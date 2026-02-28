@@ -1,0 +1,17 @@
+{
+  "name": "truefit.ai",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:fe": "pnpm --filter frontend dev",
+    "dev:be": "cd apps/backend && uvicorn main:app --reload",
+    "dev": "pnpm run /dev:/",
+    "install-fe": "pnpm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.3"
+}
