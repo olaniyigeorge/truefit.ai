@@ -3,10 +3,6 @@ import sqlalchemy
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from fastapi.responses import HTMLResponse, JSONResponse
-# from fastapi.templating import Jinja2Templates
-# from fastapi.staticfiles import StaticFiles
-from fastapi import Request
 from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 
@@ -15,6 +11,7 @@ from config import AppConfig
 from src.truefit_infra.db.database import db_manager 
 from src.truefit_api.middlewares import register_error_handler, req_res_time_log_middleware
 from src.truefit_core.common.utils import logger
+from src.truefit_api.api.v1.health import health_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -57,9 +54,6 @@ app = FastAPI(title=AppConfig.PROJECT_NAME, docs_url="/api/docs", lifespan=lifes
 
 # Middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=req_res_time_log_middleware)
-# app.add_middleware(BaseHTTPMiddleware, dispatch=log_ip_middleware)
-# app.add_middleware(RequestResponseMiddleware)
-
 register_error_handler(app)
 
 # Add CORS middleware
@@ -71,12 +65,7 @@ app.add_middleware(
     allow_headers=["*"],  # TODO : Update request headers coming from all whitelisted clients
 )
 
-# templates = Jinja2Templates(directory="src/templates")
-
-# app.mount("/static", StaticFiles(directory="src/static"), name="static")
-
-
-# app.include_router(auth_router)
+app.include_router(health_router)
 
 
 # @app.get("/", response_class=HTMLResponse)
@@ -94,33 +83,6 @@ app.add_middleware(
 #         },
 #     )
 
-
-@app.get("/ping")
-async def home(request: Request):  # , rate_limiter = Depends(RateLimitMiddleware())
-    return {
-        "message": "Pong"
-    }
-
-# Health check endpoint for Render
-@app.get("/health")
-async def health_check():
-    """Health check endpoint for monitoring"""
-    return JSONResponse(
-        status_code=200,
-        content={
-            "status": "healthy",
-            "service": "revela-backend-api"
-        }
-    )
-
-# Add HEAD handler for health checks
-@app.head("/health")
-async def health_check_head():
-    return JSONResponse(status_code=200, content={})
-
-@app.head("/")
-async def root_head():
-    return JSONResponse(status_code=200, content={})
 
 
 

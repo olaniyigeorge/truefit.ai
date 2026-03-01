@@ -459,3 +459,2487 @@ Using Dev config...
 2026-03-01 17:12:38,007 - INFO - Application startup complete
 2026-03-01 17:12:51,600 - INFO - Database connections closed
 2026-03-01 17:12:51,601 - INFO - Application shutdown complete
+2026-03-01 17:12:52,502 - INFO - 
+Using Dev config...
+
+2026-03-01 17:12:52,691 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:12:52,691 - INFO - 
+ creating tables...
+
+2026-03-01 17:12:54,858 - INFO - Database tables created successfully
+2026-03-01 17:12:54,859 - INFO - Application startup complete
+2026-03-01 17:37:20,868 - INFO - Database connections closed
+2026-03-01 17:37:20,869 - INFO - Application shutdown complete
+2026-03-01 17:37:22,224 - INFO - 
+Using Dev config...
+
+2026-03-01 17:37:22,482 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:37:22,482 - INFO - 
+ creating tables...
+
+2026-03-01 17:37:24,662 - INFO - Database tables created successfully
+2026-03-01 17:37:24,663 - INFO - Application startup complete
+2026-03-01 17:37:24,779 - INFO - Database connections closed
+2026-03-01 17:37:24,780 - INFO - Application shutdown complete
+2026-03-01 17:37:25,814 - INFO - 
+Using Dev config...
+
+2026-03-01 17:37:25,986 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:37:25,986 - INFO - 
+ creating tables...
+
+2026-03-01 17:37:28,181 - INFO - Database tables created successfully
+2026-03-01 17:37:28,182 - INFO - Application startup complete
+2026-03-01 17:37:30,538 - INFO - Database connections closed
+2026-03-01 17:37:30,538 - INFO - Application shutdown complete
+2026-03-01 17:37:31,489 - INFO - 
+Using Dev config...
+
+2026-03-01 17:37:31,663 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:37:31,664 - INFO - 
+ creating tables...
+
+2026-03-01 17:37:33,828 - INFO - Database tables created successfully
+2026-03-01 17:37:33,830 - INFO - Application startup complete
+2026-03-01 17:37:36,163 - INFO - Database connections closed
+2026-03-01 17:37:36,163 - INFO - Application shutdown complete
+2026-03-01 17:37:37,172 - INFO - 
+Using Dev config...
+
+2026-03-01 17:38:11,592 - INFO - 
+Using Dev config...
+
+2026-03-01 17:38:11,762 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:38:11,762 - INFO - 
+ creating tables...
+
+2026-03-01 17:38:13,913 - INFO - Database tables created successfully
+2026-03-01 17:38:13,914 - INFO - Application startup complete
+2026-03-01 17:38:15,284 - INFO - Database connections closed
+2026-03-01 17:38:15,285 - INFO - Application shutdown complete
+2026-03-01 17:38:16,382 - INFO - 
+Using Dev config...
+
+2026-03-01 17:39:27,403 - INFO - 
+Using Dev config...
+
+2026-03-01 17:39:45,768 - INFO - 
+Using Dev config...
+
+2026-03-01 17:39:51,588 - INFO - 
+Using Dev config...
+
+2026-03-01 17:40:09,932 - INFO - 
+Using Dev config...
+
+2026-03-01 17:42:20,242 - INFO - 
+Using Dev config...
+
+2026-03-01 17:42:20,415 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:42:20,415 - INFO - 
+ creating tables...
+
+2026-03-01 17:42:22,650 - INFO - Database tables created successfully
+2026-03-01 17:42:22,651 - INFO - Application startup complete
+2026-03-01 17:42:23,834 - INFO - Database connections closed
+2026-03-01 17:42:23,835 - INFO - Application shutdown complete
+2026-03-01 17:42:24,978 - INFO - 
+Using Dev config...
+
+2026-03-01 17:42:25,157 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:42:25,157 - INFO - 
+ creating tables...
+
+2026-03-01 17:42:27,354 - INFO - Database tables created successfully
+2026-03-01 17:42:27,355 - INFO - Application startup complete
+2026-03-01 17:42:27,461 - INFO - Database connections closed
+2026-03-01 17:42:27,461 - INFO - Application shutdown complete
+2026-03-01 17:42:28,519 - INFO - 
+Using Dev config...
+
+2026-03-01 17:42:28,722 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:42:28,722 - INFO - 
+ creating tables...
+
+2026-03-01 17:42:30,895 - INFO - Database tables created successfully
+2026-03-01 17:42:30,896 - INFO - Application startup complete
+2026-03-01 17:43:59,541 - INFO - Database connections closed
+2026-03-01 17:43:59,542 - INFO - Application shutdown complete
+2026-03-01 17:44:00,675 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:00,922 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:00,923 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:03,113 - INFO - Database tables created successfully
+2026-03-01 17:44:03,115 - INFO - Application startup complete
+2026-03-01 17:44:04,097 - INFO - Database connections closed
+2026-03-01 17:44:04,098 - INFO - Application shutdown complete
+2026-03-01 17:44:05,385 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:05,590 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:05,590 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:07,776 - INFO - Database tables created successfully
+2026-03-01 17:44:07,777 - INFO - Application startup complete
+2026-03-01 17:44:07,891 - INFO - Database connections closed
+2026-03-01 17:44:07,892 - INFO - Application shutdown complete
+2026-03-01 17:44:08,880 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:09,100 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:09,100 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:11,321 - INFO - Database tables created successfully
+2026-03-01 17:44:11,322 - INFO - Application startup complete
+2026-03-01 17:44:11,436 - INFO - Database connections closed
+2026-03-01 17:44:11,436 - INFO - Application shutdown complete
+2026-03-01 17:44:12,792 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:12,975 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:12,975 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:15,170 - INFO - Database tables created successfully
+2026-03-01 17:44:15,171 - INFO - Application startup complete
+2026-03-01 17:44:15,192 - INFO - {'PATH': '/', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.722ms '}
+2026-03-01 17:44:15,447 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.261ms '}
+2026-03-01 17:44:16,871 - INFO - {'PATH': '/docs', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.335ms '}
+2026-03-01 17:44:19,666 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.265ms '}
+2026-03-01 17:44:21,399 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.264ms '}
+2026-03-01 17:44:42,001 - INFO - Database connections closed
+2026-03-01 17:44:42,002 - INFO - Application shutdown complete
+2026-03-01 17:44:43,230 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:43,452 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:43,452 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:45,629 - INFO - Database tables created successfully
+2026-03-01 17:44:45,630 - INFO - Application startup complete
+2026-03-01 17:44:45,741 - INFO - Database connections closed
+2026-03-01 17:44:45,742 - INFO - Application shutdown complete
+2026-03-01 17:44:46,814 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:47,024 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:44:47,025 - INFO - 
+ creating tables...
+
+2026-03-01 17:44:49,212 - INFO - Database tables created successfully
+2026-03-01 17:44:49,213 - INFO - Application startup complete
+2026-03-01 17:44:49,319 - INFO - Database connections closed
+2026-03-01 17:44:49,319 - INFO - Application shutdown complete
+2026-03-01 17:44:50,414 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:58,243 - INFO - 
+Using Dev config...
+
+2026-03-01 17:44:59,601 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:09,334 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:10,523 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:12,518 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:16,978 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:21,202 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:35,867 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:37,249 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:45:37,249 - INFO - 
+ creating tables...
+
+2026-03-01 17:45:39,477 - INFO - Database tables created successfully
+2026-03-01 17:45:39,478 - INFO - Application startup complete
+2026-03-01 17:45:39,591 - INFO - Database connections closed
+2026-03-01 17:45:39,592 - INFO - Application shutdown complete
+2026-03-01 17:45:40,693 - INFO - 
+Using Dev config...
+
+2026-03-01 17:45:41,041 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:45:41,042 - INFO - 
+ creating tables...
+
+2026-03-01 17:45:43,221 - INFO - Database tables created successfully
+2026-03-01 17:45:43,222 - INFO - Application startup complete
+2026-03-01 17:45:43,986 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '758.871ms '}
+2026-03-01 17:46:05,030 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '363.532ms '}
+2026-03-01 17:46:05,113 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.299ms '}
+2026-03-01 17:46:06,934 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '290.216ms '}
+2026-03-01 17:46:07,005 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.25ms '}
+2026-03-01 17:46:08,392 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '304.34ms '}
+2026-03-01 17:46:08,543 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.372ms '}
+2026-03-01 17:50:45,854 - INFO - Database connections closed
+2026-03-01 17:50:45,855 - INFO - Application shutdown complete
+2026-03-01 17:50:48,825 - INFO - 
+Using Dev config...
+
+2026-03-01 17:50:49,161 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:50:49,161 - INFO - 
+ creating tables...
+
+2026-03-01 17:50:51,316 - INFO - Database tables created successfully
+2026-03-01 17:50:51,317 - INFO - Application startup complete
+2026-03-01 17:51:08,768 - INFO - Database connections closed
+2026-03-01 17:51:08,769 - INFO - Application shutdown complete
+2026-03-01 17:51:09,853 - INFO - 
+Using Dev config...
+
+2026-03-01 17:51:10,199 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:51:10,200 - INFO - 
+ creating tables...
+
+2026-03-01 17:51:12,336 - INFO - Database tables created successfully
+2026-03-01 17:51:12,337 - INFO - Application startup complete
+2026-03-01 17:51:13,209 - INFO - Database connections closed
+2026-03-01 17:51:13,209 - INFO - Application shutdown complete
+2026-03-01 17:51:14,186 - INFO - 
+Using Dev config...
+
+2026-03-01 17:51:14,461 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:51:14,461 - INFO - 
+ creating tables...
+
+2026-03-01 17:51:16,633 - INFO - Database tables created successfully
+2026-03-01 17:51:16,634 - INFO - Application startup complete
+2026-03-01 17:51:28,743 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2447.821ms '}
+2026-03-01 17:51:29,466 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1933.613ms '}
+2026-03-01 17:51:29,466 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2556.513ms '}
+2026-03-01 17:51:31,350 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3237.146ms '}
+2026-03-01 17:51:31,351 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2946.594ms '}
+2026-03-01 17:51:31,351 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3527.041ms '}
+2026-03-01 17:51:33,731 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4984.334ms '}
+2026-03-01 17:51:33,732 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4985.061ms '}
+2026-03-01 17:51:33,732 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4006.659ms '}
+2026-03-01 17:51:33,733 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4007.061ms '}
+2026-03-01 17:51:37,323 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5693.859ms '}
+2026-03-01 17:51:37,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6974.819ms '}
+2026-03-01 17:51:37,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6974.27ms '}
+2026-03-01 17:51:37,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4830.68ms '}
+2026-03-01 17:51:37,325 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5695.25ms '}
+2026-03-01 17:51:37,325 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6975.291ms '}
+2026-03-01 17:51:37,325 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4831.674ms '}
+2026-03-01 17:51:37,325 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5696.342ms '}
+2026-03-01 17:51:39,858 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6773.627ms '}
+2026-03-01 17:51:39,858 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6774.237ms '}
+2026-03-01 17:51:42,612 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8604.707ms '}
+2026-03-01 17:51:42,613 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5603.985ms '}
+2026-03-01 17:51:42,613 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8605.841ms '}
+2026-03-01 17:51:42,614 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8605.964ms '}
+2026-03-01 17:51:42,614 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8606.158ms '}
+2026-03-01 17:51:42,614 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8606.389ms '}
+2026-03-01 17:51:42,615 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8606.998ms '}
+2026-03-01 17:51:42,615 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8607.539ms '}
+2026-03-01 17:51:42,615 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8607.629ms '}
+2026-03-01 17:51:42,616 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8607.887ms '}
+2026-03-01 17:51:42,616 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8608.319ms '}
+2026-03-01 17:51:42,715 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5380.466ms '}
+2026-03-01 17:51:42,716 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5380.947ms '}
+2026-03-01 17:51:42,716 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5381.43ms '}
+2026-03-01 17:51:42,716 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5381.506ms '}
+2026-03-01 17:51:42,717 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5381.905ms '}
+2026-03-01 17:51:42,717 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5382.014ms '}
+2026-03-01 17:51:42,717 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5382.223ms '}
+2026-03-01 17:51:43,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3116.141ms '}
+2026-03-01 17:51:43,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3116.822ms '}
+2026-03-01 17:51:43,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3116.818ms '}
+2026-03-01 17:51:43,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3117.13ms '}
+2026-03-01 17:51:43,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3117.62ms '}
+2026-03-01 17:51:43,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3118.134ms '}
+2026-03-01 17:51:43,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5890.514ms '}
+2026-03-01 17:51:43,226 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1296.358ms '}
+2026-03-01 17:51:44,822 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2528.301ms '}
+2026-03-01 17:51:45,689 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2209.714ms '}
+2026-03-01 17:51:45,690 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2797.099ms '}
+2026-03-01 17:51:46,895 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1815.929ms '}
+2026-03-01 17:51:46,906 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2836.598ms '}
+2026-03-01 17:51:46,907 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2837.076ms '}
+2026-03-01 17:51:47,773 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1825.083ms '}
+2026-03-01 17:51:47,774 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2387.327ms '}
+2026-03-01 17:51:49,269 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3026.348ms '}
+2026-03-01 17:51:49,270 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3026.832ms '}
+2026-03-01 17:51:51,402 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4240.375ms '}
+2026-03-01 17:51:51,402 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4241.27ms '}
+2026-03-01 17:51:54,759 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6722.133ms '}
+2026-03-01 17:51:54,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6722.8ms '}
+2026-03-01 17:51:54,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6723.32ms '}
+2026-03-01 17:51:54,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6723.457ms '}
+2026-03-01 17:51:58,220 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8677.765ms '}
+2026-03-01 17:51:58,220 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8676.624ms '}
+2026-03-01 17:51:58,220 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8677.09ms '}
+2026-03-01 17:51:58,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8678.647ms '}
+2026-03-01 17:51:58,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8679.089ms '}
+2026-03-01 17:51:58,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8679.294ms '}
+2026-03-01 17:52:01,598 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9901.192ms '}
+2026-03-01 17:52:01,598 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9901.813ms '}
+2026-03-01 17:52:01,599 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9902.027ms '}
+2026-03-01 17:52:01,599 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9902.571ms '}
+2026-03-01 17:52:01,599 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9901.68ms '}
+2026-03-01 17:52:01,600 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9901.685ms '}
+2026-03-01 17:52:01,600 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9902.064ms '}
+2026-03-01 17:52:01,600 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9903.785ms '}
+2026-03-01 17:52:01,600 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9903.555ms '}
+2026-03-01 17:52:01,601 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9902.864ms '}
+2026-03-01 17:52:03,220 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8205.399ms '}
+2026-03-01 17:52:03,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8205.975ms '}
+2026-03-01 17:52:03,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8206.064ms '}
+2026-03-01 17:52:03,221 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8206.671ms '}
+2026-03-01 17:52:03,222 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8207.149ms '}
+2026-03-01 17:52:03,222 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8207.065ms '}
+2026-03-01 17:52:03,222 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8207.564ms '}
+2026-03-01 17:52:03,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8208.043ms '}
+2026-03-01 17:52:03,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8208.078ms '}
+2026-03-01 17:52:03,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8208.292ms '}
+2026-03-01 17:52:03,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4762.97ms '}
+2026-03-01 17:52:03,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4763.048ms '}
+2026-03-01 17:52:03,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4763.158ms '}
+2026-03-01 17:52:03,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4763.549ms '}
+2026-03-01 17:52:03,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4763.67ms '}
+2026-03-01 17:52:03,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4763.81ms '}
+2026-03-01 17:52:03,816 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3486.482ms '}
+2026-03-01 17:52:03,817 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3486.869ms '}
+2026-03-01 17:52:03,817 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1980.452ms '}
+2026-03-01 17:52:03,817 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1980.79ms '}
+2026-03-01 17:52:03,818 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1981.09ms '}
+2026-03-01 17:52:03,818 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3488.358ms '}
+2026-03-01 17:52:03,818 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3488.837ms '}
+2026-03-01 17:52:05,274 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2488.294ms '}
+2026-03-01 17:52:06,846 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3367.767ms '}
+2026-03-01 17:52:06,846 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2789.948ms '}
+2026-03-01 17:52:09,072 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4427.186ms '}
+2026-03-01 17:52:09,072 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4427.928ms '}
+2026-03-01 17:52:09,073 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3534.804ms '}
+2026-03-01 17:52:09,073 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3534.954ms '}
+2026-03-01 17:52:09,965 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2843.691ms '}
+2026-03-01 17:52:09,965 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3783.487ms '}
+2026-03-01 17:52:09,966 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3783.737ms '}
+2026-03-01 17:52:09,966 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2844.456ms '}
+2026-03-01 17:52:09,966 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2844.641ms '}
+2026-03-01 17:52:09,967 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2845.062ms '}
+2026-03-01 17:52:10,839 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2426.939ms '}
+2026-03-01 17:52:10,839 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2427.363ms '}
+2026-03-01 17:52:10,855 - INFO - Database connections closed
+2026-03-01 17:52:10,855 - INFO - Application shutdown complete
+2026-03-01 17:52:11,932 - INFO - 
+Using Dev config...
+
+2026-03-01 17:52:12,239 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:52:12,239 - INFO - 
+ creating tables...
+
+2026-03-01 17:52:14,457 - INFO - Database tables created successfully
+2026-03-01 17:52:14,458 - INFO - Application startup complete
+2026-03-01 17:52:24,737 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10272.285ms '}
+2026-03-01 17:52:24,737 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10272.937ms '}
+2026-03-01 17:52:24,737 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10273.102ms '}
+2026-03-01 17:52:24,738 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10273.784ms '}
+2026-03-01 17:52:24,738 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10273.771ms '}
+2026-03-01 17:52:24,738 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10273.816ms '}
+2026-03-01 17:52:24,738 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10274.245ms '}
+2026-03-01 17:52:24,739 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10274.562ms '}
+2026-03-01 17:52:24,739 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10275.074ms '}
+2026-03-01 17:52:24,739 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10275.392ms '}
+2026-03-01 17:52:28,636 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7101.849ms '}
+2026-03-01 17:52:28,637 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7105.315ms '}
+2026-03-01 17:52:28,637 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7102.833ms '}
+2026-03-01 17:52:28,637 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7106.059ms '}
+2026-03-01 17:52:28,638 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7103.371ms '}
+2026-03-01 17:52:28,638 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7103.593ms '}
+2026-03-01 17:52:28,638 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7104.024ms '}
+2026-03-01 17:52:28,639 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7104.298ms '}
+2026-03-01 17:52:28,639 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7104.463ms '}
+2026-03-01 17:52:28,639 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10688.677ms '}
+2026-03-01 17:52:28,640 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10688.933ms '}
+2026-03-01 17:52:28,640 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10689.53ms '}
+2026-03-01 17:52:28,640 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10689.657ms '}
+2026-03-01 17:52:28,640 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10689.976ms '}
+2026-03-01 17:52:28,641 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10690.383ms '}
+2026-03-01 17:52:28,641 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10690.765ms '}
+2026-03-01 17:52:28,641 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10690.592ms '}
+2026-03-01 17:52:28,642 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10691.044ms '}
+2026-03-01 17:52:28,642 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10691.731ms '}
+2026-03-01 17:52:28,660 - INFO - {'PATH': '/', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6.318ms '}
+2026-03-01 17:52:29,843 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5496.263ms '}
+2026-03-01 17:52:29,843 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4821.474ms '}
+2026-03-01 17:52:29,844 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4821.877ms '}
+2026-03-01 17:52:29,844 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4821.944ms '}
+2026-03-01 17:52:29,844 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4822.477ms '}
+2026-03-01 17:52:29,845 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4822.544ms '}
+2026-03-01 17:52:29,845 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4822.807ms '}
+2026-03-01 17:52:29,845 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4823.303ms '}
+2026-03-01 17:52:29,846 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4823.72ms '}
+2026-03-01 17:52:30,512 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2918.312ms '}
+2026-03-01 17:52:30,513 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2918.962ms '}
+2026-03-01 17:52:30,513 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2919.453ms '}
+2026-03-01 17:52:31,718 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2840.522ms '}
+2026-03-01 17:52:31,719 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2840.923ms '}
+2026-03-01 17:52:31,719 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2841.157ms '}
+2026-03-01 17:52:33,213 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3136.052ms '}
+2026-03-01 17:52:34,751 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2772.08ms '}
+2026-03-01 17:52:34,751 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2772.671ms '}
+2026-03-01 17:52:34,751 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2772.952ms '}
+2026-03-01 17:52:34,752 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3983.706ms '}
+2026-03-01 17:52:34,752 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3984.096ms '}
+2026-03-01 17:52:34,752 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3984.4ms '}
+2026-03-01 17:52:36,563 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3659.402ms '}
+2026-03-01 17:52:37,233 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3746.897ms '}
+2026-03-01 17:52:37,233 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3747.297ms '}
+2026-03-01 17:52:37,234 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3747.926ms '}
+2026-03-01 17:52:37,234 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3748.381ms '}
+2026-03-01 17:52:38,152 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3142.976ms '}
+2026-03-01 17:52:38,153 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3143.36ms '}
+2026-03-01 17:52:39,131 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4121.135ms '}
+2026-03-01 17:52:39,131 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4121.629ms '}
+2026-03-01 17:52:39,131 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2880.883ms '}
+2026-03-01 17:52:39,132 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2564.337ms '}
+2026-03-01 17:52:39,132 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2564.692ms '}
+2026-03-01 17:52:40,352 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2857.082ms '}
+2026-03-01 17:52:40,353 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2857.548ms '}
+2026-03-01 17:52:41,972 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2596.511ms '}
+2026-03-01 17:52:41,972 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2596.846ms '}
+2026-03-01 17:52:41,972 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3816.295ms '}
+2026-03-01 17:52:41,973 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3816.334ms '}
+2026-03-01 17:52:41,973 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3816.535ms '}
+2026-03-01 17:52:43,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3691.6ms '}
+2026-03-01 17:52:45,705 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3485.861ms '}
+2026-03-01 17:52:45,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3486.32ms '}
+2026-03-01 17:52:45,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5090.644ms '}
+2026-03-01 17:52:45,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5091.064ms '}
+2026-03-01 17:52:45,707 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5091.5ms '}
+2026-03-01 17:52:45,707 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5092.001ms '}
+2026-03-01 17:52:46,921 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3212.59ms '}
+2026-03-01 17:52:46,922 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4702.62ms '}
+2026-03-01 17:52:46,922 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3552.926ms '}
+2026-03-01 17:52:49,808 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5769.949ms '}
+2026-03-01 17:52:49,809 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5770.561ms '}
+2026-03-01 17:52:49,809 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5771.065ms '}
+2026-03-01 17:52:49,809 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5771.302ms '}
+2026-03-01 17:52:49,810 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5771.45ms '}
+2026-03-01 17:52:53,680 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7735.67ms '}
+2026-03-01 17:52:53,680 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7736.174ms '}
+2026-03-01 17:52:53,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7736.373ms '}
+2026-03-01 17:52:53,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5499.33ms '}
+2026-03-01 17:52:53,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6491.947ms '}
+2026-03-01 17:52:53,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6492.145ms '}
+2026-03-01 17:52:53,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6492.365ms '}
+2026-03-01 17:52:57,555 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7462.657ms '}
+2026-03-01 17:52:57,556 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7463.06ms '}
+2026-03-01 17:52:57,556 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7463.527ms '}
+2026-03-01 17:52:57,556 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7464.088ms '}
+2026-03-01 17:52:57,557 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9046.872ms '}
+2026-03-01 17:52:57,557 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9047.049ms '}
+2026-03-01 17:52:57,558 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9047.461ms '}
+2026-03-01 17:52:57,558 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9047.714ms '}
+2026-03-01 17:53:00,680 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6729.343ms '}
+2026-03-01 17:53:00,680 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6729.901ms '}
+2026-03-01 17:53:00,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6730.282ms '}
+2026-03-01 17:53:00,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6730.35ms '}
+2026-03-01 17:53:00,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6730.478ms '}
+2026-03-01 17:53:00,681 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6730.917ms '}
+2026-03-01 17:53:00,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6730.931ms '}
+2026-03-01 17:53:00,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9318.778ms '}
+2026-03-01 17:53:00,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9319.042ms '}
+2026-03-01 17:53:00,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9319.465ms '}
+2026-03-01 17:53:00,682 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9319.504ms '}
+2026-03-01 17:53:00,683 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9319.868ms '}
+2026-03-01 17:53:01,435 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5193.847ms '}
+2026-03-01 17:53:01,435 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5194.165ms '}
+2026-03-01 17:53:01,436 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5194.913ms '}
+2026-03-01 17:53:01,436 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5194.857ms '}
+2026-03-01 17:53:01,436 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10073.496ms '}
+2026-03-01 17:53:01,437 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10073.864ms '}
+2026-03-01 17:53:02,318 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4490.494ms '}
+2026-03-01 17:53:02,319 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4490.868ms '}
+2026-03-01 17:53:02,319 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4491.154ms '}
+2026-03-01 17:53:02,319 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4491.364ms '}
+2026-03-01 17:53:02,319 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4491.709ms '}
+2026-03-01 17:53:02,320 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4491.939ms '}
+2026-03-01 17:53:02,320 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4492.445ms '}
+2026-03-01 17:53:02,321 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4492.584ms '}
+2026-03-01 17:53:02,321 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4492.855ms '}
+2026-03-01 17:53:03,207 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2527.185ms '}
+2026-03-01 17:53:03,207 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2528.095ms '}
+2026-03-01 17:53:04,701 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3027.019ms '}
+2026-03-01 17:53:04,702 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3027.29ms '}
+2026-03-01 17:53:06,801 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4224.73ms '}
+2026-03-01 17:53:06,802 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4225.461ms '}
+2026-03-01 17:53:10,295 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6817.211ms '}
+2026-03-01 17:53:10,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6817.784ms '}
+2026-03-01 17:53:10,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6818.413ms '}
+2026-03-01 17:53:10,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6818.637ms '}
+2026-03-01 17:53:15,757 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10793.444ms '}
+2026-03-01 17:53:15,757 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10791.495ms '}
+2026-03-01 17:53:15,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10791.959ms '}
+2026-03-01 17:53:15,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10794.52ms '}
+2026-03-01 17:53:15,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10794.938ms '}
+2026-03-01 17:53:15,759 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10795.054ms '}
+2026-03-01 17:53:15,759 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8692.124ms '}
+2026-03-01 17:53:15,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8693.399ms '}
+2026-03-01 17:53:15,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8693.319ms '}
+2026-03-01 17:53:15,760 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8693.514ms '}
+2026-03-01 17:53:15,761 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8693.943ms '}
+2026-03-01 17:53:15,761 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8694.265ms '}
+2026-03-01 17:53:15,761 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8694.574ms '}
+2026-03-01 17:53:15,761 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8694.849ms '}
+2026-03-01 17:53:15,762 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8694.193ms '}
+2026-03-01 17:53:15,762 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8695.463ms '}
+2026-03-01 17:53:17,883 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7315.014ms '}
+2026-03-01 17:53:17,884 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7315.609ms '}
+2026-03-01 17:53:17,884 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7316.727ms '}
+2026-03-01 17:53:17,885 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7316.834ms '}
+2026-03-01 17:53:17,885 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7317.113ms '}
+2026-03-01 17:53:17,885 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7317.378ms '}
+2026-03-01 17:53:17,886 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7318.096ms '}
+2026-03-01 17:53:17,886 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7318.064ms '}
+2026-03-01 17:53:17,886 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7318.609ms '}
+2026-03-01 17:53:17,887 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7318.856ms '}
+2026-03-01 17:53:19,991 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6152.403ms '}
+2026-03-01 17:53:19,992 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6153.296ms '}
+2026-03-01 17:53:19,992 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6153.555ms '}
+2026-03-01 17:53:19,992 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6154.116ms '}
+2026-03-01 17:53:19,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6154.515ms '}
+2026-03-01 17:53:19,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6154.584ms '}
+2026-03-01 17:53:22,496 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4368.283ms '}
+2026-03-01 17:53:22,497 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4368.909ms '}
+2026-03-01 17:53:22,497 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4369.188ms '}
+2026-03-01 17:53:22,498 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4369.723ms '}
+2026-03-01 17:53:22,498 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4369.997ms '}
+2026-03-01 17:53:22,498 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6498.735ms '}
+2026-03-01 17:53:22,499 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6499.533ms '}
+2026-03-01 17:53:22,499 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6499.498ms '}
+2026-03-01 17:53:22,499 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6500.006ms '}
+2026-03-01 17:53:22,500 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6500.236ms '}
+2026-03-01 17:53:22,500 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6500.351ms '}
+2026-03-01 17:53:24,873 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5208.017ms '}
+2026-03-01 17:53:27,703 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4955.658ms '}
+2026-03-01 17:53:27,704 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4956.338ms '}
+2026-03-01 17:53:27,704 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4956.485ms '}
+2026-03-01 17:53:27,705 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4956.849ms '}
+2026-03-01 17:53:27,705 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4957.225ms '}
+2026-03-01 17:53:27,705 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4957.756ms '}
+2026-03-01 17:53:27,705 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7446.299ms '}
+2026-03-01 17:53:27,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7446.65ms '}
+2026-03-01 17:53:27,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7446.823ms '}
+2026-03-01 17:53:27,706 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7447.127ms '}
+2026-03-01 17:53:27,707 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7447.36ms '}
+2026-03-01 17:53:27,707 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7447.93ms '}
+2026-03-01 17:53:27,707 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7448.032ms '}
+2026-03-01 17:53:30,646 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6103.177ms '}
+2026-03-01 17:53:33,500 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8358.122ms '}
+2026-03-01 17:53:33,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8358.772ms '}
+2026-03-01 17:53:33,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8358.843ms '}
+2026-03-01 17:53:33,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8359.224ms '}
+2026-03-01 17:53:33,502 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8359.639ms '}
+2026-03-01 17:53:33,502 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8360.051ms '}
+2026-03-01 17:53:33,502 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8360.174ms '}
+2026-03-01 17:53:33,503 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8360.708ms '}
+2026-03-01 17:53:36,372 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8425.924ms '}
+2026-03-01 17:53:36,372 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8427.16ms '}
+2026-03-01 17:53:36,373 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8427.304ms '}
+2026-03-01 17:53:36,373 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8427.722ms '}
+2026-03-01 17:53:36,374 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8428.176ms '}
+2026-03-01 17:53:36,374 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8428.688ms '}
+2026-03-01 17:53:36,374 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8428.97ms '}
+2026-03-01 17:53:36,375 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8429.115ms '}
+2026-03-01 17:53:39,183 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8283.8ms '}
+2026-03-01 17:53:39,183 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8284.481ms '}
+2026-03-01 17:53:39,184 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8284.877ms '}
+2026-03-01 17:53:39,184 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8284.889ms '}
+2026-03-01 17:53:39,184 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8285.256ms '}
+2026-03-01 17:53:39,185 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8285.627ms '}
+2026-03-01 17:53:39,185 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8286.14ms '}
+2026-03-01 17:53:39,185 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8286.041ms '}
+2026-03-01 17:53:39,754 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6010.045ms '}
+2026-03-01 17:53:39,754 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6010.71ms '}
+2026-03-01 17:53:39,755 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6011.295ms '}
+2026-03-01 17:53:39,755 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6011.521ms '}
+2026-03-01 17:53:39,755 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6011.699ms '}
+2026-03-01 17:53:39,756 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6012.123ms '}
+2026-03-01 17:53:39,756 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6012.554ms '}
+2026-03-01 17:53:39,756 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6012.544ms '}
+2026-03-01 17:53:39,757 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3143.266ms '}
+2026-03-01 17:53:39,757 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3143.352ms '}
+2026-03-01 17:53:39,757 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3143.769ms '}
+2026-03-01 17:53:39,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3144.162ms '}
+2026-03-01 17:53:39,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3144.315ms '}
+2026-03-01 17:53:39,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3144.487ms '}
+2026-03-01 17:53:39,758 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3144.835ms '}
+2026-03-01 17:53:40,449 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1617.478ms '}
+2026-03-01 17:53:41,657 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2234.492ms '}
+2026-03-01 17:53:42,341 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2311.38ms '}
+2026-03-01 17:53:44,425 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3480.601ms '}
+2026-03-01 17:53:44,426 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3103.727ms '}
+2026-03-01 17:53:44,426 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3791.443ms '}
+2026-03-01 17:53:47,042 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5382.577ms '}
+2026-03-01 17:53:47,043 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5383.108ms '}
+2026-03-01 17:53:51,332 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8732.503ms '}
+2026-03-01 17:53:51,333 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8733.999ms '}
+2026-03-01 17:53:51,333 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8733.407ms '}
+2026-03-01 17:53:51,334 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8733.993ms '}
+2026-03-01 17:53:51,334 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8734.399ms '}
+2026-03-01 17:53:51,334 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6649.931ms '}
+2026-03-01 17:53:51,335 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6650.077ms '}
+2026-03-01 17:53:51,335 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6650.308ms '}
+2026-03-01 17:53:51,335 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6650.451ms '}
+2026-03-01 17:53:51,335 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6650.874ms '}
+2026-03-01 17:53:52,293 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5924.718ms '}
+2026-03-01 17:53:52,294 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5925.328ms '}
+2026-03-01 17:53:52,294 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2625.683ms '}
+2026-03-01 17:53:52,294 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2625.976ms '}
+2026-03-01 17:53:52,295 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2626.406ms '}
+2026-03-01 17:53:52,295 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4976.269ms '}
+2026-03-01 17:53:52,295 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4976.492ms '}
+2026-03-01 17:53:52,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4976.756ms '}
+2026-03-01 17:53:52,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4977.023ms '}
+2026-03-01 17:53:52,296 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4977.333ms '}
+2026-03-01 17:53:52,297 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4977.622ms '}
+2026-03-01 17:53:52,297 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4977.24ms '}
+2026-03-01 17:53:53,275 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2633.678ms '}
+2026-03-01 17:53:53,275 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2634.224ms '}
+2026-03-01 17:53:54,854 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3251.452ms '}
+2026-03-01 17:53:54,855 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3252.02ms '}
+2026-03-01 17:53:57,039 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4494.721ms '}
+2026-03-01 17:53:57,039 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4495.461ms '}
+2026-03-01 17:53:59,402 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5858.107ms '}
+2026-03-01 17:53:59,402 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5858.094ms '}
+2026-03-01 17:53:59,403 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5858.63ms '}
+2026-03-01 17:53:59,403 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5858.787ms '}
+2026-03-01 17:54:00,645 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5523.544ms '}
+2026-03-01 17:54:00,646 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5523.869ms '}
+2026-03-01 17:54:00,646 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5524.132ms '}
+2026-03-01 17:54:00,646 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5524.708ms '}
+2026-03-01 17:54:00,647 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5525.11ms '}
+2026-03-01 17:54:00,647 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5523.4ms '}
+2026-03-01 17:54:01,457 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2432.303ms '}
+2026-03-01 17:54:01,458 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4169.901ms '}
+2026-03-01 17:54:01,458 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4170.395ms '}
+2026-03-01 17:54:01,459 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4170.931ms '}
+2026-03-01 17:54:01,459 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4171.431ms '}
+2026-03-01 17:54:01,459 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4171.805ms '}
+2026-03-01 17:54:03,378 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3968.972ms '}
+2026-03-01 17:54:03,379 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3969.481ms '}
+2026-03-01 17:54:03,379 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3969.898ms '}
+2026-03-01 17:54:04,101 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3213.19ms '}
+2026-03-01 17:54:05,671 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3950.08ms '}
+2026-03-01 17:54:05,672 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3950.479ms '}
+2026-03-01 17:54:05,672 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3950.851ms '}
+2026-03-01 17:54:07,373 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3753.585ms '}
+2026-03-01 17:54:08,188 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3819.145ms '}
+2026-03-01 17:54:08,189 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3819.598ms '}
+2026-03-01 17:54:08,189 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3819.955ms '}
+2026-03-01 17:54:08,190 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2269.063ms '}
+2026-03-01 17:54:08,190 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2269.305ms '}
+2026-03-01 17:54:08,864 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2008.991ms '}
+2026-03-01 17:54:09,499 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1869.518ms '}
+2026-03-01 17:54:10,899 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1771.479ms '}
+2026-03-01 17:54:10,899 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2446.314ms '}
+2026-03-01 17:54:11,890 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2129.429ms '}
+2026-03-01 17:54:11,890 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1765.285ms '}
+2026-03-01 17:54:12,845 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2379.066ms '}
+2026-03-01 17:54:14,108 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '1962.299ms '}
+2026-03-01 17:54:14,109 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2944.041ms '}
+2026-03-01 17:54:14,109 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2944.199ms '}
+2026-03-01 17:54:15,369 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2896.489ms '}
+2026-03-01 17:54:17,157 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2792.193ms '}
+2026-03-01 17:54:17,158 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2792.51ms '}
+2026-03-01 17:54:17,158 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4042.187ms '}
+2026-03-01 17:54:17,158 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4042.805ms '}
+2026-03-01 17:54:17,159 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4042.771ms '}
+2026-03-01 17:54:18,876 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3851.983ms '}
+2026-03-01 17:54:21,056 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3648.899ms '}
+2026-03-01 17:54:21,056 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3649.508ms '}
+2026-03-01 17:54:21,057 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5426.189ms '}
+2026-03-01 17:54:21,057 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5426.719ms '}
+2026-03-01 17:54:21,058 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5427.009ms '}
+2026-03-01 17:54:21,058 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5427.29ms '}
+2026-03-01 17:54:23,061 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4180.646ms '}
+2026-03-01 17:54:23,061 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5654.524ms '}
+2026-03-01 17:54:23,062 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4537.863ms '}
+2026-03-01 17:54:28,498 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9285.683ms '}
+2026-03-01 17:54:28,499 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7184.2ms '}
+2026-03-01 17:54:28,500 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9287.214ms '}
+2026-03-01 17:54:28,500 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9287.633ms '}
+2026-03-01 17:54:28,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7185.749ms '}
+2026-03-01 17:54:28,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9288.584ms '}
+2026-03-01 17:54:28,501 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7186.229ms '}
+2026-03-01 17:54:28,502 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9289.035ms '}
+2026-03-01 17:54:32,688 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10337.374ms '}
+2026-03-01 17:54:32,688 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10337.812ms '}
+2026-03-01 17:54:36,383 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13043.593ms '}
+2026-03-01 17:54:36,384 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13044.721ms '}
+2026-03-01 17:54:36,385 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13044.668ms '}
+2026-03-01 17:54:36,385 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13044.835ms '}
+2026-03-01 17:54:36,385 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13045.044ms '}
+2026-03-01 17:54:36,386 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13045.92ms '}
+2026-03-01 17:54:36,386 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13046.366ms '}
+2026-03-01 17:54:36,386 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13046.177ms '}
+2026-03-01 17:54:36,387 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13046.807ms '}
+2026-03-01 17:54:36,387 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '13047.008ms '}
+2026-03-01 17:54:39,245 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10497.541ms '}
+2026-03-01 17:54:39,245 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10497.917ms '}
+2026-03-01 17:54:39,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10498.132ms '}
+2026-03-01 17:54:39,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10498.544ms '}
+2026-03-01 17:54:39,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10499.285ms '}
+2026-03-01 17:54:39,247 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10499.414ms '}
+2026-03-01 17:54:39,247 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10499.747ms '}
+2026-03-01 17:54:39,247 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10500.188ms '}
+2026-03-01 17:54:39,248 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10500.136ms '}
+2026-03-01 17:54:39,248 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '10500.745ms '}
+2026-03-01 17:54:42,189 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6175.324ms '}
+2026-03-01 17:54:42,189 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9236.438ms '}
+2026-03-01 17:54:42,189 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9236.382ms '}
+2026-03-01 17:54:42,190 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9237.173ms '}
+2026-03-01 17:54:42,190 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9237.208ms '}
+2026-03-01 17:54:42,191 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9237.731ms '}
+2026-03-01 17:54:42,191 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9237.863ms '}
+2026-03-01 17:54:42,191 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9238.516ms '}
+2026-03-01 17:54:42,191 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9238.285ms '}
+2026-03-01 17:54:42,192 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9238.757ms '}
+2026-03-01 17:54:43,991 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7591.923ms '}
+2026-03-01 17:54:43,992 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7592.665ms '}
+2026-03-01 17:54:43,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7593.214ms '}
+2026-03-01 17:54:43,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7593.357ms '}
+2026-03-01 17:54:43,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7593.569ms '}
+2026-03-01 17:54:43,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7594.25ms '}
+2026-03-01 17:54:43,994 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7594.5ms '}
+2026-03-01 17:54:43,994 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7594.701ms '}
+2026-03-01 17:54:45,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5741.976ms '}
+2026-03-01 17:54:45,223 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5742.694ms '}
+2026-03-01 17:54:45,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3404.76ms '}
+2026-03-01 17:54:45,224 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5743.677ms '}
+2026-03-01 17:54:45,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5743.94ms '}
+2026-03-01 17:54:45,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5744.452ms '}
+2026-03-01 17:54:45,225 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5744.842ms '}
+2026-03-01 17:54:45,226 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5744.928ms '}
+2026-03-01 17:54:45,807 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3604.532ms '}
+2026-03-01 17:54:45,807 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3605.165ms '}
+2026-03-01 17:54:45,807 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3605.681ms '}
+2026-03-01 17:54:45,808 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3605.76ms '}
+2026-03-01 17:54:45,808 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3606.087ms '}
+2026-03-01 17:54:47,052 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2823.734ms '}
+2026-03-01 17:54:47,052 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2823.992ms '}
+2026-03-01 17:54:47,053 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2824.482ms '}
+2026-03-01 17:54:48,381 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2925.712ms '}
+2026-03-01 17:54:50,375 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4305.771ms '}
+2026-03-01 17:54:50,375 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3076.092ms '}
+2026-03-01 17:54:50,376 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4306.898ms '}
+2026-03-01 17:54:50,376 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2770.29ms '}
+2026-03-01 17:54:50,376 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4307.626ms '}
+2026-03-01 17:54:52,449 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4477.538ms '}
+2026-03-01 17:54:56,429 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7781.221ms '}
+2026-03-01 17:54:56,430 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7782.141ms '}
+2026-03-01 17:54:56,430 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7782.439ms '}
+2026-03-01 17:54:56,430 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7782.72ms '}
+2026-03-01 17:54:56,431 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7781.333ms '}
+2026-03-01 17:54:59,995 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9369.287ms '}
+2026-03-01 17:54:59,996 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9369.958ms '}
+2026-03-01 17:54:59,996 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9370.096ms '}
+2026-03-01 17:54:59,996 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9370.518ms '}
+2026-03-01 17:54:59,997 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9370.897ms '}
+2026-03-01 17:55:02,567 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9834.479ms '}
+2026-03-01 17:55:02,568 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9834.682ms '}
+2026-03-01 17:55:02,568 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9835.342ms '}
+2026-03-01 17:55:02,568 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9836.04ms '}
+2026-03-01 17:55:02,569 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9836.508ms '}
+2026-03-01 17:55:02,569 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9836.375ms '}
+2026-03-01 17:55:02,569 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9836.756ms '}
+2026-03-01 17:55:02,570 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9836.853ms '}
+2026-03-01 17:55:02,570 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9837.946ms '}
+2026-03-01 17:55:02,570 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9837.763ms '}
+2026-03-01 17:55:05,243 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8564.785ms '}
+2026-03-01 17:55:05,244 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8565.913ms '}
+2026-03-01 17:55:05,244 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8566.211ms '}
+2026-03-01 17:55:05,244 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8566.743ms '}
+2026-03-01 17:55:05,245 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8566.664ms '}
+2026-03-01 17:55:05,245 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8567.02ms '}
+2026-03-01 17:55:05,245 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8567.362ms '}
+2026-03-01 17:55:05,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8567.773ms '}
+2026-03-01 17:55:05,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5616.008ms '}
+2026-03-01 17:55:05,246 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8568.121ms '}
+2026-03-01 17:55:07,534 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7526.647ms '}
+2026-03-01 17:55:07,535 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7527.201ms '}
+2026-03-01 17:55:07,535 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7527.427ms '}
+2026-03-01 17:55:07,536 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7527.157ms '}
+2026-03-01 17:55:07,536 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7526.824ms '}
+2026-03-01 17:55:07,536 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7527.727ms '}
+2026-03-01 17:55:07,537 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7528.733ms '}
+2026-03-01 17:55:07,957 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5143.474ms '}
+2026-03-01 17:55:07,957 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5144.041ms '}
+2026-03-01 17:55:07,958 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5144.51ms '}
+2026-03-01 17:55:07,958 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5144.916ms '}
+2026-03-01 17:55:07,958 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5144.883ms '}
+2026-03-01 17:55:07,959 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5145.656ms '}
+2026-03-01 17:55:08,519 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3042.782ms '}
+2026-03-01 17:55:08,520 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3043.116ms '}
+2026-03-01 17:55:08,520 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3043.713ms '}
+2026-03-01 17:55:08,520 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3043.648ms '}
+2026-03-01 17:55:08,520 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3043.745ms '}
+2026-03-01 17:55:08,521 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3044.105ms '}
+2026-03-01 17:55:09,179 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6365.746ms '}
+2026-03-01 17:55:09,855 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2320.711ms '}
+2026-03-01 17:55:11,836 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2992.462ms '}
+2026-03-01 17:55:11,836 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3313.575ms '}
+2026-03-01 17:55:11,836 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3646.934ms '}
+2026-03-01 17:55:13,992 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4808.694ms '}
+2026-03-01 17:55:13,993 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4809.664ms '}
+2026-03-01 17:55:17,933 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7797.303ms '}
+2026-03-01 17:55:17,933 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7798.465ms '}
+2026-03-01 17:55:17,934 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7799.042ms '}
+2026-03-01 17:55:17,934 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7799.024ms '}
+2026-03-01 17:55:17,934 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7799.232ms '}
+2026-03-01 17:55:20,687 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8601.211ms '}
+2026-03-01 17:55:20,688 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8601.631ms '}
+2026-03-01 17:55:20,688 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8601.931ms '}
+2026-03-01 17:55:20,689 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6416.789ms '}
+2026-03-01 17:55:20,689 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6414.154ms '}
+2026-03-01 17:55:20,690 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6414.468ms '}
+2026-03-01 17:55:20,690 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6414.776ms '}
+2026-03-01 17:55:20,690 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6415.114ms '}
+2026-03-01 17:55:20,691 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8604.203ms '}
+2026-03-01 17:55:20,691 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8604.57ms '}
+2026-03-01 17:55:21,321 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5155.073ms '}
+2026-03-01 17:55:21,322 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5155.672ms '}
+2026-03-01 17:55:21,322 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5156.204ms '}
+2026-03-01 17:55:21,323 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5156.48ms '}
+2026-03-01 17:55:21,323 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5157.049ms '}
+2026-03-01 17:55:21,323 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3126.495ms '}
+2026-03-01 17:55:21,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3126.751ms '}
+2026-03-01 17:55:21,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3127.197ms '}
+2026-03-01 17:55:21,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3127.55ms '}
+2026-03-01 17:55:21,324 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3127.754ms '}
+2026-03-01 17:55:21,325 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3128.243ms '}
+2026-03-01 17:55:22,589 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2349.981ms '}
+2026-03-01 17:55:23,336 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2385.907ms '}
+2026-03-01 17:55:24,227 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2645.008ms '}
+2026-03-01 17:55:24,228 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2341.184ms '}
+2026-03-01 17:55:24,228 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2014.219ms '}
+2026-03-01 17:55:25,801 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3208.863ms '}
+2026-03-01 17:55:25,802 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3209.406ms '}
+2026-03-01 17:55:28,117 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4524.533ms '}
+2026-03-01 17:55:28,118 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4525.086ms '}
+2026-03-01 17:55:30,396 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5894.758ms '}
+2026-03-01 17:55:30,397 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5895.53ms '}
+2026-03-01 17:55:30,397 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5895.723ms '}
+2026-03-01 17:55:30,398 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5896.092ms '}
+2026-03-01 17:55:32,961 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4594.598ms '}
+2026-03-01 17:55:32,962 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4594.944ms '}
+2026-03-01 17:55:32,962 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4595.397ms '}
+2026-03-01 17:55:32,962 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4595.568ms '}
+2026-03-01 17:55:32,963 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4595.984ms '}
+2026-03-01 17:55:32,963 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6898.961ms '}
+2026-03-01 17:55:32,963 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6899.37ms '}
+2026-03-01 17:55:32,964 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6899.728ms '}
+2026-03-01 17:55:32,964 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6899.693ms '}
+2026-03-01 17:55:32,964 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6900.283ms '}
+2026-03-01 17:55:32,964 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6900.411ms '}
+2026-03-01 17:55:35,781 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5738.776ms '}
+2026-03-01 17:55:37,254 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6595.568ms '}
+2026-03-01 17:55:37,255 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6596.238ms '}
+2026-03-01 17:55:37,256 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6596.504ms '}
+2026-03-01 17:55:37,256 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6596.981ms '}
+2026-03-01 17:55:37,256 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6597.188ms '}
+2026-03-01 17:55:37,257 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6597.669ms '}
+2026-03-01 17:55:37,257 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6598.122ms '}
+2026-03-01 17:55:38,156 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4947.722ms '}
+2026-03-01 17:55:38,156 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4948.151ms '}
+2026-03-01 17:55:38,156 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2742.396ms '}
+2026-03-01 17:55:38,157 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4949.222ms '}
+2026-03-01 17:55:38,157 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4949.524ms '}
+2026-03-01 17:55:38,158 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4950.072ms '}
+2026-03-01 17:55:38,158 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4950.312ms '}
+2026-03-01 17:55:39,148 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3357.293ms '}
+2026-03-01 17:55:39,148 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3357.815ms '}
+2026-03-01 17:55:39,149 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3358.434ms '}
+2026-03-01 17:55:39,149 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3358.673ms '}
+2026-03-01 17:55:40,778 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3281.458ms '}
+2026-03-01 17:55:40,778 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3281.754ms '}
+2026-03-01 17:55:42,485 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4078.938ms '}
+2026-03-01 17:55:42,486 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4080.401ms '}
+2026-03-01 17:55:44,001 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4577.181ms '}
+2026-03-01 17:55:44,002 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4578.035ms '}
+2026-03-01 17:55:44,002 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4578.238ms '}
+2026-03-01 17:55:44,003 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4578.346ms '}
+2026-03-01 17:55:45,630 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4600.247ms '}
+2026-03-01 17:55:45,631 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4600.59ms '}
+2026-03-01 17:55:45,631 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4601.022ms '}
+2026-03-01 17:55:46,810 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4081.861ms '}
+2026-03-01 17:55:46,810 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4082.214ms '}
+2026-03-01 17:55:46,811 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4082.873ms '}
+2026-03-01 17:55:46,811 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5781.263ms '}
+2026-03-01 17:55:48,300 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4043.593ms '}
+2026-03-01 17:55:48,301 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3013.717ms '}
+2026-03-01 17:55:48,301 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4044.703ms '}
+2026-03-01 17:55:48,302 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4045.183ms '}
+2026-03-01 17:55:50,079 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3016.434ms '}
+2026-03-01 17:55:50,079 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3016.844ms '}
+2026-03-01 17:55:50,080 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4438.77ms '}
+2026-03-01 17:55:50,080 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4439.109ms '}
+2026-03-01 17:55:50,080 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '4439.546ms '}
+2026-03-01 17:55:51,711 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3793.266ms '}
+2026-03-01 17:55:55,736 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7170.281ms '}
+2026-03-01 17:55:55,737 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7171.047ms '}
+2026-03-01 17:55:55,738 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7172.032ms '}
+2026-03-01 17:55:55,739 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7172.788ms '}
+2026-03-01 17:55:55,740 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5396.632ms '}
+2026-03-01 17:55:55,740 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5397.401ms '}
+2026-03-01 17:55:55,741 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5397.517ms '}
+2026-03-01 17:55:55,741 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5398.628ms '}
+2026-03-01 17:55:58,629 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6646.21ms '}
+2026-03-01 17:55:58,630 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6646.559ms '}
+2026-03-01 17:55:58,631 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6647.877ms '}
+2026-03-01 17:55:58,631 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6648.849ms '}
+2026-03-01 17:56:00,214 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6673.545ms '}
+2026-03-01 17:56:00,215 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6674.087ms '}
+2026-03-01 17:56:00,215 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6674.51ms '}
+2026-03-01 17:56:00,216 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6675.212ms '}
+2026-03-01 17:56:03,373 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7412.321ms '}
+2026-03-01 17:56:03,373 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7412.605ms '}
+2026-03-01 17:56:03,374 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7413.202ms '}
+2026-03-01 17:56:03,374 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '7413.525ms '}
+2026-03-01 17:56:08,532 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9663.118ms '}
+2026-03-01 17:56:08,533 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9663.906ms '}
+2026-03-01 17:56:08,534 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '9664.446ms '}
+2026-03-01 17:56:08,555 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8047.616ms '}
+2026-03-01 17:56:08,556 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8048.019ms '}
+2026-03-01 17:56:08,556 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '8048.768ms '}
+2026-03-01 17:56:08,575 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6834.989ms '}
+2026-03-01 17:56:08,576 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6837.085ms '}
+2026-03-01 17:56:08,576 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6837.592ms '}
+2026-03-01 17:56:08,577 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6836.25ms '}
+2026-03-01 17:56:59,145 - INFO - 
+Using Dev config...
+
+2026-03-01 17:56:59,432 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:56:59,432 - INFO - 
+ creating tables...
+
+2026-03-01 17:57:01,606 - INFO - Database tables created successfully
+2026-03-01 17:57:01,607 - INFO - Application startup complete
+2026-03-01 18:01:53,442 - INFO - Database connections closed
+2026-03-01 18:01:53,443 - INFO - Application shutdown complete
+2026-03-01 18:01:54,573 - INFO - 
+Using Dev config...
+
+2026-03-01 18:01:54,814 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:01:54,814 - INFO - 
+ creating tables...
+
+2026-03-01 18:01:56,986 - INFO - Database tables created successfully
+2026-03-01 18:01:56,987 - INFO - Application startup complete
+2026-03-01 18:02:16,933 - INFO - Database connections closed
+2026-03-01 18:02:16,933 - INFO - Application shutdown complete
+2026-03-01 18:02:17,952 - INFO - 
+Using Dev config...
+
+2026-03-01 18:02:18,244 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:02:18,245 - INFO - 
+ creating tables...
+
+2026-03-01 18:02:20,425 - INFO - Database tables created successfully
+2026-03-01 18:02:20,426 - INFO - Application startup complete
+2026-03-01 18:02:22,235 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '12.15ms '}
+2026-03-01 18:03:02,875 - INFO - Database connections closed
+2026-03-01 18:03:02,876 - INFO - Application shutdown complete
+2026-03-01 18:03:03,879 - INFO - 
+Using Dev config...
+
+2026-03-01 18:03:04,164 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:03:04,164 - INFO - 
+ creating tables...
+
+2026-03-01 18:03:06,313 - INFO - Database tables created successfully
+2026-03-01 18:03:06,314 - INFO - Application startup complete
+2026-03-01 18:03:06,421 - INFO - Database connections closed
+2026-03-01 18:03:06,422 - INFO - Application shutdown complete
+2026-03-01 18:03:07,445 - INFO - 
+Using Dev config...
+
+2026-03-01 18:03:07,736 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:03:07,736 - INFO - 
+ creating tables...
+
+2026-03-01 18:03:09,930 - INFO - Database tables created successfully
+2026-03-01 18:03:09,931 - INFO - Application startup complete
+2026-03-01 18:03:24,778 - INFO - Database connections closed
+2026-03-01 18:03:24,778 - INFO - Application shutdown complete
+2026-03-01 18:03:25,776 - INFO - 
+Using Dev config...
+
+2026-03-01 18:03:26,003 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:03:26,003 - INFO - 
+ creating tables...
+
+2026-03-01 18:03:28,189 - INFO - Database tables created successfully
+2026-03-01 18:03:28,190 - INFO - Application startup complete
+2026-03-01 18:03:28,304 - INFO - Database connections closed
+2026-03-01 18:03:28,305 - INFO - Application shutdown complete
+2026-03-01 18:03:29,356 - INFO - 
+Using Dev config...
+
+2026-03-01 18:03:29,577 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:03:29,577 - INFO - 
+ creating tables...
+
+2026-03-01 18:03:31,745 - INFO - Database tables created successfully
+2026-03-01 18:03:31,747 - INFO - Application startup complete
+2026-03-01 18:23:35,546 - INFO - Database connections closed
+2026-03-01 18:23:35,551 - INFO - Application shutdown complete
+2026-03-01 18:23:36,854 - INFO - 
+Using Dev config...
+
+2026-03-01 18:23:37,124 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:23:37,125 - INFO - 
+ creating tables...
+
+2026-03-01 18:23:39,307 - INFO - Database tables created successfully
+2026-03-01 18:23:39,308 - INFO - Application startup complete
+2026-03-01 18:30:47,843 - INFO - Database connections closed
+2026-03-01 18:30:47,844 - INFO - Application shutdown complete
+2026-03-01 18:30:49,465 - INFO - 
+Using Dev config...
+
+2026-03-01 18:30:49,736 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:30:49,736 - INFO - 
+ creating tables...
+
+2026-03-01 18:30:51,923 - INFO - Database tables created successfully
+2026-03-01 18:30:51,925 - INFO - Application startup complete
+2026-03-01 18:30:52,038 - INFO - Database connections closed
+2026-03-01 18:30:52,039 - INFO - Application shutdown complete
+2026-03-01 18:30:54,191 - INFO - 
+Using Dev config...
+
+2026-03-01 18:30:54,734 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:30:54,735 - INFO - 
+ creating tables...
+
+2026-03-01 18:30:57,005 - INFO - Database tables created successfully
+2026-03-01 18:30:57,011 - INFO - Application startup complete
+2026-03-01 18:31:05,415 - INFO - Database connections closed
+2026-03-01 18:31:05,416 - INFO - Application shutdown complete
+2026-03-01 18:31:07,166 - INFO - 
+Using Dev config...
+
+2026-03-01 18:31:07,682 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:31:07,683 - INFO - 
+ creating tables...
+
+2026-03-01 18:31:09,963 - INFO - Database tables created successfully
+2026-03-01 18:31:09,965 - INFO - Application startup complete
+2026-03-01 18:31:10,077 - INFO - Database connections closed
+2026-03-01 18:31:10,078 - INFO - Application shutdown complete
+2026-03-01 18:31:12,416 - INFO - 
+Using Dev config...
+
+2026-03-01 18:31:12,951 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:31:12,952 - INFO - 
+ creating tables...
+
+2026-03-01 18:31:15,231 - INFO - Database tables created successfully
+2026-03-01 18:31:15,233 - INFO - Application startup complete
+2026-03-01 18:31:37,764 - INFO - Database connections closed
+2026-03-01 18:31:37,764 - INFO - Application shutdown complete
+2026-03-01 18:31:39,292 - INFO - 
+Using Dev config...
+
+2026-03-01 18:31:39,569 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:31:39,570 - INFO - 
+ creating tables...
+
+2026-03-01 18:31:41,857 - INFO - Database tables created successfully
+2026-03-01 18:31:41,859 - INFO - Application startup complete
+2026-03-01 18:31:41,974 - INFO - Database connections closed
+2026-03-01 18:31:41,974 - INFO - Application shutdown complete
+2026-03-01 18:31:43,156 - INFO - 
+Using Dev config...
+
+2026-03-01 18:31:43,394 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:31:43,394 - INFO - 
+ creating tables...
+
+2026-03-01 18:31:45,611 - INFO - Database tables created successfully
+2026-03-01 18:31:45,614 - INFO - Application startup complete
+2026-03-01 18:32:00,540 - INFO - Database connections closed
+2026-03-01 18:32:00,550 - INFO - Application shutdown complete
+2026-03-01 18:32:03,443 - INFO - 
+Using Dev config...
+
+2026-03-01 18:32:04,005 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:32:04,005 - INFO - 
+ creating tables...
+
+2026-03-01 18:32:06,333 - INFO - Database tables created successfully
+2026-03-01 18:32:06,335 - INFO - Application startup complete
+2026-03-01 18:33:38,481 - INFO - Database connections closed
+2026-03-01 18:33:38,482 - INFO - Application shutdown complete
+2026-03-01 18:33:40,020 - INFO - 
+Using Dev config...
+
+2026-03-01 18:33:40,375 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:33:40,375 - INFO - 
+ creating tables...
+
+2026-03-01 18:33:42,601 - INFO - Database tables created successfully
+2026-03-01 18:33:42,603 - INFO - Application startup complete
+2026-03-01 18:33:42,715 - INFO - Database connections closed
+2026-03-01 18:33:42,716 - INFO - Application shutdown complete
+2026-03-01 18:33:44,219 - INFO - 
+Using Dev config...
+
+2026-03-01 18:33:44,480 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 18:33:44,480 - INFO - 
+ creating tables...
+
+2026-03-01 18:33:46,735 - INFO - Database tables created successfully
+2026-03-01 18:33:46,736 - INFO - Application startup complete
+2026-03-01 19:37:27,936 - INFO - Database connections closed
+2026-03-01 19:37:27,937 - INFO - Application shutdown complete
+2026-03-01 19:37:30,915 - INFO - 
+Using Dev config...
+
+2026-03-01 19:37:31,357 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:37:31,357 - INFO - 
+ creating tables...
+
+2026-03-01 19:37:33,635 - INFO - Database tables created successfully
+2026-03-01 19:37:33,636 - INFO - Application startup complete
+2026-03-01 19:37:33,741 - INFO - Database connections closed
+2026-03-01 19:37:33,742 - INFO - Application shutdown complete
+2026-03-01 19:37:35,083 - INFO - 
+Using Dev config...
+
+2026-03-01 19:37:35,350 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:37:35,351 - INFO - 
+ creating tables...
+
+2026-03-01 19:37:37,570 - INFO - Database tables created successfully
+2026-03-01 19:37:37,572 - INFO - Application startup complete
+2026-03-01 19:47:51,659 - INFO - Database connections closed
+2026-03-01 19:47:51,660 - INFO - Application shutdown complete
+2026-03-01 19:47:53,184 - INFO - 
+Using Dev config...
+
+2026-03-01 19:47:53,447 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:47:53,447 - INFO - 
+ creating tables...
+
+2026-03-01 19:47:55,704 - INFO - Database tables created successfully
+2026-03-01 19:47:55,706 - INFO - Application startup complete
+2026-03-01 19:47:58,367 - INFO - Database connections closed
+2026-03-01 19:47:58,367 - INFO - Application shutdown complete
+2026-03-01 19:47:59,644 - INFO - 
+Using Dev config...
+
+2026-03-01 19:47:59,925 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:47:59,925 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:02,195 - INFO - Database tables created successfully
+2026-03-01 19:48:02,197 - INFO - Application startup complete
+2026-03-01 19:48:19,818 - INFO - Database connections closed
+2026-03-01 19:48:19,819 - INFO - Application shutdown complete
+2026-03-01 19:48:21,122 - INFO - 
+Using Dev config...
+
+2026-03-01 19:48:21,371 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:48:21,372 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:23,682 - INFO - Database tables created successfully
+2026-03-01 19:48:23,685 - INFO - Application startup complete
+2026-03-01 19:48:23,800 - INFO - Database connections closed
+2026-03-01 19:48:23,801 - INFO - Application shutdown complete
+2026-03-01 19:48:25,176 - INFO - 
+Using Dev config...
+
+2026-03-01 19:48:25,429 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:48:25,429 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:27,679 - INFO - Database tables created successfully
+2026-03-01 19:48:27,683 - INFO - Application startup complete
+2026-03-01 19:48:27,825 - INFO - Database connections closed
+2026-03-01 19:48:27,834 - INFO - Application shutdown complete
+2026-03-01 19:48:29,235 - INFO - 
+Using Dev config...
+
+2026-03-01 19:48:29,501 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:48:29,501 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:31,711 - INFO - Database tables created successfully
+2026-03-01 19:48:31,713 - INFO - Application startup complete
+2026-03-01 19:48:31,832 - INFO - Database connections closed
+2026-03-01 19:48:31,832 - INFO - Application shutdown complete
+2026-03-01 19:48:33,283 - INFO - 
+Using Dev config...
+
+2026-03-01 19:48:33,560 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:48:33,560 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:35,781 - INFO - Database tables created successfully
+2026-03-01 19:48:35,782 - INFO - Application startup complete
+2026-03-01 19:48:35,898 - INFO - Database connections closed
+2026-03-01 19:48:35,899 - INFO - Application shutdown complete
+2026-03-01 19:48:37,251 - INFO - 
+Using Dev config...
+
+2026-03-01 19:48:37,524 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:48:37,525 - INFO - 
+ creating tables...
+
+2026-03-01 19:48:39,823 - INFO - Database tables created successfully
+2026-03-01 19:48:39,826 - INFO - Application startup complete
+2026-03-01 19:49:21,961 - INFO - Database connections closed
+2026-03-01 19:49:21,987 - INFO - Application shutdown complete
+2026-03-01 19:49:23,510 - INFO - 
+Using Dev config...
+
+2026-03-01 19:49:23,795 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:49:23,795 - INFO - 
+ creating tables...
+
+2026-03-01 19:49:26,012 - INFO - Database tables created successfully
+2026-03-01 19:49:26,014 - INFO - Application startup complete
+2026-03-01 19:49:26,133 - INFO - Database connections closed
+2026-03-01 19:49:26,133 - INFO - Application shutdown complete
+2026-03-01 19:49:27,376 - INFO - 
+Using Dev config...
+
+2026-03-01 19:49:27,622 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:49:27,623 - INFO - 
+ creating tables...
+
+2026-03-01 19:49:29,861 - INFO - Database tables created successfully
+2026-03-01 19:49:29,863 - INFO - Application startup complete
+2026-03-01 19:49:49,619 - INFO - Database connections closed
+2026-03-01 19:49:49,619 - INFO - Application shutdown complete
+2026-03-01 19:49:51,000 - INFO - 
+Using Dev config...
+
+2026-03-01 19:49:51,278 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:49:51,279 - INFO - 
+ creating tables...
+
+2026-03-01 19:49:53,550 - INFO - Database tables created successfully
+2026-03-01 19:49:53,552 - INFO - Application startup complete
+2026-03-01 19:50:05,562 - INFO - Database connections closed
+2026-03-01 19:50:05,563 - INFO - Application shutdown complete
+2026-03-01 19:50:07,001 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:07,318 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:07,319 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:09,523 - INFO - Database tables created successfully
+2026-03-01 19:50:09,526 - INFO - Application startup complete
+2026-03-01 19:50:11,926 - INFO - Database connections closed
+2026-03-01 19:50:11,929 - INFO - Application shutdown complete
+2026-03-01 19:50:13,471 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:13,706 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:13,707 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:15,965 - INFO - Database tables created successfully
+2026-03-01 19:50:15,968 - INFO - Application startup complete
+2026-03-01 19:50:19,220 - INFO - Database connections closed
+2026-03-01 19:50:19,220 - INFO - Application shutdown complete
+2026-03-01 19:50:20,605 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:20,863 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:20,864 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:23,158 - INFO - Database tables created successfully
+2026-03-01 19:50:23,160 - INFO - Application startup complete
+2026-03-01 19:50:26,403 - INFO - Database connections closed
+2026-03-01 19:50:26,403 - INFO - Application shutdown complete
+2026-03-01 19:50:27,820 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:28,093 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:28,093 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:30,410 - INFO - Database tables created successfully
+2026-03-01 19:50:30,412 - INFO - Application startup complete
+2026-03-01 19:50:30,533 - INFO - Database connections closed
+2026-03-01 19:50:30,536 - INFO - Application shutdown complete
+2026-03-01 19:50:33,140 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:33,905 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:33,906 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:36,176 - INFO - Database tables created successfully
+2026-03-01 19:50:36,180 - INFO - Application startup complete
+2026-03-01 19:50:48,039 - INFO - Database connections closed
+2026-03-01 19:50:48,040 - INFO - Application shutdown complete
+2026-03-01 19:50:50,020 - INFO - 
+Using Dev config...
+
+2026-03-01 19:50:50,648 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:50:50,649 - INFO - 
+ creating tables...
+
+2026-03-01 19:50:53,064 - INFO - Database tables created successfully
+2026-03-01 19:50:53,069 - INFO - Application startup complete
+2026-03-01 19:51:02,328 - INFO - Database connections closed
+2026-03-01 19:51:02,329 - INFO - Application shutdown complete
+2026-03-01 19:51:03,586 - INFO - 
+Using Dev config...
+
+2026-03-01 19:51:03,840 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:51:03,840 - INFO - 
+ creating tables...
+
+2026-03-01 19:51:06,081 - INFO - Database tables created successfully
+2026-03-01 19:51:06,083 - INFO - Application startup complete
+2026-03-01 19:51:56,729 - INFO - Database connections closed
+2026-03-01 19:51:56,730 - INFO - Application shutdown complete
+2026-03-01 19:51:58,513 - INFO - 
+Using Dev config...
+
+2026-03-01 19:51:58,808 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:51:58,808 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:01,026 - INFO - Database tables created successfully
+2026-03-01 19:52:01,031 - INFO - Application startup complete
+2026-03-01 19:52:01,142 - INFO - Database connections closed
+2026-03-01 19:52:01,143 - INFO - Application shutdown complete
+2026-03-01 19:52:03,038 - INFO - 
+Using Dev config...
+
+2026-03-01 19:52:03,325 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:52:03,325 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:05,628 - INFO - Database tables created successfully
+2026-03-01 19:52:05,630 - INFO - Application startup complete
+2026-03-01 19:52:05,739 - INFO - Database connections closed
+2026-03-01 19:52:05,740 - INFO - Application shutdown complete
+2026-03-01 19:52:08,538 - INFO - 
+Using Dev config...
+
+2026-03-01 19:52:09,018 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:52:09,019 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:11,367 - INFO - Database tables created successfully
+2026-03-01 19:52:11,370 - INFO - Application startup complete
+2026-03-01 19:52:24,064 - INFO - Database connections closed
+2026-03-01 19:52:24,069 - INFO - Application shutdown complete
+2026-03-01 19:52:25,561 - INFO - 
+Using Dev config...
+
+2026-03-01 19:52:25,816 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:52:25,816 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:28,055 - INFO - Database tables created successfully
+2026-03-01 19:52:28,057 - INFO - Application startup complete
+2026-03-01 19:52:28,164 - INFO - Database connections closed
+2026-03-01 19:52:28,165 - INFO - Application shutdown complete
+2026-03-01 19:52:29,338 - INFO - 
+Using Dev config...
+
+2026-03-01 19:52:29,591 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:52:29,591 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:31,841 - INFO - Database tables created successfully
+2026-03-01 19:52:31,842 - INFO - Application startup complete
+2026-03-01 19:52:44,332 - INFO - Database connections closed
+2026-03-01 19:52:44,332 - INFO - Application shutdown complete
+2026-03-01 19:52:45,554 - INFO - 
+Using Dev config...
+
+2026-03-01 19:52:45,805 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:52:45,805 - INFO - 
+ creating tables...
+
+2026-03-01 19:52:48,056 - INFO - Database tables created successfully
+2026-03-01 19:52:48,060 - INFO - Application startup complete
+2026-03-01 19:53:11,034 - INFO - Database connections closed
+2026-03-01 19:53:11,034 - INFO - Application shutdown complete
+2026-03-01 19:53:12,523 - INFO - 
+Using Dev config...
+
+2026-03-01 19:53:12,775 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 19:53:12,776 - INFO - 
+ creating tables...
+
+2026-03-01 19:53:15,000 - INFO - Database tables created successfully
+2026-03-01 19:53:15,001 - INFO - Application startup complete
+2026-03-01 20:03:44,382 - INFO - Database connections closed
+2026-03-01 20:03:44,384 - INFO - Application shutdown complete
+2026-03-01 20:03:45,887 - INFO - 
+Using Dev config...
+
+2026-03-01 20:03:46,140 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 20:03:46,140 - INFO - 
+ creating tables...
+
+2026-03-01 20:03:48,387 - INFO - Database tables created successfully
+2026-03-01 20:03:48,388 - INFO - Application startup complete
+2026-03-01 20:03:56,510 - INFO - Database connections closed
+2026-03-01 20:03:56,510 - INFO - Application shutdown complete
+2026-03-01 20:03:58,086 - INFO - 
+Using Dev config...
+
+2026-03-01 20:03:58,597 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 20:03:58,598 - INFO - 
+ creating tables...
+
+2026-03-01 20:04:00,779 - INFO - Database tables created successfully
+2026-03-01 20:04:00,780 - INFO - Application startup complete
+2026-03-01 20:07:18,977 - INFO - Database connections closed
+2026-03-01 20:07:18,978 - INFO - Application shutdown complete
+2026-03-01 20:07:21,674 - INFO - 
+Using Dev config...
+
+2026-03-01 20:07:22,273 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 20:07:22,273 - INFO - 
+ creating tables...
+
+2026-03-01 20:07:24,504 - INFO - Database tables created successfully
+2026-03-01 20:07:24,506 - INFO - Application startup complete
+2026-03-01 21:19:50,241 - INFO - Database connections closed
+2026-03-01 21:19:50,242 - INFO - Application shutdown complete
+2026-03-01 21:19:53,627 - INFO - 
+Using Dev config...
+
+2026-03-01 21:19:54,125 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:19:54,125 - INFO - 
+ creating tables...
+
+2026-03-01 21:19:56,538 - INFO - Database tables created successfully
+2026-03-01 21:19:56,542 - INFO - Application startup complete
+2026-03-01 21:19:56,651 - INFO - Database connections closed
+2026-03-01 21:19:56,652 - INFO - Application shutdown complete
+2026-03-01 21:19:58,342 - INFO - 
+Using Dev config...
+
+2026-03-01 21:19:58,630 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:19:58,630 - INFO - 
+ creating tables...
+
+2026-03-01 21:20:00,909 - INFO - Database tables created successfully
+2026-03-01 21:20:00,911 - INFO - Application startup complete
+2026-03-01 21:20:22,012 - INFO - Database connections closed
+2026-03-01 21:20:22,013 - INFO - Application shutdown complete
+2026-03-01 21:20:23,357 - INFO - 
+Using Dev config...
+
+2026-03-01 21:20:23,619 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:20:23,619 - INFO - 
+ creating tables...
+
+2026-03-01 21:20:25,884 - INFO - Database tables created successfully
+2026-03-01 21:20:25,886 - INFO - Application startup complete
+2026-03-01 21:20:25,999 - INFO - Database connections closed
+2026-03-01 21:20:26,000 - INFO - Application shutdown complete
+2026-03-01 21:20:27,235 - INFO - 
+Using Dev config...
+
+2026-03-01 21:20:27,487 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:20:27,488 - INFO - 
+ creating tables...
+
+2026-03-01 21:20:29,729 - INFO - Database tables created successfully
+2026-03-01 21:20:29,732 - INFO - Application startup complete
+2026-03-01 21:21:24,290 - INFO - Database connections closed
+2026-03-01 21:21:24,302 - INFO - Application shutdown complete
+2026-03-01 21:21:25,841 - INFO - 
+Using Dev config...
+
+2026-03-01 21:21:26,193 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:21:26,193 - INFO - 
+ creating tables...
+
+2026-03-01 21:21:28,471 - INFO - Database tables created successfully
+2026-03-01 21:21:28,473 - INFO - Application startup complete
+2026-03-01 21:21:28,583 - INFO - Database connections closed
+2026-03-01 21:21:28,584 - INFO - Application shutdown complete
+2026-03-01 21:21:29,816 - INFO - 
+Using Dev config...
+
+2026-03-01 21:21:30,059 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:21:30,060 - INFO - 
+ creating tables...
+
+2026-03-01 21:21:32,283 - INFO - Database tables created successfully
+2026-03-01 21:21:32,284 - INFO - Application startup complete
+2026-03-01 21:21:36,809 - INFO - Database connections closed
+2026-03-01 21:21:36,809 - INFO - Application shutdown complete
+2026-03-01 21:21:38,285 - INFO - 
+Using Dev config...
+
+2026-03-01 21:21:38,617 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:21:38,617 - INFO - 
+ creating tables...
+
+2026-03-01 21:21:40,878 - INFO - Database tables created successfully
+2026-03-01 21:21:40,881 - INFO - Application startup complete
+2026-03-01 21:21:40,996 - INFO - Database connections closed
+2026-03-01 21:21:40,996 - INFO - Application shutdown complete
+2026-03-01 21:21:42,581 - INFO - 
+Using Dev config...
+
+2026-03-01 21:21:43,074 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:21:43,074 - INFO - 
+ creating tables...
+
+2026-03-01 21:21:45,275 - INFO - Database tables created successfully
+2026-03-01 21:21:45,276 - INFO - Application startup complete
+2026-03-01 21:22:10,191 - INFO - Database connections closed
+2026-03-01 21:22:10,191 - INFO - Application shutdown complete
+2026-03-01 21:22:11,638 - INFO - 
+Using Dev config...
+
+2026-03-01 21:22:11,945 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:22:11,945 - INFO - 
+ creating tables...
+
+2026-03-01 21:22:14,174 - INFO - Database tables created successfully
+2026-03-01 21:22:14,176 - INFO - Application startup complete
+2026-03-01 21:23:10,565 - INFO - Database connections closed
+2026-03-01 21:23:10,566 - INFO - Application shutdown complete
+2026-03-01 21:23:11,940 - INFO - 
+Using Dev config...
+
+2026-03-01 21:23:12,253 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:23:12,253 - INFO - 
+ creating tables...
+
+2026-03-01 21:23:14,475 - INFO - Database tables created successfully
+2026-03-01 21:23:14,477 - INFO - Application startup complete
+2026-03-01 21:23:15,760 - INFO - Database connections closed
+2026-03-01 21:23:15,761 - INFO - Application shutdown complete
+2026-03-01 21:23:17,139 - INFO - 
+Using Dev config...
+
+2026-03-01 21:23:17,406 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:23:17,407 - INFO - 
+ creating tables...
+
+2026-03-01 21:23:19,670 - INFO - Database tables created successfully
+2026-03-01 21:23:19,672 - INFO - Application startup complete
+2026-03-01 21:23:19,779 - INFO - Database connections closed
+2026-03-01 21:23:19,780 - INFO - Application shutdown complete
+2026-03-01 21:23:21,052 - INFO - 
+Using Dev config...
+
+2026-03-01 21:23:21,295 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:23:21,295 - INFO - 
+ creating tables...
+
+2026-03-01 21:23:23,555 - INFO - Database tables created successfully
+2026-03-01 21:23:23,557 - INFO - Application startup complete
+2026-03-01 21:23:33,534 - INFO - Database connections closed
+2026-03-01 21:23:33,534 - INFO - Application shutdown complete
+2026-03-01 21:23:34,841 - INFO - 
+Using Dev config...
+
+2026-03-01 21:23:35,088 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:23:35,089 - INFO - 
+ creating tables...
+
+2026-03-01 21:23:37,306 - INFO - Database tables created successfully
+2026-03-01 21:23:37,308 - INFO - Application startup complete
+2026-03-01 21:23:58,173 - INFO - Database connections closed
+2026-03-01 21:23:58,175 - INFO - Application shutdown complete
+2026-03-01 21:23:59,627 - INFO - 
+Using Dev config...
+
+2026-03-01 21:23:59,980 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:23:59,981 - INFO - 
+ creating tables...
+
+2026-03-01 21:24:02,229 - INFO - Database tables created successfully
+2026-03-01 21:24:02,231 - INFO - Application startup complete
+2026-03-01 21:24:02,346 - INFO - Database connections closed
+2026-03-01 21:24:02,346 - INFO - Application shutdown complete
+2026-03-01 21:24:03,609 - INFO - 
+Using Dev config...
+
+2026-03-01 21:24:03,850 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:24:03,851 - INFO - 
+ creating tables...
+
+2026-03-01 21:24:06,183 - INFO - Database tables created successfully
+2026-03-01 21:24:06,187 - INFO - Application startup complete
+2026-03-01 21:25:07,074 - INFO - Database connections closed
+2026-03-01 21:25:07,086 - INFO - Application shutdown complete
+2026-03-01 21:25:08,487 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:08,781 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:08,781 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:10,957 - INFO - Database tables created successfully
+2026-03-01 21:25:10,959 - INFO - Application startup complete
+2026-03-01 21:25:25,958 - INFO - Database connections closed
+2026-03-01 21:25:25,993 - INFO - Application shutdown complete
+2026-03-01 21:25:27,598 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:27,858 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:27,859 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:30,108 - INFO - Database tables created successfully
+2026-03-01 21:25:30,110 - INFO - Application startup complete
+2026-03-01 21:25:30,217 - INFO - Database connections closed
+2026-03-01 21:25:30,218 - INFO - Application shutdown complete
+2026-03-01 21:25:31,481 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:31,753 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:31,753 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:34,034 - INFO - Database tables created successfully
+2026-03-01 21:25:34,036 - INFO - Application startup complete
+2026-03-01 21:25:39,932 - INFO - Database connections closed
+2026-03-01 21:25:39,932 - INFO - Application shutdown complete
+2026-03-01 21:25:41,247 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:41,505 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:41,505 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:43,762 - INFO - Database tables created successfully
+2026-03-01 21:25:43,764 - INFO - Application startup complete
+2026-03-01 21:25:43,883 - INFO - Database connections closed
+2026-03-01 21:25:43,894 - INFO - Application shutdown complete
+2026-03-01 21:25:45,297 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:45,546 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:45,546 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:47,792 - INFO - Database tables created successfully
+2026-03-01 21:25:47,794 - INFO - Application startup complete
+2026-03-01 21:25:47,904 - INFO - Database connections closed
+2026-03-01 21:25:47,906 - INFO - Application shutdown complete
+2026-03-01 21:25:49,435 - INFO - 
+Using Dev config...
+
+2026-03-01 21:25:49,686 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 21:25:49,687 - INFO - 
+ creating tables...
+
+2026-03-01 21:25:51,876 - INFO - Database tables created successfully
+2026-03-01 21:25:51,877 - INFO - Application startup complete
+2026-03-01 22:02:38,209 - INFO - Database connections closed
+2026-03-01 22:02:38,216 - INFO - Application shutdown complete
+2026-03-01 22:02:40,474 - INFO - 
+Using Dev config...
+
+2026-03-01 22:02:41,202 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:02:41,203 - INFO - 
+ creating tables...
+
+2026-03-01 22:02:43,528 - INFO - Database tables created successfully
+2026-03-01 22:02:43,530 - INFO - Application startup complete
+2026-03-01 22:02:45,178 - INFO - Database connections closed
+2026-03-01 22:02:45,179 - INFO - Application shutdown complete
+2026-03-01 22:02:46,768 - INFO - 
+Using Dev config...
+
+2026-03-01 22:02:47,055 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:02:47,077 - INFO - 
+ creating tables...
+
+2026-03-01 22:02:49,358 - INFO - Database tables created successfully
+2026-03-01 22:02:49,360 - INFO - Application startup complete
+2026-03-01 22:02:51,302 - INFO - Database connections closed
+2026-03-01 22:02:51,304 - INFO - Application shutdown complete
+2026-03-01 22:02:52,767 - INFO - 
+Using Dev config...
+
+2026-03-01 22:02:53,065 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:02:53,065 - INFO - 
+ creating tables...
+
+2026-03-01 22:02:55,306 - INFO - Database tables created successfully
+2026-03-01 22:02:55,308 - INFO - Application startup complete
+2026-03-01 22:04:03,658 - INFO - Database connections closed
+2026-03-01 22:04:03,658 - INFO - Application shutdown complete
+2026-03-01 22:04:05,292 - INFO - 
+Using Dev config...
+
+2026-03-01 22:04:05,582 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:04:05,583 - INFO - 
+ creating tables...
+
+2026-03-01 22:04:07,902 - INFO - Database tables created successfully
+2026-03-01 22:04:07,905 - INFO - Application startup complete
+2026-03-01 22:04:59,978 - INFO - Database connections closed
+2026-03-01 22:04:59,978 - INFO - Application shutdown complete
+2026-03-01 22:05:01,845 - INFO - 
+Using Dev config...
+
+2026-03-01 22:05:02,502 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:05:02,503 - INFO - 
+ creating tables...
+
+2026-03-01 22:05:04,782 - INFO - Database tables created successfully
+2026-03-01 22:05:04,785 - INFO - Application startup complete
+2026-03-01 22:05:05,333 - INFO - Database connections closed
+2026-03-01 22:05:05,334 - INFO - Application shutdown complete
+2026-03-01 22:05:07,019 - INFO - 
+Using Dev config...
+
+2026-03-01 22:05:07,313 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:05:07,313 - INFO - 
+ creating tables...
+
+2026-03-01 22:05:09,553 - INFO - Database tables created successfully
+2026-03-01 22:05:09,555 - INFO - Application startup complete
+2026-03-01 22:05:12,576 - INFO - Database connections closed
+2026-03-01 22:05:12,577 - INFO - Application shutdown complete
+2026-03-01 22:05:14,041 - INFO - 
+Using Dev config...
+
+2026-03-01 22:05:14,285 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:05:14,285 - INFO - 
+ creating tables...
+
+2026-03-01 22:05:16,532 - INFO - Database tables created successfully
+2026-03-01 22:05:16,534 - INFO - Application startup complete
+2026-03-01 22:05:16,645 - INFO - Database connections closed
+2026-03-01 22:05:16,646 - INFO - Application shutdown complete
+2026-03-01 22:05:19,112 - INFO - 
+Using Dev config...
+
+2026-03-01 22:05:19,708 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:05:19,709 - INFO - 
+ creating tables...
+
+2026-03-01 22:05:22,041 - INFO - Database tables created successfully
+2026-03-01 22:05:22,044 - INFO - Application startup complete
+2026-03-01 22:06:26,386 - INFO - Database connections closed
+2026-03-01 22:06:26,386 - INFO - Application shutdown complete
+2026-03-01 22:06:27,761 - INFO - 
+Using Dev config...
+
+2026-03-01 22:06:28,029 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:06:28,029 - INFO - 
+ creating tables...
+
+2026-03-01 22:06:30,321 - INFO - Database tables created successfully
+2026-03-01 22:06:30,324 - INFO - Application startup complete
+2026-03-01 22:07:19,570 - INFO - Database connections closed
+2026-03-01 22:07:19,571 - INFO - Application shutdown complete
+2026-03-01 22:07:21,011 - INFO - 
+Using Dev config...
+
+2026-03-01 22:07:21,328 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:07:21,329 - INFO - 
+ creating tables...
+
+2026-03-01 22:07:23,570 - INFO - Database tables created successfully
+2026-03-01 22:07:23,573 - INFO - Application startup complete
+2026-03-01 22:07:33,192 - INFO - Database connections closed
+2026-03-01 22:07:33,195 - INFO - Application shutdown complete
+2026-03-01 22:07:34,588 - INFO - 
+Using Dev config...
+
+2026-03-01 22:07:34,900 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:07:34,901 - INFO - 
+ creating tables...
+
+2026-03-01 22:07:37,131 - INFO - Database tables created successfully
+2026-03-01 22:07:37,132 - INFO - Application startup complete
+2026-03-01 22:08:16,067 - INFO - Database connections closed
+2026-03-01 22:08:16,068 - INFO - Application shutdown complete
+2026-03-01 22:08:17,425 - INFO - 
+Using Dev config...
+
+2026-03-01 22:08:17,740 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:08:17,740 - INFO - 
+ creating tables...
+
+2026-03-01 22:08:19,970 - INFO - Database tables created successfully
+2026-03-01 22:08:19,973 - INFO - Application startup complete
+2026-03-01 22:15:35,071 - INFO - Database connections closed
+2026-03-01 22:15:35,072 - INFO - Application shutdown complete
+2026-03-01 22:15:37,175 - INFO - 
+Using Dev config...
+
+2026-03-01 22:15:37,489 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:15:37,489 - INFO - 
+ creating tables...
+
+2026-03-01 22:15:39,689 - INFO - Database tables created successfully
+2026-03-01 22:15:39,691 - INFO - Application startup complete
+2026-03-01 22:41:03,980 - INFO - Database connections closed
+2026-03-01 22:41:03,981 - INFO - Application shutdown complete
+2026-03-01 22:41:05,465 - INFO - 
+Using Dev config...
+
+2026-03-01 22:41:05,721 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:41:05,721 - INFO - 
+ creating tables...
+
+2026-03-01 22:41:08,007 - INFO - Database tables created successfully
+2026-03-01 22:41:08,010 - INFO - Application startup complete
+2026-03-01 22:41:08,120 - INFO - Database connections closed
+2026-03-01 22:41:08,121 - INFO - Application shutdown complete
+2026-03-01 22:41:09,375 - INFO - 
+Using Dev config...
+
+2026-03-01 22:41:09,650 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:41:09,651 - INFO - 
+ creating tables...
+
+2026-03-01 22:41:11,857 - INFO - Database tables created successfully
+2026-03-01 22:41:11,859 - INFO - Application startup complete
+2026-03-01 22:41:19,701 - INFO - Database connections closed
+2026-03-01 22:41:19,701 - INFO - Application shutdown complete
+2026-03-01 22:41:20,949 - INFO - 
+Using Dev config...
+
+2026-03-01 22:41:21,196 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:41:21,197 - INFO - 
+ creating tables...
+
+2026-03-01 22:41:23,420 - INFO - Database tables created successfully
+2026-03-01 22:41:23,422 - INFO - Application startup complete
+2026-03-01 22:44:25,224 - INFO - Database connections closed
+2026-03-01 22:44:25,225 - INFO - Application shutdown complete
+2026-03-01 22:44:26,708 - INFO - 
+Using Dev config...
+
+2026-03-01 22:44:26,962 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:44:26,963 - INFO - 
+ creating tables...
+
+2026-03-01 22:44:29,147 - INFO - Database tables created successfully
+2026-03-01 22:44:29,148 - INFO - Application startup complete
+2026-03-01 22:45:18,182 - INFO - Database connections closed
+2026-03-01 22:45:18,185 - INFO - Application shutdown complete
+2026-03-01 22:45:19,511 - INFO - 
+Using Dev config...
+
+2026-03-01 22:45:19,784 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:45:19,784 - INFO - 
+ creating tables...
+
+2026-03-01 22:45:22,033 - INFO - Database tables created successfully
+2026-03-01 22:45:22,035 - INFO - Application startup complete
+2026-03-01 22:45:22,150 - INFO - Database connections closed
+2026-03-01 22:45:22,151 - INFO - Application shutdown complete
+2026-03-01 22:45:23,359 - INFO - 
+Using Dev config...
+
+2026-03-01 22:45:23,603 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:45:23,604 - INFO - 
+ creating tables...
+
+2026-03-01 22:45:25,871 - INFO - Database tables created successfully
+2026-03-01 22:45:25,873 - INFO - Application startup complete
+2026-03-01 22:46:01,391 - INFO - Database connections closed
+2026-03-01 22:46:01,392 - INFO - Application shutdown complete
+2026-03-01 22:46:02,689 - INFO - 
+Using Dev config...
+
+2026-03-01 22:46:02,968 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:46:02,968 - INFO - 
+ creating tables...
+
+2026-03-01 22:46:05,163 - INFO - Database tables created successfully
+2026-03-01 22:46:05,164 - INFO - Application startup complete
+2026-03-01 22:46:22,469 - INFO - Database connections closed
+2026-03-01 22:46:22,470 - INFO - Application shutdown complete
+2026-03-01 22:46:23,869 - INFO - 
+Using Dev config...
+
+2026-03-01 22:46:24,171 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:46:24,171 - INFO - 
+ creating tables...
+
+2026-03-01 22:46:26,419 - INFO - Database tables created successfully
+2026-03-01 22:46:26,422 - INFO - Application startup complete
+2026-03-01 22:46:29,858 - INFO - Database connections closed
+2026-03-01 22:46:29,858 - INFO - Application shutdown complete
+2026-03-01 22:46:31,109 - INFO - 
+Using Dev config...
+
+2026-03-01 22:46:31,375 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:46:31,376 - INFO - 
+ creating tables...
+
+2026-03-01 22:46:33,693 - INFO - Database tables created successfully
+2026-03-01 22:46:33,696 - INFO - Application startup complete
+2026-03-01 22:46:50,714 - INFO - Database connections closed
+2026-03-01 22:46:50,716 - INFO - Application shutdown complete
+2026-03-01 22:46:52,049 - INFO - 
+Using Dev config...
+
+2026-03-01 22:46:52,324 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:46:52,324 - INFO - 
+ creating tables...
+
+2026-03-01 22:46:54,558 - INFO - Database tables created successfully
+2026-03-01 22:46:54,559 - INFO - Application startup complete
+2026-03-01 22:47:47,565 - INFO - Database connections closed
+2026-03-01 22:47:47,575 - INFO - Application shutdown complete
+2026-03-01 22:47:48,927 - INFO - 
+Using Dev config...
+
+2026-03-01 22:47:49,201 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:47:49,202 - INFO - 
+ creating tables...
+
+2026-03-01 22:47:51,495 - INFO - Database tables created successfully
+2026-03-01 22:47:51,499 - INFO - Application startup complete
+2026-03-01 22:47:55,813 - INFO - Database connections closed
+2026-03-01 22:47:55,814 - INFO - Application shutdown complete
+2026-03-01 22:47:57,200 - INFO - 
+Using Dev config...
+
+2026-03-01 22:47:57,469 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:47:57,469 - INFO - 
+ creating tables...
+
+2026-03-01 22:47:59,683 - INFO - Database tables created successfully
+2026-03-01 22:47:59,684 - INFO - Application startup complete
+2026-03-01 22:52:24,639 - INFO - Database connections closed
+2026-03-01 22:52:24,640 - INFO - Application shutdown complete
+2026-03-01 22:52:26,868 - INFO - 
+Using Dev config...
+
+2026-03-01 22:52:27,313 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:52:27,314 - INFO - 
+ creating tables...
+
+2026-03-01 22:52:29,593 - INFO - Database tables created successfully
+2026-03-01 22:52:29,596 - INFO - Application startup complete
+2026-03-01 22:52:44,728 - INFO - Database connections closed
+2026-03-01 22:52:44,729 - INFO - Application shutdown complete
+2026-03-01 22:52:47,562 - INFO - 
+Using Dev config...
+
+2026-03-01 22:52:48,080 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:52:48,080 - INFO - 
+ creating tables...
+
+2026-03-01 22:52:50,458 - INFO - Database tables created successfully
+2026-03-01 22:52:50,461 - INFO - Application startup complete
+2026-03-01 22:52:51,093 - INFO - Database connections closed
+2026-03-01 22:52:51,094 - INFO - Application shutdown complete
+2026-03-01 22:52:54,147 - INFO - 
+Using Dev config...
+
+2026-03-01 22:52:54,701 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:52:54,702 - INFO - 
+ creating tables...
+
+2026-03-01 22:52:56,985 - INFO - Database tables created successfully
+2026-03-01 22:52:56,988 - INFO - Application startup complete
+2026-03-01 22:52:57,103 - INFO - Database connections closed
+2026-03-01 22:52:57,104 - INFO - Application shutdown complete
+2026-03-01 22:52:59,171 - INFO - 
+Using Dev config...
+
+2026-03-01 22:52:59,532 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:52:59,532 - INFO - 
+ creating tables...
+
+2026-03-01 22:53:01,840 - INFO - Database tables created successfully
+2026-03-01 22:53:01,843 - INFO - Application startup complete
+2026-03-01 22:53:05,397 - INFO - Database connections closed
+2026-03-01 22:53:05,398 - INFO - Application shutdown complete
+2026-03-01 22:53:07,916 - INFO - 
+Using Dev config...
+
+2026-03-01 22:53:08,504 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:53:08,505 - INFO - 
+ creating tables...
+
+2026-03-01 22:53:10,808 - INFO - Database tables created successfully
+2026-03-01 22:53:10,811 - INFO - Application startup complete
+2026-03-01 22:53:10,920 - INFO - Database connections closed
+2026-03-01 22:53:10,921 - INFO - Application shutdown complete
+2026-03-01 22:53:14,443 - INFO - 
+Using Dev config...
+
+2026-03-01 22:53:14,933 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 22:53:14,934 - INFO - 
+ creating tables...
+
+2026-03-01 22:53:17,284 - INFO - Database tables created successfully
+2026-03-01 22:53:17,288 - INFO - Application startup complete
+2026-03-01 23:12:46,484 - INFO - Database connections closed
+2026-03-01 23:12:46,485 - INFO - Application shutdown complete
+2026-03-01 23:12:48,876 - INFO - 
+Using Dev config...
+
+2026-03-01 23:12:49,353 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:12:49,354 - INFO - 
+ creating tables...
+
+2026-03-01 23:12:51,712 - INFO - Database tables created successfully
+2026-03-01 23:12:51,715 - INFO - Application startup complete
+2026-03-01 23:12:51,827 - INFO - Database connections closed
+2026-03-01 23:12:51,828 - INFO - Application shutdown complete
+2026-03-01 23:12:53,699 - INFO - 
+Using Dev config...
+
+2026-03-01 23:12:54,262 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:12:54,262 - INFO - 
+ creating tables...
+
+2026-03-01 23:12:56,639 - INFO - Database tables created successfully
+2026-03-01 23:12:56,642 - INFO - Application startup complete
+2026-03-01 23:12:56,759 - INFO - Database connections closed
+2026-03-01 23:12:56,760 - INFO - Application shutdown complete
+2026-03-01 23:12:59,523 - INFO - 
+Using Dev config...
+
+2026-03-01 23:13:00,197 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:13:00,198 - INFO - 
+ creating tables...
+
+2026-03-01 23:13:02,528 - INFO - Database tables created successfully
+2026-03-01 23:13:02,530 - INFO - Application startup complete
+2026-03-01 23:13:02,637 - INFO - Database connections closed
+2026-03-01 23:13:02,638 - INFO - Application shutdown complete
+2026-03-01 23:13:05,133 - INFO - 
+Using Dev config...
+
+2026-03-01 23:13:05,684 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:13:05,685 - INFO - 
+ creating tables...
+
+2026-03-01 23:13:08,013 - INFO - Database tables created successfully
+2026-03-01 23:13:08,016 - INFO - Application startup complete
+2026-03-01 23:13:37,001 - INFO - Database connections closed
+2026-03-01 23:13:37,002 - INFO - Application shutdown complete
+2026-03-01 23:13:39,155 - INFO - 
+Using Dev config...
+
+2026-03-01 23:13:39,804 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:13:39,805 - INFO - 
+ creating tables...
+
+2026-03-01 23:13:42,182 - INFO - Database tables created successfully
+2026-03-01 23:13:42,184 - INFO - Application startup complete
+2026-03-01 23:14:18,909 - INFO - Database connections closed
+2026-03-01 23:14:18,911 - INFO - Application shutdown complete
+2026-03-01 23:14:21,264 - INFO - 
+Using Dev config...
+
+2026-03-01 23:14:21,667 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:14:21,668 - INFO - 
+ creating tables...
+
+2026-03-01 23:14:23,934 - INFO - Database tables created successfully
+2026-03-01 23:14:23,937 - INFO - Application startup complete
+2026-03-01 23:14:27,062 - INFO - Database connections closed
+2026-03-01 23:14:27,063 - INFO - Application shutdown complete
+2026-03-01 23:14:29,197 - INFO - 
+Using Dev config...
+
+2026-03-01 23:14:29,648 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:14:29,648 - INFO - 
+ creating tables...
+
+2026-03-01 23:14:31,945 - INFO - Database tables created successfully
+2026-03-01 23:14:31,948 - INFO - Application startup complete
+2026-03-01 23:14:32,080 - INFO - Database connections closed
+2026-03-01 23:14:32,080 - INFO - Application shutdown complete
+2026-03-01 23:14:34,897 - INFO - 
+Using Dev config...
+
+2026-03-01 23:14:35,415 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:14:35,416 - INFO - 
+ creating tables...
+
+2026-03-01 23:14:37,691 - INFO - Database tables created successfully
+2026-03-01 23:14:37,693 - INFO - Application startup complete
+2026-03-01 23:14:37,810 - INFO - Database connections closed
+2026-03-01 23:14:37,813 - INFO - Application shutdown complete
+2026-03-01 23:14:41,035 - INFO - 
+Using Dev config...
+
+2026-03-01 23:14:41,641 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:14:41,642 - INFO - 
+ creating tables...
+
+2026-03-01 23:14:43,993 - INFO - Database tables created successfully
+2026-03-01 23:14:43,995 - INFO - Application startup complete
+2026-03-01 23:14:51,486 - INFO - Database connections closed
+2026-03-01 23:14:51,487 - INFO - Application shutdown complete
+2026-03-01 23:14:54,309 - INFO - 
+Using Dev config...
+
+2026-03-01 23:14:54,871 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:14:54,872 - INFO - 
+ creating tables...
+
+2026-03-01 23:14:57,277 - INFO - Database tables created successfully
+2026-03-01 23:14:57,280 - INFO - Application startup complete
+2026-03-01 23:15:26,505 - INFO - Database connections closed
+2026-03-01 23:15:26,506 - INFO - Application shutdown complete
+2026-03-01 23:15:29,104 - INFO - 
+Using Dev config...
+
+2026-03-01 23:15:29,550 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:15:29,550 - INFO - 
+ creating tables...
+
+2026-03-01 23:15:31,854 - INFO - Database tables created successfully
+2026-03-01 23:15:31,857 - INFO - Application startup complete
+2026-03-01 23:15:33,609 - INFO - Database connections closed
+2026-03-01 23:15:33,611 - INFO - Application shutdown complete
+2026-03-01 23:15:36,459 - INFO - 
+Using Dev config...
+
+2026-03-01 23:15:36,847 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:15:36,848 - INFO - 
+ creating tables...
+
+2026-03-01 23:15:39,107 - INFO - Database tables created successfully
+2026-03-01 23:15:39,110 - INFO - Application startup complete
+2026-03-01 23:15:43,681 - INFO - Database connections closed
+2026-03-01 23:15:43,682 - INFO - Application shutdown complete
+2026-03-01 23:15:46,303 - INFO - 
+Using Dev config...
+
+2026-03-01 23:15:46,783 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:15:46,784 - INFO - 
+ creating tables...
+
+2026-03-01 23:15:49,087 - INFO - Database tables created successfully
+2026-03-01 23:15:49,090 - INFO - Application startup complete
+2026-03-01 23:15:49,207 - INFO - Database connections closed
+2026-03-01 23:15:49,208 - INFO - Application shutdown complete
+2026-03-01 23:15:51,442 - INFO - 
+Using Dev config...
+
+2026-03-01 23:15:51,895 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:15:51,896 - INFO - 
+ creating tables...
+
+2026-03-01 23:15:54,178 - INFO - Database tables created successfully
+2026-03-01 23:15:54,180 - INFO - Application startup complete
+2026-03-01 23:15:54,302 - INFO - Database connections closed
+2026-03-01 23:15:54,303 - INFO - Application shutdown complete
+2026-03-01 23:15:56,403 - INFO - 
+Using Dev config...
+
+2026-03-01 23:15:56,929 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:15:56,930 - INFO - 
+ creating tables...
+
+2026-03-01 23:15:59,206 - INFO - Database tables created successfully
+2026-03-01 23:15:59,209 - INFO - Application startup complete
+2026-03-01 23:15:59,328 - INFO - Database connections closed
+2026-03-01 23:15:59,328 - INFO - Application shutdown complete
+2026-03-01 23:16:03,041 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:03,466 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:03,467 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:05,791 - INFO - Database tables created successfully
+2026-03-01 23:16:05,795 - INFO - Application startup complete
+2026-03-01 23:16:05,921 - INFO - Database connections closed
+2026-03-01 23:16:05,922 - INFO - Application shutdown complete
+2026-03-01 23:16:08,566 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:09,140 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:09,141 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:11,432 - INFO - Database tables created successfully
+2026-03-01 23:16:11,434 - INFO - Application startup complete
+2026-03-01 23:16:12,300 - INFO - Database connections closed
+2026-03-01 23:16:12,301 - INFO - Application shutdown complete
+2026-03-01 23:16:14,562 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:15,246 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:15,246 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:17,562 - INFO - Database tables created successfully
+2026-03-01 23:16:17,565 - INFO - Application startup complete
+2026-03-01 23:16:23,764 - INFO - Database connections closed
+2026-03-01 23:16:23,765 - INFO - Application shutdown complete
+2026-03-01 23:16:26,321 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:26,710 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:26,710 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:29,007 - INFO - Database tables created successfully
+2026-03-01 23:16:29,011 - INFO - Application startup complete
+2026-03-01 23:16:29,772 - INFO - Database connections closed
+2026-03-01 23:16:29,773 - INFO - Application shutdown complete
+2026-03-01 23:16:32,294 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:32,766 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:32,767 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:35,055 - INFO - Database tables created successfully
+2026-03-01 23:16:35,058 - INFO - Application startup complete
+2026-03-01 23:16:35,169 - INFO - Database connections closed
+2026-03-01 23:16:35,170 - INFO - Application shutdown complete
+2026-03-01 23:16:37,703 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:38,065 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:38,066 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:40,404 - INFO - Database tables created successfully
+2026-03-01 23:16:40,407 - INFO - Application startup complete
+2026-03-01 23:16:42,120 - INFO - Database connections closed
+2026-03-01 23:16:42,121 - INFO - Application shutdown complete
+2026-03-01 23:16:44,179 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:44,815 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:44,816 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:47,135 - INFO - Database tables created successfully
+2026-03-01 23:16:47,138 - INFO - Application startup complete
+2026-03-01 23:16:47,249 - INFO - Database connections closed
+2026-03-01 23:16:47,250 - INFO - Application shutdown complete
+2026-03-01 23:16:49,220 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:49,650 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:49,651 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:51,960 - INFO - Database tables created successfully
+2026-03-01 23:16:51,962 - INFO - Application startup complete
+2026-03-01 23:16:52,076 - INFO - Database connections closed
+2026-03-01 23:16:52,076 - INFO - Application shutdown complete
+2026-03-01 23:16:54,149 - INFO - 
+Using Dev config...
+
+2026-03-01 23:16:54,613 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:16:54,614 - INFO - 
+ creating tables...
+
+2026-03-01 23:16:56,857 - INFO - Database tables created successfully
+2026-03-01 23:16:56,859 - INFO - Application startup complete
+2026-03-01 23:16:58,482 - INFO - Database connections closed
+2026-03-01 23:16:58,483 - INFO - Application shutdown complete
+2026-03-01 23:17:01,181 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:01,678 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:01,678 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:03,948 - INFO - Database tables created successfully
+2026-03-01 23:17:03,951 - INFO - Application startup complete
+2026-03-01 23:17:04,059 - INFO - Database connections closed
+2026-03-01 23:17:04,060 - INFO - Application shutdown complete
+2026-03-01 23:17:06,088 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:06,810 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:06,811 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:09,118 - INFO - Database tables created successfully
+2026-03-01 23:17:09,121 - INFO - Application startup complete
+2026-03-01 23:17:09,237 - INFO - Database connections closed
+2026-03-01 23:17:09,238 - INFO - Application shutdown complete
+2026-03-01 23:17:11,325 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:11,987 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:11,992 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:14,327 - INFO - Database tables created successfully
+2026-03-01 23:17:14,330 - INFO - Application startup complete
+2026-03-01 23:17:14,446 - INFO - Database connections closed
+2026-03-01 23:17:14,447 - INFO - Application shutdown complete
+2026-03-01 23:17:16,803 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:17,271 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:17,272 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:19,564 - INFO - Database tables created successfully
+2026-03-01 23:17:19,566 - INFO - Application startup complete
+2026-03-01 23:17:23,483 - INFO - Database connections closed
+2026-03-01 23:17:23,485 - INFO - Application shutdown complete
+2026-03-01 23:17:25,898 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:26,294 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:26,295 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:28,612 - INFO - Database tables created successfully
+2026-03-01 23:17:28,615 - INFO - Application startup complete
+2026-03-01 23:17:28,728 - INFO - Database connections closed
+2026-03-01 23:17:28,731 - INFO - Application shutdown complete
+2026-03-01 23:17:30,769 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:31,210 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:31,229 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:33,558 - INFO - Database tables created successfully
+2026-03-01 23:17:33,561 - INFO - Application startup complete
+2026-03-01 23:17:33,902 - INFO - Database connections closed
+2026-03-01 23:17:33,903 - INFO - Application shutdown complete
+2026-03-01 23:17:35,892 - INFO - 
+Using Dev config...
+
+2026-03-01 23:17:36,286 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:17:36,286 - INFO - 
+ creating tables...
+
+2026-03-01 23:17:38,591 - INFO - Database tables created successfully
+2026-03-01 23:17:38,594 - INFO - Application startup complete
+2026-03-01 23:18:02,167 - INFO - Database connections closed
+2026-03-01 23:18:02,167 - INFO - Application shutdown complete
+2026-03-01 23:18:04,453 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:04,916 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:04,916 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:07,319 - INFO - Database tables created successfully
+2026-03-01 23:18:07,324 - INFO - Application startup complete
+2026-03-01 23:18:22,970 - INFO - Database connections closed
+2026-03-01 23:18:22,976 - INFO - Application shutdown complete
+2026-03-01 23:18:25,486 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:25,909 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:25,910 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:28,232 - INFO - Database tables created successfully
+2026-03-01 23:18:28,237 - INFO - Application startup complete
+2026-03-01 23:18:28,364 - INFO - Database connections closed
+2026-03-01 23:18:28,366 - INFO - Application shutdown complete
+2026-03-01 23:18:30,827 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:31,212 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:31,213 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:33,574 - INFO - Database tables created successfully
+2026-03-01 23:18:33,576 - INFO - Application startup complete
+2026-03-01 23:18:34,103 - INFO - Database connections closed
+2026-03-01 23:18:34,105 - INFO - Application shutdown complete
+2026-03-01 23:18:36,209 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:36,752 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:36,753 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:38,999 - INFO - Database tables created successfully
+2026-03-01 23:18:39,001 - INFO - Application startup complete
+2026-03-01 23:18:39,113 - INFO - Database connections closed
+2026-03-01 23:18:39,118 - INFO - Application shutdown complete
+2026-03-01 23:18:41,316 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:41,703 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:41,704 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:43,984 - INFO - Database tables created successfully
+2026-03-01 23:18:43,986 - INFO - Application startup complete
+2026-03-01 23:18:44,100 - INFO - Database connections closed
+2026-03-01 23:18:44,104 - INFO - Application shutdown complete
+2026-03-01 23:18:46,201 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:46,630 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:46,631 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:49,005 - INFO - Database tables created successfully
+2026-03-01 23:18:49,011 - INFO - Application startup complete
+2026-03-01 23:18:49,126 - INFO - Database connections closed
+2026-03-01 23:18:49,128 - INFO - Application shutdown complete
+2026-03-01 23:18:51,639 - INFO - 
+Using Dev config...
+
+2026-03-01 23:18:52,015 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:18:52,016 - INFO - 
+ creating tables...
+
+2026-03-01 23:18:54,381 - INFO - Database tables created successfully
+2026-03-01 23:18:54,385 - INFO - Application startup complete
+2026-03-01 23:18:56,944 - INFO - Database connections closed
+2026-03-01 23:18:56,948 - INFO - Application shutdown complete
+2026-03-01 23:18:59,893 - INFO - 
+Using Dev config...
+
+2026-03-01 23:19:00,558 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:19:00,558 - INFO - 
+ creating tables...
+
+2026-03-01 23:19:02,859 - INFO - Database tables created successfully
+2026-03-01 23:19:02,861 - INFO - Application startup complete
+2026-03-01 23:19:06,951 - INFO - Database connections closed
+2026-03-01 23:19:06,952 - INFO - Application shutdown complete
+2026-03-01 23:19:09,028 - INFO - 
+Using Dev config...
+
+2026-03-01 23:19:09,521 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 23:19:09,522 - INFO - 
+ creating tables...
+
+2026-03-01 23:19:11,864 - INFO - Database tables created successfully
+2026-03-01 23:19:11,866 - INFO - Application startup complete
+2026-03-01 23:19:11,979 - INFO - Database connections closed
+2026-03-01 23:19:11,980 - INFO - Application shutdown complete
