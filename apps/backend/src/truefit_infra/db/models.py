@@ -1,4 +1,6 @@
 from __future__ import annotations
+import os
+print("LOADED:", os.path.abspath(__file__))
 
 import enum
 from datetime import datetime
@@ -20,7 +22,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PG_UUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, relationship, mapped_column
 
 
 # ----------------------------
@@ -31,8 +33,9 @@ class Base(DeclarativeBase):
     pass
 
 
+
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now()
 
 
 # ----------------------------
@@ -341,7 +344,7 @@ class InterviewTurn(Base):
     speaker: Mapped[Speaker] = mapped_column(String(32), nullable=False)
     modality: Mapped[Modality] = mapped_column(String(32), nullable=False)
 
-    text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    turn_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
 
     started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
@@ -398,7 +401,7 @@ class Transcript(Base):
     engine: Mapped[str] = mapped_column(String(64), nullable=False)
     language: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
 
-    text: Mapped[str] = mapped_column(Text, nullable=False)
+    transcript_text: Mapped[str] = mapped_column(Text, nullable=False)
     segments: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)

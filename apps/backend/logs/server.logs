@@ -138,3 +138,324 @@ Using Dev config...
 2026-03-01 13:32:08,741 - INFO - Application startup complete
 2026-03-01 13:34:14,075 - INFO - Database connections closed
 2026-03-01 13:34:14,077 - INFO - Application shutdown complete
+2026-03-01 15:49:26,767 - INFO - 
+Using Dev config...
+
+2026-03-01 15:49:27,625 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 15:49:27,625 - INFO - 
+ creating tables...
+
+2026-03-01 15:49:29,836 - INFO - Database tables created successfully
+2026-03-01 15:49:29,837 - INFO - Application startup complete
+2026-03-01 16:18:08,074 - INFO - Database connections closed
+2026-03-01 16:18:08,074 - INFO - Application shutdown complete
+2026-03-01 16:18:09,025 - INFO - 
+Using Dev config...
+
+2026-03-01 16:18:09,157 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:18:09,158 - INFO - 
+ creating tables...
+
+2026-03-01 16:18:11,315 - INFO - Database tables created successfully
+2026-03-01 16:18:11,315 - INFO - Application startup complete
+2026-03-01 16:20:18,697 - INFO - Database connections closed
+2026-03-01 16:20:18,697 - INFO - Application shutdown complete
+2026-03-01 16:20:19,814 - INFO - 
+Using Dev config...
+
+2026-03-01 16:20:20,015 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:20:20,016 - INFO - 
+ creating tables...
+
+2026-03-01 16:20:22,148 - INFO - Database tables created successfully
+2026-03-01 16:20:22,148 - INFO - Application startup complete
+2026-03-01 16:20:37,724 - INFO - Database connections closed
+2026-03-01 16:20:37,727 - INFO - Application shutdown complete
+2026-03-01 16:20:39,361 - INFO - 
+Using Dev config...
+
+2026-03-01 16:20:39,620 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:20:39,621 - INFO - 
+ creating tables...
+
+2026-03-01 16:20:41,788 - INFO - Database tables created successfully
+2026-03-01 16:20:41,789 - INFO - Application startup complete
+2026-03-01 16:20:41,898 - INFO - Database connections closed
+2026-03-01 16:20:41,898 - INFO - Application shutdown complete
+2026-03-01 16:20:42,971 - INFO - 
+Using Dev config...
+
+2026-03-01 16:20:43,122 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:20:43,133 - INFO - 
+ creating tables...
+
+2026-03-01 16:20:45,284 - INFO - Database tables created successfully
+2026-03-01 16:20:45,284 - INFO - Application startup complete
+2026-03-01 16:27:44,739 - INFO - Database connections closed
+2026-03-01 16:27:44,739 - INFO - Application shutdown complete
+2026-03-01 16:27:45,805 - INFO - 
+Using Dev config...
+
+2026-03-01 16:27:45,943 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:27:45,943 - INFO - 
+ creating tables...
+
+2026-03-01 16:27:48,132 - INFO - Database tables created successfully
+2026-03-01 16:27:48,133 - INFO - Application startup complete
+2026-03-01 16:27:48,756 - INFO - Database connections closed
+2026-03-01 16:27:48,757 - INFO - Application shutdown complete
+2026-03-01 16:27:49,828 - INFO - 
+Using Dev config...
+
+2026-03-01 16:27:49,970 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:27:49,970 - INFO - 
+ creating tables...
+
+2026-03-01 16:27:52,127 - INFO - Database tables created successfully
+2026-03-01 16:27:52,127 - INFO - Application startup complete
+2026-03-01 16:35:03,341 - INFO - Database connections closed
+2026-03-01 16:35:03,342 - INFO - Application shutdown complete
+2026-03-01 16:35:04,309 - INFO - 
+Using Dev config...
+
+2026-03-01 16:35:04,476 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 16:35:04,476 - INFO - 
+ creating tables...
+
+2026-03-01 16:35:06,630 - ERROR - Startup failed: name 'Base' is not defined
+2026-03-01 16:35:06,631 - INFO - Database connections closed
+2026-03-01 16:35:06,632 - INFO - Application shutdown complete
+2026-03-01 16:35:13,667 - INFO - 
+Using Dev config...
+
+2026-03-01 16:35:26,617 - INFO - 
+Using Dev config...
+
+2026-03-01 16:35:39,848 - INFO - 
+Using Dev config...
+
+2026-03-01 16:38:09,035 - INFO - 
+Using Dev config...
+
+2026-03-01 16:38:24,411 - INFO - 
+Using Dev config...
+
+2026-03-01 16:41:40,529 - INFO - 
+Using Dev config...
+
+2026-03-01 16:43:43,754 - INFO - 
+Using Dev config...
+
+2026-03-01 16:43:45,081 - INFO - 
+Using Dev config...
+
+2026-03-01 16:43:59,327 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:00,669 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:03,929 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:05,636 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:07,220 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:16,597 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:19,106 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:21,308 - INFO - 
+Using Dev config...
+
+2026-03-01 16:44:48,492 - INFO - 
+Using Dev config...
+
+2026-03-01 16:45:04,009 - INFO - 
+Using Dev config...
+
+2026-03-01 16:45:08,187 - INFO - 
+Using Dev config...
+
+2026-03-01 16:45:34,590 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:05,245 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:06,820 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:09,338 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:16,736 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:29,448 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:33,672 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:40,727 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:42,870 - INFO - 
+Using Dev config...
+
+2026-03-01 16:46:44,605 - INFO - 
+Using Dev config...
+
+2026-03-01 16:47:11,489 - INFO - 
+Using Dev config...
+
+2026-03-01 16:47:15,100 - INFO - 
+Using Dev config...
+
+2026-03-01 16:47:48,518 - INFO - 
+Using Dev config...
+
+2026-03-01 16:47:52,008 - INFO - 
+Using Dev config...
+
+2026-03-01 16:47:59,374 - INFO - 
+Using Dev config...
+
+2026-03-01 16:49:22,717 - INFO - 
+Using Dev config...
+
+2026-03-01 16:49:27,973 - INFO - 
+Using Dev config...
+
+2026-03-01 16:50:59,560 - INFO - 
+Using Dev config...
+
+2026-03-01 16:51:04,410 - INFO - 
+Using Dev config...
+
+2026-03-01 16:51:13,806 - INFO - 
+Using Dev config...
+
+2026-03-01 16:51:33,454 - INFO - 
+Using Dev config...
+
+2026-03-01 16:51:48,580 - INFO - 
+Using Dev config...
+
+2026-03-01 16:54:58,574 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:06,295 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:08,250 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:36,632 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:51,688 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:53,940 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:56,721 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:58,191 - INFO - 
+Using Dev config...
+
+2026-03-01 16:55:59,900 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:15,963 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:17,108 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:22,534 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:24,693 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:26,199 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:27,327 - INFO - 
+Using Dev config...
+
+2026-03-01 16:58:29,187 - INFO - 
+Using Dev config...
+
+2026-03-01 17:08:18,616 - INFO - 
+Using Dev config...
+
+2026-03-01 17:08:48,726 - INFO - 
+Using Dev config...
+
+2026-03-01 17:10:58,387 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:00,044 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:01,259 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:07,521 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:17,038 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:24,624 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:43,613 - INFO - 
+Using Dev config...
+
+2026-03-01 17:11:57,168 - INFO - 
+Using Dev config...
+
+2026-03-01 17:12:28,111 - INFO - 
+Using Dev config...
+
+2026-03-01 17:12:28,429 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:12:28,429 - INFO - 
+ creating tables...
+
+2026-03-01 17:12:30,903 - INFO - Database tables created successfully
+2026-03-01 17:12:30,907 - INFO - Application startup complete
+2026-03-01 17:12:31,024 - INFO - Database connections closed
+2026-03-01 17:12:31,025 - INFO - Application shutdown complete
+2026-03-01 17:12:32,024 - INFO - 
+Using Dev config...
+
+2026-03-01 17:12:32,243 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:12:32,243 - INFO - 
+ creating tables...
+
+2026-03-01 17:12:34,413 - INFO - Database tables created successfully
+2026-03-01 17:12:34,414 - INFO - Application startup complete
+2026-03-01 17:12:34,519 - INFO - Database connections closed
+2026-03-01 17:12:34,519 - INFO - Application shutdown complete
+2026-03-01 17:12:35,607 - INFO - 
+Using Dev config...
+
+2026-03-01 17:12:35,823 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-01 17:12:35,824 - INFO - 
+ creating tables...
+
+2026-03-01 17:12:38,005 - INFO - Database tables created successfully
+2026-03-01 17:12:38,007 - INFO - Application startup complete
+2026-03-01 17:12:51,600 - INFO - Database connections closed
+2026-03-01 17:12:51,601 - INFO - Application shutdown complete

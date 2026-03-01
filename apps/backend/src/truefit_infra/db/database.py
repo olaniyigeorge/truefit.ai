@@ -1,12 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import declarative_base
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 
 from src.truefit_core.common.utils import logger
-
-Base = declarative_base()
+from src.truefit_infra.db.models import Base
 
 
 class DatabaseManager:
