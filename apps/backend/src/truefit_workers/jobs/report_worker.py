@@ -1,0 +1,1 @@
+ # Consumes evaluation.completed → generates PDF report
