@@ -7,7 +7,7 @@ from urllib.parse import unquote
 from alembic import context
 
 
-from config import AppConfig
+from truefit_infra.config import AppConfig
 from db.database import Base
 
 # Importing models to make sure alembic sees them when loaded

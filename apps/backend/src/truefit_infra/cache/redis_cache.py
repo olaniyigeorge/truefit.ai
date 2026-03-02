@@ -1,0 +1,1 @@
+# RedisCacheAdapter(CachePort): Implements the CachePort interface using Redis as the underlying cache mechanism.

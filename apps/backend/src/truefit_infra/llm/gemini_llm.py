@@ -1,0 +1,2 @@
+# GeminiLLMAdapter(LLMPort) — standard gen AI LLM adapter for Gemini models, implementing the LLMPort interface.
+# Used for question, geenration, text answering, evaluation, and other gen AI use cases. Provides a consistent interface for interacting with Gemini LLMs across the application.

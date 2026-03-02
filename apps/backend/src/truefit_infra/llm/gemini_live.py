@@ -1,0 +1,2 @@
+# GeminiLiveAdapter — Live API session wrapper
+# GeminiLiveAdapter: A wrapper around the Gemini LLM API that manages live interview sessions, allowing for real-time interactions with the model. This adapter handles session creation, message sending, and response retrieval, providing a seamless interface for applications that require live communication with Gemini LLMs. It abstracts away the complexities of session management and ensures efficient handling of live interactions.
