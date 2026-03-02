@@ -81,9 +81,6 @@ def _utcnow_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-# ── Context snapshot (built at session start) ──
-
-
 
 # ── Main agent class ───
 

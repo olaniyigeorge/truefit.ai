@@ -1,7 +1,3 @@
-# InterviewContext dataclass
-
-
-
 from dataclasses import dataclass
 from typing import Optional
 import uuid
