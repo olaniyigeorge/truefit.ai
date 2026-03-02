@@ -6,9 +6,6 @@ import time
 
 from src.truefit_core.common.utils import logger
 
-# from src.utils.limits_wrapper import hit
-
-
 async def req_res_time_log_middleware(request: Request, call_next):
 
     start_time = time.time()
