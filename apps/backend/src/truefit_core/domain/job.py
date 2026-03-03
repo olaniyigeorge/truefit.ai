@@ -200,7 +200,7 @@ class Job:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    # ── Derived queries ───────────────────────────────────────────────────────
+    # ── Derived queries ─────
 
     @property
     def is_open_for_interviews(self) -> bool:
@@ -214,7 +214,7 @@ class Job:
     def preferred_skills(self) -> list[SkillRequirement]:
         return [s for s in self._skills if not s.required]
 
-    # ── Commands ──────────────────────────────────────────────────────────────
+    # ── Commands ─────
 
     def activate(self) -> None:
         self._transition_to(JobStatus.ACTIVE)

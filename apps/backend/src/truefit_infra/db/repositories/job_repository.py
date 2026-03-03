@@ -1,6 +1,4 @@
 """
-truefit_infra/db/repositories/job_repository.py
-
 SQLAlchemy implementation of JobRepository against the job_listings table.
 
 Mapping layers
@@ -49,7 +47,7 @@ class SQLAlchemyJobRepository(JobRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
-    # ── JobRepository interface ───────────────────────────────────────────────
+    # ── JobRepository interface ──
 
     async def save(self, job: Job) -> None:
         """
