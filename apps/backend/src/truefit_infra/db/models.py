@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import uuid
 print("LOADED:", os.path.abspath(__file__))
 
 import enum
@@ -198,28 +199,80 @@ class CandidateProfile(Base):
     applications: Mapped[list["Application"]] = relationship(back_populates="candidate")
 
 
+
 class JobListing(Base):
     __tablename__ = "job_listings"
 
-    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    org_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("orgs.id", ondelete="CASCADE"), nullable=False)
-    created_by: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="RESTRICT"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        primary_key=True,
+        server_default=text("gen_random_uuid()"),
+    )
+    org_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("orgs.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    created_by: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
 
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="draft"
+    )
 
-    requirements: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
-    interview_config: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    # Denormalised from requirements.experience_level for indexed filtering
+    experience_level: Mapped[str] = mapped_column(String(32), nullable=False)
 
-    status: Mapped[JobStatus] = mapped_column(String(32), nullable=False, default=JobStatus.draft.value)
+    # Structured skill data: [{name, required, weight, min_years}, ...]
+    skills: Mapped[list[dict[str, Any]]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    # Role-level requirements (education, certifications, location, etc.)
+    requirements: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
 
+    # AI interview configuration
+    interview_config: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+
+    # ── Relationships ─
     org: Mapped["Org"] = relationship(back_populates="job_listings")
     created_by_user: Mapped["User"] = relationship(back_populates="created_jobs")
     applications: Mapped[list["Application"]] = relationship(back_populates="job")
 
+    __table_args__ = (
+        Index("ix_job_listings_org_id", "org_id"),
+        Index("ix_job_listings_status", "status"),
+        Index("ix_job_listings_experience_level", "experience_level"),
+        Index("ix_job_listings_org_status", "org_id", "status"),
+        Index("ix_job_listings_org_exp", "org_id", "experience_level"),
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"JobListing(id={self.id}, title={self.title!r}, "
+            f"status={self.status}, org_id={self.org_id})"
+        )
 
 class Rubric(Base):
     __tablename__ = "rubrics"

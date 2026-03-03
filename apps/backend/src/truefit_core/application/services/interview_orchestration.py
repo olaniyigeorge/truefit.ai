@@ -100,7 +100,7 @@ class InterviewOrchestrationService:
             interview = Interview(
                 job_id=job_id,
                 candidate_id=candidate_id,
-                company_id=job.company_id,
+                org_id=job.org_id,
                 max_questions=config.max_questions,
                 max_duration_minutes=config.max_duration_minutes,
             )
@@ -118,7 +118,7 @@ class InterviewOrchestrationService:
                     "interview_id": str(interview.id),
                     "job_id": str(job_id),
                     "candidate_id": str(candidate_id),
-                    "company_id": str(job.company_id),
+                    "org_id": str(job.org_id),
                     "max_questions": config.max_questions,
                     "max_duration_minutes": config.max_duration_minutes,
                 },
@@ -310,7 +310,7 @@ class InterviewOrchestrationService:
                 "interview_id": str(interview.id),
                 "candidate_id": str(interview.candidate_id),
                 "job_id": str(interview.job_id),
-                "company_id": str(interview.company_id),
+                "org_id": str(interview.org_id),
                 "questions_answered": interview.answered_count,
                 "elapsed_minutes": interview.elapsed_minutes,
             },

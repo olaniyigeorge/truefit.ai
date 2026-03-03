@@ -23,7 +23,7 @@ class GetEvaluationResponse:
     interview_id: uuid.UUID
     candidate_id: uuid.UUID
     job_id: uuid.UUID
-    company_id: uuid.UUID
+    org_id: uuid.UUID
     recommendation: str
     overall_score: float
     technical_score: float
@@ -45,7 +45,7 @@ class GetEvaluationResponse:
             interview_id=e.interview_id,
             candidate_id=e.candidate_id,
             job_id=e.job_id,
-            company_id=e.company_id,
+            org_id=e.org_id,
             recommendation=e.recommendation.value,
             overall_score=e.scores.overall,
             technical_score=e.scores.technical,

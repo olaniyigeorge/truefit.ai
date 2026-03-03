@@ -110,7 +110,7 @@ class EvaluationService:
             interview_id=interview_id,
             job_id=interview.job_id,
             candidate_id=interview.candidate_id,
-            company_id=interview.company_id,
+            org_id=interview.org_id,
             llm_result_raw=llm_result,
         )
 
@@ -147,7 +147,7 @@ class EvaluationService:
                     "evaluation_id": str(evaluation.id),
                     "interview_id": str(interview_id),
                     "candidate_id": str(interview.candidate_id),
-                    "company_id": str(interview.company_id),
+                    "org_id": str(interview.org_id),
                     "storage_key": storage_key,
                 },
             ))
@@ -189,7 +189,7 @@ class EvaluationService:
         interview_id: uuid.UUID,
         job_id: uuid.UUID,
         candidate_id: uuid.UUID,
-        company_id: uuid.UUID,
+        org_id: uuid.UUID,
         llm_result_raw,  # LLMEvaluationResult
     ) -> Evaluation:
         skill_scores = [
@@ -222,7 +222,7 @@ class EvaluationService:
             interview_id=interview_id,
             job_id=job_id,
             candidate_id=candidate_id,
-            company_id=company_id,
+            org_id=org_id,
             scores=scores,
             recommendation=recommendation,
             summary=llm_result_raw.summary,
@@ -263,7 +263,7 @@ class EvaluationService:
             "generated_at": _utcnow_iso(),
         }
 
-        key = f"reports/{evaluation.company_id}/{evaluation.job_id}/{evaluation.id}.json"
+        key = f"reports/{evaluation.org_id}/{evaluation.job_id}/{evaluation.id}.json"
         await self._storage.upload(
             key=key,
             data=json.dumps(report_data, indent=2).encode(),

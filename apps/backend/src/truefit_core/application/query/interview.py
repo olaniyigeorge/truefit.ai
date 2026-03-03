@@ -15,7 +15,7 @@ class GetInterviewResponse:
     interview_id: uuid.UUID
     job_id: uuid.UUID
     candidate_id: uuid.UUID
-    company_id: uuid.UUID
+    org_id: uuid.UUID
     status: str
     question_count: int
     answered_count: int
@@ -31,7 +31,7 @@ class GetInterviewResponse:
             interview_id=i.id,
             job_id=i.job_id,
             candidate_id=i.candidate_id,
-            company_id=i.company_id,
+            org_id=i.org_id,
             status=i.status.value,
             question_count=i.question_count,
             answered_count=i.answered_count,

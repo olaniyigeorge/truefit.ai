@@ -43,7 +43,7 @@ class JobService:
     async def create_job(
         self,
         *,
-        company_id: uuid.UUID,
+        org_id: uuid.UUID,
         title: str,
         description: str,
         experience_level: ExperienceLevel,
@@ -51,7 +51,7 @@ class JobService:
         interview_config: InterviewConfig | None = None,
     ) -> Job:
         job = Job(
-            company_id=company_id,
+            org_id=org_id,
             title=title,
             description=description,
             experience_level=experience_level,
@@ -59,7 +59,7 @@ class JobService:
             interview_config=interview_config,
         )
         await self._jobs.save(job)
-        logger.info(f"Job created: {job.id} — '{job.title}' for company {company_id}")
+        logger.info(f"Job created: {job.id} — '{job.title}' for company {org_id}")
         return job
 
     async def close_job(self, job_id: uuid.UUID) -> Job:
@@ -90,7 +90,7 @@ class JobService:
             occurred_at=_utcnow_iso(),
             payload={
                 "job_id": str(job_id),
-                "company_id": str(job.company_id),
+                "org_id": str(job.org_id),
                 "interviews_abandoned": abandoned_count,
             },
         ))

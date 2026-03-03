@@ -35,7 +35,7 @@ class JobRepository(ABC):
 
     @abstractmethod
     async def get_by_company(
-        self, company_id: uuid.UUID, *, limit: int = 50, offset: int = 0
+        self, org_id: uuid.UUID, *, limit: int = 50, offset: int = 0
     ) -> list[Job]: ...
 
     @abstractmethod

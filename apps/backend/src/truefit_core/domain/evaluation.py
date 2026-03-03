@@ -79,7 +79,7 @@ class Evaluation:
         interview_id: uuid.UUID,
         job_id: uuid.UUID,
         candidate_id: uuid.UUID,
-        company_id: uuid.UUID,
+        org_id: uuid.UUID,
         scores: EvaluationScores,
         recommendation: HiringRecommendation,
         summary: str,               # 2-3 paragraph LLM narrative
@@ -101,7 +101,7 @@ class Evaluation:
         self._interview_id: uuid.UUID = interview_id
         self._job_id: uuid.UUID = job_id
         self._candidate_id: uuid.UUID = candidate_id
-        self._company_id: uuid.UUID = company_id
+        self._org_id: uuid.UUID = org_id
         self._scores: EvaluationScores = scores
         self._recommendation: HiringRecommendation = recommendation
         self._summary: str = summary.strip()
@@ -130,8 +130,8 @@ class Evaluation:
         return self._candidate_id
 
     @property
-    def company_id(self) -> uuid.UUID:
-        return self._company_id
+    def org_id(self) -> uuid.UUID:
+        return self._org_id
 
     @property
     def scores(self) -> EvaluationScores:

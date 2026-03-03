@@ -13,7 +13,7 @@ from truefit_core.domain.job import Job
 @dataclass(frozen=True)
 class GetJobResponse:
     job_id: uuid.UUID
-    company_id: uuid.UUID
+    org_id: uuid.UUID
     title: str
     description: str
     status: str
@@ -27,7 +27,7 @@ class GetJobResponse:
     def from_domain(cls, job: Job) -> "GetJobResponse":
         return cls(
             job_id=job.id,
-            company_id=job.company_id,
+            org_id=job.org_id,
             title=job.title,
             description=job.description,
             status=job.status.value,
@@ -59,13 +59,13 @@ async def get_job(
 
 
 async def list_company_jobs(
-    company_id: uuid.UUID,
+    org_id: uuid.UUID,
     *,
     job_repo: JobRepository,
     pagination: PaginationParams = PaginationParams(),
 ) -> list[GetJobResponse]:
     jobs = await job_repo.get_by_company(
-        company_id, limit=pagination.limit, offset=pagination.offset
+        org_id, limit=pagination.limit, offset=pagination.offset
     )
     return [GetJobResponse.from_domain(j) for j in jobs]
 

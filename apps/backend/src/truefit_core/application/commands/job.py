@@ -45,7 +45,7 @@ class InterviewConfigInput:
 
 @dataclass(frozen=True)
 class CreateJobCommand:
-    company_id: uuid.UUID
+    org_id: uuid.UUID
     title: str
     description: str
     experience_level: str               # validated against ExperienceLevel enum
@@ -81,7 +81,7 @@ class CloseJobCommand:
 @dataclass(frozen=True)
 class JobResponse:
     job_id: uuid.UUID
-    company_id: uuid.UUID
+    org_id: uuid.UUID
     title: str
     status: str
     experience_level: str
@@ -95,7 +95,7 @@ class JobResponse:
     def from_domain(cls, job: Job) -> "JobResponse":
         return cls(
             job_id=job.id,
-            company_id=job.company_id,
+            org_id=job.org_id,
             title=job.title,
             status=job.status.value,
             experience_level=job.experience_level.value,
@@ -142,7 +142,7 @@ async def handle_create_job(
         )
 
     job = await job_service.create_job(
-        company_id=cmd.company_id,
+        org_id=cmd.org_id,
         title=cmd.title,
         description=cmd.description,
         experience_level=experience_level,

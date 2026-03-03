@@ -83,7 +83,7 @@ class Interview:
         *,
         job_id: uuid.UUID,
         candidate_id: uuid.UUID,
-        company_id: uuid.UUID,
+        org_id: uuid.UUID,
         max_questions: int,
         max_duration_minutes: int,
         interview_id: Optional[uuid.UUID] = None,
@@ -102,7 +102,7 @@ class Interview:
         self._id: uuid.UUID = interview_id or uuid.uuid4()
         self._job_id: uuid.UUID = job_id
         self._candidate_id: uuid.UUID = candidate_id
-        self._company_id: uuid.UUID = company_id
+        self._org_id: uuid.UUID = org_id
         self._max_questions: int = max_questions
         self._max_duration_minutes: int = max_duration_minutes
         self._status: InterviewStatus = status
@@ -127,8 +127,8 @@ class Interview:
         return self._candidate_id
 
     @property
-    def company_id(self) -> uuid.UUID:
-        return self._company_id
+    def org_id(self) -> uuid.UUID:
+        return self._org_id
 
     @property
     def status(self) -> InterviewStatus:
