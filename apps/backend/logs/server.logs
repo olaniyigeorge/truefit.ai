@@ -3224,3 +3224,27 @@ Using Dev config...
 
 2026-03-03 16:15:14,343 - INFO - Database tables created successfully
 2026-03-03 16:15:14,345 - INFO - Application startup complete
+2026-03-04 10:11:52,746 - INFO - 
+Using Dev config...
+
+2026-03-04 10:11:53,886 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-04 10:11:53,887 - INFO - 
+ creating tables...
+
+2026-03-04 10:11:57,992 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-04 10:11:57,993 - INFO - Database connections closed
+2026-03-04 10:11:57,993 - INFO - Application shutdown complete
+2026-03-04 10:12:35,406 - INFO - 
+Using Dev config...
+
+2026-03-04 10:12:35,644 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-04 10:12:35,645 - INFO - 
+ creating tables...
+
+2026-03-04 10:12:37,858 - INFO - Database tables created successfully
+2026-03-04 10:12:37,859 - INFO - Application startup complete
+2026-03-04 10:13:11,345 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6.439ms '}
+2026-03-04 10:13:11,553 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.439ms '}
+2026-03-04 10:13:19,950 - INFO - {'PATH': '/health', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '3.961ms '}
+2026-03-04 10:15:54,105 - INFO - Database connections closed
+2026-03-04 10:15:54,105 - INFO - Application shutdown complete
