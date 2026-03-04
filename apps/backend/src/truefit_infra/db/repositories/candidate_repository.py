@@ -3,8 +3,9 @@ SQLAlchemy implementation of CandidateRepository.
 
 Mapping layers
 ──────────────
-_to_row(candidate)     Candidate domain object  →  flat dict for CandidateProfile upsert
-_to_domain(row, user)  CandidateProfile + User rows →  reconstructed Candidate aggregate
+_to_full_row(user_id, candidate)  Candidate domain object  →  full dict for initial INSERT
+_to_update_row(candidate)         Candidate domain object  →  partial dict for upsert
+_to_domain(profile, user, ...)    CandidateProfile + User rows → Candidate aggregate
 
 The Candidate aggregate spans two DB tables:
 
@@ -13,25 +14,29 @@ The Candidate aggregate spans two DB tables:
   id                            candidate_profiles.id
   full_name                     users.display_name
   contact.email                 users.email
-  contact.phone                 candidate_profiles.contact_meta (JSONB)  [1]
-  contact.linkedin_url          candidate_profiles.contact_meta (JSONB)  [1]
-  status                        users.is_active  →  ACTIVE/BANNED
+  contact.phone                 (None — no dedicated column yet; extend via migration)
+  contact.linkedin_url          (None — no dedicated column yet; extend via migration)
+  status                        users.is_active  →  ACTIVE / BANNED
   resume.storage_key            media_assets.uri  (via resume_asset_id FK)
-  resume.filename               media_assets.uri  (last segment)
+  resume.filename               media_assets.uri  (last path segment)
   resume.content_type           media_assets.content_type
   resume.uploaded_at            media_assets.created_at
-  active_interview_job_ids      derived from open InterviewSessions [2]
+  active_interview_job_ids      derived: applications + open interview_sessions
   created_at                    candidate_profiles.created_at
   updated_at                    candidate_profiles.updated_at
 
-[1] Stored in a contact_meta JSONB column.  If that column doesn't exist yet,
-    the values default to None — forward-compatible approach matching
-    job_repository's treatment of JSONB extras.
+Design note — user_id gap
+─────────────────────────
+The abstract port's save(candidate) signature does not carry a user_id.
+Because CandidateProfile.user_id is a non-nullable FK, initial profile creation
+MUST know which user owns it.  Two strategies are therefore supported:
 
-[2] The domain invariant (one active interview per job) is enforced at the
-    domain layer; here we materialise the set by querying open sessions.
-    For performance, callers that need a lightweight candidate object can
-    pass allow_active_interviews=False to skip the extra join.
+  1. create_for_user(user_id, candidate)  — use this at registration time
+     AFTER the User row already exists (created by the auth adapter / Firebase sync).
+
+  2. save(candidate)                      — use this for all subsequent mutations
+     (update_profile, attach_resume, status changes).  On conflict-do-update
+     it never overwrites user_id, so the FK value set during creation is preserved.
 """
 
 from __future__ import annotations
@@ -40,7 +45,7 @@ import uuid
 from datetime import timezone
 from typing import Optional
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from src.truefit_core.application.ports import CandidateRepository
@@ -76,18 +81,17 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
 
     async def save(self, candidate: Candidate) -> None:
         """
-        Upsert the candidate profile.
+        Upsert the candidate profile (mutable fields only).
 
-        Rules:
-        - created_at is immutable after first write (excluded from update set).
-        - user_id must already exist in users table — this repo does NOT create users.
-        - contact extras (phone, linkedin_url) are stored in profile JSONB.
-        - Domain status BANNED ↔  user.is_active = False; this repo does NOT
-          mutate the User row — status changes must be coordinated at the
-          application layer (which updates both the profile and the User via
-          their respective repositories / services).
+        Safe to call on any existing profile.
+        Mutable fields updated on conflict: updated_at (and future profile fields).
+        Immutable fields (user_id, created_at) are never overwritten.
+
+        NOTE: For initial profile creation use create_for_user() which accepts
+        a user_id. This method uses candidate.id as a placeholder for user_id
+        in the VALUES clause, but that placeholder is never applied on conflict.
         """
-        data = self._to_row(candidate)
+        data = self._to_update_row(candidate)
 
         stmt = (
             pg_insert(CandidateProfile)
@@ -95,13 +99,12 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
             .on_conflict_do_update(
                 index_elements=["id"],
                 set_={
-                    "headline":     data["headline"],
-                    "bio":          data["bio"],
-                    "location":     data["location"],
+                    "headline":         data["headline"],
+                    "bio":              data["bio"],
+                    "location":         data["location"],
                     "years_experience": data["years_experience"],
-                    "skills":       data["skills"],
-                    "updated_at":   data["updated_at"],
-                    # user_id, created_at deliberately excluded — immutable
+                    "skills":           data["skills"],
+                    "updated_at":       data["updated_at"],
                 },
             )
         )
@@ -142,7 +145,11 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
                 else set()
             )
 
-        return self._to_domain(profile, user, resume=resume, active_interview_job_ids=active_job_ids)
+        return self._to_domain(
+            profile, user,
+            resume=resume,
+            active_interview_job_ids=active_job_ids,
+        )
 
     async def get_by_email(
         self,
@@ -174,20 +181,49 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
                 else set()
             )
 
-        return self._to_domain(profile, user, resume=resume, active_interview_job_ids=active_job_ids)
+        return self._to_domain(
+            profile, user,
+            resume=resume,
+            active_interview_job_ids=active_job_ids,
+        )
 
     async def delete(self, candidate_id: uuid.UUID) -> None:
         """
         Hard-delete the CandidateProfile row.
         The User row is NOT deleted here — that is an auth/account concern.
-        Applications and sessions cascade-delete via the FK constraints.
+        Applications and sessions cascade-delete via their FK constraints.
         """
         stmt = delete(CandidateProfile).where(CandidateProfile.id == candidate_id)
 
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
-    # ── Extended read methods (beyond abstract port) ──────────────────────
+    # ── Extended methods (beyond abstract port) ───────────────────────────
+
+    async def create_for_user(
+        self,
+        user_id: uuid.UUID,
+        candidate: Candidate,
+    ) -> None:
+        """
+        Insert a new CandidateProfile row linked to an existing User.
+
+        Use this at registration time — AFTER the User row already exists in
+        the users table (created by the auth adapter / Firebase sync).
+
+        Idempotent: if a profile for this candidate.id already exists the
+        insert is a no-op (on_conflict_do_nothing).
+        """
+        data = self._to_full_row(user_id=user_id, candidate=candidate)
+
+        stmt = (
+            pg_insert(CandidateProfile)
+            .values(**data)
+            .on_conflict_do_nothing(index_elements=["id"])
+        )
+
+        async with self._db.get_session() as session:
+            await session.execute(stmt)
 
     async def list_by_status(
         self,
@@ -199,11 +235,9 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         """
         List candidates filtered by their effective status.
 
-        ACTIVE  → User.is_active = True
-        BANNED  → User.is_active = False
-        WITHDRAWN → Not representable via User.is_active alone;
-                    returns an empty list (withdrawn candidates are
-                    soft-deleted at the application level).
+        ACTIVE    → User.is_active = True
+        BANNED    → User.is_active = False
+        WITHDRAWN → Returns empty list (managed as soft-delete at the app layer).
         """
         if status == CandidateStatus.WITHDRAWN:
             return []
@@ -223,24 +257,20 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
             result = await session.execute(stmt)
             rows = result.all()
 
-        candidates = []
-        for profile, user in rows:
-            candidates.append(
-                self._to_domain(profile, user, resume=None, active_interview_job_ids=set())
-            )
-        return candidates
+        return [
+            self._to_domain(profile, user, resume=None, active_interview_job_ids=set())
+            for profile, user in rows
+        ]
 
     async def count(self, *, status: Optional[CandidateStatus] = None) -> int:
-        """Count candidates, optionally filtered by status."""
-        from sqlalchemy import func
-
+        """Count candidate profiles, optionally filtered by status."""
         stmt = (
             select(func.count())
             .select_from(CandidateProfile)
             .join(User, CandidateProfile.user_id == User.id)
         )
         if status == CandidateStatus.ACTIVE:
-            stmt = stmt.where(User.is_active == True)  # noqa: E712
+            stmt = stmt.where(User.is_active == True)   # noqa: E712
         elif status == CandidateStatus.BANNED:
             stmt = stmt.where(User.is_active == False)  # noqa: E712
 
@@ -250,8 +280,6 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
 
     async def exists(self, candidate_id: uuid.UUID) -> bool:
         """Check if a CandidateProfile row exists for the given UUID."""
-        from sqlalchemy import func
-
         stmt = (
             select(func.count())
             .select_from(CandidateProfile)
@@ -280,7 +308,6 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         if asset is None:
             return None
 
-        # Derive filename from the URI (last path segment)
         filename = asset.uri.split("/")[-1] if asset.uri else "resume"
         uploaded_at = asset.created_at
         if uploaded_at.tzinfo is None:
@@ -320,33 +347,46 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
     # ── Mapping: domain → DB row ──────────────────────────────────────────
 
     @staticmethod
-    def _to_row(candidate: Candidate) -> dict:
+    def _to_full_row(*, user_id: uuid.UUID, candidate: Candidate) -> dict:
         """
-        Flatten Candidate aggregate → dict matching CandidateProfile columns.
-
-        Notes:
-        - user_id is stored as candidate.id for new inserts (the profile PK IS the
-          candidate id and must be registered by the auth flow before save() is called).
-        - Skills (list[str]) are stored in the ARRAY column.
-        - Phone / linkedin_url have no dedicated columns; they are deliberately
-          omitted here — those fields live on a user-profile extension table or
-          JSONB that can be added in a future migration without breaking this mapping.
+        Full row dict for initial INSERT (includes user_id and created_at).
+        Used exclusively by create_for_user().
         """
         return {
-            "id": candidate.id,
-            # user_id must already exist: supplied by the caller at profile creation time.
-            # On conflict-do-update we never overwrite user_id, so setting it here is safe.
-            "user_id": candidate.id,   # Placeholder — callers must supply the real user_id
-            "headline": None,           # Not modelled on Candidate domain object
-            "bio": None,                # Not modelled on Candidate domain object
-            "location": None,           # Not modelled on Candidate domain object
-            "years_experience": None,   # Not modelled on Candidate domain object
-            "skills": [],               # Not modelled on Candidate domain object
-            "created_at": candidate.created_at,
-            "updated_at": candidate.updated_at,
+            "id":               candidate.id,
+            "user_id":          user_id,
+            "headline":         None,
+            "bio":              None,
+            "location":         None,
+            "years_experience": None,
+            "skills":           [],
+            "created_at":       candidate.created_at,
+            "updated_at":       candidate.updated_at,
         }
 
-    # ── Mapping: DB row → domain ──────────────────────────────────────────
+    @staticmethod
+    def _to_update_row(candidate: Candidate) -> dict:
+        """
+        Partial row dict for upsert via save().
+
+        user_id uses candidate.id as a placeholder value — it is required in
+        the VALUES clause by SQLAlchemy but is excluded from the SET clause in
+        on_conflict_do_update, so the real FK stored by create_for_user() is
+        always preserved.
+        """
+        return {
+            "id":               candidate.id,
+            "user_id":          candidate.id,   # placeholder; excluded from conflict update
+            "headline":         None,
+            "bio":              None,
+            "location":         None,
+            "years_experience": None,
+            "skills":           [],
+            "created_at":       candidate.created_at,
+            "updated_at":       candidate.updated_at,
+        }
+
+    # ── Mapping: DB rows → domain ─────────────────────────────────────────
 
     @staticmethod
     def _to_domain(
@@ -363,23 +403,21 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         Status mapping:
             User.is_active = True  → CandidateStatus.ACTIVE
             User.is_active = False → CandidateStatus.BANNED
-            (WITHDRAWN is a soft-state managed at application layer.)
+            (WITHDRAWN is soft-state managed at the application layer.)
 
-        Timestamps are made timezone-aware (UTC) if the DB returns naive datetimes.
+        Timestamps are coerced to UTC-aware datetimes if the DB returns naive values.
         """
         def _tz(dt):
             if dt is not None and dt.tzinfo is None:
                 return dt.replace(tzinfo=timezone.utc)
             return dt
 
-        status = (
-            CandidateStatus.ACTIVE if user.is_active else CandidateStatus.BANNED
-        )
+        status = CandidateStatus.ACTIVE if user.is_active else CandidateStatus.BANNED
 
         contact = ContactInfo(
             email=user.email,
-            phone=None,        # Extend if a contact_meta JSONB column is added
-            linkedin_url=None, # Extend if a contact_meta JSONB column is added
+            phone=None,        # extend when a contact_meta JSONB column is added
+            linkedin_url=None, # extend when a contact_meta JSONB column is added
         )
 
         return Candidate(
