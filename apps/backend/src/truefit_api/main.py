@@ -7,11 +7,11 @@ from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 
 load_dotenv()
-from truefit_infra.config import AppConfig
+from src.truefit_infra.config import AppConfig
 from src.truefit_infra.db.database import db_manager 
 from src.truefit_api.middlewares import register_error_handler, req_res_time_log_middleware
 from src.truefit_core.common.utils import logger
-from truefit_api.api.v1.http.health import health_router
+from src.truefit_api.api.v1.http.health import health_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
