@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from src.truefit_infra.db.database import db_manager
+from src.truefit_infra.cache.redis_cache import redis_client
 
 health_router = APIRouter(tags=["health"])
 
@@ -22,9 +23,11 @@ async def _check_database() -> Dict[str, Any]:
 
 
 async def _check_cache() -> Dict[str, Any]:
-    # TODO: wire up cache client check (Redis, etc.)
-    # e.g. await cache_client.ping()
-    return {"status": "skipped"}
+    try:
+        status = await redis_client.is_healthy()
+        return {"status": "ok"} if status else {"status": "down", "error": "Cache is not healthy"}  
+    except Exception:
+        return {"status": "down", "error": "Cache is not healthy"}
 
 
 async def _check_llm() -> Dict[str, Any]:

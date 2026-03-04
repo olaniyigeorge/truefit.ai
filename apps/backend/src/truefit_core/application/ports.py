@@ -19,11 +19,77 @@ from src.truefit_core.domain.candidate import Candidate
 from src.truefit_core.domain.evaluation import Evaluation
 from src.truefit_core.domain.interview import Interview
 from src.truefit_core.domain.job import Job
+from src.truefit_infra.db.models import User
 
 
 # ─────────────────
 # Repository ports
 # ─────────────────
+
+class UserRepository(ABC):
+    @abstractmethod
+    async def save(self, user: User) -> None: ...
+
+    @abstractmethod
+    async def get_by_id(self, user_id: uuid.UUID) -> Optional[User]: ...
+
+    @abstractmethod
+    async def get_by_email(self, email: str) -> Optional[User]: ...
+
+
+
+
+
+# ── Abstract port ───
+
+class OrgRepository(ABC):
+    @abstractmethod
+    async def save(self, org: Org) -> None: ...
+
+    @abstractmethod
+    async def get_by_id(self, org_id: uuid.UUID) -> Optional[Org]: ...
+
+    @abstractmethod
+    async def get_by_slug(self, slug: str) -> Optional[Org]: ...
+
+    @abstractmethod
+    async def list_all(self, *, limit: int = 50, offset: int = 0) -> list[Org]: ...
+
+    @abstractmethod
+    async def delete(self, org_id: uuid.UUID) -> None: ...
+
+
+
+# class OrgRepository(ABC):
+    
+#     async def create_org(
+#         self,
+#         *,
+#         created_by: uuid.UUID,
+#         name: str,
+#         slug: str,
+#         contact: dict,
+#         billing: dict,
+#         description: str | None = None,
+#         industry: str | None = None,
+#         headcount: str | None = None,
+#         logo_url: str | None = None,
+#     ) -> dict: ...
+#     async def get_by_slug(self, slug: str) -> Optional[dict]: ...
+
+class CandidateProfileRepository(ABC):
+    async def create_for_user(
+        self,
+        *,
+        user_id: uuid.UUID,
+        headline: str | None = None,
+        bio: str | None = None,
+        location: str | None = None,
+        years_experience: int | None = None,
+        skills: list[str] | None = None,
+    ) -> dict: ...
+    async def get_by_user_id(self, user_id: uuid.UUID) -> Optional[dict]: ...
+
 
 
 class JobRepository(ABC):

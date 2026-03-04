@@ -12,6 +12,11 @@ from src.truefit_infra.db.database import db_manager
 from src.truefit_api.middlewares import register_error_handler, req_res_time_log_middleware
 from src.truefit_core.common.utils import logger
 from src.truefit_api.api.v1.http.health import health_router
+from src.truefit_api.api.v1.http.jobs import router as jobs_router
+from src.truefit_api.api.v1.http.candidates import router as candidates_router
+from src.truefit_api.api.v1.http.interviews import router as interviews_router
+from src.truefit_api.api.v1.http.orgs import router as orgs_router
+from src.truefit_api.api.v1.http.users import router as users_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -65,7 +70,12 @@ app.add_middleware(
     allow_headers=["*"],  # TODO : Update request headers coming from all whitelisted clients
 )
 
-app.include_router(health_router)
+app.include_router(health_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1")
+app.include_router(orgs_router, prefix="/api/v1")
+app.include_router(candidates_router, prefix="/api/v1")
+app.include_router(jobs_router, prefix="/api/v1")
+app.include_router(interviews_router, prefix="/api/v1")
 
 
 # @app.get("/", response_class=HTMLResponse)

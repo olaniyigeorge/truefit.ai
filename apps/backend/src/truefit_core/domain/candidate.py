@@ -59,6 +59,11 @@ class Candidate:
         full_name: str,
         candidate_id: Optional[uuid.UUID] = None,
         status: CandidateStatus = CandidateStatus.ACTIVE,
+        user_id: Optional[uuid.UUID] = None, # For linking to a User account if needed in the future
+        headline: Optional[str] = None,
+        bio: Optional[str] = None,
+        location: Optional[str] = None,
+        skills: Optional[list[str]] = None,
         resume: Optional[ResumeRef] = None,
         # Set of job IDs the candidate currently has an active interview for.
         # Kept here (not on Interview) so the invariant can be checked without
@@ -74,6 +79,11 @@ class Candidate:
         self._full_name: str = full_name.strip()
         self._contact: ContactInfo = contact
         self._status: CandidateStatus = status
+        self._user_id: Optional[uuid.UUID] = user_id
+        self._headline: Optional[str] = headline
+        self._bio: Optional[str] = bio
+        self._location: Optional[str] = location
+        self._skills: list[str] = skills or []
         self._resume: Optional[ResumeRef] = resume
         self._active_interview_job_ids: set[uuid.UUID] = (
             set(active_interview_job_ids) if active_interview_job_ids else set()

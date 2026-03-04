@@ -1,11 +1,8 @@
-# RedisCacheAdapter(CachePort): Implements the CachePort interface using Redis as the underlying cache mechanism.
-
-
 import redis.asyncio as redis
 from typing import Any, Optional
 import json
 
-from config import AppConfig
+from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 from src.truefit_core.application.ports import CachePort
 
@@ -43,16 +40,27 @@ class RedisCacheAdapter(CachePort):
             logger.info("Error setting value to Redis:", e)
             return False
 
-    @abstractmethod
-    async def delete(self, key: str) -> None: ...
+    async def delete(self, key: str) -> None:
+        await self._client.delete(key)
 
-    @abstractmethod
-    async def exists(self, key: str) -> bool: ...
+    async def exists(self, key: str) -> bool:
+        return await self._client.exists(key) > 0
 
-    @abstractmethod
     async def increment(self, key: str, *, ttl_seconds: Optional[int] = None) -> int:
         """Atomic increment — useful for rate limiting."""
-        ...
+        new_value = await self._client.incr(key)
+        if ttl_seconds is not None:
+            await self._client.expire(key, ttl_seconds)
+        return new_value
 
-    @abstractmethod
-    async def is_healthy(self) -> bool: ...
+    async def is_healthy(self) -> bool:
+        try:
+            print("Pinging Redis...", self._client)
+            await self._client.ping()
+            return True
+        except Exception:
+            return False
+        
+
+
+redis_client = RedisCacheAdapter(AppConfig.REDIS_URL)
