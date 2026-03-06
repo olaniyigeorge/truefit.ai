@@ -7491,3 +7491,225 @@ Using Dev config...
 2026-03-04 16:07:13,427 - INFO - Application startup complete
 2026-03-04 16:07:15,692 - INFO - Database connections closed
 2026-03-04 16:07:15,693 - INFO - Application shutdown complete
+2026-03-05 13:13:26,670 - INFO - 
+Using Dev config...
+
+2026-03-05 13:13:31,533 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-05 13:13:31,533 - INFO - 
+ creating tables...
+
+2026-03-05 13:13:35,665 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-05 13:13:35,667 - INFO - Database connections closed
+2026-03-05 13:13:35,668 - INFO - Application shutdown complete
+2026-03-05 13:42:40,563 - INFO - 
+Using Dev config...
+
+2026-03-05 13:42:40,979 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-05 13:42:40,979 - INFO - 
+ creating tables...
+
+2026-03-05 13:42:43,282 - INFO - Database tables created successfully
+2026-03-05 13:42:43,283 - INFO - Application startup complete
+2026-03-05 13:42:57,224 - INFO - {'PATH': '/', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.855ms '}
+2026-03-05 13:42:57,401 - INFO - {'PATH': '/favicon.ico', 'METHOD': 'GET', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.312ms '}
+2026-03-05 13:43:01,412 - INFO - {'PATH': '/api/docs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '0.282ms '}
+2026-03-05 13:43:01,647 - INFO - {'PATH': '/openapi.json', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '144.404ms '}
+2026-03-05 13:43:05,479 - INFO - Database connections closed
+2026-03-05 13:43:05,479 - INFO - Application shutdown complete
+2026-03-06 08:23:29,198 - INFO - 
+Using Dev config...
+
+2026-03-06 08:23:31,418 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 08:23:31,418 - INFO - 
+ creating tables...
+
+2026-03-06 08:23:35,525 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-06 08:23:35,526 - INFO - Database connections closed
+2026-03-06 08:23:35,526 - INFO - Application shutdown complete
+2026-03-06 08:24:09,854 - INFO - 
+Using Dev config...
+
+2026-03-06 08:24:10,309 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 08:24:10,309 - INFO - 
+ creating tables...
+
+2026-03-06 08:24:12,559 - INFO - Database tables created successfully
+2026-03-06 08:24:12,560 - INFO - Application startup complete
+2026-03-06 09:41:07,746 - INFO - Database connections closed
+2026-03-06 09:41:07,748 - INFO - Application shutdown complete
+2026-03-06 09:41:09,212 - INFO - 
+Using Dev config...
+
+2026-03-06 09:41:09,845 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:41:09,845 - INFO - 
+ creating tables...
+
+2026-03-06 09:41:12,163 - INFO - Database tables created successfully
+2026-03-06 09:41:12,164 - INFO - Application startup complete
+2026-03-06 09:41:12,282 - INFO - Database connections closed
+2026-03-06 09:41:12,283 - INFO - Application shutdown complete
+2026-03-06 09:41:13,677 - INFO - 
+Using Dev config...
+
+2026-03-06 09:41:14,139 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:41:14,139 - INFO - 
+ creating tables...
+
+2026-03-06 09:41:16,404 - INFO - Database tables created successfully
+2026-03-06 09:41:16,406 - INFO - Application startup complete
+2026-03-06 09:41:16,518 - INFO - Database connections closed
+2026-03-06 09:41:16,518 - INFO - Application shutdown complete
+2026-03-06 09:41:17,814 - INFO - 
+Using Dev config...
+
+2026-03-06 09:41:18,282 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:41:18,282 - INFO - 
+ creating tables...
+
+2026-03-06 09:41:20,515 - INFO - Database tables created successfully
+2026-03-06 09:41:20,517 - INFO - Application startup complete
+2026-03-06 09:41:20,633 - INFO - Database connections closed
+2026-03-06 09:41:20,634 - INFO - Application shutdown complete
+2026-03-06 09:41:21,881 - INFO - 
+Using Dev config...
+
+2026-03-06 09:41:22,400 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:41:22,400 - INFO - 
+ creating tables...
+
+2026-03-06 09:41:24,816 - INFO - Database tables created successfully
+2026-03-06 09:41:24,821 - INFO - Application startup complete
+2026-03-06 09:48:03,257 - INFO - Database connections closed
+2026-03-06 09:48:03,257 - INFO - Application shutdown complete
+2026-03-06 09:48:04,719 - INFO - 
+Using Dev config...
+
+2026-03-06 09:48:05,260 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:48:05,261 - INFO - 
+ creating tables...
+
+2026-03-06 09:48:07,577 - INFO - Database tables created successfully
+2026-03-06 09:48:07,579 - INFO - Application startup complete
+2026-03-06 09:48:22,415 - INFO - Database connections closed
+2026-03-06 09:48:22,416 - INFO - Application shutdown complete
+2026-03-06 09:48:24,558 - INFO - 
+Using Dev config...
+
+2026-03-06 09:48:25,603 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:48:25,604 - INFO - 
+ creating tables...
+
+2026-03-06 09:48:27,881 - INFO - Database tables created successfully
+2026-03-06 09:48:27,883 - INFO - Application startup complete
+2026-03-06 09:49:07,074 - INFO - Database connections closed
+2026-03-06 09:49:07,075 - INFO - Application shutdown complete
+2026-03-06 09:49:08,436 - INFO - 
+Using Dev config...
+
+2026-03-06 09:49:08,952 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:49:08,952 - INFO - 
+ creating tables...
+
+2026-03-06 09:49:11,204 - INFO - Database tables created successfully
+2026-03-06 09:49:11,206 - INFO - Application startup complete
+2026-03-06 09:49:33,012 - INFO - Database connections closed
+2026-03-06 09:49:33,013 - INFO - Application shutdown complete
+2026-03-06 09:49:34,409 - INFO - 
+Using Dev config...
+
+2026-03-06 09:49:34,910 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:49:34,910 - INFO - 
+ creating tables...
+
+2026-03-06 09:49:37,174 - INFO - Database tables created successfully
+2026-03-06 09:49:37,177 - INFO - Application startup complete
+2026-03-06 09:49:55,823 - INFO - Database connections closed
+2026-03-06 09:49:55,823 - INFO - Application shutdown complete
+2026-03-06 09:49:57,473 - INFO - 
+Using Dev config...
+
+2026-03-06 09:49:58,374 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:49:58,375 - INFO - 
+ creating tables...
+
+2026-03-06 09:50:00,597 - INFO - Database tables created successfully
+2026-03-06 09:50:00,598 - INFO - Application startup complete
+2026-03-06 09:50:00,713 - INFO - Database connections closed
+2026-03-06 09:50:00,714 - INFO - Application shutdown complete
+2026-03-06 09:50:02,117 - INFO - 
+Using Dev config...
+
+2026-03-06 09:50:03,125 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:50:03,126 - INFO - 
+ creating tables...
+
+2026-03-06 09:50:05,466 - INFO - Database tables created successfully
+2026-03-06 09:50:05,469 - INFO - Application startup complete
+2026-03-06 09:50:25,512 - INFO - Database connections closed
+2026-03-06 09:50:25,517 - INFO - Application shutdown complete
+2026-03-06 09:50:27,871 - INFO - 
+Using Dev config...
+
+2026-03-06 09:50:28,433 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:50:28,434 - INFO - 
+ creating tables...
+
+2026-03-06 09:50:30,853 - INFO - Database tables created successfully
+2026-03-06 09:50:30,857 - INFO - Application startup complete
+2026-03-06 09:50:30,969 - INFO - Database connections closed
+2026-03-06 09:50:30,970 - INFO - Application shutdown complete
+2026-03-06 09:50:33,531 - INFO - 
+Using Dev config...
+
+2026-03-06 09:50:34,521 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:50:34,522 - INFO - 
+ creating tables...
+
+2026-03-06 09:50:36,806 - INFO - Database tables created successfully
+2026-03-06 09:50:36,809 - INFO - Application startup complete
+2026-03-06 09:51:00,284 - INFO - Database connections closed
+2026-03-06 09:51:00,285 - INFO - Application shutdown complete
+2026-03-06 09:51:01,818 - INFO - 
+Using Dev config...
+
+2026-03-06 09:51:02,416 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:51:02,417 - INFO - 
+ creating tables...
+
+2026-03-06 09:51:04,610 - INFO - Database tables created successfully
+2026-03-06 09:51:04,611 - INFO - Application startup complete
+2026-03-06 09:51:12,096 - INFO - Database connections closed
+2026-03-06 09:51:12,096 - INFO - Application shutdown complete
+2026-03-06 09:51:13,515 - INFO - 
+Using Dev config...
+
+2026-03-06 09:51:14,000 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:51:14,001 - INFO - 
+ creating tables...
+
+2026-03-06 09:51:16,244 - INFO - Database tables created successfully
+2026-03-06 09:51:16,246 - INFO - Application startup complete
+2026-03-06 09:51:19,374 - INFO - Database connections closed
+2026-03-06 09:51:19,375 - INFO - Application shutdown complete
+2026-03-06 09:51:20,767 - INFO - 
+Using Dev config...
+
+2026-03-06 09:51:21,285 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:51:21,286 - INFO - 
+ creating tables...
+
+2026-03-06 09:51:23,596 - INFO - Database tables created successfully
+2026-03-06 09:51:23,599 - INFO - Application startup complete
+2026-03-06 09:51:23,716 - INFO - Database connections closed
+2026-03-06 09:51:23,716 - INFO - Application shutdown complete
+2026-03-06 09:51:26,208 - INFO - 
+Using Dev config...
+
+2026-03-06 09:51:27,284 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 09:51:27,284 - INFO - 
+ creating tables...
+
+2026-03-06 09:51:29,671 - INFO - Database tables created successfully
+2026-03-06 09:51:29,675 - INFO - Application startup complete
+2026-03-06 10:04:43,679 - INFO - Database connections closed
+2026-03-06 10:04:43,680 - INFO - Application shutdown complete
