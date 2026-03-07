@@ -1,7 +1,7 @@
-import {useState, useEffect} from "react"
-import {onAuthStateChanged} from "firebase/auth"
-import type { User } from "firebase/auth"   
-import {auth} from "@/firebase"
+import { useState, useEffect } from "react"
+import { onAuthStateChanged } from "firebase/auth"
+import type { User } from "firebase/auth"
+import { auth } from "@/helpers/firebase"
 
 
 export const useAuth = () => {
@@ -20,5 +20,5 @@ export const useAuth = () => {
     }, [])
 
     return { user, loading }
-    
+
 }
