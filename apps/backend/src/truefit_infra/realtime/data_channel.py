@@ -18,8 +18,8 @@ from typing import Any, Awaitable, Callable, Optional
 
 from aiortc.rtcdatachannel import RTCDataChannel
 
-from .webrtc_client import SessionContext
 from src.truefit_core.common.utils import logger
+from src.truefit_infra.realtime.session_context import SessionContext
 
 # Type alias for inbound event handler
 InboundHandler = Callable[[dict[str, Any]], Awaitable[None]]

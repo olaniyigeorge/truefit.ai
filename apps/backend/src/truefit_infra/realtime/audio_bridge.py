@@ -17,7 +17,7 @@ import av
 from aiortc import MediaStreamTrack
 from aiortc.mediastreams import AudioStreamTrack
 
-from .webrtc_client import SessionContext
+from src.truefit_infra.realtime.session_context import SessionContext
 from src.truefit_core.common.utils import logger
 
 # PCM format expected by Gemini Live API

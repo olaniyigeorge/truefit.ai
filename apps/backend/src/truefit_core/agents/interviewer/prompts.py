@@ -6,7 +6,7 @@
 
 # ── System prompt builder ────
 
-from truefit_core.agents.interviewer.context import InterviewContext
+from src.truefit_core.agents.interviewer.context import InterviewContext
 
 
 def build_system_prompt(ctx: InterviewContext) -> str:

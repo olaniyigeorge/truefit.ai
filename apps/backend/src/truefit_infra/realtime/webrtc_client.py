@@ -12,27 +12,18 @@ always have the right scope. Does NOT know about Gemini or domain logic.
 """
 from __future__ import annotations
 
-import asyncio
 import uuid
 from typing import Optional
 
 from aiortc import RTCPeerConnection, MediaStreamTrack
 from aiortc.mediastreams import AudioStreamTrack
 
+from src.truefit_infra.realtime.session_context import SessionContext
+
 from .audio_bridge import AudioBridge
 from .frame_sampler import FrameSampler
 from .data_channel import DataChannelManager
 from src.truefit_core.common.utils import logger
-
-
-class SessionContext:
-    """Immutable session metadata passed to every infra component."""
-    __slots__ = ("session_id", "job_id", "candidate_id")
-
-    def __init__(self, session_id: str, job_id: uuid.UUID, candidate_id: uuid.UUID):
-        self.session_id = session_id
-        self.job_id = job_id
-        self.candidate_id = candidate_id
 
 
 class WebRTCClient:
@@ -69,7 +60,7 @@ class WebRTCClient:
 
         self._closed = False
 
-    # ── Setup ─────────────────────────────────────────────────────────────────
+    # ── Setup ───
 
     def setup_handlers(self) -> None:
         """
@@ -111,7 +102,7 @@ class WebRTCClient:
             if state in ("failed", "closed"):
                 await self.close()
 
-    # ── Outbound audio (Gemini → browser) ────────────────────────────────────
+    # ── Outbound audio (Gemini → browser) ──
 
     def add_outbound_audio_track(self, track: AudioStreamTrack) -> None:
         """
@@ -120,7 +111,7 @@ class WebRTCClient:
         """
         self.pc.addTrack(track)
 
-    # ── Teardown ──────────────────────────────────────────────────────────────
+    # ── Teardown ──
 
     async def close(self) -> None:
         if self._closed:
@@ -132,7 +123,7 @@ class WebRTCClient:
         logger.info(f"[{self.context.session_id}] WebRTCClient closed")
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ── Helpers ──
 
 def _is_screen_track(track: MediaStreamTrack) -> bool:
     """
@@ -143,7 +134,7 @@ def _is_screen_track(track: MediaStreamTrack) -> bool:
     return any(kw in label.lower() for kw in ("screen", "window", "tab", "display"))
 
 
-# ── Registry ──────────────────────────────────────────────────────────────────
+# ── Registry ──
 
 class WebRTCClientRegistry:
     """

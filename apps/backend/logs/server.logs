@@ -7713,3 +7713,2144 @@ Using Dev config...
 2026-03-06 09:51:29,675 - INFO - Application startup complete
 2026-03-06 10:04:43,679 - INFO - Database connections closed
 2026-03-06 10:04:43,680 - INFO - Application shutdown complete
+2026-03-06 10:11:19,200 - INFO - 
+Using Dev config...
+
+2026-03-06 10:11:19,625 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:11:19,626 - INFO - 
+ creating tables...
+
+2026-03-06 10:11:21,882 - INFO - Database tables created successfully
+2026-03-06 10:11:21,884 - INFO - Application startup complete
+2026-03-06 10:32:16,693 - INFO - {'PATH': '/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.918ms '}
+2026-03-06 10:32:58,301 - INFO - {'PATH': '/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.632ms '}
+2026-03-06 10:39:57,863 - INFO - Database connections closed
+2026-03-06 10:39:57,864 - INFO - Application shutdown complete
+2026-03-06 10:39:59,783 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:00,300 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:00,300 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:02,581 - INFO - Database tables created successfully
+2026-03-06 10:40:02,585 - INFO - Application startup complete
+2026-03-06 10:40:02,698 - INFO - Database connections closed
+2026-03-06 10:40:02,699 - INFO - Application shutdown complete
+2026-03-06 10:40:03,982 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:04,432 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:04,432 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:06,707 - INFO - Database tables created successfully
+2026-03-06 10:40:06,709 - INFO - Application startup complete
+2026-03-06 10:40:06,833 - INFO - Database connections closed
+2026-03-06 10:40:06,834 - INFO - Application shutdown complete
+2026-03-06 10:40:08,331 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:08,818 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:08,819 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:11,125 - INFO - Database tables created successfully
+2026-03-06 10:40:11,129 - INFO - Application startup complete
+2026-03-06 10:40:13,404 - INFO - Database connections closed
+2026-03-06 10:40:13,405 - INFO - Application shutdown complete
+2026-03-06 10:40:15,087 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:15,652 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:15,652 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:17,830 - INFO - Database tables created successfully
+2026-03-06 10:40:17,832 - INFO - Application startup complete
+2026-03-06 10:40:18,163 - INFO - Database connections closed
+2026-03-06 10:40:18,168 - INFO - Application shutdown complete
+2026-03-06 10:40:19,803 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:20,395 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:20,396 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:22,630 - INFO - Database tables created successfully
+2026-03-06 10:40:22,632 - INFO - Application startup complete
+2026-03-06 10:40:22,742 - INFO - Database connections closed
+2026-03-06 10:40:22,742 - INFO - Application shutdown complete
+2026-03-06 10:40:24,231 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:24,786 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:24,787 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:27,064 - INFO - Database tables created successfully
+2026-03-06 10:40:27,067 - INFO - Application startup complete
+2026-03-06 10:40:27,186 - INFO - Database connections closed
+2026-03-06 10:40:27,187 - INFO - Application shutdown complete
+2026-03-06 10:40:28,503 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:29,056 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:29,056 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:31,242 - INFO - Database tables created successfully
+2026-03-06 10:40:31,244 - INFO - Application startup complete
+2026-03-06 10:40:31,355 - INFO - Database connections closed
+2026-03-06 10:40:31,356 - INFO - Application shutdown complete
+2026-03-06 10:40:32,712 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:33,186 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:33,187 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:35,401 - INFO - Database tables created successfully
+2026-03-06 10:40:35,402 - INFO - Application startup complete
+2026-03-06 10:40:35,510 - INFO - Database connections closed
+2026-03-06 10:40:35,510 - INFO - Application shutdown complete
+2026-03-06 10:40:36,812 - INFO - 
+Using Dev config...
+
+2026-03-06 10:40:37,257 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:40:37,258 - INFO - 
+ creating tables...
+
+2026-03-06 10:40:39,448 - INFO - Database tables created successfully
+2026-03-06 10:40:39,450 - INFO - Application startup complete
+2026-03-06 10:48:59,339 - INFO - Database connections closed
+2026-03-06 10:48:59,340 - INFO - Application shutdown complete
+2026-03-06 10:49:00,741 - INFO - 
+Using Dev config...
+
+2026-03-06 10:49:01,260 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 10:49:01,260 - INFO - 
+ creating tables...
+
+2026-03-06 10:49:03,444 - INFO - Database tables created successfully
+2026-03-06 10:49:03,446 - INFO - Application startup complete
+2026-03-06 10:49:03,557 - INFO - Database connections closed
+2026-03-06 10:49:03,559 - INFO - Application shutdown complete
+2026-03-06 10:49:04,908 - INFO - 
+Using Dev config...
+
+2026-03-06 10:49:10,334 - INFO - 
+Using Dev config...
+
+2026-03-06 10:49:46,687 - INFO - 
+Using Dev config...
+
+2026-03-06 10:50:00,184 - INFO - 
+Using Dev config...
+
+2026-03-06 10:50:07,138 - INFO - 
+Using Dev config...
+
+2026-03-06 10:50:10,829 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:10,222 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:16,954 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:19,428 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:31,435 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:33,504 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:41,820 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:48,973 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:57,127 - INFO - 
+Using Dev config...
+
+2026-03-06 10:52:59,671 - INFO - 
+Using Dev config...
+
+2026-03-06 10:53:02,924 - INFO - 
+Using Dev config...
+
+2026-03-06 10:53:05,281 - INFO - 
+Using Dev config...
+
+2026-03-06 10:53:07,355 - INFO - 
+Using Dev config...
+
+2026-03-06 10:59:39,163 - INFO - 
+Using Dev config...
+
+2026-03-06 10:59:41,339 - INFO - 
+Using Dev config...
+
+2026-03-06 10:59:43,693 - INFO - 
+Using Dev config...
+
+2026-03-06 11:00:01,005 - INFO - 
+Using Dev config...
+
+2026-03-06 11:00:05,139 - INFO - 
+Using Dev config...
+
+2026-03-06 11:00:16,480 - INFO - 
+Using Dev config...
+
+2026-03-06 11:00:18,615 - INFO - 
+Using Dev config...
+
+2026-03-06 11:00:20,346 - INFO - 
+Using Dev config...
+
+2026-03-06 11:02:42,397 - INFO - 
+Using Dev config...
+
+2026-03-06 11:02:48,411 - INFO - 
+Using Dev config...
+
+2026-03-06 11:02:53,689 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:00,632 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:02,240 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:10,322 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:14,699 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:16,995 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:28,355 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:31,748 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:33,499 - INFO - 
+Using Dev config...
+
+2026-03-06 11:03:55,586 - INFO - 
+Using Dev config...
+
+2026-03-06 11:04:02,036 - INFO - 
+Using Dev config...
+
+2026-03-06 11:04:04,028 - INFO - 
+Using Dev config...
+
+2026-03-06 11:06:07,306 - INFO - 
+Using Dev config...
+
+2026-03-06 11:06:10,378 - INFO - 
+Using Dev config...
+
+2026-03-06 11:06:27,077 - INFO - 
+Using Dev config...
+
+2026-03-06 11:06:38,672 - INFO - 
+Using Dev config...
+
+2026-03-06 11:06:39,562 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:06:39,563 - INFO - 
+ creating tables...
+
+2026-03-06 11:06:41,833 - INFO - Database tables created successfully
+2026-03-06 11:06:41,836 - INFO - Application startup complete
+2026-03-06 11:07:42,551 - INFO - Database connections closed
+2026-03-06 11:07:42,551 - INFO - Application shutdown complete
+2026-03-06 11:07:44,131 - INFO - 
+Using Dev config...
+
+2026-03-06 11:07:45,044 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:07:45,045 - INFO - 
+ creating tables...
+
+2026-03-06 11:07:47,358 - INFO - Database tables created successfully
+2026-03-06 11:07:47,361 - INFO - Application startup complete
+2026-03-06 11:07:47,480 - INFO - Database connections closed
+2026-03-06 11:07:47,482 - INFO - Application shutdown complete
+2026-03-06 11:07:48,968 - INFO - 
+Using Dev config...
+
+2026-03-06 11:07:49,828 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:07:49,828 - INFO - 
+ creating tables...
+
+2026-03-06 11:07:52,075 - INFO - Database tables created successfully
+2026-03-06 11:07:52,076 - INFO - Application startup complete
+2026-03-06 11:07:52,191 - INFO - Database connections closed
+2026-03-06 11:07:52,192 - INFO - Application shutdown complete
+2026-03-06 11:07:54,355 - INFO - 
+Using Dev config...
+
+2026-03-06 11:07:55,137 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:07:55,138 - INFO - 
+ creating tables...
+
+2026-03-06 11:07:57,346 - INFO - Database tables created successfully
+2026-03-06 11:07:57,348 - INFO - Application startup complete
+2026-03-06 11:08:05,059 - INFO - Database connections closed
+2026-03-06 11:08:05,060 - INFO - Application shutdown complete
+2026-03-06 11:08:06,484 - INFO - 
+Using Dev config...
+
+2026-03-06 11:08:07,248 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:08:07,249 - INFO - 
+ creating tables...
+
+2026-03-06 11:08:09,628 - INFO - Database tables created successfully
+2026-03-06 11:08:09,633 - INFO - Application startup complete
+2026-03-06 11:09:10,000 - INFO - Database connections closed
+2026-03-06 11:09:10,001 - INFO - Application shutdown complete
+2026-03-06 11:09:11,507 - INFO - 
+Using Dev config...
+
+2026-03-06 11:09:16,232 - INFO - 
+Using Dev config...
+
+2026-03-06 11:09:17,034 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:09:17,034 - INFO - 
+ creating tables...
+
+2026-03-06 11:09:19,289 - INFO - Database tables created successfully
+2026-03-06 11:09:19,290 - INFO - Application startup complete
+2026-03-06 11:09:19,403 - INFO - Database connections closed
+2026-03-06 11:09:19,407 - INFO - Application shutdown complete
+2026-03-06 11:09:21,708 - INFO - 
+Using Dev config...
+
+2026-03-06 11:09:23,292 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:09:23,292 - INFO - 
+ creating tables...
+
+2026-03-06 11:09:25,552 - INFO - Database tables created successfully
+2026-03-06 11:09:25,553 - INFO - Application startup complete
+2026-03-06 11:11:38,273 - INFO - {'PATH': '/v1/documents/ingestpi/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.541ms '}
+2026-03-06 11:11:48,595 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '3.122ms '}
+2026-03-06 11:11:59,486 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '24.919ms '}
+2026-03-06 11:13:16,516 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '106.697ms '}
+2026-03-06 11:16:11,875 - INFO - Database connections closed
+2026-03-06 11:16:11,875 - INFO - Application shutdown complete
+2026-03-06 11:16:14,003 - INFO - 
+Using Dev config...
+
+2026-03-06 11:16:15,991 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:16:15,992 - INFO - 
+ creating tables...
+
+2026-03-06 11:16:18,243 - INFO - Database tables created successfully
+2026-03-06 11:16:18,244 - INFO - Application startup complete
+2026-03-06 11:16:58,429 - INFO - {'PATH': '/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.558ms '}
+2026-03-06 11:17:36,914 - INFO - {'PATH': '/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.607ms '}
+2026-03-06 11:18:29,382 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '2.697ms '}
+2026-03-06 11:22:45,529 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '1.047ms '}
+2026-03-06 11:23:31,662 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '1.336ms '}
+2026-03-06 11:24:34,397 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Received track: kind=audio id=090a5e9d-d66f-4416-a9e0-a304c323a246
+2026-03-06 11:24:34,397 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Received track: kind=video id=39552bba-56ec-489f-bfb4-0c6c330ccb09
+2026-03-06 11:24:34,397 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:24:34,406 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:24:34,407 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:24:34,409 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:24:39,421 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Connection state: connecting
+2026-03-06 11:24:39,423 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5065.376ms '}
+2026-03-06 11:24:39,524 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.31ms '}
+2026-03-06 11:24:39,541 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.238ms '}
+2026-03-06 11:24:39,561 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.618ms '}
+2026-03-06 11:24:39,571 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(ROiG7OObYn 1 udp 1853824767 172.22.0.1 64515 typ prflx)
+2026-03-06 11:24:39,575 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 57187) -> ('172.22.0.1', 64515)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:24:39,581 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 57187) -> ('172.22.0.1', 64515)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:24:39,582 - INFO - Connection(0) ICE completed
+2026-03-06 11:24:39,583 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.322ms '}
+2026-03-06 11:24:39,615 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '24.435ms '}
+2026-03-06 11:24:39,624 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.352ms '}
+2026-03-06 11:24:39,627 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Connection state: connected
+2026-03-06 11:24:39,633 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.148ms '}
+2026-03-06 11:24:39,635 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] DataChannel opened: interview
+2026-03-06 11:24:39,638 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.344ms '}
+2026-03-06 11:24:39,643 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.363ms '}
+2026-03-06 11:24:39,648 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.915ms '}
+2026-03-06 11:24:39,654 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.665ms '}
+2026-03-06 11:24:39,660 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.378ms '}
+2026-03-06 11:24:39,665 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.812ms '}
+2026-03-06 11:24:39,670 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.522ms '}
+2026-03-06 11:24:39,675 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.379ms '}
+2026-03-06 11:24:39,789 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(ux3qCBx7d9 1 udp 1853759231 172.20.10.4 64516 typ prflx)
+2026-03-06 11:24:39,790 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 57186) -> ('172.20.10.4', 64516)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:24:39,791 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 57186) -> ('172.20.10.4', 64516)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:25:10,648 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] DataChannel closed
+2026-03-06 11:25:10,667 - WARNING - [a0d8f605-0771-483b-a551-658530b6a522] Inbound track error: 
+2026-03-06 11:25:11,775 - WARNING - [a0d8f605-0771-483b-a551-658530b6a522] camera track error: 
+2026-03-06 11:25:11,799 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Track ended: 090a5e9d-d66f-4416-a9e0-a304c323a246
+2026-03-06 11:25:11,799 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Track ended: 39552bba-56ec-489f-bfb4-0c6c330ccb09
+2026-03-06 11:25:11,800 - INFO - [a0d8f605-0771-483b-a551-658530b6a522] Connection state: closed
+2026-03-06 11:26:00,680 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Received track: kind=audio id=93672f93-0826-4e6b-b6cd-5d473fc7ef54
+2026-03-06 11:26:00,681 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Received track: kind=video id=18de0a05-795f-4e08-8f3d-04cf525dba22
+2026-03-06 11:26:00,682 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:26:00,688 - INFO - Connection(3) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:26:00,688 - INFO - Connection(3) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:26:00,689 - INFO - Connection(3) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:26:05,702 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Connection state: connecting
+2026-03-06 11:26:05,702 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5029.381ms '}
+2026-03-06 11:26:05,724 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.059ms '}
+2026-03-06 11:26:05,732 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.84ms '}
+2026-03-06 11:26:05,740 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.7ms '}
+2026-03-06 11:26:05,749 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.74ms '}
+2026-03-06 11:26:05,759 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.794ms '}
+2026-03-06 11:26:05,768 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.604ms '}
+2026-03-06 11:26:05,783 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '5.006ms '}
+2026-03-06 11:26:05,793 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(K5QrukMqxr 1 udp 1853824767 172.22.0.1 57967 typ prflx)
+2026-03-06 11:26:05,794 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 65310) -> ('172.22.0.1', 57967)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:26:05,797 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 65310) -> ('172.22.0.1', 57967)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:26:05,797 - INFO - Connection(3) ICE completed
+2026-03-06 11:26:05,803 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.021ms '}
+2026-03-06 11:26:05,814 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.397ms '}
+2026-03-06 11:26:05,824 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.028ms '}
+2026-03-06 11:26:05,830 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Connection state: connected
+2026-03-06 11:26:05,836 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] DataChannel opened: interview
+2026-03-06 11:26:05,842 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.859ms '}
+2026-03-06 11:26:05,852 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.465ms '}
+2026-03-06 11:26:05,862 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.464ms '}
+2026-03-06 11:26:05,869 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.76ms '}
+2026-03-06 11:26:05,877 - INFO - {'PATH': '/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.054ms '}
+2026-03-06 11:26:05,990 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(TWBcdHIiwF 1 udp 1853759231 172.20.10.4 57968 typ prflx)
+2026-03-06 11:26:05,991 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 65309) -> ('172.20.10.4', 57968)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:26:05,993 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 65309) -> ('172.20.10.4', 57968)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:37:39,775 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] DataChannel closed
+2026-03-06 11:44:02,973 - WARNING - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Inbound track error: 
+2026-03-06 11:44:03,355 - WARNING - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] camera track error: 
+2026-03-06 11:44:03,610 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Track ended: 93672f93-0826-4e6b-b6cd-5d473fc7ef54
+2026-03-06 11:44:03,946 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Track ended: 18de0a05-795f-4e08-8f3d-04cf525dba22
+2026-03-06 11:44:04,015 - INFO - [055e63d6-1f37-4c9e-b03f-8a9f15996d3a] Connection state: closed
+2026-03-06 11:45:41,958 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] Received track: kind=audio id=217fc3a6-cedb-4c81-a91d-dbdb247e3bba
+2026-03-06 11:45:41,958 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] Received track: kind=video id=f08d7262-97e4-431e-99a3-cece80f7c41a
+2026-03-06 11:45:41,959 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:45:41,977 - INFO - Connection(6) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:45:41,979 - INFO - Connection(6) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:45:41,982 - INFO - Connection(6) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:45:46,998 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] Connection state: connecting
+2026-03-06 11:45:47,000 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5082.366ms '}
+2026-03-06 11:45:47,042 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.068ms '}
+2026-03-06 11:45:47,050 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.219ms '}
+2026-03-06 11:45:47,056 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.901ms '}
+2026-03-06 11:45:47,065 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.188ms '}
+2026-03-06 11:45:47,074 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.082ms '}
+2026-03-06 11:45:47,081 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.416ms '}
+2026-03-06 11:45:47,090 - INFO - Connection(6) Discovered peer reflexive candidate Candidate(DJHQDWKDkX 1 udp 1853824767 172.22.0.1 65261 typ prflx)
+2026-03-06 11:45:47,091 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 65268) -> ('172.22.0.1', 65261)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:45:47,093 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.264ms '}
+2026-03-06 11:45:47,100 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 65268) -> ('172.22.0.1', 65261)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:45:47,101 - INFO - Connection(6) ICE completed
+2026-03-06 11:45:47,105 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.236ms '}
+2026-03-06 11:45:47,114 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.14ms '}
+2026-03-06 11:45:47,118 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] Connection state: connected
+2026-03-06 11:45:47,121 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.314ms '}
+2026-03-06 11:45:47,126 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] DataChannel opened: interview
+2026-03-06 11:45:47,129 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.228ms '}
+2026-03-06 11:45:47,135 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.778ms '}
+2026-03-06 11:45:47,141 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.072ms '}
+2026-03-06 11:45:47,148 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.505ms '}
+2026-03-06 11:45:47,158 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.174ms '}
+2026-03-06 11:45:47,288 - INFO - Connection(6) Discovered peer reflexive candidate Candidate(p0rW8vyl40 1 udp 1853759231 172.20.10.4 65262 typ prflx)
+2026-03-06 11:45:47,290 - INFO - Connection(6) Check CandidatePair(('172.20.10.4', 65267) -> ('172.20.10.4', 65262)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:45:47,292 - INFO - Connection(6) Check CandidatePair(('172.20.10.4', 65267) -> ('172.20.10.4', 65262)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:47:29,816 - INFO - Database connections closed
+2026-03-06 11:47:29,817 - INFO - Application shutdown complete
+2026-03-06 11:47:29,842 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] DataChannel closed
+2026-03-06 11:47:29,844 - INFO - [8ebb2a53-829a-47ef-8c71-403342a8ae4c] Connection state: closed
+2026-03-06 11:47:31,893 - INFO - 
+Using Dev config...
+
+2026-03-06 11:47:32,737 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:47:32,737 - INFO - 
+ creating tables...
+
+2026-03-06 11:47:35,103 - INFO - Database tables created successfully
+2026-03-06 11:47:35,107 - INFO - Application startup complete
+2026-03-06 11:48:05,146 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Received track: kind=audio id=0f6d6358-1750-4f44-8e8d-85e533211263
+2026-03-06 11:48:05,146 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Received track: kind=video id=bd4e6697-debd-433f-83e4-a7a648cf0a70
+2026-03-06 11:48:05,146 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:48:05,154 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:48:05,154 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:48:05,155 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:48:10,163 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Connection state: connecting
+2026-03-06 11:48:10,164 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5032.017ms '}
+2026-03-06 11:48:10,184 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.123ms '}
+2026-03-06 11:48:10,191 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.075ms '}
+2026-03-06 11:48:10,202 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.327ms '}
+2026-03-06 11:48:10,255 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(cENsqVRwWB 1 udp 1853824767 172.22.0.1 56988 typ prflx)
+2026-03-06 11:48:10,267 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 56995) -> ('172.22.0.1', 56988)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:48:10,283 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 56995) -> ('172.22.0.1', 56988)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:48:10,288 - INFO - Connection(0) ICE completed
+2026-03-06 11:48:10,299 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '31.678ms '}
+2026-03-06 11:48:10,318 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.798ms '}
+2026-03-06 11:48:10,325 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Connection state: connected
+2026-03-06 11:48:10,331 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '5.26ms '}
+2026-03-06 11:48:10,342 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] DataChannel opened: interview
+2026-03-06 11:48:10,347 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.354ms '}
+2026-03-06 11:48:10,353 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.256ms '}
+2026-03-06 11:48:10,359 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.202ms '}
+2026-03-06 11:48:10,364 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.789ms '}
+2026-03-06 11:48:10,368 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.762ms '}
+2026-03-06 11:48:10,376 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.743ms '}
+2026-03-06 11:48:10,383 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.892ms '}
+2026-03-06 11:48:10,388 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.926ms '}
+2026-03-06 11:48:10,394 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.839ms '}
+2026-03-06 11:48:10,446 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(ZPYTWbVL9c 1 udp 1853759231 172.20.10.4 56989 typ prflx)
+2026-03-06 11:48:10,446 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 56994) -> ('172.20.10.4', 56989)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:48:10,447 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 56994) -> ('172.20.10.4', 56989)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:51:43,861 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '20.746ms '}
+2026-03-06 11:51:59,769 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.739ms '}
+2026-03-06 11:54:25,575 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] DataChannel closed
+2026-03-06 11:54:27,248 - WARNING - [7018e4d3-afdf-423c-a834-8baed31ab0a1] camera track error: 
+2026-03-06 11:54:27,249 - WARNING - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Inbound track error: 
+2026-03-06 11:54:27,304 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Track ended: bd4e6697-debd-433f-83e4-a7a648cf0a70
+2026-03-06 11:54:27,305 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Track ended: 0f6d6358-1750-4f44-8e8d-85e533211263
+2026-03-06 11:54:27,305 - INFO - [7018e4d3-afdf-423c-a834-8baed31ab0a1] Connection state: closed
+2026-03-06 11:54:56,158 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] Received track: kind=audio id=4a00c8d9-e1f6-42d3-b3b9-24d5bd061d91
+2026-03-06 11:54:56,160 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] Received track: kind=video id=18185ac5-a196-4914-ad6c-4150b440df75
+2026-03-06 11:54:56,160 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:54:56,173 - INFO - Connection(3) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:54:56,174 - INFO - Connection(3) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:54:56,175 - INFO - Connection(3) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:55:01,195 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] Connection state: connecting
+2026-03-06 11:55:01,197 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5046.929ms '}
+2026-03-06 11:55:01,236 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.111ms '}
+2026-03-06 11:55:01,256 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.544ms '}
+2026-03-06 11:55:01,276 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(BEBsq8yEV2 1 udp 1853824767 172.22.0.1 51541 typ prflx)
+2026-03-06 11:55:01,282 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 58780) -> ('172.22.0.1', 51541)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:55:01,286 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '12.922ms '}
+2026-03-06 11:55:01,291 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 58780) -> ('172.22.0.1', 51541)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:55:01,292 - INFO - Connection(3) ICE completed
+2026-03-06 11:55:01,308 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.862ms '}
+2026-03-06 11:55:01,324 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] Connection state: connected
+2026-03-06 11:55:01,365 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] DataChannel opened: interview
+2026-03-06 11:55:01,369 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.247ms '}
+2026-03-06 11:55:01,374 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.758ms '}
+2026-03-06 11:55:01,382 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.368ms '}
+2026-03-06 11:55:01,390 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.791ms '}
+2026-03-06 11:55:01,396 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.592ms '}
+2026-03-06 11:55:01,402 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.757ms '}
+2026-03-06 11:55:01,408 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.88ms '}
+2026-03-06 11:55:01,414 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.785ms '}
+2026-03-06 11:55:01,422 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.027ms '}
+2026-03-06 11:55:01,428 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.614ms '}
+2026-03-06 11:55:01,433 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '0.771ms '}
+2026-03-06 11:55:01,479 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(rshoveHukO 1 udp 1853759231 172.20.10.4 51542 typ prflx)
+2026-03-06 11:55:01,480 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 58779) -> ('172.20.10.4', 51542)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:55:01,483 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 58779) -> ('172.20.10.4', 51542)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:55:23,928 - INFO - Database connections closed
+2026-03-06 11:55:23,929 - INFO - Application shutdown complete
+2026-03-06 11:55:23,956 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] DataChannel closed
+2026-03-06 11:55:23,958 - INFO - [e510178d-e125-4b92-8740-f21da6a55c80] Connection state: closed
+2026-03-06 11:55:26,006 - INFO - 
+Using Dev config...
+
+2026-03-06 11:55:26,837 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:55:26,837 - INFO - 
+ creating tables...
+
+2026-03-06 11:55:29,142 - INFO - Database tables created successfully
+2026-03-06 11:55:29,145 - INFO - Application startup complete
+2026-03-06 11:55:29,263 - INFO - Database connections closed
+2026-03-06 11:55:29,264 - INFO - Application shutdown complete
+2026-03-06 11:55:30,979 - INFO - 
+Using Dev config...
+
+2026-03-06 11:55:32,007 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:55:32,007 - INFO - 
+ creating tables...
+
+2026-03-06 11:55:34,196 - INFO - Database tables created successfully
+2026-03-06 11:55:34,198 - INFO - Application startup complete
+2026-03-06 11:55:34,316 - INFO - Database connections closed
+2026-03-06 11:55:34,317 - INFO - Application shutdown complete
+2026-03-06 11:55:35,847 - INFO - 
+Using Dev config...
+
+2026-03-06 11:55:38,159 - INFO - 
+Using Dev config...
+
+2026-03-06 11:55:38,919 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:55:38,920 - INFO - 
+ creating tables...
+
+2026-03-06 11:55:41,218 - INFO - Database tables created successfully
+2026-03-06 11:55:41,220 - INFO - Application startup complete
+2026-03-06 11:55:41,327 - INFO - Database connections closed
+2026-03-06 11:55:41,328 - INFO - Application shutdown complete
+2026-03-06 11:55:42,977 - INFO - 
+Using Dev config...
+
+2026-03-06 11:55:43,805 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:55:43,806 - INFO - 
+ creating tables...
+
+2026-03-06 11:55:46,178 - INFO - Database tables created successfully
+2026-03-06 11:55:46,182 - INFO - Application startup complete
+2026-03-06 11:55:54,837 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Received track: kind=audio id=1e2a3b65-41e3-4c46-9238-4c28bf873aab
+2026-03-06 11:55:54,837 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Received track: kind=video id=b85c12bd-6c7d-46f4-afe6-55a5b9c29111
+2026-03-06 11:55:54,837 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:55:54,849 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:55:54,850 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:55:54,851 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:55:59,863 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Connection state: connecting
+2026-03-06 11:55:59,864 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5044.404ms '}
+2026-03-06 11:55:59,887 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.461ms '}
+2026-03-06 11:55:59,894 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.822ms '}
+2026-03-06 11:55:59,903 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.163ms '}
+2026-03-06 11:55:59,910 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.328ms '}
+2026-03-06 11:55:59,919 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.074ms '}
+2026-03-06 11:55:59,927 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.601ms '}
+2026-03-06 11:55:59,929 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(DxmUwvVdg2 1 udp 1853824767 172.22.0.1 49153 typ prflx)
+2026-03-06 11:55:59,930 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 49176) -> ('172.22.0.1', 49153)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:55:59,931 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 49176) -> ('172.22.0.1', 49153)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:55:59,932 - INFO - Connection(0) ICE completed
+2026-03-06 11:55:59,936 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.976ms '}
+2026-03-06 11:55:59,944 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.995ms '}
+2026-03-06 11:55:59,957 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.227ms '}
+2026-03-06 11:55:59,961 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Connection state: connected
+2026-03-06 11:55:59,964 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] DataChannel opened: interview
+2026-03-06 11:55:59,967 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.764ms '}
+2026-03-06 11:55:59,973 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.311ms '}
+2026-03-06 11:55:59,980 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.562ms '}
+2026-03-06 11:55:59,987 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.814ms '}
+2026-03-06 11:55:59,993 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.451ms '}
+2026-03-06 11:56:00,004 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.01ms '}
+2026-03-06 11:56:00,156 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(e8y4BVXasA 1 udp 1853759231 172.20.10.4 49154 typ prflx)
+2026-03-06 11:56:00,157 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 49175) -> ('172.20.10.4', 49154)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:56:00,159 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 49175) -> ('172.20.10.4', 49154)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:57:18,759 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] DataChannel closed
+2026-03-06 11:57:18,771 - WARNING - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Inbound track error: 
+2026-03-06 11:57:22,742 - WARNING - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] camera track error: 
+2026-03-06 11:57:22,855 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Track ended: 1e2a3b65-41e3-4c46-9238-4c28bf873aab
+2026-03-06 11:57:22,855 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Track ended: b85c12bd-6c7d-46f4-afe6-55a5b9c29111
+2026-03-06 11:57:22,856 - INFO - [9f0624e9-2065-4c33-87d9-41b9b93c4f1b] Connection state: closed
+2026-03-06 11:57:28,718 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] Received track: kind=audio id=56605c46-c9fd-4b7a-8d76-60d973d308d9
+2026-03-06 11:57:28,719 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] Received track: kind=video id=e6ead32c-ac34-4652-9448-2f0627e13ac3
+2026-03-06 11:57:28,719 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:57:28,725 - INFO - Connection(3) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:57:28,725 - INFO - Connection(3) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:57:28,726 - INFO - Connection(3) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:57:33,733 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] Connection state: connecting
+2026-03-06 11:57:33,734 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5021.358ms '}
+2026-03-06 11:57:33,759 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.429ms '}
+2026-03-06 11:57:33,770 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.537ms '}
+2026-03-06 11:57:33,781 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.299ms '}
+2026-03-06 11:57:33,792 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.646ms '}
+2026-03-06 11:57:33,805 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.151ms '}
+2026-03-06 11:57:33,813 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(EbNjmefyZD 1 udp 1853824767 172.22.0.1 64540 typ prflx)
+2026-03-06 11:57:33,814 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 56240) -> ('172.22.0.1', 64540)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:57:33,817 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 56240) -> ('172.22.0.1', 64540)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:57:33,818 - INFO - Connection(3) ICE completed
+2026-03-06 11:57:33,820 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.972ms '}
+2026-03-06 11:57:33,837 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '6.064ms '}
+2026-03-06 11:57:33,838 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] Connection state: connected
+2026-03-06 11:57:33,842 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] DataChannel opened: interview
+2026-03-06 11:57:33,852 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.952ms '}
+2026-03-06 11:57:33,863 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.676ms '}
+2026-03-06 11:57:33,870 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.365ms '}
+2026-03-06 11:57:33,879 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.132ms '}
+2026-03-06 11:57:33,888 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.052ms '}
+2026-03-06 11:57:33,898 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.913ms '}
+2026-03-06 11:57:33,905 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.292ms '}
+2026-03-06 11:57:33,913 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.712ms '}
+2026-03-06 11:57:34,027 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(oVL2khcjRp 1 udp 1853759231 172.20.10.4 64541 typ prflx)
+2026-03-06 11:57:34,028 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 56239) -> ('172.20.10.4', 64541)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:57:34,030 - INFO - Connection(3) Check CandidatePair(('172.20.10.4', 56239) -> ('172.20.10.4', 64541)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:57:41,133 - INFO - Database connections closed
+2026-03-06 11:57:41,133 - INFO - Application shutdown complete
+2026-03-06 11:57:41,144 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] DataChannel closed
+2026-03-06 11:57:41,145 - INFO - [c1a46fae-77de-4dd5-8004-638e867c6f2b] Connection state: closed
+2026-03-06 11:57:48,658 - INFO - 
+Using Dev config...
+
+2026-03-06 11:57:50,430 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:57:50,430 - INFO - 
+ creating tables...
+
+2026-03-06 11:57:52,793 - INFO - Database tables created successfully
+2026-03-06 11:57:52,796 - INFO - Application startup complete
+2026-03-06 11:57:53,456 - INFO - Database connections closed
+2026-03-06 11:57:53,457 - INFO - Application shutdown complete
+2026-03-06 11:57:59,593 - INFO - 
+Using Dev config...
+
+2026-03-06 11:58:00,968 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 11:58:00,969 - INFO - 
+ creating tables...
+
+2026-03-06 11:58:03,216 - INFO - Database tables created successfully
+2026-03-06 11:58:03,219 - INFO - Application startup complete
+2026-03-06 11:58:16,860 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Received track: kind=audio id=edda4e6b-3433-4b73-bf73-c9be2803163a
+2026-03-06 11:58:16,860 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Received track: kind=video id=6ae06371-05c6-461c-a223-5c0ffe5494ec
+2026-03-06 11:58:16,861 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 11:58:16,871 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:58:16,871 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:58:16,872 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 11:58:21,893 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Connection state: connecting
+2026-03-06 11:58:21,895 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '5051.271ms '}
+2026-03-06 11:58:21,940 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '6.488ms '}
+2026-03-06 11:58:21,962 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.811ms '}
+2026-03-06 11:58:21,985 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '5.506ms '}
+2026-03-06 11:58:21,995 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(vdNSMWimeN 1 udp 1853824767 172.22.0.1 51727 typ prflx)
+2026-03-06 11:58:21,996 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 51734) -> ('172.22.0.1', 51727)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:58:21,999 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 51734) -> ('172.22.0.1', 51727)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 11:58:22,000 - INFO - Connection(0) ICE completed
+2026-03-06 11:58:22,003 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.317ms '}
+2026-03-06 11:58:22,021 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '10.92ms '}
+2026-03-06 11:58:22,025 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Connection state: connected
+2026-03-06 11:58:22,029 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] DataChannel opened: interview
+2026-03-06 11:58:22,036 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.299ms '}
+2026-03-06 11:58:22,043 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.368ms '}
+2026-03-06 11:58:22,048 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.118ms '}
+2026-03-06 11:58:22,054 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.234ms '}
+2026-03-06 11:58:22,061 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.397ms '}
+2026-03-06 11:58:22,067 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.097ms '}
+2026-03-06 11:58:22,072 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.164ms '}
+2026-03-06 11:58:22,079 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.145ms '}
+2026-03-06 11:58:22,092 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.566ms '}
+2026-03-06 11:58:22,098 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.332ms '}
+2026-03-06 11:58:22,198 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(HWslx1gKjG 1 udp 1853759231 172.20.10.4 51728 typ prflx)
+2026-03-06 11:58:22,198 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 51733) -> ('172.20.10.4', 51728)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 11:58:22,200 - INFO - Connection(0) Check CandidatePair(('172.20.10.4', 51733) -> ('172.20.10.4', 51728)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:06:14,825 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] DataChannel closed
+2026-03-06 12:07:52,731 - WARNING - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Inbound track error: 
+2026-03-06 12:07:52,838 - WARNING - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] camera track error: 
+2026-03-06 12:07:52,887 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Track ended: edda4e6b-3433-4b73-bf73-c9be2803163a
+2026-03-06 12:07:52,933 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Track ended: 6ae06371-05c6-461c-a223-5c0ffe5494ec
+2026-03-06 12:07:52,969 - INFO - [63b8af5c-ec55-4db7-9ee6-47be4e650c2a] Connection state: closed
+2026-03-06 12:19:49,175 - INFO - Database connections closed
+2026-03-06 12:19:49,176 - INFO - Application shutdown complete
+2026-03-06 12:19:50,798 - INFO - 
+Using Dev config...
+
+2026-03-06 12:19:51,702 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:19:51,702 - INFO - 
+ creating tables...
+
+2026-03-06 12:19:54,027 - INFO - Database tables created successfully
+2026-03-06 12:19:54,030 - INFO - Application startup complete
+2026-03-06 12:19:54,148 - INFO - Database connections closed
+2026-03-06 12:19:54,149 - INFO - Application shutdown complete
+2026-03-06 12:19:55,605 - INFO - 
+Using Dev config...
+
+2026-03-06 12:19:56,400 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:19:56,401 - INFO - 
+ creating tables...
+
+2026-03-06 12:19:58,572 - INFO - Database tables created successfully
+2026-03-06 12:19:58,573 - INFO - Application startup complete
+2026-03-06 12:20:45,464 - INFO - Database connections closed
+2026-03-06 12:20:45,465 - INFO - Application shutdown complete
+2026-03-06 12:20:46,969 - INFO - 
+Using Dev config...
+
+2026-03-06 12:20:47,746 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:20:47,746 - INFO - 
+ creating tables...
+
+2026-03-06 12:20:49,924 - INFO - Database tables created successfully
+2026-03-06 12:20:49,925 - INFO - Application startup complete
+2026-03-06 12:20:50,041 - INFO - Database connections closed
+2026-03-06 12:20:50,042 - INFO - Application shutdown complete
+2026-03-06 12:20:51,478 - INFO - 
+Using Dev config...
+
+2026-03-06 12:20:52,328 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:20:52,329 - INFO - 
+ creating tables...
+
+2026-03-06 12:20:54,651 - INFO - Database tables created successfully
+2026-03-06 12:20:54,653 - INFO - Application startup complete
+2026-03-06 12:21:39,823 - INFO - Database connections closed
+2026-03-06 12:21:39,824 - INFO - Application shutdown complete
+2026-03-06 12:21:41,321 - INFO - 
+Using Dev config...
+
+2026-03-06 12:21:42,122 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:21:42,122 - INFO - 
+ creating tables...
+
+2026-03-06 12:21:44,389 - INFO - Database tables created successfully
+2026-03-06 12:21:44,392 - INFO - Application startup complete
+2026-03-06 12:24:51,683 - INFO - Database connections closed
+2026-03-06 12:24:51,683 - INFO - Application shutdown complete
+2026-03-06 12:24:53,148 - INFO - 
+Using Dev config...
+
+2026-03-06 12:24:54,009 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:24:54,009 - INFO - 
+ creating tables...
+
+2026-03-06 12:24:56,216 - INFO - Database tables created successfully
+2026-03-06 12:24:56,218 - INFO - Application startup complete
+2026-03-06 12:24:56,325 - INFO - Database connections closed
+2026-03-06 12:24:56,325 - INFO - Application shutdown complete
+2026-03-06 12:24:57,759 - INFO - 
+Using Dev config...
+
+2026-03-06 12:24:58,622 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:24:58,623 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:00,825 - INFO - Database tables created successfully
+2026-03-06 12:25:00,826 - INFO - Application startup complete
+2026-03-06 12:25:00,941 - INFO - Database connections closed
+2026-03-06 12:25:00,941 - INFO - Application shutdown complete
+2026-03-06 12:25:03,218 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:04,006 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:04,007 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:06,181 - INFO - Database tables created successfully
+2026-03-06 12:25:06,182 - INFO - Application startup complete
+2026-03-06 12:25:06,295 - INFO - Database connections closed
+2026-03-06 12:25:06,296 - INFO - Application shutdown complete
+2026-03-06 12:25:07,733 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:08,488 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:08,489 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:10,673 - INFO - Database tables created successfully
+2026-03-06 12:25:10,674 - INFO - Application startup complete
+2026-03-06 12:25:10,795 - INFO - Database connections closed
+2026-03-06 12:25:10,795 - INFO - Application shutdown complete
+2026-03-06 12:25:12,258 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:13,141 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:13,178 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:15,447 - INFO - Database tables created successfully
+2026-03-06 12:25:15,449 - INFO - Application startup complete
+2026-03-06 12:25:15,663 - INFO - Database connections closed
+2026-03-06 12:25:15,664 - INFO - Application shutdown complete
+2026-03-06 12:25:17,059 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:17,896 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:17,896 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:20,121 - INFO - Database tables created successfully
+2026-03-06 12:25:20,123 - INFO - Application startup complete
+2026-03-06 12:25:20,231 - INFO - Database connections closed
+2026-03-06 12:25:20,231 - INFO - Application shutdown complete
+2026-03-06 12:25:21,597 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:22,391 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:22,391 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:24,624 - INFO - Database tables created successfully
+2026-03-06 12:25:24,625 - INFO - Application startup complete
+2026-03-06 12:25:24,743 - INFO - Database connections closed
+2026-03-06 12:25:24,744 - INFO - Application shutdown complete
+2026-03-06 12:25:26,139 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:26,932 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:26,933 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:29,145 - INFO - Database tables created successfully
+2026-03-06 12:25:29,147 - INFO - Application startup complete
+2026-03-06 12:25:29,263 - INFO - Database connections closed
+2026-03-06 12:25:29,264 - INFO - Application shutdown complete
+2026-03-06 12:25:30,642 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:31,386 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:31,386 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:33,576 - INFO - Database tables created successfully
+2026-03-06 12:25:33,578 - INFO - Application startup complete
+2026-03-06 12:25:33,692 - INFO - Database connections closed
+2026-03-06 12:25:33,693 - INFO - Application shutdown complete
+2026-03-06 12:25:35,155 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:35,970 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:35,970 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:38,157 - INFO - Database tables created successfully
+2026-03-06 12:25:38,158 - INFO - Application startup complete
+2026-03-06 12:25:38,272 - INFO - Database connections closed
+2026-03-06 12:25:38,273 - INFO - Application shutdown complete
+2026-03-06 12:25:39,611 - INFO - 
+Using Dev config...
+
+2026-03-06 12:25:40,362 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:25:40,363 - INFO - 
+ creating tables...
+
+2026-03-06 12:25:42,609 - INFO - Database tables created successfully
+2026-03-06 12:25:42,611 - INFO - Application startup complete
+2026-03-06 12:25:51,860 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] Received track: kind=audio id=5c04f7cd-bc85-4fc5-baba-40acb60e5580
+2026-03-06 12:25:51,861 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] Received track: kind=video id=33147f0b-694d-44dc-a6eb-11e496082276
+2026-03-06 12:25:51,862 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:25:51,890 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:25:51,891 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:25:51,894 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:25:51,911 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] Connection state: connecting
+2026-03-06 12:25:51,913 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '106.463ms '}
+2026-03-06 12:25:51,956 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '5.176ms '}
+2026-03-06 12:25:51,966 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.793ms '}
+2026-03-06 12:25:51,980 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.06ms '}
+2026-03-06 12:25:51,991 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.367ms '}
+2026-03-06 12:25:51,999 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.843ms '}
+2026-03-06 12:25:52,008 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.788ms '}
+2026-03-06 12:25:52,009 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(MPe3KsLXvd 1 udp 1853824767 172.22.0.1 65122 typ prflx)
+2026-03-06 12:25:52,010 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 65126) -> ('172.22.0.1', 65122)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:25:52,012 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 65126) -> ('172.22.0.1', 65122)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:25:52,012 - INFO - Connection(0) ICE completed
+2026-03-06 12:25:52,029 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] Connection state: connected
+2026-03-06 12:25:52,031 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] DataChannel opened: interview
+2026-03-06 12:26:10,509 - INFO - Database connections closed
+2026-03-06 12:26:10,509 - INFO - Application shutdown complete
+2026-03-06 12:26:10,515 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] DataChannel closed
+2026-03-06 12:26:10,515 - INFO - [5f805c1f-9851-4497-aeae-288ad80f60d0] Connection state: closed
+2026-03-06 12:26:12,109 - INFO - 
+Using Dev config...
+
+2026-03-06 12:26:12,911 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:26:12,911 - INFO - 
+ creating tables...
+
+2026-03-06 12:26:15,262 - INFO - Database tables created successfully
+2026-03-06 12:26:15,263 - INFO - Application startup complete
+2026-03-06 12:26:15,375 - INFO - Database connections closed
+2026-03-06 12:26:15,376 - INFO - Application shutdown complete
+2026-03-06 12:26:16,941 - INFO - 
+Using Dev config...
+
+2026-03-06 12:26:18,020 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 12:26:18,021 - INFO - 
+ creating tables...
+
+2026-03-06 12:26:20,354 - INFO - Database tables created successfully
+2026-03-06 12:26:20,357 - INFO - Application startup complete
+2026-03-06 12:26:28,427 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Received track: kind=audio id=18e3bdd3-96cf-4b64-9839-d013f03f224a
+2026-03-06 12:26:28,428 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Received track: kind=video id=cd49524c-d628-4c72-8c27-3fe6b998a013
+2026-03-06 12:26:28,429 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:26:28,443 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:26:28,444 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:26:28,445 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:26:28,450 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Connection state: connecting
+2026-03-06 12:26:28,451 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '52.637ms '}
+2026-03-06 12:26:28,467 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.907ms '}
+2026-03-06 12:26:28,476 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.381ms '}
+2026-03-06 12:26:28,483 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.578ms '}
+2026-03-06 12:26:28,491 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.47ms '}
+2026-03-06 12:26:28,497 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.21ms '}
+2026-03-06 12:26:28,503 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.754ms '}
+2026-03-06 12:26:28,524 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(j3Nz7iFjbC 1 udp 1853824767 172.22.0.1 56288 typ prflx)
+2026-03-06 12:26:28,525 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 56292) -> ('172.22.0.1', 56288)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:26:28,526 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 56292) -> ('172.22.0.1', 56288)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:26:28,526 - INFO - Connection(0) ICE completed
+2026-03-06 12:26:28,578 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Connection state: connected
+2026-03-06 12:26:28,582 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] DataChannel opened: interview
+2026-03-06 12:27:49,573 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] DataChannel closed
+2026-03-06 12:27:49,583 - WARNING - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Inbound track error: 
+2026-03-06 12:27:49,583 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Track ended: 18e3bdd3-96cf-4b64-9839-d013f03f224a
+2026-03-06 12:27:49,584 - INFO - [e4648981-ba7b-425e-82a1-36dcb4760e9f] Connection state: closed
+2026-03-06 12:29:14,547 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Received track: kind=audio id=e1dce2e7-84f6-4d46-a71d-c363e152751e
+2026-03-06 12:29:14,548 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Received track: kind=video id=95187ca8-826e-4371-bbe4-c5adf8c10827
+2026-03-06 12:29:14,549 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:29:14,564 - INFO - Connection(3) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:29:14,565 - INFO - Connection(3) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:29:14,567 - INFO - Connection(3) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:29:14,575 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Connection state: connecting
+2026-03-06 12:29:14,576 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '39.258ms '}
+2026-03-06 12:29:14,629 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '5.724ms '}
+2026-03-06 12:29:14,643 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.298ms '}
+2026-03-06 12:29:14,655 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.912ms '}
+2026-03-06 12:29:14,665 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.599ms '}
+2026-03-06 12:29:14,677 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.489ms '}
+2026-03-06 12:29:14,680 - INFO - Connection(3) Discovered peer reflexive candidate Candidate(NYi842i1WP 1 udp 1853824767 172.22.0.1 61206 typ prflx)
+2026-03-06 12:29:14,681 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 59930) -> ('172.22.0.1', 61206)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:29:14,685 - INFO - Connection(3) Check CandidatePair(('172.22.0.1', 59930) -> ('172.22.0.1', 61206)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:29:14,693 - INFO - Connection(3) ICE completed
+2026-03-06 12:29:14,707 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '8.352ms '}
+2026-03-06 12:29:14,711 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Connection state: connected
+2026-03-06 12:29:14,716 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] DataChannel opened: interview
+2026-03-06 12:30:02,579 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] DataChannel closed
+2026-03-06 12:30:02,592 - WARNING - [cd183180-b245-4ca8-bc89-1a54189f55fc] Inbound track error: 
+2026-03-06 12:30:05,240 - WARNING - [cd183180-b245-4ca8-bc89-1a54189f55fc] camera track error: 
+2026-03-06 12:30:05,305 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Track ended: e1dce2e7-84f6-4d46-a71d-c363e152751e
+2026-03-06 12:30:05,306 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Track ended: 95187ca8-826e-4371-bbe4-c5adf8c10827
+2026-03-06 12:30:05,308 - INFO - [cd183180-b245-4ca8-bc89-1a54189f55fc] Connection state: closed
+2026-03-06 12:32:59,382 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Received track: kind=audio id=f3d42dd0-71c6-48d1-884e-4970bd15e639
+2026-03-06 12:32:59,383 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Received track: kind=video id=f66ab456-0e56-41f4-bcb1-22f8c9f1c9c3
+2026-03-06 12:32:59,384 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:32:59,395 - INFO - Connection(6) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:32:59,396 - INFO - Connection(6) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:32:59,398 - INFO - Connection(6) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:32:59,408 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Connection state: connecting
+2026-03-06 12:32:59,409 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '37.448ms '}
+2026-03-06 12:32:59,432 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.971ms '}
+2026-03-06 12:32:59,446 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.94ms '}
+2026-03-06 12:32:59,458 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.935ms '}
+2026-03-06 12:32:59,470 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.624ms '}
+2026-03-06 12:32:59,476 - INFO - Connection(6) Discovered peer reflexive candidate Candidate(AW3JTQD10P 1 udp 1853824767 172.22.0.1 57309 typ prflx)
+2026-03-06 12:32:59,477 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 57313) -> ('172.22.0.1', 57309)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:32:59,482 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 57313) -> ('172.22.0.1', 57309)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:32:59,483 - INFO - Connection(6) ICE completed
+2026-03-06 12:32:59,489 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '7.791ms '}
+2026-03-06 12:32:59,510 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '12.047ms '}
+2026-03-06 12:32:59,516 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Connection state: connected
+2026-03-06 12:32:59,522 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] DataChannel opened: interview
+2026-03-06 12:34:15,046 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] DataChannel closed
+2026-03-06 12:34:15,059 - WARNING - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Inbound track error: 
+2026-03-06 12:34:15,545 - WARNING - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] camera track error: 
+2026-03-06 12:34:15,571 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Track ended: f3d42dd0-71c6-48d1-884e-4970bd15e639
+2026-03-06 12:34:15,572 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Track ended: f66ab456-0e56-41f4-bcb1-22f8c9f1c9c3
+2026-03-06 12:34:15,574 - INFO - [a7ea9a9b-dac3-4e1c-8b66-715b75472323] Connection state: closed
+2026-03-06 12:34:22,702 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Received track: kind=audio id=03b166a1-7d02-4c46-ae59-5f5b1b92f906
+2026-03-06 12:34:22,703 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Received track: kind=video id=3f4e9cfc-855d-4ad1-b142-f7b3ae96e861
+2026-03-06 12:34:22,703 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:34:22,719 - INFO - Connection(9) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:34:22,720 - INFO - Connection(9) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:34:22,721 - INFO - Connection(9) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:34:22,730 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Connection state: connecting
+2026-03-06 12:34:22,730 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '35.619ms '}
+2026-03-06 12:34:22,773 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.083ms '}
+2026-03-06 12:34:22,793 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.311ms '}
+2026-03-06 12:34:22,806 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.388ms '}
+2026-03-06 12:34:22,809 - INFO - Connection(9) Discovered peer reflexive candidate Candidate(JkgaJkEM5F 1 udp 1853824767 172.22.0.1 50994 typ prflx)
+2026-03-06 12:34:22,816 - INFO - Connection(9) Check CandidatePair(('172.22.0.1', 50335) -> ('172.22.0.1', 50994)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:34:22,818 - INFO - Connection(9) Check CandidatePair(('172.22.0.1', 50335) -> ('172.22.0.1', 50994)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:34:22,819 - INFO - Connection(9) ICE completed
+2026-03-06 12:34:22,915 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Connection state: connected
+2026-03-06 12:34:22,919 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] DataChannel opened: interview
+2026-03-06 12:34:22,952 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.674ms '}
+2026-03-06 12:34:22,973 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '7.948ms '}
+2026-03-06 12:34:22,999 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '9.968ms '}
+2026-03-06 12:35:37,566 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] DataChannel closed
+2026-03-06 12:35:37,576 - WARNING - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Inbound track error: 
+2026-03-06 12:35:38,879 - WARNING - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] camera track error: 
+2026-03-06 12:35:38,934 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Track ended: 03b166a1-7d02-4c46-ae59-5f5b1b92f906
+2026-03-06 12:35:38,935 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Track ended: 3f4e9cfc-855d-4ad1-b142-f7b3ae96e861
+2026-03-06 12:35:38,936 - INFO - [d9bc427d-9b05-4d37-9134-9b20c8520c9a] Connection state: closed
+2026-03-06 12:44:26,522 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Received track: kind=audio id=ddb3dcc0-cb05-4a35-abe9-339f98b81b97
+2026-03-06 12:44:26,523 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Received track: kind=video id=535b45da-2b54-4b60-9369-7bc6c0074584
+2026-03-06 12:44:26,523 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:44:26,535 - INFO - Connection(12) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:44:26,536 - INFO - Connection(12) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:44:26,537 - INFO - Connection(12) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:44:26,543 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Connection state: connecting
+2026-03-06 12:44:26,544 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '29.594ms '}
+2026-03-06 12:44:26,572 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.72ms '}
+2026-03-06 12:44:26,584 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.767ms '}
+2026-03-06 12:44:26,596 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.625ms '}
+2026-03-06 12:44:26,606 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.205ms '}
+2026-03-06 12:44:26,618 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.966ms '}
+2026-03-06 12:44:26,629 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.345ms '}
+2026-03-06 12:44:26,639 - INFO - Connection(12) Discovered peer reflexive candidate Candidate(dHRSGb8GcL 1 udp 1853824767 172.22.0.1 54531 typ prflx)
+2026-03-06 12:44:26,642 - INFO - Connection(12) Check CandidatePair(('172.22.0.1', 54770) -> ('172.22.0.1', 54531)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:44:26,645 - INFO - Connection(12) Check CandidatePair(('172.22.0.1', 54770) -> ('172.22.0.1', 54531)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:44:26,645 - INFO - Connection(12) ICE completed
+2026-03-06 12:44:26,690 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Connection state: connected
+2026-03-06 12:44:26,697 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] DataChannel opened: interview
+2026-03-06 12:44:51,563 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] DataChannel closed
+2026-03-06 12:44:52,103 - WARNING - [c71186c5-d294-4d9a-8801-f1348f55931a] camera track error: 
+2026-03-06 12:44:52,105 - WARNING - [c71186c5-d294-4d9a-8801-f1348f55931a] Inbound track error: 
+2026-03-06 12:44:52,119 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Track ended: 535b45da-2b54-4b60-9369-7bc6c0074584
+2026-03-06 12:44:52,129 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Track ended: ddb3dcc0-cb05-4a35-abe9-339f98b81b97
+2026-03-06 12:44:52,141 - INFO - [c71186c5-d294-4d9a-8801-f1348f55931a] Connection state: closed
+2026-03-06 12:45:38,920 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Received track: kind=audio id=d5df40cd-e84d-4359-a9af-2e5518cd4b8c
+2026-03-06 12:45:38,920 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Received track: kind=video id=e7f0358d-8cc3-4703-b0dc-b841c8b1696c
+2026-03-06 12:45:38,921 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:45:38,937 - INFO - Connection(15) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:45:38,938 - INFO - Connection(15) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:45:38,941 - INFO - Connection(15) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:45:38,967 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Connection state: connecting
+2026-03-06 12:45:38,968 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '56.401ms '}
+2026-03-06 12:45:38,991 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.711ms '}
+2026-03-06 12:45:39,003 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.095ms '}
+2026-03-06 12:45:39,016 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.832ms '}
+2026-03-06 12:45:39,029 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.528ms '}
+2026-03-06 12:45:39,042 - INFO - Connection(15) Discovered peer reflexive candidate Candidate(d3oCCZGp2k 1 udp 1853824767 172.22.0.1 53904 typ prflx)
+2026-03-06 12:45:39,043 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '4.323ms '}
+2026-03-06 12:45:39,046 - INFO - Connection(15) Check CandidatePair(('172.22.0.1', 53908) -> ('172.22.0.1', 53904)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:45:39,049 - INFO - Connection(15) Check CandidatePair(('172.22.0.1', 53908) -> ('172.22.0.1', 53904)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:45:39,050 - INFO - Connection(15) ICE completed
+2026-03-06 12:45:39,058 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '6.235ms '}
+2026-03-06 12:45:39,068 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Connection state: connected
+2026-03-06 12:45:39,073 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] DataChannel opened: interview
+2026-03-06 12:46:09,576 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] DataChannel closed
+2026-03-06 12:46:14,532 - WARNING - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] camera track error: 
+2026-03-06 12:46:14,533 - WARNING - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Inbound track error: 
+2026-03-06 12:46:14,747 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Track ended: e7f0358d-8cc3-4703-b0dc-b841c8b1696c
+2026-03-06 12:46:14,749 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Track ended: d5df40cd-e84d-4359-a9af-2e5518cd4b8c
+2026-03-06 12:46:14,750 - INFO - [c293fa5f-cfe4-49f8-9a8c-7e483f96733b] Connection state: closed
+2026-03-06 12:46:43,628 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Received track: kind=audio id=f68b74ac-de96-46b5-88b8-e94d5eac0a23
+2026-03-06 12:46:43,629 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Received track: kind=video id=59f6f1c0-0aa2-4e14-b21c-1057614fa773
+2026-03-06 12:46:43,630 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:46:43,650 - INFO - Connection(18) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:46:43,651 - INFO - Connection(18) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:46:43,653 - INFO - Connection(18) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:46:43,660 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Connection state: connecting
+2026-03-06 12:46:43,661 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '42.861ms '}
+2026-03-06 12:46:43,684 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '2.129ms '}
+2026-03-06 12:46:43,697 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '3.139ms '}
+2026-03-06 12:46:43,711 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '3.029ms '}
+2026-03-06 12:46:43,727 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '5.704ms '}
+2026-03-06 12:46:43,731 - INFO - Connection(18) Discovered peer reflexive candidate Candidate(JBinmpj68I 1 udp 1853824767 172.22.0.1 59327 typ prflx)
+2026-03-06 12:46:43,733 - INFO - Connection(18) Check CandidatePair(('172.22.0.1', 58791) -> ('172.22.0.1', 59327)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:46:43,738 - INFO - Connection(18) Check CandidatePair(('172.22.0.1', 58791) -> ('172.22.0.1', 59327)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:46:43,738 - INFO - Connection(18) ICE completed
+2026-03-06 12:46:43,741 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '3.277ms '}
+2026-03-06 12:46:43,755 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '4.89ms '}
+2026-03-06 12:46:43,764 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Connection state: connected
+2026-03-06 12:46:43,769 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] DataChannel opened: interview
+2026-03-06 12:48:18,580 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] DataChannel closed
+2026-03-06 12:48:18,587 - WARNING - [65debe11-bcec-4c3e-83e4-969b3751e0af] Inbound track error: 
+2026-03-06 12:48:20,006 - WARNING - [65debe11-bcec-4c3e-83e4-969b3751e0af] camera track error: 
+2026-03-06 12:48:20,063 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Track ended: f68b74ac-de96-46b5-88b8-e94d5eac0a23
+2026-03-06 12:48:20,064 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Track ended: 59f6f1c0-0aa2-4e14-b21c-1057614fa773
+2026-03-06 12:48:20,066 - INFO - [65debe11-bcec-4c3e-83e4-969b3751e0af] Connection state: closed
+2026-03-06 12:48:41,002 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Received track: kind=audio id=f107cbb6-9073-400f-b96b-0aa319e5b7f2
+2026-03-06 12:48:41,003 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Received track: kind=video id=d879edb8-6261-4004-a0c3-b487d9b63794
+2026-03-06 12:48:41,005 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] FrameSampler attached camera track (interval=5.0s)
+2026-03-06 12:48:41,023 - INFO - Connection(21) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:48:41,026 - INFO - Connection(21) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:48:41,028 - INFO - Connection(21) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-06 12:48:41,035 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Connection state: connecting
+2026-03-06 12:48:41,036 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '46.828ms '}
+2026-03-06 12:48:41,066 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.726ms '}
+2026-03-06 12:48:41,082 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.937ms '}
+2026-03-06 12:48:41,106 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '7.97ms '}
+2026-03-06 12:48:41,117 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '2.229ms '}
+2026-03-06 12:48:41,127 - INFO - Connection(21) Discovered peer reflexive candidate Candidate(43IKzycTE2 1 udp 1853824767 172.22.0.1 56674 typ prflx)
+2026-03-06 12:48:41,129 - INFO - Connection(21) Check CandidatePair(('172.22.0.1', 56678) -> ('172.22.0.1', 56674)) State.WAITING -> State.IN_PROGRESS
+2026-03-06 12:48:41,131 - INFO - Connection(21) Check CandidatePair(('172.22.0.1', 56678) -> ('172.22.0.1', 56674)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-06 12:48:41,132 - INFO - Connection(21) ICE completed
+2026-03-06 12:48:41,134 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '3.3ms '}
+2026-03-06 12:48:41,151 - INFO - {'PATH': '/api/v1/webrtc/ice-candidate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '6.188ms '}
+2026-03-06 12:48:41,161 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Connection state: connected
+2026-03-06 12:48:41,166 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] DataChannel opened: interview
+2026-03-06 12:48:43,138 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] DataChannel closed
+2026-03-06 12:48:43,178 - WARNING - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Inbound track error: 
+2026-03-06 12:48:46,309 - WARNING - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] camera track error: 
+2026-03-06 12:48:46,392 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Track ended: f107cbb6-9073-400f-b96b-0aa319e5b7f2
+2026-03-06 12:48:46,392 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Track ended: d879edb8-6261-4004-a0c3-b487d9b63794
+2026-03-06 12:48:46,394 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] Connection state: closed
+2026-03-06 12:48:46,395 - INFO - [12a26d95-6169-4d84-9d0f-1f959dc53b5b] WebRTCClient closed
+2026-03-06 14:53:01,790 - INFO - {'PATH': '/api/v1/orgs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '167.89ms '}
+2026-03-06 14:53:53,710 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '31.322ms '}
+2026-03-06 14:54:12,779 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/reactivate', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '47.808ms '}
+2026-03-06 14:54:34,554 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/billing', 'METHOD': 'PATCH', 'STATUS_CODE': 200, 'REQ/RES_TIME': '31.829ms '}
+2026-03-06 14:54:42,802 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/billing', 'METHOD': 'PATCH', 'STATUS_CODE': 200, 'REQ/RES_TIME': '51.508ms '}
+2026-03-06 14:54:56,043 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/deactivate', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '12.187ms '}
+2026-03-06 14:55:07,914 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/reactivate', 'METHOD': 'POST', 'STATUS_CODE': 400, 'REQ/RES_TIME': '6.464ms '}
+2026-03-06 14:55:31,200 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/suspend', 'METHOD': 'POST', 'STATUS_CODE': 400, 'REQ/RES_TIME': '5.233ms '}
+2026-03-06 14:55:43,348 - INFO - {'PATH': '/api/v1/orgs/89201275-dbc0-4cfd-80e5-5114d89f24b3/reactivate', 'METHOD': 'POST', 'STATUS_CODE': 400, 'REQ/RES_TIME': '4.853ms '}
+2026-03-06 14:57:23,679 - INFO - {'PATH': '/api/v1/interviews', 'METHOD': 'GET', 'STATUS_CODE': 400, 'REQ/RES_TIME': '35.234ms '}
+2026-03-06 15:46:23,134 - INFO - {'PATH': '/api/v1/orgs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '110.228ms '}
+2026-03-06 15:46:41,506 - INFO - {'PATH': '/api/v1/orgs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6.812ms '}
+2026-03-06 15:47:14,383 - INFO - {'PATH': '/api/docs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2.063ms '}
+2026-03-06 15:47:15,280 - INFO - {'PATH': '/openapi.json', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '608.075ms '}
+2026-03-06 15:57:40,760 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '13.04ms '}
+2026-03-06 15:57:53,539 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '0.862ms '}
+2026-03-06 15:58:09,174 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '1.608ms '}
+2026-03-06 15:58:55,660 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 422, 'REQ/RES_TIME': '24.319ms '}
+2026-03-06 15:59:53,871 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 201, 'REQ/RES_TIME': '124.663ms '}
+2026-03-06 16:00:00,156 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 201, 'REQ/RES_TIME': '29.094ms '}
+2026-03-06 16:01:17,258 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '50.829ms '}
+2026-03-06 16:02:19,409 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'POST', 'STATUS_CODE': 201, 'REQ/RES_TIME': '47.717ms '}
+2026-03-06 16:02:25,725 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '6.224ms '}
+2026-03-06 16:27:04,716 - INFO - Database connections closed
+2026-03-06 16:27:04,732 - INFO - Application shutdown complete
+2026-03-06 16:27:14,419 - INFO - 
+Using Dev config...
+
+2026-03-06 16:27:26,953 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:27:26,954 - INFO - 
+ creating tables...
+
+2026-03-06 16:27:29,236 - INFO - Database tables created successfully
+2026-03-06 16:27:29,251 - INFO - Application startup complete
+2026-03-06 16:27:29,358 - INFO - Database connections closed
+2026-03-06 16:27:29,359 - INFO - Application shutdown complete
+2026-03-06 16:27:31,487 - INFO - 
+Using Dev config...
+
+2026-03-06 16:27:32,234 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:27:32,234 - INFO - 
+ creating tables...
+
+2026-03-06 16:27:34,507 - INFO - Database tables created successfully
+2026-03-06 16:27:34,509 - INFO - Application startup complete
+2026-03-06 16:29:34,887 - INFO - Database connections closed
+2026-03-06 16:29:34,887 - INFO - Application shutdown complete
+2026-03-06 16:29:36,669 - INFO - 
+Using Dev config...
+
+2026-03-06 16:29:37,440 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:29:37,440 - INFO - 
+ creating tables...
+
+2026-03-06 16:29:39,788 - INFO - Database tables created successfully
+2026-03-06 16:29:39,791 - INFO - Application startup complete
+2026-03-06 16:29:39,901 - INFO - Database connections closed
+2026-03-06 16:29:39,902 - INFO - Application shutdown complete
+2026-03-06 16:29:42,872 - INFO - 
+Using Dev config...
+
+2026-03-06 16:29:43,643 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:29:43,643 - INFO - 
+ creating tables...
+
+2026-03-06 16:29:45,893 - INFO - Database tables created successfully
+2026-03-06 16:29:45,896 - INFO - Application startup complete
+2026-03-06 16:31:39,273 - INFO - Database connections closed
+2026-03-06 16:31:39,273 - INFO - Application shutdown complete
+2026-03-06 16:31:40,846 - INFO - 
+Using Dev config...
+
+2026-03-06 16:31:41,616 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:31:41,616 - INFO - 
+ creating tables...
+
+2026-03-06 16:31:43,845 - INFO - Database tables created successfully
+2026-03-06 16:31:43,847 - INFO - Application startup complete
+2026-03-06 16:31:53,623 - INFO - Database connections closed
+2026-03-06 16:31:53,623 - INFO - Application shutdown complete
+2026-03-06 16:31:55,006 - INFO - 
+Using Dev config...
+
+2026-03-06 16:31:55,762 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:31:55,762 - INFO - 
+ creating tables...
+
+2026-03-06 16:31:57,998 - INFO - Database tables created successfully
+2026-03-06 16:31:58,001 - INFO - Application startup complete
+2026-03-06 16:31:58,117 - INFO - Database connections closed
+2026-03-06 16:31:58,118 - INFO - Application shutdown complete
+2026-03-06 16:31:59,518 - INFO - 
+Using Dev config...
+
+2026-03-06 16:32:00,270 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:32:00,270 - INFO - 
+ creating tables...
+
+2026-03-06 16:32:02,618 - INFO - Database tables created successfully
+2026-03-06 16:32:02,621 - INFO - Application startup complete
+2026-03-06 16:32:54,258 - INFO - Database connections closed
+2026-03-06 16:32:54,258 - INFO - Application shutdown complete
+2026-03-06 16:32:55,691 - INFO - 
+Using Dev config...
+
+2026-03-06 16:32:56,460 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:32:56,461 - INFO - 
+ creating tables...
+
+2026-03-06 16:32:58,682 - INFO - Database tables created successfully
+2026-03-06 16:32:58,683 - INFO - Application startup complete
+2026-03-06 16:33:27,229 - INFO - Database connections closed
+2026-03-06 16:33:27,229 - INFO - Application shutdown complete
+2026-03-06 16:33:28,693 - INFO - 
+Using Dev config...
+
+2026-03-06 16:33:29,492 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:33:29,492 - INFO - 
+ creating tables...
+
+2026-03-06 16:33:31,714 - INFO - Database tables created successfully
+2026-03-06 16:33:31,715 - INFO - Application startup complete
+2026-03-06 16:33:31,828 - INFO - Database connections closed
+2026-03-06 16:33:31,828 - INFO - Application shutdown complete
+2026-03-06 16:33:33,210 - INFO - 
+Using Dev config...
+
+2026-03-06 16:33:33,920 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:33:33,924 - INFO - 
+ creating tables...
+
+2026-03-06 16:33:36,112 - INFO - Database tables created successfully
+2026-03-06 16:33:36,114 - INFO - Application startup complete
+2026-03-06 16:33:36,224 - INFO - Database connections closed
+2026-03-06 16:33:36,225 - INFO - Application shutdown complete
+2026-03-06 16:33:37,627 - INFO - 
+Using Dev config...
+
+2026-03-06 16:33:38,336 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-06 16:33:38,336 - INFO - 
+ creating tables...
+
+2026-03-06 16:33:40,590 - INFO - Database tables created successfully
+2026-03-06 16:33:40,592 - INFO - Application startup complete
+2026-03-07 09:05:30,407 - INFO - 
+Using Dev config...
+
+2026-03-07 09:05:31,795 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:05:31,796 - INFO - 
+ creating tables...
+
+2026-03-07 09:05:35,872 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:05:35,873 - INFO - Database connections closed
+2026-03-07 09:05:35,874 - INFO - Application shutdown complete
+2026-03-07 09:07:12,441 - INFO - 
+Using Dev config...
+
+2026-03-07 09:07:13,254 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:07:13,255 - INFO - 
+ creating tables...
+
+2026-03-07 09:07:17,329 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:07:17,331 - INFO - Database connections closed
+2026-03-07 09:07:17,332 - INFO - Application shutdown complete
+2026-03-07 09:07:19,813 - INFO - 
+Using Dev config...
+
+2026-03-07 09:07:21,626 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:07:21,627 - INFO - 
+ creating tables...
+
+2026-03-07 09:07:25,727 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:07:25,729 - INFO - Database connections closed
+2026-03-07 09:07:25,729 - INFO - Application shutdown complete
+2026-03-07 09:35:46,751 - INFO - 
+Using Dev config...
+
+2026-03-07 09:35:47,707 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:35:47,708 - INFO - 
+ creating tables...
+
+2026-03-07 09:35:51,789 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:35:51,791 - INFO - Database connections closed
+2026-03-07 09:35:51,791 - INFO - Application shutdown complete
+2026-03-07 09:35:54,929 - INFO - 
+Using Dev config...
+
+2026-03-07 09:35:56,858 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:35:56,859 - INFO - 
+ creating tables...
+
+2026-03-07 09:36:00,931 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:36:00,933 - INFO - Database connections closed
+2026-03-07 09:36:00,933 - INFO - Application shutdown complete
+2026-03-07 09:42:32,158 - INFO - 
+Using Dev config...
+
+2026-03-07 09:42:38,073 - INFO - 
+Using Dev config...
+
+2026-03-07 09:42:42,058 - INFO - 
+Using Dev config...
+
+2026-03-07 09:43:09,776 - INFO - 
+Using Dev config...
+
+2026-03-07 09:44:16,296 - INFO - 
+Using Dev config...
+
+2026-03-07 09:45:37,940 - INFO - 
+Using Dev config...
+
+2026-03-07 09:45:59,317 - INFO - 
+Using Dev config...
+
+2026-03-07 09:46:10,487 - INFO - 
+Using Dev config...
+
+2026-03-07 09:46:15,863 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:12,016 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:13,960 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:14,831 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:51:14,832 - INFO - 
+ creating tables...
+
+2026-03-07 09:51:18,915 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:51:18,917 - INFO - Database connections closed
+2026-03-07 09:51:18,918 - INFO - Application shutdown complete
+2026-03-07 09:51:20,260 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:20,942 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:51:20,943 - INFO - 
+ creating tables...
+
+2026-03-07 09:51:25,025 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:51:25,027 - INFO - Database connections closed
+2026-03-07 09:51:25,028 - INFO - Application shutdown complete
+2026-03-07 09:51:41,792 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:43,988 - INFO - 
+Using Dev config...
+
+2026-03-07 09:51:47,617 - INFO - 
+Using Dev config...
+
+2026-03-07 09:54:16,106 - INFO - 
+Using Dev config...
+
+2026-03-07 09:54:20,290 - INFO - 
+Using Dev config...
+
+2026-03-07 09:54:20,866 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:54:20,866 - INFO - 
+ creating tables...
+
+2026-03-07 09:54:24,936 - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2026-03-07 09:54:24,939 - INFO - Database connections closed
+2026-03-07 09:54:24,939 - INFO - Application shutdown complete
+2026-03-07 09:55:15,140 - INFO - 
+Using Dev config...
+
+2026-03-07 09:55:15,592 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:55:15,592 - INFO - 
+ creating tables...
+
+2026-03-07 09:55:17,973 - INFO - Database tables created successfully
+2026-03-07 09:55:17,976 - INFO - Application startup complete
+2026-03-07 09:55:22,250 - INFO - Database connections closed
+2026-03-07 09:55:22,250 - INFO - Application shutdown complete
+2026-03-07 09:55:23,956 - INFO - 
+Using Dev config...
+
+2026-03-07 09:55:24,404 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:55:24,405 - INFO - 
+ creating tables...
+
+2026-03-07 09:55:26,623 - INFO - Database tables created successfully
+2026-03-07 09:55:26,625 - INFO - Application startup complete
+2026-03-07 09:55:26,733 - INFO - Database connections closed
+2026-03-07 09:55:26,734 - INFO - Application shutdown complete
+2026-03-07 09:55:28,064 - INFO - 
+Using Dev config...
+
+2026-03-07 09:55:29,059 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 09:55:29,060 - INFO - 
+ creating tables...
+
+2026-03-07 09:55:31,367 - INFO - Database tables created successfully
+2026-03-07 09:55:31,370 - INFO - Application startup complete
+2026-03-07 09:55:31,568 - INFO - {'PATH': '/api/v1/orgs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '125.771ms '}
+2026-03-07 09:55:51,086 - INFO - {'PATH': '/api/v1/jobs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '39.182ms '}
+2026-03-07 09:59:59,767 - INFO - Database connections closed
+2026-03-07 09:59:59,768 - INFO - Application shutdown complete
+2026-03-07 10:00:01,374 - INFO - 
+Using Dev config...
+
+2026-03-07 10:00:01,845 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:00:01,872 - INFO - 
+ creating tables...
+
+2026-03-07 10:00:04,121 - INFO - Database tables created successfully
+2026-03-07 10:00:04,122 - INFO - Application startup complete
+2026-03-07 10:00:04,226 - INFO - Database connections closed
+2026-03-07 10:00:04,229 - INFO - Application shutdown complete
+2026-03-07 10:00:05,709 - INFO - 
+Using Dev config...
+
+2026-03-07 10:00:20,324 - INFO - 
+Using Dev config...
+
+2026-03-07 10:00:31,567 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:04,594 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:08,422 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:11,600 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:19,449 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:30,734 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:35,550 - INFO - 
+Using Dev config...
+
+2026-03-07 10:01:40,284 - INFO - 
+Using Dev config...
+
+2026-03-07 10:02:43,378 - INFO - 
+Using Dev config...
+
+2026-03-07 10:03:01,359 - INFO - 
+Using Dev config...
+
+2026-03-07 10:03:55,164 - INFO - 
+Using Dev config...
+
+2026-03-07 10:13:51,851 - INFO - 
+Using Dev config...
+
+2026-03-07 10:14:39,377 - INFO - 
+Using Dev config...
+
+2026-03-07 10:14:56,265 - INFO - 
+Using Dev config...
+
+2026-03-07 10:15:04,917 - INFO - 
+Using Dev config...
+
+2026-03-07 10:15:36,538 - INFO - 
+Using Dev config...
+
+2026-03-07 10:15:39,568 - INFO - 
+Using Dev config...
+
+2026-03-07 10:15:53,528 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:13,681 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:35,983 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:43,791 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:51,527 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:54,600 - INFO - 
+Using Dev config...
+
+2026-03-07 10:16:58,281 - INFO - 
+Using Dev config...
+
+2026-03-07 10:17:01,527 - INFO - 
+Using Dev config...
+
+2026-03-07 10:17:04,786 - INFO - 
+Using Dev config...
+
+2026-03-07 10:18:20,469 - INFO - 
+Using Dev config...
+
+2026-03-07 10:18:23,836 - INFO - 
+Using Dev config...
+
+2026-03-07 10:18:39,538 - INFO - 
+Using Dev config...
+
+2026-03-07 10:18:51,399 - INFO - 
+Using Dev config...
+
+2026-03-07 10:19:35,460 - INFO - 
+Using Dev config...
+
+2026-03-07 10:19:48,983 - INFO - 
+Using Dev config...
+
+2026-03-07 10:19:52,965 - INFO - 
+Using Dev config...
+
+2026-03-07 10:19:56,542 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:19:56,543 - INFO - 
+ creating tables...
+
+2026-03-07 10:19:58,862 - INFO - Database tables created successfully
+2026-03-07 10:19:58,865 - INFO - Application startup complete
+2026-03-07 10:20:17,249 - INFO - Database connections closed
+2026-03-07 10:20:17,251 - INFO - Application shutdown complete
+2026-03-07 10:20:19,395 - INFO - 
+Using Dev config...
+
+2026-03-07 10:20:22,058 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:20:22,059 - INFO - 
+ creating tables...
+
+2026-03-07 10:20:24,359 - INFO - Database tables created successfully
+2026-03-07 10:20:24,361 - INFO - Application startup complete
+2026-03-07 10:20:54,203 - INFO - Database connections closed
+2026-03-07 10:20:54,204 - INFO - Application shutdown complete
+2026-03-07 10:20:56,333 - INFO - 
+Using Dev config...
+
+2026-03-07 10:20:59,633 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:20:59,634 - INFO - 
+ creating tables...
+
+2026-03-07 10:21:01,922 - INFO - Database tables created successfully
+2026-03-07 10:21:01,925 - INFO - Application startup complete
+2026-03-07 10:21:02,038 - INFO - Database connections closed
+2026-03-07 10:21:02,039 - INFO - Application shutdown complete
+2026-03-07 10:21:04,533 - INFO - 
+Using Dev config...
+
+2026-03-07 10:21:10,716 - INFO - 
+Using Dev config...
+
+2026-03-07 10:21:13,229 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:21:13,229 - INFO - 
+ creating tables...
+
+2026-03-07 10:21:15,501 - INFO - Database tables created successfully
+2026-03-07 10:21:15,504 - INFO - Application startup complete
+2026-03-07 10:21:29,941 - INFO - Database connections closed
+2026-03-07 10:21:29,942 - INFO - Application shutdown complete
+2026-03-07 10:21:32,182 - INFO - 
+Using Dev config...
+
+2026-03-07 10:21:34,664 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:21:34,665 - INFO - 
+ creating tables...
+
+2026-03-07 10:21:36,959 - INFO - Database tables created successfully
+2026-03-07 10:21:36,962 - INFO - Application startup complete
+2026-03-07 10:24:37,567 - INFO - Database connections closed
+2026-03-07 10:24:37,567 - INFO - Application shutdown complete
+2026-03-07 10:24:40,323 - INFO - 
+Using Dev config...
+
+2026-03-07 10:24:43,071 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:24:43,072 - INFO - 
+ creating tables...
+
+2026-03-07 10:24:45,438 - INFO - Database tables created successfully
+2026-03-07 10:24:45,441 - INFO - Application startup complete
+2026-03-07 10:25:53,700 - INFO - Database connections closed
+2026-03-07 10:25:53,700 - INFO - Application shutdown complete
+2026-03-07 10:25:57,201 - INFO - 
+Using Dev config...
+
+2026-03-07 10:26:00,988 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:26:00,989 - INFO - 
+ creating tables...
+
+2026-03-07 10:26:03,203 - INFO - Database tables created successfully
+2026-03-07 10:26:03,206 - INFO - Application startup complete
+2026-03-07 10:26:03,330 - INFO - Database connections closed
+2026-03-07 10:26:03,331 - INFO - Application shutdown complete
+2026-03-07 10:26:05,878 - INFO - 
+Using Dev config...
+
+2026-03-07 10:26:09,470 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:26:09,471 - INFO - 
+ creating tables...
+
+2026-03-07 10:26:11,744 - INFO - Database tables created successfully
+2026-03-07 10:26:11,747 - INFO - Application startup complete
+2026-03-07 10:26:11,860 - INFO - Database connections closed
+2026-03-07 10:26:11,861 - INFO - Application shutdown complete
+2026-03-07 10:26:15,468 - INFO - 
+Using Dev config...
+
+2026-03-07 10:26:19,413 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:26:19,414 - INFO - 
+ creating tables...
+
+2026-03-07 10:26:21,709 - INFO - Database tables created successfully
+2026-03-07 10:26:21,713 - INFO - Application startup complete
+2026-03-07 10:26:34,211 - INFO - Database connections closed
+2026-03-07 10:26:34,212 - INFO - Application shutdown complete
+2026-03-07 10:26:37,529 - INFO - 
+Using Dev config...
+
+2026-03-07 10:27:57,828 - INFO - 
+Using Dev config...
+
+2026-03-07 10:28:34,368 - INFO - 
+Using Dev config...
+
+2026-03-07 10:28:41,056 - INFO - 
+Using Dev config...
+
+2026-03-07 10:28:49,334 - INFO - 
+Using Dev config...
+
+2026-03-07 10:30:54,529 - INFO - 
+Using Dev config...
+
+2026-03-07 10:31:02,366 - INFO - 
+Using Dev config...
+
+2026-03-07 10:31:06,222 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:31:06,223 - INFO - 
+ creating tables...
+
+2026-03-07 10:31:08,601 - INFO - Database tables created successfully
+2026-03-07 10:31:08,604 - INFO - Application startup complete
+2026-03-07 10:31:08,726 - INFO - Database connections closed
+2026-03-07 10:31:08,727 - INFO - Application shutdown complete
+2026-03-07 10:31:11,882 - INFO - 
+Using Dev config...
+
+2026-03-07 10:31:15,616 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 10:31:15,617 - INFO - 
+ creating tables...
+
+2026-03-07 10:31:17,940 - INFO - Database tables created successfully
+2026-03-07 10:31:17,944 - INFO - Application startup complete
+2026-03-07 10:32:19,452 - INFO - Database connections closed
+2026-03-07 10:32:19,457 - INFO - Application shutdown complete
+2026-03-07 10:32:22,841 - INFO - 
+Using Dev config...
+
+2026-03-07 10:32:27,367 - INFO - 
+Using Dev config...
+
+2026-03-07 10:33:09,855 - INFO - 
+Using Dev config...
+
+2026-03-07 10:33:20,220 - INFO - 
+Using Dev config...
+
+2026-03-07 10:33:30,804 - INFO - 
+Using Dev config...
+
+2026-03-07 10:33:38,173 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:06,653 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:12,587 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:33,851 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:39,562 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:45,358 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:51,991 - INFO - 
+Using Dev config...
+
+2026-03-07 10:34:59,119 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:14,091 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:19,719 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:30,650 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:36,196 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:41,545 - INFO - 
+Using Dev config...
+
+2026-03-07 10:35:54,914 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:00,579 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:06,531 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:11,685 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:20,942 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:44,657 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:50,671 - INFO - 
+Using Dev config...
+
+2026-03-07 10:36:56,886 - INFO - 
+Using Dev config...
+
+2026-03-07 10:37:04,294 - INFO - 
+Using Dev config...
+
+2026-03-07 10:45:32,758 - INFO - 
+Using Dev config...
+
+2026-03-07 10:46:41,335 - INFO - 
+Using Dev config...
+
+2026-03-07 10:47:19,363 - INFO - 
+Using Dev config...
+
+2026-03-07 10:47:26,586 - INFO - 
+Using Dev config...
+
+2026-03-07 10:49:34,828 - INFO - 
+Using Dev config...
+
+2026-03-07 10:49:41,045 - INFO - 
+Using Dev config...
+
+2026-03-07 10:49:50,246 - INFO - 
+Using Dev config...
+
+2026-03-07 10:49:57,153 - INFO - 
+Using Dev config...
+
+2026-03-07 10:50:03,498 - INFO - 
+Using Dev config...
+
+2026-03-07 10:50:22,738 - INFO - 
+Using Dev config...
+
+2026-03-07 10:50:28,109 - INFO - 
+Using Dev config...
+
+2026-03-07 10:50:50,305 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:05,194 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:13,384 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:21,471 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:26,944 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:29,708 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:35,718 - INFO - 
+Using Dev config...
+
+2026-03-07 10:51:41,375 - INFO - 
+Using Dev config...
+
+2026-03-07 10:52:28,629 - INFO - 
+Using Dev config...
+
+2026-03-07 10:52:53,462 - INFO - 
+Using Dev config...
+
+2026-03-07 10:53:00,966 - INFO - 
+Using Dev config...
+
+2026-03-07 10:53:08,206 - INFO - 
+Using Dev config...
+
+2026-03-07 10:53:28,679 - INFO - 
+Using Dev config...
+
+2026-03-07 10:53:35,125 - INFO - 
+Using Dev config...
+
+2026-03-07 10:53:41,795 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:15,152 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:20,518 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:26,498 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:33,101 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:43,269 - INFO - 
+Using Dev config...
+
+2026-03-07 10:55:50,560 - INFO - 
+Using Dev config...
+
+2026-03-07 10:56:01,066 - INFO - 
+Using Dev config...
+
+2026-03-07 10:56:08,639 - INFO - 
+Using Dev config...
+
+2026-03-07 10:56:17,272 - INFO - 
+Using Dev config...
+
+2026-03-07 10:56:22,046 - INFO - 
+Using Dev config...
+
+2026-03-07 10:57:34,313 - INFO - 
+Using Dev config...
+
+2026-03-07 10:57:42,414 - INFO - 
+Using Dev config...
+
+2026-03-07 10:58:59,326 - INFO - 
+Using Dev config...
+
+2026-03-07 10:59:06,750 - INFO - 
+Using Dev config...
+
+2026-03-07 11:00:07,095 - INFO - 
+Using Dev config...
+
+2026-03-07 11:00:13,765 - INFO - 
+Using Dev config...
+
+2026-03-07 11:00:21,765 - INFO - 
+Using Dev config...
+
+2026-03-07 11:00:29,819 - INFO - 
+Using Dev config...
+
+2026-03-07 11:01:14,821 - INFO - 
+Using Dev config...
+
+2026-03-07 11:01:21,896 - INFO - 
+Using Dev config...
+
+2026-03-07 11:01:28,400 - INFO - 
+Using Dev config...
+
+2026-03-07 11:02:17,769 - INFO - 
+Using Dev config...
+
+2026-03-07 11:02:48,074 - INFO - 
+Using Dev config...
+
+2026-03-07 11:02:54,122 - INFO - 
+Using Dev config...
+
+2026-03-07 11:03:04,508 - INFO - 
+Using Dev config...
+
+2026-03-07 11:03:10,279 - INFO - 
+Using Dev config...
+
+2026-03-07 11:03:45,973 - INFO - 
+Using Dev config...
+
+2026-03-07 11:04:59,892 - INFO - 
+Using Dev config...
+
+2026-03-07 11:05:09,500 - INFO - 
+Using Dev config...
+
+2026-03-07 11:06:35,670 - INFO - 
+Using Dev config...
+
+2026-03-07 11:06:47,985 - INFO - 
+Using Dev config...
+
+2026-03-07 11:07:21,777 - INFO - 
+Using Dev config...
+
+2026-03-07 11:08:25,412 - INFO - 
+Using Dev config...
+
+2026-03-07 11:08:29,152 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:08:29,153 - INFO - 
+ creating tables...
+
+2026-03-07 11:08:31,443 - INFO - Database tables created successfully
+2026-03-07 11:08:31,444 - INFO - Application startup complete
+2026-03-07 11:08:31,567 - INFO - Database connections closed
+2026-03-07 11:08:31,570 - INFO - Application shutdown complete
+2026-03-07 11:08:34,509 - INFO - 
+Using Dev config...
+
+2026-03-07 11:08:37,152 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:08:37,152 - INFO - 
+ creating tables...
+
+2026-03-07 11:08:39,385 - INFO - Database tables created successfully
+2026-03-07 11:08:39,387 - INFO - Application startup complete
+2026-03-07 11:08:44,454 - INFO - Database connections closed
+2026-03-07 11:08:44,455 - INFO - Application shutdown complete
+2026-03-07 11:08:46,961 - INFO - 
+Using Dev config...
+
+2026-03-07 11:08:50,379 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:08:50,380 - INFO - 
+ creating tables...
+
+2026-03-07 11:08:52,611 - INFO - Database tables created successfully
+2026-03-07 11:08:52,613 - INFO - Application startup complete
+2026-03-07 11:08:52,719 - INFO - Database connections closed
+2026-03-07 11:08:52,720 - INFO - Application shutdown complete
+2026-03-07 11:08:56,417 - INFO - 
+Using Dev config...
+
+2026-03-07 11:09:00,727 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:09:00,728 - INFO - 
+ creating tables...
+
+2026-03-07 11:09:02,967 - INFO - Database tables created successfully
+2026-03-07 11:09:02,969 - INFO - Application startup complete
+2026-03-07 11:09:03,098 - INFO - Database connections closed
+2026-03-07 11:09:03,099 - INFO - Application shutdown complete
+2026-03-07 11:09:05,907 - INFO - 
+Using Dev config...
+
+2026-03-07 11:09:08,791 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:09:08,791 - INFO - 
+ creating tables...
+
+2026-03-07 11:09:11,140 - INFO - Database tables created successfully
+2026-03-07 11:09:11,142 - INFO - Application startup complete
+2026-03-07 11:09:11,259 - INFO - Database connections closed
+2026-03-07 11:09:11,261 - INFO - Application shutdown complete
+2026-03-07 11:09:13,807 - INFO - 
+Using Dev config...
+
+2026-03-07 11:09:16,460 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:09:16,462 - INFO - 
+ creating tables...
+
+2026-03-07 11:09:18,780 - INFO - Database tables created successfully
+2026-03-07 11:09:18,782 - INFO - Application startup complete
+2026-03-07 11:11:21,231 - INFO - Database connections closed
+2026-03-07 11:11:21,232 - INFO - Application shutdown complete
+2026-03-07 11:11:24,099 - INFO - 
+Using Dev config...
+
+2026-03-07 11:11:30,310 - INFO - 
+Using Dev config...
+
+2026-03-07 11:11:33,704 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:11:33,704 - INFO - 
+ creating tables...
+
+2026-03-07 11:11:36,032 - INFO - Database tables created successfully
+2026-03-07 11:11:36,036 - INFO - Application startup complete
+2026-03-07 11:12:55,979 - INFO - Database connections closed
+2026-03-07 11:12:55,980 - INFO - Application shutdown complete
+2026-03-07 11:12:59,509 - INFO - 
+Using Dev config...
+
+2026-03-07 11:13:03,348 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:13:03,349 - INFO - 
+ creating tables...
+
+2026-03-07 11:13:05,719 - INFO - Database tables created successfully
+2026-03-07 11:13:05,722 - INFO - Application startup complete
+2026-03-07 11:13:25,716 - INFO - Database connections closed
+2026-03-07 11:13:25,719 - INFO - Application shutdown complete
+2026-03-07 11:13:28,808 - INFO - 
+Using Dev config...
+
+2026-03-07 11:13:31,734 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:13:31,735 - INFO - 
+ creating tables...
+
+2026-03-07 11:13:34,118 - INFO - Database tables created successfully
+2026-03-07 11:13:34,120 - INFO - Application startup complete
+2026-03-07 11:13:34,237 - INFO - Database connections closed
+2026-03-07 11:13:34,238 - INFO - Application shutdown complete
+2026-03-07 11:14:12,999 - INFO - 
+Using Dev config...
+
+2026-03-07 11:14:17,324 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:14:17,325 - INFO - 
+ creating tables...
+
+2026-03-07 11:14:19,609 - INFO - Database tables created successfully
+2026-03-07 11:14:19,611 - INFO - Application startup complete
+2026-03-07 11:15:03,807 - INFO - Database connections closed
+2026-03-07 11:15:03,808 - INFO - Application shutdown complete
+2026-03-07 11:15:07,016 - INFO - 
+Using Dev config...
+
+2026-03-07 11:15:10,475 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:15:10,476 - INFO - 
+ creating tables...
+
+2026-03-07 11:15:12,792 - INFO - Database tables created successfully
+2026-03-07 11:15:12,795 - INFO - Application startup complete
+2026-03-07 11:15:12,916 - INFO - Database connections closed
+2026-03-07 11:15:12,917 - INFO - Application shutdown complete
+2026-03-07 11:15:16,302 - INFO - 
+Using Dev config...
+
+2026-03-07 11:15:20,426 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:15:20,427 - INFO - 
+ creating tables...
+
+2026-03-07 11:15:22,748 - INFO - Database tables created successfully
+2026-03-07 11:15:22,750 - INFO - Application startup complete
+2026-03-07 11:15:42,141 - INFO - Database connections closed
+2026-03-07 11:15:42,148 - INFO - Application shutdown complete
+2026-03-07 11:15:44,799 - INFO - 
+Using Dev config...
+
+2026-03-07 11:15:47,647 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:15:47,648 - INFO - 
+ creating tables...
+
+2026-03-07 11:15:49,927 - INFO - Database tables created successfully
+2026-03-07 11:15:49,928 - INFO - Application startup complete
+2026-03-07 11:16:21,670 - INFO - Database connections closed
+2026-03-07 11:16:21,670 - INFO - Application shutdown complete
+2026-03-07 11:16:24,965 - INFO - 
+Using Dev config...
+
+2026-03-07 11:16:28,439 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:16:28,439 - INFO - 
+ creating tables...
+
+2026-03-07 11:16:30,748 - INFO - Database tables created successfully
+2026-03-07 11:16:30,749 - INFO - Application startup complete
+2026-03-07 11:16:30,868 - INFO - Database connections closed
+2026-03-07 11:16:30,870 - INFO - Application shutdown complete
+2026-03-07 11:16:34,619 - INFO - 
+Using Dev config...
+
+2026-03-07 11:16:37,900 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:16:37,901 - INFO - 
+ creating tables...
+
+2026-03-07 11:16:40,142 - INFO - Database tables created successfully
+2026-03-07 11:16:40,144 - INFO - Application startup complete
+2026-03-07 11:16:40,253 - INFO - Database connections closed
+2026-03-07 11:16:40,257 - INFO - Application shutdown complete
+2026-03-07 11:16:48,128 - INFO - 
+Using Dev config...
+
+2026-03-07 11:16:52,207 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:16:52,207 - INFO - 
+ creating tables...
+
+2026-03-07 11:16:54,593 - INFO - Database tables created successfully
+2026-03-07 11:16:54,598 - INFO - Application startup complete
+2026-03-07 11:17:20,933 - INFO - Database connections closed
+2026-03-07 11:17:20,933 - INFO - Application shutdown complete

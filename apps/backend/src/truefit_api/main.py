@@ -17,6 +17,7 @@ from src.truefit_api.api.v1.http.candidates import router as candidates_router
 from src.truefit_api.api.v1.http.interviews import router as interviews_router
 from src.truefit_api.api.v1.http.orgs import router as orgs_router
 from src.truefit_api.api.v1.http.users import router as users_router
+from src.truefit_api.api.v1.ws.interview_websocket import interview_ws_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -64,7 +65,12 @@ register_error_handler(app)
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[AppConfig.CLIENT_DOMAIN],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],  # TODO : Update request headers coming from all whitelisted clients
@@ -76,23 +82,7 @@ app.include_router(orgs_router, prefix="/api/v1")
 app.include_router(candidates_router, prefix="/api/v1")
 app.include_router(jobs_router, prefix="/api/v1")
 app.include_router(interviews_router, prefix="/api/v1")
-
-
-# @app.get("/", response_class=HTMLResponse)
-# async def home(request: Request):
-#     base_url = AppConfig.DOMAIN
-#     # TODO : Version documentation
-
-#     return templates.TemplateResponse(
-#         request,
-#         "home.html",
-#         {
-#             "name": "Revele Backend",
-#             "details": "Revela API Backend",
-#             "docs": f"api/docs",
-#         },
-#     )
-
+app.include_router(interview_ws_router)
 
 
 

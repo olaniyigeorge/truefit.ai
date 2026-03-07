@@ -13,13 +13,14 @@ from __future__ import annotations
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, AsyncGenerator, Optional
 
 from src.truefit_core.domain.candidate import Candidate
 from src.truefit_core.domain.evaluation import Evaluation
 from src.truefit_core.domain.interview import Interview
 from src.truefit_core.domain.job import Job
 from src.truefit_infra.db.models import User
+from src.truefit_core.domain.org import Org
 
 
 # ─────────────────
@@ -354,3 +355,121 @@ class CachePort(ABC):
 
     @abstractmethod
     async def is_healthy(self) -> bool: ...
+
+
+
+
+class LiveSessionPort(ABC):
+    """
+    Abstraction over a real-time multimodal AI session.
+
+    Implementations wrap a live AI API (e.g. Gemini Live) and expose a
+    uniform interface for the agent layer. The agent never imports any
+    AI SDK directly — all SDK types are confined to the adapter.
+
+    Lifecycle
+    ─────────
+    All methods except open_session() require an active session.
+    Sessions are opened and closed via the open_session() context manager:
+
+        async with adapter.open_session(system_prompt, tools=tools) as session:
+            await session.send_client_content(text="...")
+            await session.send_audio(pcm_bytes)
+            async for event_type, data in session.receive():
+                ...
+
+    Audio format contract
+    ─────────────────────
+    Implementations must accept 16kHz mono s16 PCM for send_audio().
+    Callers must not assume a specific output sample rate — check the
+    concrete adapter's docstring (Gemini Live returns 24kHz).
+    """
+
+    # ── Session lifecycle ─────────────────────────────────────────────────────
+
+    @abstractmethod
+    def open_session(
+        self,
+        system_prompt: str,
+        tools: list | None = None,
+    ) -> Any:
+        """
+        Return an async context manager that opens and closes the session.
+        Must be used as: async with adapter.open_session(...) as session.
+        The yielded value is the adapter itself with an active session.
+        """
+        ...
+
+    @abstractmethod
+    async def close(self) -> None:
+        """Tear down the active session. Called automatically by open_session()."""
+        ...
+
+    # ── Sending ───────────────────────────────────────────────────────────────
+
+    @abstractmethod
+    async def send_audio(self, pcm_bytes: bytes) -> None:
+        """
+        Stream a raw PCM audio chunk into the session.
+        Expected format: 16kHz mono s16 (320 bytes per 20ms chunk).
+        """
+        ...
+
+    @abstractmethod
+    async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
+        """
+        Send a JPEG frame into the session for visual context.
+        source: "camera" | "screen" — used for logging/context only.
+        """
+        ...
+
+    @abstractmethod
+    async def send_client_content(self, text: str) -> None:
+        """
+        Inject a one-time structured text message into the session.
+        Used before audio begins to pre-load context (job, candidate data).
+        Not for conversational turns — use send_audio() for those.
+        """
+        ...
+
+    @abstractmethod
+    async def send_tool_response(
+        self,
+        *,
+        call_id: str,
+        name: str,
+        result: dict,
+    ) -> None:
+        """
+        Respond to a tool_call event from receive().
+        Must be called for every tool_call received — the session blocks
+        until a response is provided.
+        """
+        ...
+
+    # ── Receiving ─────────────────────────────────────────────────────────────
+
+    @abstractmethod
+    async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
+        """
+        Async generator yielding normalised events from the model.
+
+        Event types:
+          ("audio",         bytes)  — PCM audio to play to the candidate
+          ("text",          str)    — agent output transcript
+          ("input_text",    str)    — candidate speech transcript
+          ("tool_call",     dict)   — {"id": str, "name": str, "args": dict}
+          ("turn_complete", None)   — agent finished its speaking turn
+          ("interrupted",   None)   — agent was interrupted mid-speech
+          ("go_away",       None)   — server is closing the connection
+
+        Implementations must not raise on end-of-stream — simply stop yielding.
+        """
+        ...
+
+    # ── Health ────────────────────────────────────────────────────────────────
+
+    @abstractmethod
+    async def is_healthy(self) -> bool:
+        """Return True if there is an active open session."""
+        ...

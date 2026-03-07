@@ -22,8 +22,8 @@ import av
 from aiortc import MediaStreamTrack
 from PIL import Image
 
-from .webrtc_client import SessionContext
 from src.truefit_core.common.utils import logger
+from src.truefit_infra.realtime.session_context import SessionContext
 
 
 class FrameSource(str, Enum):
