@@ -1,8 +1,4 @@
 from __future__ import annotations
-import os
-import uuid
-print("LOADED:", os.path.abspath(__file__))
-
 import enum
 from datetime import datetime
 from typing import Any, Optional
@@ -26,9 +22,9 @@ from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship, mapped_column
 
 
-# ----------------------------
+# -----
 # Base
-# ----------------------------
+# -----
 
 class Base(DeclarativeBase):
     pass
@@ -131,9 +127,10 @@ class SessionEventType(str, enum.Enum):
     error = "error"
 
 
-# ----------------------------
+# -------
 # Tables
-# ----------------------------
+# --------
+
 
 class Org(Base):
     __tablename__ = "orgs"
@@ -141,25 +138,73 @@ class Org(Base):
     id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
         primary_key=True,
-        server_default=text("gen_random_uuid()"),  # requires pgcrypto
+        server_default=text("gen_random_uuid()"),
     )
+    created_by: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    slug: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    slug: Mapped[str] = mapped_column(String(150), nullable=False, unique=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="active")
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    contact: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
+    billing: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
 
-    users: Mapped[list["User"]] = relationship(back_populates="org")
+    logo_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    industry: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    headcount: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+
+    # ── Relationships ───
+    creator: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[created_by],
+        back_populates="orgs_created",
+    )
+    users: Mapped[list["User"]] = relationship(
+        "User",
+        foreign_keys="User.org_id",
+        back_populates="org",
+    )
     job_listings: Mapped[list["JobListing"]] = relationship(back_populates="org")
     rubrics: Mapped[list["Rubric"]] = relationship(back_populates="org")
+
+    __table_args__ = (
+        Index("ix_orgs_slug", "slug", unique=True),
+        Index("ix_orgs_status", "status"),
+        Index("ix_orgs_created_by", "created_by"),
+    )
+
+    def __repr__(self) -> str:
+        return f"Org(id={self.id}, name={self.name!r}, slug={self.slug!r})"
 
 
 class User(Base):
     __tablename__ = "users"
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    org_id: Mapped[Optional[UUID]] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("orgs.id", ondelete="SET NULL"), nullable=True)
-
+    org_id: Mapped[Optional[UUID]] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("orgs.id", ondelete="SET NULL"),
+        nullable=True,
+    )
     email: Mapped[str] = mapped_column(String(320), nullable=False, unique=True)
     display_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
@@ -172,7 +217,16 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
-    org: Mapped[Optional["Org"]] = relationship(back_populates="users")
+    org: Mapped[Optional["Org"]] = relationship(
+        "Org",
+        foreign_keys=[org_id],
+        back_populates="users",
+    )
+    orgs_created: Mapped[list["Org"]] = relationship(
+        "Org",
+        foreign_keys="Org.created_by",
+        back_populates="creator",
+    )
     candidate_profile: Mapped[Optional["CandidateProfile"]] = relationship(back_populates="user", uselist=False)
     created_jobs: Mapped[list["JobListing"]] = relationship(back_populates="created_by_user")
 

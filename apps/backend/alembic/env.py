@@ -7,19 +7,11 @@ from urllib.parse import unquote
 from alembic import context
 
 
-from truefit_infra.config import AppConfig
-from db.database import Base
+from src.truefit_infra.config import AppConfig
+from src.truefit_infra.db.models import Base
 
 # Importing models to make sure alembic sees them when loaded
-from db.models.user import User
-from db.models.ticket import Ticket, TicketTypeTemplate
-from db.models.event import *
-from db.models.notification import Notification
-from db.models.auth import PendingSignUp, Otp
-from db.models.payment import Payment
-from db.models.survey import *
-from db.models.analytics import *
-from db.models.event_registration import *
+from src.truefit_infra.db.models import *
 
 print("Registered tables:", Base.metadata.tables.keys())
 

@@ -13,7 +13,7 @@ calls
 
 #--------------------signaling.py--------------
 """
-This will handle the only the WebRTC handshake. It receives the SDP offer from the frontend,
+This will handle the only the WebRTC handshake. It receives the SDP(session description protocol) offer from the frontend,
 creates a peer connection via the webrct_client, and returns the SDP answer. It should
 also expose an ICE candidate exchange endpoint. This file should have awareness of Gemini or AI. it should be pure WebRTC Plumbing
 """

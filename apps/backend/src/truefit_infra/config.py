@@ -7,35 +7,30 @@ from src.truefit_core.common.utils import logger
 class GlobalConfig(BaseSettings):
     ENV: str
     PROJECT_NAME: str
+    API_VERSION: str
+    LOG_LEVEL: str
     CLIENT_DOMAIN: str
-    INVITE_CODE_PREFIX: str
-    DOMAIN: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
-    REFRESH_TOKEN_EXPIRE_DAYS: int
-    DATABASE_URL: str
-    ALGORITHM: str
+    BACKEND_DOMAIN: str
+    CORS_ORIGINS: str
     APP_SECRET_KEY: str
-    PAYSTACK_SECRET_KEY: str
-    PAYSTACK_PUBLIC_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    AUTH_MODE: str
+    DATABASE_URL: str
+    DB_ECHO: bool
     REDIS_URL: str
+    REDIS_PREFIX: str
     GEMINI_API_KEY: str
-    MAIL_USERNAME:str
-    MAIL_PASSWORD:str
-    MAIL_FROM:str
-    MAIL_FROM_NAME:str
-    MAIL_PORT:int
-    MAIL_SERVER:str
-    MAIL_STARTTLS:bool
-    MAIL_SSL_TLS:bool
-    USE_CREDENTIALS:bool
-    GOOGLE_CLIENT_ID: str
-    SENDGRID_API_KEY: str
-    SEND_MAIL_TOKEN: str
-    CLOUDINARY_CLOUD_NAME: str
-    CLOUDINARY_API_KEY: str
-    CLOUDINARY_API_SECRET: str
-    TRUEFIT_CORE_HEALTH_URL: str
-    TRUEFIT_AGENT_HEALTH_URL: str
+    GEMINI_MODEL: str
+    GEMINI_LIVE_ENABLED: str
+    STORAGE_PROVIDER: str
+    LOCAL_STORAGE_DIR: str
+    GCS_BUCKET: str
+    GOOGLE_APPLICATION_CREDENTIALS: str
+    REALTIME_ENABLED: bool
+    WEBRTC_TOKEN_SECRET: str
+    WORKERS_ENABLED: str
+    SENTRY_DSN: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
