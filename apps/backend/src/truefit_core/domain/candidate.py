@@ -12,15 +12,13 @@ def _utcnow() -> datetime:
 
 
 class CandidateStatus(str, Enum):
-    """Lifecycle of a candidate within the platform."""
     ACTIVE = "active"
-    BANNED = "banned"       # blocked from creating new sessions
-    WITHDRAWN = "withdrawn" # self-requested removal
+    BANNED = "banned"
+    WITHDRAWN = "withdrawn"
 
 
 @dataclass(frozen=True)
 class ContactInfo:
-    """Value object — equality by value, not identity."""
     email: str
     phone: Optional[str] = None
     linkedin_url: Optional[str] = None
@@ -32,11 +30,7 @@ class ContactInfo:
 
 @dataclass(frozen=True)
 class ResumeRef:
-    """
-    Points to a stored resume artifact; does NOT hold the file itself.
-    Storage is owned by truefit_infra.StoragePort.
-    """
-    storage_key: str      # e.g. "resumes/<candidate_id>/<filename>"
+    storage_key: str
     filename: str
     uploaded_at: datetime
     content_type: str = "application/pdf"
@@ -46,10 +40,25 @@ class Candidate:
     """
     Aggregate root representing a job-seeker on the platform.
 
-    Invariants enforced:
-    - A candidate can only have ONE active interview per job at a time.
-    - Banned candidates cannot start new interview sessions.
-    - Contact info and profile can be updated freely while ACTIVE.
+    Schema source of truth: candidate_profiles table
+    ─────────────────────────────────────────────────
+    id               uuid
+    user_id          uuid (FK users.id)
+    headline         varchar(255)
+    bio              text
+    location         varchar(255)
+    years_experience integer
+    skills           text[]
+    resume_asset_id  uuid (FK media_assets.id)
+    created_at       timestamptz
+    updated_at       timestamptz
+
+    Derived at read-time (not persisted on candidate_profiles):
+    - full_name           ← users.display_name
+    - contact             ← users.email + optional phone/linkedin
+    - status              ← users.is_active
+    - active_interview_job_ids ← join interview_sessions + applications
+    - resume              ← ResumeRef resolved from media_assets
     """
 
     def __init__(
@@ -58,16 +67,15 @@ class Candidate:
         contact: ContactInfo,
         full_name: str,
         candidate_id: Optional[uuid.UUID] = None,
+        user_id: Optional[uuid.UUID] = None,
         status: CandidateStatus = CandidateStatus.ACTIVE,
-        user_id: Optional[uuid.UUID] = None, # For linking to a User account if needed in the future
         headline: Optional[str] = None,
         bio: Optional[str] = None,
         location: Optional[str] = None,
+        years_experience: Optional[int] = None,
         skills: Optional[list[str]] = None,
         resume: Optional[ResumeRef] = None,
-        # Set of job IDs the candidate currently has an active interview for.
-        # Kept here (not on Interview) so the invariant can be checked without
-        # a DB round-trip in the domain layer.
+        resume_asset_id: Optional[uuid.UUID] = None,
         active_interview_job_ids: Optional[set[uuid.UUID]] = None,
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None,
@@ -76,26 +84,32 @@ class Candidate:
             raise ValueError("Candidate full name cannot be empty")
 
         self._id: uuid.UUID = candidate_id or uuid.uuid4()
+        self._user_id: Optional[uuid.UUID] = user_id
         self._full_name: str = full_name.strip()
         self._contact: ContactInfo = contact
         self._status: CandidateStatus = status
-        self._user_id: Optional[uuid.UUID] = user_id
         self._headline: Optional[str] = headline
         self._bio: Optional[str] = bio
         self._location: Optional[str] = location
-        self._skills: list[str] = skills or []
+        self._years_experience: Optional[int] = years_experience
+        self._skills: list[str] = list(skills or [])
         self._resume: Optional[ResumeRef] = resume
+        self._resume_asset_id: Optional[uuid.UUID] = resume_asset_id
         self._active_interview_job_ids: set[uuid.UUID] = (
             set(active_interview_job_ids) if active_interview_job_ids else set()
         )
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # ── Identity ───
+    # ── Identity / properties ──────────────────────────────────────────────
 
     @property
     def id(self) -> uuid.UUID:
         return self._id
+
+    @property
+    def user_id(self) -> Optional[uuid.UUID]:
+        return self._user_id
 
     @property
     def full_name(self) -> str:
@@ -110,8 +124,32 @@ class Candidate:
         return self._status
 
     @property
+    def headline(self) -> Optional[str]:
+        return self._headline
+
+    @property
+    def bio(self) -> Optional[str]:
+        return self._bio
+
+    @property
+    def location(self) -> Optional[str]:
+        return self._location
+
+    @property
+    def years_experience(self) -> Optional[int]:
+        return self._years_experience
+
+    @property
+    def skills(self) -> list[str]:
+        return list(self._skills)
+
+    @property
     def resume(self) -> Optional[ResumeRef]:
         return self._resume
+
+    @property
+    def resume_asset_id(self) -> Optional[uuid.UUID]:
+        return self._resume_asset_id
 
     @property
     def created_at(self) -> datetime:
@@ -121,7 +159,7 @@ class Candidate:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    # ── Queries ─
+    # ── Queries ───────────────────────────────────────────────────────────
 
     @property
     def is_eligible_to_interview(self) -> bool:
@@ -130,13 +168,18 @@ class Candidate:
     def has_active_interview_for(self, job_id: uuid.UUID) -> bool:
         return job_id in self._active_interview_job_ids
 
-    # ── Commands ──
+    # ── Commands ──────────────────────────────────────────────────────────
 
     def update_profile(
         self,
         *,
         full_name: Optional[str] = None,
         contact: Optional[ContactInfo] = None,
+        headline: Optional[str] = None,
+        bio: Optional[str] = None,
+        location: Optional[str] = None,
+        years_experience: Optional[int] = None,
+        skills: Optional[list[str]] = None,
     ) -> None:
         self._assert_active()
         if full_name is not None:
@@ -145,19 +188,31 @@ class Candidate:
             self._full_name = full_name.strip()
         if contact is not None:
             self._contact = contact
+        if headline is not None:
+            self._headline = headline
+        if bio is not None:
+            self._bio = bio
+        if location is not None:
+            self._location = location
+        if years_experience is not None:
+            self._years_experience = years_experience
+        if skills is not None:
+            self._skills = list(skills)
         self._touch()
 
-    def attach_resume(self, resume: ResumeRef) -> None:
+    def attach_resume(self, resume: ResumeRef, resume_asset_id: uuid.UUID) -> None:
         self._assert_active()
         self._resume = resume
+        self._resume_asset_id = resume_asset_id
         self._touch()
 
     def remove_resume(self) -> None:
         self._assert_active()
         self._resume = None
+        self._resume_asset_id = None
         self._touch()
 
-    def ban(self, *, reason: str) -> None:  # noqa: ARG002  reason logged upstream
+    def ban(self, *, reason: str) -> None:
         if self._status == CandidateStatus.BANNED:
             raise ValueError("Candidate is already banned")
         self._status = CandidateStatus.BANNED
@@ -170,13 +225,7 @@ class Candidate:
         self._active_interview_job_ids.clear()
         self._touch()
 
-    # ── Interview tracking (called by InterviewStarted / InterviewEnded events)
-
     def register_active_interview(self, job_id: uuid.UUID) -> None:
-        """
-        Called when an interview session is created.
-        Enforces the one-active-interview-per-job invariant.
-        """
         self._assert_active()
         if self.has_active_interview_for(job_id):
             raise ValueError(
@@ -186,11 +235,10 @@ class Candidate:
         self._touch()
 
     def release_active_interview(self, job_id: uuid.UUID) -> None:
-        """Called when an interview is completed or abandoned."""
         self._active_interview_job_ids.discard(job_id)
         self._touch()
 
-    # ── Assertions ───
+    # ── Assertions ────────────────────────────────────────────────────────
 
     def assert_eligible_to_interview(self) -> None:
         if not self.is_eligible_to_interview:
@@ -199,7 +247,7 @@ class Candidate:
                 f"(status={self._status.value})"
             )
 
-    # ── Internal helpers ──
+    # ── Internal ──────────────────────────────────────────────────────────
 
     def _assert_active(self) -> None:
         if self._status != CandidateStatus.ACTIVE:
@@ -209,8 +257,6 @@ class Candidate:
 
     def _touch(self) -> None:
         self._updated_at = _utcnow()
-
-    # ── Representation ───
 
     def __repr__(self) -> str:
         return (

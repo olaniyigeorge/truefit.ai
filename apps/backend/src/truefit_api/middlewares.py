@@ -7,26 +7,20 @@ import time
 from src.truefit_core.common.utils import logger
 
 async def req_res_time_log_middleware(request: Request, call_next):
+    if request.scope["type"] == "websocket":
+        return await call_next(request)
 
     start_time = time.time()
     response = await call_next(request)
-    req_process_time = round((time.time() - start_time) * 1000, 3)  # in ms
-
-    # if request.url == "xxx" ---> implement authorization or check auth
+    req_process_time = round((time.time() - start_time) * 1000, 3)
 
     log_obj = {
         "PATH": request.url.path,
         "METHOD": request.method,
         "STATUS_CODE": response.status_code,
-        "REQ/RES_TIME": f"{req_process_time}ms ",
-    }
-    debug_log_obj = {
-        "IP": request.client.host,
-        "PATH": request.url.path,
-        "METHOD": request.method,
+        "REQ/RES_TIME": f"{req_process_time}ms",
     }
     logger.info(log_obj, extra=log_obj)
-    logger.debug(debug_log_obj, extra=debug_log_obj)
     return response
 
 # TODO: Debug or re-implement rate limiting middleware 

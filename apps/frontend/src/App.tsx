@@ -4,6 +4,7 @@ import Landing from "@/pages/Landing"
 // import Dashboard from "@/pages/Dashboard"
 import ProtectedRoute from "@/components/ProtectedRoute";
 import InterviewPage from '@/pages/InterviewPage';
+import ITVPage from '@/pages/ItvPage';
 
 
 
@@ -18,6 +19,8 @@ function App() {
         <Route element={<ProtectedRoute />} >
           <Route path="intervew/:sessionId" element={<InterviewPage />} />
         </Route>
+        {/* Test interview setup */}
+        <Route path="itv/:jobId/:candidateId" element={<ITVPage/>} />
       </Routes>
     </>
   )

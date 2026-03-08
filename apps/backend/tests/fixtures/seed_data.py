@@ -4,7 +4,7 @@ tests/fixtures/seed_data.py
 Seeds resources in dependency order (FULLY SELF-CONTAINED):
   1) Users (admin + recruiter)      -> required for orgs.created_by and jobs.created_by
   2) Orgs                           -> requires created_by user
-  3) Candidates (as users + profiles) -> aligns to your DB model: users + candidate_profiles
+  3) Candidates (as users + profiles) -> aligns to the DB model: users + candidate_profiles
   4) Jobs                           -> requires org_id + created_by
   5) Applications                   -> requires job + candidate_profile
   6) Interview Sessions (+ optional turns) -> requires application
@@ -186,7 +186,7 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
     ]
 
 
-# ── Candidates (align to your DB: users + candidate_profiles) ─────────────────
+# ── Candidates (align to the DB: users + candidate_profiles) ─────────────────
 CANDIDATE_USER_PAYLOADS: list[dict[str, Any]] = [
     {
         "email": "amara.nwosu@example.com",
@@ -256,7 +256,7 @@ async def _health(client: httpx.AsyncClient) -> bool:
     except httpx.ConnectError:
         print(
             "\n❌  Cannot connect to server.\n"
-            f"    Is your FastAPI app running at {BASE_URL}?\n\n"
+            f"    Is the FastAPI app running at {BASE_URL}?\n\n"
             "    Start it with:\n"
             "      uvicorn src.truefit_api.main:app --reload --port 8000\n"
         )
@@ -268,19 +268,19 @@ async def _ensure_user(client: httpx.AsyncClient, payload: dict[str, Any]) -> di
     Creates a user, or fetches it by email if it already exists.
     Requires:
       POST /users
-      GET  /users/by-email/{email}  (or adjust below to your real route)
+      GET  /users/by-email/{email}
     """
     r = await client.post("/users", json=payload)
     if r.status_code in (200, 201):
         return r.json()
 
-    # If your API uses 409 conflict on duplicate email:
+    # If API uses 409 conflict on duplicate email:
     if r.status_code == 409:
         r2 = await client.get(f"/users/by-email/{payload['email']}")
         r2.raise_for_status()
         return r2.json()
 
-    # If your API uses 422 validation, surface it clearly.
+    # If API uses 422 validation, surface it clearly.
     if r.status_code == 422:
         raise RuntimeError(f"User validation error: {r.json().get('detail')}")
 
@@ -328,9 +328,9 @@ async def _ensure_candidate_profile(
     """
     Creates candidate profile for a given user_id.
     Requires:
-      POST /candidate-profiles  (or your route)
+      POST /candidate-profiles  
       GET  /candidate-profiles/by-user/{user_id}
-    Adjust endpoints to match your API.
+    Adjust endpoints to match the API.
     """
     payload = {"user_id": user_id, **CANDIDATE_PROFILE_PAYLOADS_BY_EMAIL[email]}
     r = await client.post("/candidate-profiles", json=payload)
@@ -373,7 +373,7 @@ async def _ensure_application(client: httpx.AsyncClient, job_id: str, candidate_
 
 
 async def _start_interview(client: httpx.AsyncClient, job_id: str, candidate_profile_id: str) -> dict:
-    # your existing endpoint
+    # existing endpoint
     r = await client.post("/interviews", json={"job_id": job_id, "candidate_id": candidate_profile_id})
     if r.status_code in (200, 201):
         return r.json()
