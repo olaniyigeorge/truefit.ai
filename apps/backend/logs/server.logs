@@ -12695,3 +12695,498 @@ Using Dev config...
 2026-03-08 01:01:47,123 - INFO - Application startup complete
 2026-03-08 01:01:50,331 - INFO - Database connections closed
 2026-03-08 01:01:50,332 - INFO - Application shutdown complete
+2026-03-08 01:15:50,365 - INFO - 
+Using Dev config...
+
+2026-03-08 01:15:54,362 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:15:54,363 - INFO - 
+ creating tables...
+
+2026-03-08 01:15:56,680 - INFO - Database tables created successfully
+2026-03-08 01:15:56,684 - INFO - Application startup complete
+2026-03-08 01:16:35,872 - INFO - Interview b6ed85c5-4e0c-4390-b377-ee6446c4ab8e started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:16:35,897 - INFO - WS receive loop started
+2026-03-08 01:16:36,174 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 8714448522369161646 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:16:36,175 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Creating RTCPeerConnection
+2026-03-08 01:16:36,188 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Creating WebRTCClient
+2026-03-08 01:16:36,190 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Calling setup_handlers
+2026-03-08 01:16:36,191 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] setRemoteDescription
+2026-03-08 01:16:36,198 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] createAnswer
+2026-03-08 01:16:36,201 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] setLocalDescription
+2026-03-08 01:16:36,203 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Received track: kind=audio id=89bfb4d1-8a17-4bdf-a91f-c3a8c0ad0148
+2026-03-08 01:16:36,228 - INFO - Connection(0) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:16:36,229 - INFO - Connection(0) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:16:36,232 - INFO - Connection(0) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:16:41,243 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] WebRTC offer handled, answer ready
+2026-03-08 01:16:41,247 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:4073595385 1 udp 2122260223 172.22.0.1 57677 typ host
+2026-03-08 01:16:41,250 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:16:41,270 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Connection state: connecting
+2026-03-08 01:16:41,343 - INFO - Connection(0) Discovered peer reflexive candidate Candidate(o06aCKylJH 1 udp 1853824767 172.22.0.1 57677 typ prflx)
+2026-03-08 01:16:41,344 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 63236) -> ('172.22.0.1', 57677)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:16:41,347 - INFO - Connection(0) Check CandidatePair(('172.22.0.1', 63236) -> ('172.22.0.1', 57677)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:16:41,348 - INFO - Connection(0) ICE completed
+2026-03-08 01:16:41,416 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Connection state: connected
+2026-03-08 01:16:41,418 - INFO - Interview b6ed85c5-4e0c-4390-b377-ee6446c4ab8e abandoned: error
+2026-03-08 01:16:41,421 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] Connection state: closed
+2026-03-08 01:16:41,423 - INFO - [7be26d4c-2d1d-4615-bdeb-eb8bf12d92b5] WebRTCClient closed
+2026-03-08 01:19:57,473 - INFO - Interview 7991538b-f5e1-4988-9dca-89f5f1efe9c2 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:19:57,497 - WARNING - Failed to send WS message: 
+2026-03-08 01:19:57,498 - INFO - WS receive loop started
+2026-03-08 01:19:58,727 - INFO - Resuming existing interview 7991538b-f5e1-4988-9dca-89f5f1efe9c2 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:19:58,748 - INFO - WS receive loop started
+2026-03-08 01:19:58,840 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 2885230258473600529 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:19:58,841 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Creating RTCPeerConnection
+2026-03-08 01:19:58,843 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Creating WebRTCClient
+2026-03-08 01:19:58,844 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Calling setup_handlers
+2026-03-08 01:19:58,845 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] setRemoteDescription
+2026-03-08 01:19:58,848 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] createAnswer
+2026-03-08 01:19:58,850 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] setLocalDescription
+2026-03-08 01:19:58,851 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Received track: kind=audio id=ef29ad13-4c70-4808-acba-3e4353acd69c
+2026-03-08 01:19:58,869 - INFO - Connection(2) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:19:58,870 - INFO - Connection(2) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:19:58,873 - INFO - Connection(2) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:03,883 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] WebRTC offer handled, answer ready
+2026-03-08 01:20:03,889 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:3832307343 1 udp 2122260223 172.22.0.1 60861 typ host
+2026-03-08 01:20:03,902 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:20:04,060 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Connection state: connecting
+2026-03-08 01:20:04,166 - INFO - Connection(2) Discovered peer reflexive candidate Candidate(ZlBGEwvvgg 1 udp 1853824767 172.22.0.1 60861 typ prflx)
+2026-03-08 01:20:04,212 - INFO - Connection(2) Check CandidatePair(('172.22.0.1', 50691) -> ('172.22.0.1', 60861)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:20:04,323 - INFO - Connection(2) Discovered peer reflexive candidate Candidate(vARGjn6izM 1 udp 1853759231 172.20.10.3 60862 typ prflx)
+2026-03-08 01:20:04,373 - INFO - Connection(2) Check CandidatePair(('172.20.10.3', 50690) -> ('172.20.10.3', 60862)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:20:04,426 - INFO - Connection(2) Check CandidatePair(('172.22.0.1', 50691) -> ('172.22.0.1', 60861)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:20:04,439 - INFO - Connection(2) ICE completed
+2026-03-08 01:20:04,494 - INFO - Connection(2) Check CandidatePair(('172.20.10.3', 50690) -> ('172.20.10.3', 60862)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:20:04,589 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Connection state: connected
+2026-03-08 01:20:04,671 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] DataChannel opened: interview
+2026-03-08 01:20:05,092 - INFO - Interview 7991538b-f5e1-4988-9dca-89f5f1efe9c2 abandoned: error
+2026-03-08 01:20:05,113 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] DataChannel closed
+2026-03-08 01:20:05,127 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] Connection state: closed
+2026-03-08 01:20:05,145 - INFO - [b0974dc8-92fe-4b99-a97e-fd23a09ffd56] WebRTCClient closed
+2026-03-08 01:20:10,238 - INFO - Interview c326c715-bed8-4f44-8772-eca45b69aaff started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:20:10,263 - INFO - WS receive loop started
+2026-03-08 01:20:10,362 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 5071804546467952489 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:20:10,363 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Creating RTCPeerConnection
+2026-03-08 01:20:10,364 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Creating WebRTCClient
+2026-03-08 01:20:10,365 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Calling setup_handlers
+2026-03-08 01:20:10,366 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] setRemoteDescription
+2026-03-08 01:20:10,368 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] createAnswer
+2026-03-08 01:20:10,369 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] setLocalDescription
+2026-03-08 01:20:10,370 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Received track: kind=audio id=456f954f-8270-4ec3-b974-54bd7cac3d43
+2026-03-08 01:20:10,382 - INFO - Connection(4) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:10,383 - INFO - Connection(4) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:10,384 - INFO - Connection(4) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:15,392 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] WebRTC offer handled, answer ready
+2026-03-08 01:20:15,393 - WARNING - Failed to send WS message: 
+2026-03-08 01:20:15,394 - ERROR - Interview connection error: WebSocket is not connected. Need to call "accept" first.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 228, in _ws_receive_loop
+    async for raw in self._ws.iter_text():
+    ...<23 lines>...
+                await self._send({"type": "pong"})
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\starlette\websockets.py", line 147, in iter_text
+    yield await self.receive_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\starlette\websockets.py", line 118, in receive_text
+    raise RuntimeError('WebSocket is not connected. Need to call "accept" first.')
+RuntimeError: WebSocket is not connected. Need to call "accept" first.
+2026-03-08 01:20:15,446 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:20:15,448 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Connection state: connecting
+2026-03-08 01:20:15,516 - INFO - Interview c326c715-bed8-4f44-8772-eca45b69aaff abandoned: error
+2026-03-08 01:20:15,518 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] Connection state: closed
+2026-03-08 01:20:15,520 - INFO - [2c25b4e3-5cba-4b65-8a31-71606aaa2e18] WebRTCClient closed
+2026-03-08 01:20:18,348 - INFO - Interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:20:18,371 - WARNING - Failed to send WS message: 
+2026-03-08 01:20:18,372 - INFO - WS receive loop started
+2026-03-08 01:20:21,365 - INFO - Resuming existing interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:20:21,387 - WARNING - Failed to send WS message: 
+2026-03-08 01:20:21,387 - INFO - WS receive loop started
+2026-03-08 01:20:24,648 - INFO - Resuming existing interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:20:24,676 - WARNING - Failed to send WS message: 
+2026-03-08 01:20:24,677 - INFO - WS receive loop started
+2026-03-08 01:20:27,500 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:20:27,779 - INFO - Resuming existing interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:20:27,802 - WARNING - Failed to send WS message: 
+2026-03-08 01:20:27,804 - INFO - WS receive loop started
+2026-03-08 01:20:28,407 - INFO - Resuming existing interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:20:28,558 - INFO - WS receive loop started
+2026-03-08 01:20:28,729 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 1017664184329324679 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:20:28,730 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Creating RTCPeerConnection
+2026-03-08 01:20:28,731 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Creating WebRTCClient
+2026-03-08 01:20:28,732 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Calling setup_handlers
+2026-03-08 01:20:28,733 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] setRemoteDescription
+2026-03-08 01:20:28,738 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] createAnswer
+2026-03-08 01:20:28,739 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] setLocalDescription
+2026-03-08 01:20:28,741 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Received track: kind=audio id=0613ab15-95dd-4175-8eab-fed40de9bb1e
+2026-03-08 01:20:28,757 - INFO - Connection(6) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:28,758 - INFO - Connection(6) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:28,760 - INFO - Connection(6) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:20:33,766 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] WebRTC offer handled, answer ready
+2026-03-08 01:20:33,768 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:4285921377 1 udp 2122260223 172.22.0.1 55879 typ host
+2026-03-08 01:20:33,769 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:20:33,793 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Connection state: connecting
+2026-03-08 01:20:33,855 - INFO - Connection(6) Discovered peer reflexive candidate Candidate(guJ3kZuz2G 1 udp 1853824767 172.22.0.1 55879 typ prflx)
+2026-03-08 01:20:33,869 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 55878) -> ('172.22.0.1', 55879)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:20:33,898 - INFO - Connection(6) Check CandidatePair(('172.22.0.1', 55878) -> ('172.22.0.1', 55879)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:20:33,907 - INFO - Connection(6) ICE completed
+2026-03-08 01:20:34,017 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Connection state: connected
+2026-03-08 01:20:34,056 - INFO - Connection(6) Discovered peer reflexive candidate Candidate(V62LeIzZc8 1 udp 1853759231 172.20.10.3 55880 typ prflx)
+2026-03-08 01:20:34,068 - INFO - Connection(6) Check CandidatePair(('172.20.10.3', 55877) -> ('172.20.10.3', 55880)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:20:34,108 - INFO - Connection(6) Check CandidatePair(('172.20.10.3', 55877) -> ('172.20.10.3', 55880)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:20:34,146 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] DataChannel opened: interview
+2026-03-08 01:20:34,222 - INFO - Interview f6ae32d8-1d0b-4d0b-8fe0-5707e9cc3b2b abandoned: error
+2026-03-08 01:20:34,226 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] DataChannel closed
+2026-03-08 01:20:34,227 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] Connection state: closed
+2026-03-08 01:20:34,229 - INFO - [da599688-9e06-4466-a323-3d33d72c450a] WebRTCClient closed
+2026-03-08 01:20:48,378 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:20:51,390 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:20:54,683 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:20:57,812 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:23:19,874 - INFO - Interview c395b2b6-5cf3-48a5-bf80-206d4171bffc started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:23:19,894 - INFO - WS receive loop started
+2026-03-08 01:23:19,949 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 6576277151630242916 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:23:19,950 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Creating RTCPeerConnection
+2026-03-08 01:23:19,952 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Creating WebRTCClient
+2026-03-08 01:23:19,952 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Calling setup_handlers
+2026-03-08 01:23:19,953 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] setRemoteDescription
+2026-03-08 01:23:19,958 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] createAnswer
+2026-03-08 01:23:19,960 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] setLocalDescription
+2026-03-08 01:23:19,962 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Received track: kind=audio id=8e2b81d9-a31f-42eb-8142-77d7b14dcf93
+2026-03-08 01:23:19,979 - INFO - Connection(8) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:23:19,980 - INFO - Connection(8) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:23:19,983 - INFO - Connection(8) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:23:24,994 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] WebRTC offer handled, answer ready
+2026-03-08 01:23:24,996 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:4244292501 1 udp 2122260223 172.22.0.1 50372 typ host
+2026-03-08 01:23:24,997 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:23:25,006 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Connection state: connecting
+2026-03-08 01:23:25,066 - INFO - Connection(8) Discovered peer reflexive candidate Candidate(LhxpSvQWWC 1 udp 1853824767 172.22.0.1 50372 typ prflx)
+2026-03-08 01:23:25,070 - INFO - Connection(8) Check CandidatePair(('172.22.0.1', 65381) -> ('172.22.0.1', 50372)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:23:25,074 - INFO - Connection(8) Check CandidatePair(('172.22.0.1', 65381) -> ('172.22.0.1', 50372)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:23:25,075 - INFO - Connection(8) ICE completed
+2026-03-08 01:23:25,097 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Connection state: connected
+2026-03-08 01:23:25,104 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] DataChannel opened: interview
+2026-03-08 01:23:25,108 - INFO - Interview c395b2b6-5cf3-48a5-bf80-206d4171bffc abandoned: error
+2026-03-08 01:23:25,111 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] DataChannel closed
+2026-03-08 01:23:25,112 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] Connection state: closed
+2026-03-08 01:23:25,113 - INFO - [ef0929c6-780b-47c9-98d5-e5a6a18056a2] WebRTCClient closed
+2026-03-08 01:24:28,948 - INFO - Interview 409b65eb-56ac-4bc4-89db-41fc9fda2c50 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:24:28,975 - INFO - WS receive loop started
+2026-03-08 01:24:29,031 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 4757201226015331748 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:24:29,031 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Creating RTCPeerConnection
+2026-03-08 01:24:29,033 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Creating WebRTCClient
+2026-03-08 01:24:29,034 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Calling setup_handlers
+2026-03-08 01:24:29,035 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] setRemoteDescription
+2026-03-08 01:24:29,073 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] createAnswer
+2026-03-08 01:24:29,082 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] setLocalDescription
+2026-03-08 01:24:29,092 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Received track: kind=audio id=6c5ff2ef-1284-4001-8eb5-f7abaa894d14
+2026-03-08 01:24:29,127 - INFO - Connection(10) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:29,168 - INFO - Connection(10) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:29,171 - INFO - Connection(10) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:33,513 - INFO - Resuming existing interview 409b65eb-56ac-4bc4-89db-41fc9fda2c50 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:24:33,538 - INFO - WS receive loop started
+2026-03-08 01:24:33,648 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 7645790191647182122 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:24:33,648 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Creating RTCPeerConnection
+2026-03-08 01:24:33,650 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Creating WebRTCClient
+2026-03-08 01:24:33,651 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Calling setup_handlers
+2026-03-08 01:24:33,651 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] setRemoteDescription
+2026-03-08 01:24:33,655 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] createAnswer
+2026-03-08 01:24:33,659 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] setLocalDescription
+2026-03-08 01:24:33,662 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Received track: kind=audio id=f24b376c-7572-4e4b-9bf6-5f32a051fff2
+2026-03-08 01:24:33,683 - INFO - Connection(12) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:33,684 - INFO - Connection(12) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:33,685 - INFO - Connection(12) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:34,186 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] WebRTC offer handled, answer ready
+2026-03-08 01:24:34,187 - WARNING - Failed to send WS message: 
+2026-03-08 01:24:34,188 - ERROR - Interview connection error: WebSocket is not connected. Need to call "accept" first.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 228, in _ws_receive_loop
+    async for raw in self._ws.iter_text():
+    ...<23 lines>...
+                await self._send({"type": "pong"})
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\starlette\websockets.py", line 147, in iter_text
+    yield await self.receive_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\starlette\websockets.py", line 118, in receive_text
+    raise RuntimeError('WebSocket is not connected. Need to call "accept" first.')
+RuntimeError: WebSocket is not connected. Need to call "accept" first.
+2026-03-08 01:24:34,191 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:24:34,193 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Connection state: connecting
+2026-03-08 01:24:34,263 - INFO - Interview 409b65eb-56ac-4bc4-89db-41fc9fda2c50 abandoned: error
+2026-03-08 01:24:34,264 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] Connection state: closed
+2026-03-08 01:24:34,265 - INFO - [ff4d4623-268a-4d0a-9931-15d90c41785f] WebRTCClient closed
+2026-03-08 01:24:38,692 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] WebRTC offer handled, answer ready
+2026-03-08 01:24:38,694 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:25851135 1 udp 2122260223 172.22.0.1 49344 typ host g
+2026-03-08 01:24:38,696 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:24:38,709 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Connection state: connecting
+2026-03-08 01:24:38,752 - INFO - Interview 409b65eb-56ac-4bc4-89db-41fc9fda2c50 already finished, ignoring abandon
+2026-03-08 01:24:38,754 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] Connection state: closed
+2026-03-08 01:24:38,756 - INFO - [822ed07c-11b8-4da8-b7c9-16db5a4db272] WebRTCClient closed
+2026-03-08 01:24:54,073 - INFO - Interview 974bfc74-0c4c-49d1-9881-45659d7aa4bc started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:24:54,097 - WARNING - Failed to send WS message: 
+2026-03-08 01:24:54,098 - INFO - WS receive loop started
+2026-03-08 01:24:55,833 - INFO - Resuming existing interview 974bfc74-0c4c-49d1-9881-45659d7aa4bc for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:24:55,855 - INFO - WS receive loop started
+2026-03-08 01:24:55,905 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 6192451277034094674 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:24:55,906 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Creating RTCPeerConnection
+2026-03-08 01:24:55,908 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Creating WebRTCClient
+2026-03-08 01:24:55,908 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Calling setup_handlers
+2026-03-08 01:24:55,909 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] setRemoteDescription
+2026-03-08 01:24:55,914 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] createAnswer
+2026-03-08 01:24:55,916 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] setLocalDescription
+2026-03-08 01:24:55,917 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Received track: kind=audio id=cfdf2d43-d85e-4ccf-a6ab-d0fb0964541e
+2026-03-08 01:24:55,932 - INFO - Connection(14) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:55,933 - INFO - Connection(14) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:24:55,943 - INFO - Connection(14) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:00,954 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] WebRTC offer handled, answer ready
+2026-03-08 01:25:00,956 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:1085266744 1 udp 2122260223 172.22.0.1 62153 typ host
+2026-03-08 01:25:00,959 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:25:00,967 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Connection state: connecting
+2026-03-08 01:25:01,035 - INFO - Connection(14) Discovered peer reflexive candidate Candidate(bd05769oTO 1 udp 1853824767 172.22.0.1 62153 typ prflx)
+2026-03-08 01:25:01,037 - INFO - Connection(14) Check CandidatePair(('172.22.0.1', 50727) -> ('172.22.0.1', 62153)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:25:01,045 - INFO - Connection(14) Check CandidatePair(('172.22.0.1', 50727) -> ('172.22.0.1', 62153)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:25:01,046 - INFO - Connection(14) ICE completed
+2026-03-08 01:25:01,066 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Connection state: connected
+2026-03-08 01:25:01,071 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] DataChannel opened: interview
+2026-03-08 01:25:01,110 - INFO - Interview 974bfc74-0c4c-49d1-9881-45659d7aa4bc abandoned: error
+2026-03-08 01:25:01,113 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] DataChannel closed
+2026-03-08 01:25:01,115 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] Connection state: closed
+2026-03-08 01:25:01,117 - INFO - [ebbfa501-72af-4d5c-9c7b-4635824b1fc6] WebRTCClient closed
+2026-03-08 01:25:24,106 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:25:29,486 - INFO - Interview 77172b2d-3936-43fa-ab0b-5eca342711b4 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:25:29,515 - WARNING - Failed to send WS message: 
+2026-03-08 01:25:29,517 - INFO - WS receive loop started
+2026-03-08 01:25:32,675 - INFO - Resuming existing interview 77172b2d-3936-43fa-ab0b-5eca342711b4 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:25:32,702 - INFO - WS receive loop started
+2026-03-08 01:25:32,763 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 7714452293407912351 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:25:32,764 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Creating RTCPeerConnection
+2026-03-08 01:25:32,766 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Creating WebRTCClient
+2026-03-08 01:25:32,767 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Calling setup_handlers
+2026-03-08 01:25:32,767 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] setRemoteDescription
+2026-03-08 01:25:32,772 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] createAnswer
+2026-03-08 01:25:32,773 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] setLocalDescription
+2026-03-08 01:25:32,775 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Received track: kind=audio id=fd819c7c-1dda-4b97-b756-4d6cea33bf67
+2026-03-08 01:25:32,788 - INFO - Connection(16) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:32,789 - INFO - Connection(16) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:32,790 - INFO - Connection(16) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:37,793 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] WebRTC offer handled, answer ready
+2026-03-08 01:25:37,796 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:2103756031 1 udp 2122260223 172.22.0.1 49242 typ host
+2026-03-08 01:25:37,798 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:25:37,808 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Connection state: connecting
+2026-03-08 01:25:37,859 - INFO - Connection(16) Discovered peer reflexive candidate Candidate(oaAhc7IrW6 1 udp 1853824767 172.22.0.1 49242 typ prflx)
+2026-03-08 01:25:37,861 - INFO - Connection(16) Check CandidatePair(('172.22.0.1', 49241) -> ('172.22.0.1', 49242)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:25:37,865 - INFO - Connection(16) Check CandidatePair(('172.22.0.1', 49241) -> ('172.22.0.1', 49242)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:25:37,866 - INFO - Connection(16) ICE completed
+2026-03-08 01:25:37,886 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Connection state: connected
+2026-03-08 01:25:37,893 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] DataChannel opened: interview
+2026-03-08 01:25:37,938 - INFO - Interview 77172b2d-3936-43fa-ab0b-5eca342711b4 abandoned: error
+2026-03-08 01:25:37,941 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] DataChannel closed
+2026-03-08 01:25:37,942 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] Connection state: closed
+2026-03-08 01:25:37,945 - INFO - [edbc8f44-5fa1-404b-85c0-022636783c82] WebRTCClient closed
+2026-03-08 01:25:48,357 - INFO - Interview 91e83e83-a481-46df-b11b-383d803fb171 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:25:48,387 - WARNING - Failed to send WS message: 
+2026-03-08 01:25:48,388 - INFO - WS receive loop started
+2026-03-08 01:25:49,969 - INFO - Resuming existing interview 91e83e83-a481-46df-b11b-383d803fb171 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 01:25:49,998 - INFO - WS receive loop started
+2026-03-08 01:25:50,065 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 8109670465095795804 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:25:50,066 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Creating RTCPeerConnection
+2026-03-08 01:25:50,067 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Creating WebRTCClient
+2026-03-08 01:25:50,068 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Calling setup_handlers
+2026-03-08 01:25:50,068 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] setRemoteDescription
+2026-03-08 01:25:50,071 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] createAnswer
+2026-03-08 01:25:50,072 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] setLocalDescription
+2026-03-08 01:25:50,076 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Received track: kind=audio id=46f37e11-05e3-437e-9b15-709e3b55208c
+2026-03-08 01:25:50,089 - INFO - Connection(18) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:50,090 - INFO - Connection(18) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:50,094 - INFO - Connection(18) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:25:55,114 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] WebRTC offer handled, answer ready
+2026-03-08 01:25:55,117 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:2637074431 1 udp 2122260223 172.22.0.1 65100 typ host
+2026-03-08 01:25:55,121 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:25:55,138 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Connection state: connecting
+2026-03-08 01:25:55,192 - INFO - Connection(18) Discovered peer reflexive candidate Candidate(aTKQe6MEUz 1 udp 1853824767 172.22.0.1 65100 typ prflx)
+2026-03-08 01:25:55,196 - INFO - Connection(18) Check CandidatePair(('172.22.0.1', 65099) -> ('172.22.0.1', 65100)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:25:55,205 - INFO - Connection(18) Check CandidatePair(('172.22.0.1', 65099) -> ('172.22.0.1', 65100)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:25:55,207 - INFO - Connection(18) ICE completed
+2026-03-08 01:25:55,223 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Connection state: connected
+2026-03-08 01:25:55,236 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] DataChannel opened: interview
+2026-03-08 01:25:55,312 - INFO - Interview 91e83e83-a481-46df-b11b-383d803fb171 abandoned: error
+2026-03-08 01:25:55,315 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] DataChannel closed
+2026-03-08 01:25:55,318 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] Connection state: closed
+2026-03-08 01:25:55,320 - INFO - [07e3f225-29ce-43ca-a73f-bda7c25e25e3] WebRTCClient closed
+2026-03-08 01:25:59,528 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:26:10,144 - INFO - Interview 5725fc48-30ff-4ce9-9c21-672f3609e6f8 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 01:26:10,165 - INFO - WS receive loop started
+2026-03-08 01:26:10,212 - INFO - WS message received: {"type":"webrtc_offer","sdp":"v=0\r\no=- 9046362909843250251 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na
+2026-03-08 01:26:10,213 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Creating RTCPeerConnection
+2026-03-08 01:26:10,215 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Creating WebRTCClient
+2026-03-08 01:26:10,216 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Calling setup_handlers
+2026-03-08 01:26:10,217 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] setRemoteDescription
+2026-03-08 01:26:10,220 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] createAnswer
+2026-03-08 01:26:10,221 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] setLocalDescription
+2026-03-08 01:26:10,223 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Received track: kind=audio id=022c7b78-6b0f-4cdd-a33d-564cd7dc1057
+2026-03-08 01:26:10,240 - INFO - Connection(20) Could not bind to 169.254.52.161 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:26:10,242 - INFO - Connection(20) Could not bind to 169.254.97.108 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:26:10,245 - INFO - Connection(20) Could not bind to 169.254.89.238 - [WinError 10049] The requested address is not valid in its context
+2026-03-08 01:26:15,258 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] WebRTC offer handled, answer ready
+2026-03-08 01:26:15,261 - INFO - WS message received: {"type":"ice_candidate","candidate":"candidate:397432822 1 udp 2122260223 172.22.0.1 50061 typ host 
+2026-03-08 01:26:15,264 - ERROR - Interview connection error: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 242, in _ws_receive_loop
+    await self._handle_ice_candidate(msg)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 291, in _handle_ice_candidate
+    await self._signaling.handle_ice_candidate(
+    ...<3 lines>...
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\realtime\signaling.py", line 76, in handle_ice_candidate
+    ice = RTCIceCandidate(
+        candidate=candidate,
+        sdpMid=sdp_mid,
+        sdpMLineIndex=sdp_mline_index,
+    )
+TypeError: RTCIceCandidate.__init__() got an unexpected keyword argument 'candidate'
+2026-03-08 01:26:15,276 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Connection state: connecting
+2026-03-08 01:26:15,328 - INFO - Connection(20) Discovered peer reflexive candidate Candidate(17VHEFisYu 1 udp 1853824767 172.22.0.1 50061 typ prflx)
+2026-03-08 01:26:15,330 - INFO - Connection(20) Check CandidatePair(('172.22.0.1', 50195) -> ('172.22.0.1', 50061)) State.WAITING -> State.IN_PROGRESS
+2026-03-08 01:26:15,338 - INFO - Connection(20) Check CandidatePair(('172.22.0.1', 50195) -> ('172.22.0.1', 50061)) State.IN_PROGRESS -> State.SUCCEEDED
+2026-03-08 01:26:15,339 - INFO - Connection(20) ICE completed
+2026-03-08 01:26:15,378 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Connection state: connected
+2026-03-08 01:26:15,387 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] DataChannel opened: interview
+2026-03-08 01:26:15,429 - INFO - Interview 5725fc48-30ff-4ce9-9c21-672f3609e6f8 abandoned: error
+2026-03-08 01:26:15,431 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] DataChannel closed
+2026-03-08 01:26:15,432 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] Connection state: closed
+2026-03-08 01:26:15,434 - INFO - [bb67a18a-8960-4012-b7fa-7d21cbf93cb9] WebRTCClient closed
+2026-03-08 01:26:18,393 - WARNING - Failed to send WS message: Cannot call "send" once a close message has been sent.
+2026-03-08 01:27:21,589 - INFO - Database connections closed
+2026-03-08 01:27:21,590 - INFO - Application shutdown complete
