@@ -1,6 +1,6 @@
-import {createContext, useContext, useEffect, useState} from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { onAuthStateChanged, signOut, type User } from "firebase/auth"
-import {auth} from "@/firebase" 
+import { auth } from "@/helpers/firebase"
 
 //define context data shape
 interface AuthContextType {
@@ -13,7 +13,7 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 //provider component
-export const AuthProvider = ({children}: {children: React.ReactNode}) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 

@@ -1,7 +1,5 @@
 
 import { BrowserRouter as Router } from "react-router"
-import { SidebarProvider} from "@/components/ui/sidebar"
-import AppSidebar from "@/components/AppSidebar"
 import {AuthProvider} from "@/context/authContext"
 
 
@@ -15,12 +13,9 @@ const AppProviders = ({ children }: AppProviderProp) => {
     return (
         <AuthProvider>
         <Router>
-            <SidebarProvider>
-                {/* <AppSidebar /> */}
                 <main>
                     {children}
                 </main>
-            </SidebarProvider>
         </Router>
         </AuthProvider>
     )
