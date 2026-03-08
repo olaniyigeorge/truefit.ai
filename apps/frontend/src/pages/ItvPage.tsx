@@ -560,7 +560,7 @@ function InfoRow({ label, value, accent }: { label: string; value: string; accen
   return (
     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
       <span style={{ color: "#493fff" }}>{label}</span>
-      <span style={{ color: accent ? "#22c55e" : "#6b7280", fontFamily: "monospace" }}>{value}</span>
+      <span style={{ color: accent ? "#22c55e" : "#6f7f9f", fontFamily: "monospace" }}>{value}</span>
     </div>
   )
 }
@@ -646,7 +646,7 @@ function WebRTCStateIndicator({ phase }: { phase: SessionPhase }) {
   )
 }
 
-// ── ItvPage (route entry point) ───────────────────────────────────────────────
+// ── ItvPage (route entry point) ───
 
 export default function ItvPage() {
   const { jobId: urlJobId, candidateId: urlCandidateId } = useParams<{
