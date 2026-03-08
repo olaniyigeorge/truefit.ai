@@ -17,6 +17,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="intervew/:sessionId" element={<InterviewPage />} />
         </Route>
+        {/* Test interview setup */}
         <Route path="itv/:jobId/:candidateId" element={<ITVPage/>} />
       </Routes>
     </div>
