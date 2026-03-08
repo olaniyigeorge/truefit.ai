@@ -219,4 +219,7 @@ dist/
 .pytest_cache/
 *.pyc
 "logs/" 
-"logs/" 
+logs/ 
+"apps/backend/logs/"
+apps/backend/logs/
+
