@@ -103,7 +103,7 @@ class AudioBridge:
     async def audio_input_stream(self) -> AsyncIterator[bytes]:
         """
         Async generator the agent iterates to receive PCM audio.
-        Mirrors the interface your existing InterviewConnection uses.
+        Mirrors the interface InterviewConnection uses.
         """
         while True:
             chunk = await self.inbound_queue.get()

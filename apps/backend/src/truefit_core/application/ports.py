@@ -131,11 +131,6 @@ class InterviewRepository(ABC):
     async def get_by_id(self, interview_id: uuid.UUID) -> Optional[Interview]: ...
 
     @abstractmethod
-    async def get_active_for_candidate_and_job(
-        self, candidate_id: uuid.UUID, job_id: uuid.UUID
-    ) -> Optional[Interview]: ...
-
-    @abstractmethod
     async def list_by_candidate(
         self, candidate_id: uuid.UUID, *, limit: int = 20, offset: int = 0
     ) -> list[Interview]: ...
@@ -144,6 +139,15 @@ class InterviewRepository(ABC):
     async def list_by_job(
         self, job_id: uuid.UUID, *, limit: int = 50, offset: int = 0
     ) -> list[Interview]: ...
+
+    @abstractmethod
+    async def get_active_for_job_and_candidate(
+        self,
+        *,
+        job_id: uuid.UUID,
+        candidate_id: uuid.UUID,
+    ) -> Optional[Interview]:
+        ...
 
 
 class EvaluationRepository(ABC):
@@ -356,6 +360,43 @@ class CachePort(ABC):
     @abstractmethod
     async def is_healthy(self) -> bool: ...
 
+
+
+
+class ApplicationRepository(ABC):
+
+    @abstractmethod
+    async def save(self, application: Application) -> None: ...
+
+    @abstractmethod
+    async def get_by_id(self, application_id: uuid.UUID) -> Optional[Application]: ...
+
+    @abstractmethod
+    async def get_by_job_and_candidate(
+        self, job_id: uuid.UUID, candidate_id: uuid.UUID
+    ) -> Optional[Application]: ...
+
+    @abstractmethod
+    async def list_by_job(
+        self,
+        job_id: uuid.UUID,
+        *,
+        status: Optional[str] = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[Application]: ...
+
+    @abstractmethod
+    async def list_by_candidate(
+        self,
+        candidate_id: uuid.UUID,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[Application]: ...
+
+    @abstractmethod
+    async def delete(self, application_id: uuid.UUID) -> None: ...
 
 
 

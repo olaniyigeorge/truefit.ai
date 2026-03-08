@@ -33,7 +33,7 @@ class DataChannelManager:
         # Attach the channel when aiortc fires the datachannel event
         manager.attach(channel)
 
-        # Register handler for inbound events (wired up by your agent layer)
+        # Register handler for inbound events (wired up by the agent layer)
         manager.on_inbound_event = my_handler
 
         # Send outbound events

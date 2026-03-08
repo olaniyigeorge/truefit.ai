@@ -50,6 +50,7 @@ def get_orchestration() -> InterviewOrchestrationService:
     interview_repo = get_interview_repo()
     job_repo = get_job_repo()
     candidate_repo = get_candidate_repo()
+    llm_adapter = get_gemini_live()
     queue = get_queue()
     cache = get_cache()
 
@@ -57,6 +58,7 @@ def get_orchestration() -> InterviewOrchestrationService:
         interview_repo=interview_repo,
         job_repo=job_repo,
         candidate_repo=candidate_repo,
+        llm=llm_adapter,
         queue=queue,
         cache=cache,
     )
@@ -138,6 +140,8 @@ class InterviewConnection:
             self._interview_id = interview.id
             context = await self._build_context(interview.id)
 
+            print(f"\n\n\nStarted interview {interview.id} for job {self._job_id} and candidate {self._candidate_id}\n\n\n")
+
             # ② Tell the frontend the session exists + the session_id it needs for signaling
             await self._send({
                 "type": "session_started",
@@ -154,11 +158,18 @@ class InterviewConnection:
                 candidate_id=self._candidate_id,
             )
 
+            # ④ Start receive loop NOW so it can process the offer while we wait
+            ws_task = asyncio.create_task(self._ws_receive_loop())
+            interrupt_task = asyncio.create_task(self._interrupt_monitor_loop())
+
+
             # ④ Wait for WebRTC to connect before starting agent
             #    (_ws_receive_loop handles the offer/ICE messages and sets _webrtc_ready)
             try:
                 await asyncio.wait_for(self._webrtc_ready.wait(), timeout=30.0)
             except asyncio.TimeoutError:
+                ws_task.cancel()
+                interrupt_task.cancel()
                 await self._send({"type": "error", "message": "WebRTC setup timed out"})
                 return
 
@@ -168,7 +179,7 @@ class InterviewConnection:
 
             # ⑥ Build agent — audio I/O now comes from WebRTC AudioBridge
             agent = LiveInterviewAgent(
-                genai_client=self._live_adapter,
+                live_adapter=self._live_adapter,
                 orchestration=self._orchestration,
                 queue=self._queue,
                 cache=self._cache,
@@ -177,12 +188,18 @@ class InterviewConnection:
                 on_text_output=self._on_text_output,
             )
 
-            # ⑦ Run everything concurrently
-            await asyncio.gather(
-                agent.run(context),
-                self._ws_receive_loop(),
-                self._interrupt_monitor_loop(),
-            )
+            # ⑧ Run agent alongside the already-running tasks
+            agent_task = asyncio.create_task(agent.run(context))
+
+            await asyncio.gather(agent_task, ws_task, interrupt_task)
+
+
+            # # ⑦ Run everything concurrently
+            # await asyncio.gather(
+            #     agent.run(context),
+            #     self._ws_receive_loop(),
+            #     self._interrupt_monitor_loop(),
+            # )
 
         except WebSocketDisconnect:
             logger.info(f"Candidate {self._candidate_id} disconnected")
@@ -207,7 +224,9 @@ class InterviewConnection:
         After WebRTC ready:    handles control messages (end_session, ping)
         Audio never arrives here — it flows via WebRTC AudioBridge.
         """
+        logger.info("WS receive loop started")
         async for raw in self._ws.iter_text():
+            logger.info(f"WS message received: {raw[:100]}") 
             try:
                 msg = json.loads(raw)
             except json.JSONDecodeError:

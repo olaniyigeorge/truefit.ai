@@ -18,6 +18,8 @@ from src.truefit_api.api.v1.http.interviews import router as interviews_router
 from src.truefit_api.api.v1.http.orgs import router as orgs_router
 from src.truefit_api.api.v1.http.users import router as users_router
 from src.truefit_api.api.v1.ws.interview_websocket import interview_ws_router
+from src.truefit_api.api.v1.http.applications import router as applications_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -82,6 +84,7 @@ app.include_router(orgs_router, prefix="/api/v1")
 app.include_router(candidates_router, prefix="/api/v1")
 app.include_router(jobs_router, prefix="/api/v1")
 app.include_router(interviews_router, prefix="/api/v1")
+app.include_router(applications_router, prefix="/api/v1")
 app.include_router(interview_ws_router)
 
 

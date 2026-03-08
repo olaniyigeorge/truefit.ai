@@ -32,12 +32,10 @@ class WebRTCSignaling:
         frame_interval_camera: float = 5.0,
         frame_interval_screen: float = 2.0,
     ) -> str:
-        """
-        Creates the RTCPeerConnection, sets remote description,
-        returns the SDP answer string to send back to the browser.
-        """
+        logger.info(f"[{self._session_id}] Creating RTCPeerConnection")
         pc = RTCPeerConnection()
 
+        logger.info(f"[{self._session_id}] Creating WebRTCClient")
         self._client = WebRTCClient(
             pc=pc,
             session_id=self._session_id,
@@ -46,18 +44,22 @@ class WebRTCSignaling:
             frame_interval_camera=frame_interval_camera,
             frame_interval_screen=frame_interval_screen,
         )
+        
+        logger.info(f"[{self._session_id}] Calling setup_handlers")
         self._client.setup_handlers()
 
+        logger.info(f"[{self._session_id}] setRemoteDescription")
         await pc.setRemoteDescription(RTCSessionDescription(sdp=sdp, type=sdp_type))
+        
+        logger.info(f"[{self._session_id}] createAnswer")
         answer = await pc.createAnswer()
+        
+        logger.info(f"[{self._session_id}] setLocalDescription")
         await pc.setLocalDescription(answer)
 
-        # Register for ICE candidate lookups within the same WS loop
         WebRTCClientRegistry.register(self._session_id, self._client)
-
         logger.info(f"[{self._session_id}] WebRTC offer handled, answer ready")
         return pc.localDescription.sdp
-
     # ── Step 2: trickle ICE candidates ───────────────────────────────────────
 
     async def handle_ice_candidate(

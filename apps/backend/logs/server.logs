@@ -9854,3 +9854,2844 @@ Using Dev config...
 2026-03-07 11:16:54,598 - INFO - Application startup complete
 2026-03-07 11:17:20,933 - INFO - Database connections closed
 2026-03-07 11:17:20,933 - INFO - Application shutdown complete
+2026-03-07 11:18:32,427 - INFO - 
+Using Dev config...
+
+2026-03-07 11:18:35,113 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:18:35,114 - INFO - 
+ creating tables...
+
+2026-03-07 11:18:37,451 - INFO - Database tables created successfully
+2026-03-07 11:18:37,452 - INFO - Application startup complete
+2026-03-07 11:18:51,867 - INFO - Database connections closed
+2026-03-07 11:18:51,880 - INFO - Application shutdown complete
+2026-03-07 11:18:54,976 - INFO - 
+Using Dev config...
+
+2026-03-07 11:18:58,779 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:18:58,780 - INFO - 
+ creating tables...
+
+2026-03-07 11:19:01,130 - INFO - Database tables created successfully
+2026-03-07 11:19:01,138 - INFO - Application startup complete
+2026-03-07 11:19:01,258 - INFO - Database connections closed
+2026-03-07 11:19:01,264 - INFO - Application shutdown complete
+2026-03-07 11:19:04,820 - INFO - 
+Using Dev config...
+
+2026-03-07 11:19:08,081 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:19:08,081 - INFO - 
+ creating tables...
+
+2026-03-07 11:19:10,433 - INFO - Database tables created successfully
+2026-03-07 11:19:10,436 - INFO - Application startup complete
+2026-03-07 11:19:10,555 - INFO - Database connections closed
+2026-03-07 11:19:10,557 - INFO - Application shutdown complete
+2026-03-07 11:19:13,905 - INFO - 
+Using Dev config...
+
+2026-03-07 11:19:16,248 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:19:16,249 - INFO - 
+ creating tables...
+
+2026-03-07 11:19:18,565 - INFO - Database tables created successfully
+2026-03-07 11:19:18,568 - INFO - Application startup complete
+2026-03-07 11:20:06,810 - INFO - Database connections closed
+2026-03-07 11:20:06,813 - INFO - Application shutdown complete
+2026-03-07 11:20:09,705 - INFO - 
+Using Dev config...
+
+2026-03-07 11:20:12,928 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:20:13,032 - INFO - 
+ creating tables...
+
+2026-03-07 11:20:15,322 - INFO - Database tables created successfully
+2026-03-07 11:20:15,326 - INFO - Application startup complete
+2026-03-07 11:20:15,447 - INFO - Database connections closed
+2026-03-07 11:20:15,449 - INFO - Application shutdown complete
+2026-03-07 11:20:18,481 - INFO - 
+Using Dev config...
+
+2026-03-07 11:20:22,153 - INFO - 
+Using Dev config...
+
+2026-03-07 11:20:25,661 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:20:25,661 - INFO - 
+ creating tables...
+
+2026-03-07 11:20:27,969 - INFO - Database tables created successfully
+2026-03-07 11:20:27,971 - INFO - Application startup complete
+2026-03-07 11:20:28,086 - INFO - Database connections closed
+2026-03-07 11:20:28,090 - INFO - Application shutdown complete
+2026-03-07 11:20:30,252 - INFO - 
+Using Dev config...
+
+2026-03-07 11:20:32,922 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:20:32,922 - INFO - 
+ creating tables...
+
+2026-03-07 11:20:35,227 - INFO - Database tables created successfully
+2026-03-07 11:20:35,230 - INFO - Application startup complete
+2026-03-07 11:20:54,820 - INFO - Database connections closed
+2026-03-07 11:20:54,823 - INFO - Application shutdown complete
+2026-03-07 11:20:57,301 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:00,880 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:21:00,880 - INFO - 
+ creating tables...
+
+2026-03-07 11:21:03,133 - INFO - Database tables created successfully
+2026-03-07 11:21:03,135 - INFO - Application startup complete
+2026-03-07 11:21:03,251 - INFO - Database connections closed
+2026-03-07 11:21:03,254 - INFO - Application shutdown complete
+2026-03-07 11:21:06,863 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:13,456 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:15,756 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:19,399 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:22,143 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:21:22,144 - INFO - 
+ creating tables...
+
+2026-03-07 11:21:24,473 - INFO - Database tables created successfully
+2026-03-07 11:21:24,476 - INFO - Application startup complete
+2026-03-07 11:21:24,621 - INFO - Database connections closed
+2026-03-07 11:21:24,622 - INFO - Application shutdown complete
+2026-03-07 11:21:26,838 - INFO - 
+Using Dev config...
+
+2026-03-07 11:21:30,457 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:21:30,458 - INFO - 
+ creating tables...
+
+2026-03-07 11:21:32,799 - INFO - Database tables created successfully
+2026-03-07 11:21:32,801 - INFO - Application startup complete
+2026-03-07 11:21:44,524 - ERROR - Interview connection error: Job 'Software Engineer' is not accepting interviews (status=draft)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 139, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 90, in start_interview
+    job.assert_open_for_interviews()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\job.py", line 288, in assert_open_for_interviews
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Job 'Software Engineer' is not accepting interviews (status=draft)
+2026-03-07 11:22:46,024 - INFO - {'PATH': '/api/v1/jobs/ed0d8254-2b92-4523-ba84-93e59446ecce/activate', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '23.081ms'}
+2026-03-07 11:23:17,988 - INFO - {'PATH': '/api/v1/jobs/183c3d37-c69d-490a-8618-f06e97254317/activate', 'METHOD': 'POST', 'STATUS_CODE': 200, 'REQ/RES_TIME': '69.449ms'}
+2026-03-07 11:23:28,429 - ERROR - Interview connection error: Application not found for job_id + candidate_id; cannot create InterviewSession.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 139, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 70, in save
+    raise ValueError("Application not found for job_id + candidate_id; cannot create InterviewSession.")
+ValueError: Application not found for job_id + candidate_id; cannot create InterviewSession.
+2026-03-07 11:24:31,710 - INFO - Database connections closed
+2026-03-07 11:24:31,711 - INFO - Application shutdown complete
+2026-03-07 11:24:34,405 - INFO - 
+Using Dev config...
+
+2026-03-07 11:24:37,254 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:24:37,255 - INFO - 
+ creating tables...
+
+2026-03-07 11:24:39,527 - INFO - Database tables created successfully
+2026-03-07 11:24:39,528 - INFO - Application startup complete
+2026-03-07 11:34:35,864 - INFO - Database connections closed
+2026-03-07 11:34:35,865 - INFO - Application shutdown complete
+2026-03-07 11:34:39,747 - INFO - 
+Using Dev config...
+
+2026-03-07 11:34:43,487 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:34:43,488 - INFO - 
+ creating tables...
+
+2026-03-07 11:34:45,914 - INFO - Database tables created successfully
+2026-03-07 11:34:45,917 - INFO - Application startup complete
+2026-03-07 11:34:46,026 - INFO - Database connections closed
+2026-03-07 11:34:46,026 - INFO - Application shutdown complete
+2026-03-07 11:34:48,679 - INFO - 
+Using Dev config...
+
+2026-03-07 11:34:51,674 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:34:51,675 - INFO - 
+ creating tables...
+
+2026-03-07 11:34:53,921 - INFO - Database tables created successfully
+2026-03-07 11:34:53,923 - INFO - Application startup complete
+2026-03-07 11:36:01,594 - INFO - Database connections closed
+2026-03-07 11:36:01,595 - INFO - Application shutdown complete
+2026-03-07 11:36:05,294 - INFO - 
+Using Dev config...
+
+2026-03-07 11:36:10,548 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:36:10,549 - INFO - 
+ creating tables...
+
+2026-03-07 11:36:12,995 - INFO - Database tables created successfully
+2026-03-07 11:36:12,998 - INFO - Application startup complete
+2026-03-07 11:36:13,109 - INFO - Database connections closed
+2026-03-07 11:36:13,110 - INFO - Application shutdown complete
+2026-03-07 11:36:15,464 - INFO - 
+Using Dev config...
+
+2026-03-07 11:36:18,207 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:36:18,207 - INFO - 
+ creating tables...
+
+2026-03-07 11:36:20,490 - INFO - Database tables created successfully
+2026-03-07 11:36:20,493 - INFO - Application startup complete
+2026-03-07 11:36:51,917 - INFO - Database connections closed
+2026-03-07 11:36:51,917 - INFO - Application shutdown complete
+2026-03-07 11:36:55,044 - INFO - 
+Using Dev config...
+
+2026-03-07 11:37:00,106 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:37:00,107 - INFO - 
+ creating tables...
+
+2026-03-07 11:37:02,357 - INFO - Database tables created successfully
+2026-03-07 11:37:02,358 - INFO - Application startup complete
+2026-03-07 11:37:02,474 - INFO - Database connections closed
+2026-03-07 11:37:02,478 - INFO - Application shutdown complete
+2026-03-07 11:37:05,713 - INFO - 
+Using Dev config...
+
+2026-03-07 11:37:09,109 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:37:09,110 - INFO - 
+ creating tables...
+
+2026-03-07 11:37:11,424 - INFO - Database tables created successfully
+2026-03-07 11:37:11,427 - INFO - Application startup complete
+2026-03-07 11:37:32,375 - INFO - Database connections closed
+2026-03-07 11:37:32,375 - INFO - Application shutdown complete
+2026-03-07 11:37:36,126 - INFO - 
+Using Dev config...
+
+2026-03-07 11:37:40,872 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:37:40,873 - INFO - 
+ creating tables...
+
+2026-03-07 11:37:43,169 - INFO - Database tables created successfully
+2026-03-07 11:37:43,172 - INFO - Application startup complete
+2026-03-07 11:37:43,283 - INFO - Database connections closed
+2026-03-07 11:37:43,284 - INFO - Application shutdown complete
+2026-03-07 11:37:47,152 - INFO - 
+Using Dev config...
+
+2026-03-07 11:37:51,680 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:37:51,688 - INFO - 
+ creating tables...
+
+2026-03-07 11:37:54,069 - INFO - Database tables created successfully
+2026-03-07 11:37:54,071 - INFO - Application startup complete
+2026-03-07 11:38:03,992 - INFO - Database connections closed
+2026-03-07 11:38:03,993 - INFO - Application shutdown complete
+2026-03-07 11:38:06,760 - INFO - 
+Using Dev config...
+
+2026-03-07 11:38:11,788 - INFO - 
+Using Dev config...
+
+2026-03-07 11:38:15,672 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:38:15,672 - INFO - 
+ creating tables...
+
+2026-03-07 11:38:17,937 - INFO - Database tables created successfully
+2026-03-07 11:38:17,939 - INFO - Application startup complete
+2026-03-07 11:38:18,061 - INFO - Database connections closed
+2026-03-07 11:38:18,064 - INFO - Application shutdown complete
+2026-03-07 11:38:20,495 - INFO - 
+Using Dev config...
+
+2026-03-07 11:38:24,787 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:38:24,794 - INFO - 
+ creating tables...
+
+2026-03-07 11:38:27,144 - INFO - Database tables created successfully
+2026-03-07 11:38:27,147 - INFO - Application startup complete
+2026-03-07 11:38:27,262 - INFO - Database connections closed
+2026-03-07 11:38:27,273 - INFO - Application shutdown complete
+2026-03-07 11:38:30,614 - INFO - 
+Using Dev config...
+
+2026-03-07 11:38:34,789 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:38:34,791 - INFO - 
+ creating tables...
+
+2026-03-07 11:38:37,120 - INFO - Database tables created successfully
+2026-03-07 11:38:37,122 - INFO - Application startup complete
+2026-03-07 11:38:37,237 - INFO - Database connections closed
+2026-03-07 11:38:37,242 - INFO - Application shutdown complete
+2026-03-07 11:38:40,866 - INFO - 
+Using Dev config...
+
+2026-03-07 11:38:45,250 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:38:45,251 - INFO - 
+ creating tables...
+
+2026-03-07 11:38:47,544 - INFO - Database tables created successfully
+2026-03-07 11:38:47,547 - INFO - Application startup complete
+2026-03-07 11:38:54,229 - INFO - {'PATH': '/api/docs', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '2.039ms'}
+2026-03-07 11:38:55,368 - INFO - {'PATH': '/openapi.json', 'METHOD': 'GET', 'STATUS_CODE': 200, 'REQ/RES_TIME': '608.946ms'}
+2026-03-07 11:42:02,797 - INFO - {'PATH': '/api/v1/applications', 'METHOD': 'POST', 'STATUS_CODE': 201, 'REQ/RES_TIME': '185.65ms'}
+2026-03-07 11:42:20,620 - ERROR - Interview connection error: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 91, in save
+    if session_row.turns:
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1131, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        execution_options,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+        stmt, params, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2366, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 123, in await_only
+    raise exc.MissingGreenlet(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2026-03-07 11:43:40,055 - INFO - Database connections closed
+2026-03-07 11:43:40,064 - INFO - Application shutdown complete
+2026-03-07 11:43:42,751 - INFO - 
+Using Dev config...
+
+2026-03-07 11:43:46,002 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:43:46,003 - INFO - 
+ creating tables...
+
+2026-03-07 11:43:48,213 - INFO - Database tables created successfully
+2026-03-07 11:43:48,215 - INFO - Application startup complete
+2026-03-07 11:43:58,624 - INFO - Database connections closed
+2026-03-07 11:43:58,625 - INFO - Application shutdown complete
+2026-03-07 11:44:02,120 - INFO - 
+Using Dev config...
+
+2026-03-07 11:44:05,622 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:44:05,623 - INFO - 
+ creating tables...
+
+2026-03-07 11:44:07,870 - INFO - Database tables created successfully
+2026-03-07 11:44:07,873 - INFO - Application startup complete
+2026-03-07 11:44:07,985 - INFO - Database connections closed
+2026-03-07 11:44:07,987 - INFO - Application shutdown complete
+2026-03-07 11:44:11,044 - INFO - 
+Using Dev config...
+
+2026-03-07 11:44:13,895 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:44:13,896 - INFO - 
+ creating tables...
+
+2026-03-07 11:44:16,254 - INFO - Database tables created successfully
+2026-03-07 11:44:16,256 - INFO - Application startup complete
+2026-03-07 11:44:16,369 - INFO - Database connections closed
+2026-03-07 11:44:16,372 - INFO - Application shutdown complete
+2026-03-07 11:44:19,405 - INFO - 
+Using Dev config...
+
+2026-03-07 11:44:22,518 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 11:44:22,518 - INFO - 
+ creating tables...
+
+2026-03-07 11:44:24,834 - INFO - Database tables created successfully
+2026-03-07 11:44:24,836 - INFO - Application startup complete
+2026-03-07 11:44:28,327 - ERROR - Interview connection error: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 91, in save
+    if session_row.turns:
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1131, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        execution_options,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+        stmt, params, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2366, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 123, in await_only
+    raise exc.MissingGreenlet(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2026-03-07 11:46:39,188 - INFO - Database connections closed
+2026-03-07 11:46:39,188 - INFO - Application shutdown complete
+2026-03-07 11:46:44,559 - INFO - 
+Using Dev config...
+
+2026-03-07 17:27:21,289 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:27:21,308 - INFO - 
+ creating tables...
+
+2026-03-07 17:27:23,832 - INFO - Database tables created successfully
+2026-03-07 17:27:23,835 - INFO - Application startup complete
+2026-03-07 17:47:10,835 - INFO - Database connections closed
+2026-03-07 17:47:10,836 - INFO - Application shutdown complete
+2026-03-07 17:47:15,906 - INFO - 
+Using Dev config...
+
+2026-03-07 17:47:28,052 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:47:28,052 - INFO - 
+ creating tables...
+
+2026-03-07 17:47:30,255 - INFO - Database tables created successfully
+2026-03-07 17:47:30,256 - INFO - Application startup complete
+2026-03-07 17:47:30,363 - INFO - Database connections closed
+2026-03-07 17:47:30,363 - INFO - Application shutdown complete
+2026-03-07 17:47:31,689 - INFO - 
+Using Dev config...
+
+2026-03-07 17:47:33,645 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:47:33,646 - INFO - 
+ creating tables...
+
+2026-03-07 17:47:35,820 - INFO - Database tables created successfully
+2026-03-07 17:47:35,821 - INFO - Application startup complete
+2026-03-07 17:47:35,925 - INFO - Database connections closed
+2026-03-07 17:47:35,926 - INFO - Application shutdown complete
+2026-03-07 17:47:37,263 - INFO - 
+Using Dev config...
+
+2026-03-07 17:47:38,887 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:47:38,887 - INFO - 
+ creating tables...
+
+2026-03-07 17:47:41,079 - INFO - Database tables created successfully
+2026-03-07 17:47:41,080 - INFO - Application startup complete
+2026-03-07 17:47:44,859 - INFO - Database connections closed
+2026-03-07 17:47:44,860 - INFO - Application shutdown complete
+2026-03-07 17:47:46,098 - INFO - 
+Using Dev config...
+
+2026-03-07 17:47:48,254 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:47:48,255 - INFO - 
+ creating tables...
+
+2026-03-07 17:47:50,461 - INFO - Database tables created successfully
+2026-03-07 17:47:50,463 - INFO - Application startup complete
+2026-03-07 17:47:50,569 - INFO - Database connections closed
+2026-03-07 17:47:50,570 - INFO - Application shutdown complete
+2026-03-07 17:47:52,625 - INFO - 
+Using Dev config...
+
+2026-03-07 17:47:55,898 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:47:55,898 - INFO - 
+ creating tables...
+
+2026-03-07 17:47:58,282 - INFO - Database tables created successfully
+2026-03-07 17:47:58,288 - INFO - Application startup complete
+2026-03-07 17:47:58,418 - INFO - Database connections closed
+2026-03-07 17:47:58,420 - INFO - Application shutdown complete
+2026-03-07 17:48:03,337 - INFO - 
+Using Dev config...
+
+2026-03-07 17:48:07,463 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:48:07,465 - INFO - 
+ creating tables...
+
+2026-03-07 17:48:09,737 - INFO - Database tables created successfully
+2026-03-07 17:48:09,740 - INFO - Application startup complete
+2026-03-07 17:48:21,109 - ERROR - Interview connection error: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 92, in save
+    if session_row.turns:
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1131, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        execution_options,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+        stmt, params, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2366, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 123, in await_only
+    raise exc.MissingGreenlet(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2026-03-07 17:49:05,636 - INFO - Database connections closed
+2026-03-07 17:49:05,637 - INFO - Application shutdown complete
+2026-03-07 17:49:06,934 - INFO - 
+Using Dev config...
+
+2026-03-07 17:49:14,040 - INFO - 
+Using Dev config...
+
+2026-03-07 17:49:15,576 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:49:15,577 - INFO - 
+ creating tables...
+
+2026-03-07 17:49:17,759 - INFO - Database tables created successfully
+2026-03-07 17:49:17,760 - INFO - Application startup complete
+2026-03-07 17:49:17,872 - INFO - Database connections closed
+2026-03-07 17:49:17,873 - INFO - Application shutdown complete
+2026-03-07 17:49:19,230 - INFO - 
+Using Dev config...
+
+2026-03-07 17:49:20,899 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 17:49:20,900 - INFO - 
+ creating tables...
+
+2026-03-07 17:49:23,050 - INFO - Database tables created successfully
+2026-03-07 17:49:23,051 - INFO - Application startup complete
+2026-03-07 17:49:24,499 - ERROR - Interview connection error: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 92, in save
+    if session_row.turns:
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1131, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        execution_options,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+        stmt, params, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2366, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 123, in await_only
+    raise exc.MissingGreenlet(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2026-03-07 19:51:48,555 - INFO - Database connections closed
+2026-03-07 19:51:48,558 - INFO - Application shutdown complete
+2026-03-07 19:51:51,227 - INFO - 
+Using Dev config...
+
+2026-03-07 19:51:55,152 - INFO - 
+Using Dev config...
+
+2026-03-07 19:51:57,701 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 19:51:57,701 - INFO - 
+ creating tables...
+
+2026-03-07 19:52:00,063 - INFO - Database tables created successfully
+2026-03-07 19:52:00,064 - INFO - Application startup complete
+2026-03-07 19:52:00,172 - INFO - Database connections closed
+2026-03-07 19:52:00,173 - INFO - Application shutdown complete
+2026-03-07 19:52:01,717 - INFO - 
+Using Dev config...
+
+2026-03-07 19:52:03,419 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 19:52:03,420 - INFO - 
+ creating tables...
+
+2026-03-07 19:52:05,640 - INFO - Database tables created successfully
+2026-03-07 19:52:05,641 - INFO - Application startup complete
+2026-03-07 19:52:31,275 - INFO - Database connections closed
+2026-03-07 19:52:31,276 - INFO - Application shutdown complete
+2026-03-07 19:52:32,946 - INFO - 
+Using Dev config...
+
+2026-03-07 19:52:34,698 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 19:52:34,698 - INFO - 
+ creating tables...
+
+2026-03-07 19:52:36,913 - INFO - Database tables created successfully
+2026-03-07 19:52:36,914 - INFO - Application startup complete
+2026-03-07 19:52:44,635 - INFO - Database connections closed
+2026-03-07 19:52:44,636 - INFO - Application shutdown complete
+2026-03-07 19:52:46,449 - INFO - 
+Using Dev config...
+
+2026-03-07 19:52:48,757 - INFO - 
+Using Dev config...
+
+2026-03-07 19:52:50,662 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 19:52:50,663 - INFO - 
+ creating tables...
+
+2026-03-07 19:52:53,056 - INFO - Database tables created successfully
+2026-03-07 19:52:53,059 - INFO - Application startup complete
+2026-03-07 22:54:42,266 - ERROR - Interview connection error: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 109, in start_interview
+    await self._interviews.save(interview)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 92, in save
+    if session_row.turns:
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1131, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        execution_options,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+        stmt, params, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2366, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 123, in await_only
+    raise exc.MissingGreenlet(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.MissingGreenlet: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2026-03-07 23:04:01,768 - INFO - Database connections closed
+2026-03-07 23:04:01,768 - INFO - Application shutdown complete
+2026-03-07 23:04:04,462 - INFO - 
+Using Dev config...
+
+2026-03-07 23:04:07,405 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:04:07,406 - INFO - 
+ creating tables...
+
+2026-03-07 23:04:09,624 - INFO - Database tables created successfully
+2026-03-07 23:04:09,625 - INFO - Application startup complete
+2026-03-07 23:04:14,172 - INFO - Database connections closed
+2026-03-07 23:04:14,173 - INFO - Application shutdown complete
+2026-03-07 23:04:15,747 - INFO - 
+Using Dev config...
+
+2026-03-07 23:04:18,005 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:04:18,005 - INFO - 
+ creating tables...
+
+2026-03-07 23:04:20,241 - INFO - Database tables created successfully
+2026-03-07 23:04:20,243 - INFO - Application startup complete
+2026-03-07 23:04:20,349 - INFO - Database connections closed
+2026-03-07 23:04:20,349 - INFO - Application shutdown complete
+2026-03-07 23:04:22,111 - INFO - 
+Using Dev config...
+
+2026-03-07 23:04:24,481 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:04:24,482 - INFO - 
+ creating tables...
+
+2026-03-07 23:04:26,755 - INFO - Database tables created successfully
+2026-03-07 23:04:26,757 - INFO - Application startup complete
+2026-03-07 23:04:26,867 - INFO - Database connections closed
+2026-03-07 23:04:26,868 - INFO - Application shutdown complete
+2026-03-07 23:04:28,562 - INFO - 
+Using Dev config...
+
+2026-03-07 23:04:30,366 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:04:30,367 - INFO - 
+ creating tables...
+
+2026-03-07 23:04:32,589 - INFO - Database tables created successfully
+2026-03-07 23:04:32,591 - INFO - Application startup complete
+2026-03-07 23:04:32,697 - INFO - Database connections closed
+2026-03-07 23:04:32,698 - INFO - Application shutdown complete
+2026-03-07 23:04:34,839 - INFO - 
+Using Dev config...
+
+2026-03-07 23:04:38,804 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:04:38,804 - INFO - 
+ creating tables...
+
+2026-03-07 23:04:41,221 - INFO - Database tables created successfully
+2026-03-07 23:04:41,224 - INFO - Application startup complete
+2026-03-07 23:04:44,801 - ERROR - Interview connection error: Unconsumed column names: status, contact, resume, active_interview_job_ids, full_name
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 110, in start_interview
+    await self._candidates.save(candidate)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\candidate_repository.py", line 69, in save
+    await session.execute(stmt)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 190, in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1633, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ~~~~~~~~~~~~~~~~~~~~~^
+        dialect=dialect,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        linting=self.dialect.compiler_linting | compiler.WARN_LINTING,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 729, in _compile_w_cache
+    compiled_sql = self._compiler(
+        dialect,
+    ...<4 lines>...
+        **kw,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 324, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\compiler.py", line 1461, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\compiler.py", line 901, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\compiler.py", line 947, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\annotation.py", line 344, in _compiler_dispatch
+    return self.__element.__class__._compiler_dispatch(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, visitor, **kw
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\visitors.py", line 138, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\compiler.py", line 5944, in visit_insert
+    crud_params_struct = crud._get_crud_params(
+        self,
+    ...<4 lines>...
+        **kw,
+    )
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\sqlalchemy\sql\crud.py", line 381, in _get_crud_params
+    raise exc.CompileError(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.CompileError: Unconsumed column names: status, contact, resume, active_interview_job_ids, full_name
+2026-03-07 23:10:42,179 - INFO - Database connections closed
+2026-03-07 23:10:42,179 - INFO - Application shutdown complete
+2026-03-07 23:10:45,056 - INFO - 
+Using Dev config...
+
+2026-03-07 23:10:48,995 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:10:48,999 - INFO - 
+ creating tables...
+
+2026-03-07 23:10:51,325 - INFO - Database tables created successfully
+2026-03-07 23:10:51,327 - INFO - Application startup complete
+2026-03-07 23:10:51,435 - INFO - Database connections closed
+2026-03-07 23:10:51,435 - INFO - Application shutdown complete
+2026-03-07 23:10:53,075 - INFO - 
+Using Dev config...
+
+2026-03-07 23:10:54,903 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:10:54,904 - INFO - 
+ creating tables...
+
+2026-03-07 23:10:57,130 - INFO - Database tables created successfully
+2026-03-07 23:10:57,132 - INFO - Application startup complete
+2026-03-07 23:14:26,019 - INFO - Database connections closed
+2026-03-07 23:14:26,020 - INFO - Application shutdown complete
+2026-03-07 23:14:28,956 - INFO - 
+Using Dev config...
+
+2026-03-07 23:14:32,338 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:14:32,339 - INFO - 
+ creating tables...
+
+2026-03-07 23:14:34,561 - INFO - Database tables created successfully
+2026-03-07 23:14:34,563 - INFO - Application startup complete
+2026-03-07 23:14:34,678 - INFO - Database connections closed
+2026-03-07 23:14:34,679 - INFO - Application shutdown complete
+2026-03-07 23:14:37,370 - INFO - 
+Using Dev config...
+
+2026-03-07 23:14:39,647 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:14:39,648 - INFO - 
+ creating tables...
+
+2026-03-07 23:14:41,857 - INFO - Database tables created successfully
+2026-03-07 23:14:41,859 - INFO - Application startup complete
+2026-03-07 23:15:15,472 - INFO - Database connections closed
+2026-03-07 23:15:15,473 - INFO - Application shutdown complete
+2026-03-07 23:15:17,055 - INFO - 
+Using Dev config...
+
+2026-03-07 23:15:19,116 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:15:19,117 - INFO - 
+ creating tables...
+
+2026-03-07 23:15:21,495 - INFO - Database tables created successfully
+2026-03-07 23:15:21,498 - INFO - Application startup complete
+2026-03-07 23:15:21,610 - INFO - Database connections closed
+2026-03-07 23:15:21,611 - INFO - Application shutdown complete
+2026-03-07 23:15:24,575 - INFO - 
+Using Dev config...
+
+2026-03-07 23:15:28,172 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:15:28,172 - INFO - 
+ creating tables...
+
+2026-03-07 23:15:30,439 - INFO - Database tables created successfully
+2026-03-07 23:15:30,441 - INFO - Application startup complete
+2026-03-07 23:15:43,961 - ERROR - Interview connection error: Candidate.__init__() got an unexpected keyword argument 'years_experience'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 92, in start_interview
+    candidate = await self._candidates.get_by_id(candidate_id)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\candidate_repository.py", line 79, in get_by_id
+    return self._to_domain(profile, active_job_ids, resume_ref)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\candidate_repository.py", line 217, in _to_domain
+    return Candidate(
+        candidate_id=profile.id,
+    ...<12 lines>...
+        updated_at=profile.updated_at,
+    )
+TypeError: Candidate.__init__() got an unexpected keyword argument 'years_experience'
+2026-03-07 23:18:25,313 - INFO - Database connections closed
+2026-03-07 23:18:25,314 - INFO - Application shutdown complete
+2026-03-07 23:18:27,170 - INFO - 
+Using Dev config...
+
+2026-03-07 23:18:29,272 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:18:29,272 - INFO - 
+ creating tables...
+
+2026-03-07 23:18:31,466 - INFO - Database tables created successfully
+2026-03-07 23:18:31,467 - INFO - Application startup complete
+2026-03-07 23:18:46,439 - ERROR - Interview connection error: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 97, in start_interview
+    candidate.register_active_interview(job_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\candidate.py", line 231, in register_active_interview
+    raise ValueError(
+        f"Candidate already has an active interview for job {job_id}"
+    )
+ValueError: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-07 23:28:28,966 - INFO - Database connections closed
+2026-03-07 23:28:28,967 - INFO - Application shutdown complete
+2026-03-07 23:28:30,936 - INFO - 
+Using Dev config...
+
+2026-03-07 23:28:33,248 - INFO - 
+Using Dev config...
+
+2026-03-07 23:28:35,182 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:28:35,182 - INFO - 
+ creating tables...
+
+2026-03-07 23:28:37,634 - INFO - Database tables created successfully
+2026-03-07 23:28:37,638 - INFO - Application startup complete
+2026-03-07 23:28:37,752 - INFO - Database connections closed
+2026-03-07 23:28:37,757 - INFO - Application shutdown complete
+2026-03-07 23:28:40,817 - INFO - 
+Using Dev config...
+
+2026-03-07 23:28:44,703 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:28:44,703 - INFO - 
+ creating tables...
+
+2026-03-07 23:28:46,995 - INFO - Database tables created successfully
+2026-03-07 23:28:46,999 - INFO - Application startup complete
+2026-03-07 23:28:57,525 - INFO - Database connections closed
+2026-03-07 23:28:57,526 - INFO - Application shutdown complete
+2026-03-07 23:28:59,193 - INFO - 
+Using Dev config...
+
+2026-03-07 23:29:00,970 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:29:00,970 - INFO - 
+ creating tables...
+
+2026-03-07 23:29:03,155 - INFO - Database tables created successfully
+2026-03-07 23:29:03,156 - INFO - Application startup complete
+2026-03-07 23:29:07,224 - INFO - Database connections closed
+2026-03-07 23:29:07,225 - INFO - Application shutdown complete
+2026-03-07 23:29:08,845 - INFO - 
+Using Dev config...
+
+2026-03-07 23:29:10,607 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:29:10,607 - INFO - 
+ creating tables...
+
+2026-03-07 23:29:12,976 - INFO - Database tables created successfully
+2026-03-07 23:29:12,991 - INFO - Application startup complete
+2026-03-07 23:29:13,111 - INFO - Database connections closed
+2026-03-07 23:29:13,112 - INFO - Application shutdown complete
+2026-03-07 23:29:16,305 - INFO - 
+Using Dev config...
+
+2026-03-07 23:29:19,849 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:29:19,850 - INFO - 
+ creating tables...
+
+2026-03-07 23:29:22,175 - INFO - Database tables created successfully
+2026-03-07 23:29:22,178 - INFO - Application startup complete
+2026-03-07 23:30:11,658 - INFO - Database connections closed
+2026-03-07 23:30:11,659 - INFO - Application shutdown complete
+2026-03-07 23:30:13,801 - INFO - 
+Using Dev config...
+
+2026-03-07 23:30:16,759 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:30:16,774 - INFO - 
+ creating tables...
+
+2026-03-07 23:30:19,060 - INFO - Database tables created successfully
+2026-03-07 23:30:19,061 - INFO - Application startup complete
+2026-03-07 23:30:19,171 - INFO - Database connections closed
+2026-03-07 23:30:19,172 - INFO - Application shutdown complete
+2026-03-07 23:30:21,368 - INFO - 
+Using Dev config...
+
+2026-03-07 23:30:23,104 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:30:23,104 - INFO - 
+ creating tables...
+
+2026-03-07 23:30:25,316 - INFO - Database tables created successfully
+2026-03-07 23:30:25,317 - INFO - Application startup complete
+2026-03-07 23:32:28,132 - INFO - Database connections closed
+2026-03-07 23:32:28,133 - INFO - Application shutdown complete
+2026-03-07 23:32:29,334 - INFO - 
+Using Dev config...
+
+2026-03-07 23:32:32,047 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:32:32,048 - INFO - 
+ creating tables...
+
+2026-03-07 23:32:34,385 - INFO - Database tables created successfully
+2026-03-07 23:32:34,388 - INFO - Application startup complete
+2026-03-07 23:32:34,507 - INFO - Database connections closed
+2026-03-07 23:32:34,508 - INFO - Application shutdown complete
+2026-03-07 23:32:36,135 - INFO - 
+Using Dev config...
+
+2026-03-07 23:32:37,913 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:32:37,913 - INFO - 
+ creating tables...
+
+2026-03-07 23:32:40,169 - INFO - Database tables created successfully
+2026-03-07 23:32:40,171 - INFO - Application startup complete
+2026-03-07 23:32:40,285 - INFO - Database connections closed
+2026-03-07 23:32:40,286 - INFO - Application shutdown complete
+2026-03-07 23:32:47,030 - INFO - 
+Using Dev config...
+
+2026-03-07 23:32:48,658 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:32:48,658 - INFO - 
+ creating tables...
+
+2026-03-07 23:32:50,869 - INFO - Database tables created successfully
+2026-03-07 23:32:50,870 - INFO - Application startup complete
+2026-03-07 23:32:57,410 - ERROR - Interview connection error: SQLAlchemyInterviewRepository._to_domain() got an unexpected keyword argument 'job_id'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 99, in start_interview
+    existing = await self._interviews.get_active_for_job_and_candidate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 239, in get_active_for_job_and_candidate
+    return self._to_domain(row, job_id=job_id, candidate_id=candidate_id)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: SQLAlchemyInterviewRepository._to_domain() got an unexpected keyword argument 'job_id'
+2026-03-07 23:33:30,113 - INFO - Database connections closed
+2026-03-07 23:33:30,116 - INFO - Application shutdown complete
+2026-03-07 23:33:31,821 - INFO - 
+Using Dev config...
+
+2026-03-07 23:33:33,807 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:33:33,808 - INFO - 
+ creating tables...
+
+2026-03-07 23:33:36,050 - INFO - Database tables created successfully
+2026-03-07 23:33:36,052 - INFO - Application startup complete
+2026-03-07 23:33:36,162 - INFO - Database connections closed
+2026-03-07 23:33:36,164 - INFO - Application shutdown complete
+2026-03-07 23:33:37,715 - INFO - 
+Using Dev config...
+
+2026-03-07 23:33:39,730 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:33:39,731 - INFO - 
+ creating tables...
+
+2026-03-07 23:33:41,912 - INFO - Database tables created successfully
+2026-03-07 23:33:41,914 - INFO - Application startup complete
+2026-03-07 23:33:42,030 - INFO - Database connections closed
+2026-03-07 23:33:42,031 - INFO - Application shutdown complete
+2026-03-07 23:33:43,658 - INFO - 
+Using Dev config...
+
+2026-03-07 23:33:45,899 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:33:45,899 - INFO - 
+ creating tables...
+
+2026-03-07 23:33:48,135 - INFO - Database tables created successfully
+2026-03-07 23:33:48,136 - INFO - Application startup complete
+2026-03-07 23:33:48,244 - INFO - Database connections closed
+2026-03-07 23:33:48,245 - INFO - Application shutdown complete
+2026-03-07 23:33:49,909 - INFO - 
+Using Dev config...
+
+2026-03-07 23:33:51,942 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:33:51,942 - INFO - 
+ creating tables...
+
+2026-03-07 23:33:54,198 - INFO - Database tables created successfully
+2026-03-07 23:33:54,200 - INFO - Application startup complete
+2026-03-07 23:33:54,311 - INFO - Database connections closed
+2026-03-07 23:33:54,312 - INFO - Application shutdown complete
+2026-03-07 23:33:56,562 - INFO - 
+Using Dev config...
+
+2026-03-07 23:33:58,411 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:33:58,411 - INFO - 
+ creating tables...
+
+2026-03-07 23:34:00,660 - INFO - Database tables created successfully
+2026-03-07 23:34:00,661 - INFO - Application startup complete
+2026-03-07 23:34:00,776 - INFO - Database connections closed
+2026-03-07 23:34:00,777 - INFO - Application shutdown complete
+2026-03-07 23:34:02,517 - INFO - 
+Using Dev config...
+
+2026-03-07 23:34:04,326 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:34:04,326 - INFO - 
+ creating tables...
+
+2026-03-07 23:34:06,606 - INFO - Database tables created successfully
+2026-03-07 23:34:06,608 - INFO - Application startup complete
+2026-03-07 23:34:25,085 - INFO - Database connections closed
+2026-03-07 23:34:25,086 - INFO - Application shutdown complete
+2026-03-07 23:34:27,548 - INFO - 
+Using Dev config...
+
+2026-03-07 23:34:30,025 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:34:30,025 - INFO - 
+ creating tables...
+
+2026-03-07 23:34:32,330 - INFO - Database tables created successfully
+2026-03-07 23:34:32,333 - INFO - Application startup complete
+2026-03-07 23:34:55,366 - INFO - Database connections closed
+2026-03-07 23:34:55,368 - INFO - Application shutdown complete
+2026-03-07 23:34:57,092 - INFO - 
+Using Dev config...
+
+2026-03-07 23:34:59,417 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:34:59,417 - INFO - 
+ creating tables...
+
+2026-03-07 23:35:01,730 - INFO - Database tables created successfully
+2026-03-07 23:35:01,734 - INFO - Application startup complete
+2026-03-07 23:36:09,514 - INFO - Database connections closed
+2026-03-07 23:36:09,514 - INFO - Application shutdown complete
+2026-03-07 23:36:11,328 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:13,477 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:36:13,478 - INFO - 
+ creating tables...
+
+2026-03-07 23:36:15,690 - INFO - Database tables created successfully
+2026-03-07 23:36:15,692 - INFO - Application startup complete
+2026-03-07 23:36:15,810 - INFO - Database connections closed
+2026-03-07 23:36:15,810 - INFO - Application shutdown complete
+2026-03-07 23:36:17,596 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:19,472 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:21,052 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:25,786 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:27,458 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:33,653 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:35,507 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:36:35,508 - INFO - 
+ creating tables...
+
+2026-03-07 23:36:37,724 - INFO - Database tables created successfully
+2026-03-07 23:36:37,726 - INFO - Application startup complete
+2026-03-07 23:36:37,835 - INFO - Database connections closed
+2026-03-07 23:36:37,836 - INFO - Application shutdown complete
+2026-03-07 23:36:39,626 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:41,395 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:36:41,395 - INFO - 
+ creating tables...
+
+2026-03-07 23:36:43,833 - INFO - Database tables created successfully
+2026-03-07 23:36:43,836 - INFO - Application startup complete
+2026-03-07 23:36:43,949 - INFO - Database connections closed
+2026-03-07 23:36:43,949 - INFO - Application shutdown complete
+2026-03-07 23:36:46,516 - INFO - 
+Using Dev config...
+
+2026-03-07 23:36:50,796 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:36:50,806 - INFO - 
+ creating tables...
+
+2026-03-07 23:36:53,049 - INFO - Database tables created successfully
+2026-03-07 23:36:53,050 - INFO - Application startup complete
+2026-03-07 23:37:02,367 - INFO - Database connections closed
+2026-03-07 23:37:02,367 - INFO - Application shutdown complete
+2026-03-07 23:37:04,081 - INFO - 
+Using Dev config...
+
+2026-03-07 23:37:06,097 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:37:06,098 - INFO - 
+ creating tables...
+
+2026-03-07 23:37:08,318 - INFO - Database tables created successfully
+2026-03-07 23:37:08,320 - INFO - Application startup complete
+2026-03-07 23:37:38,950 - INFO - Database connections closed
+2026-03-07 23:37:38,950 - INFO - Application shutdown complete
+2026-03-07 23:37:40,594 - INFO - 
+Using Dev config...
+
+2026-03-07 23:37:42,353 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:37:42,353 - INFO - 
+ creating tables...
+
+2026-03-07 23:37:44,546 - INFO - Database tables created successfully
+2026-03-07 23:37:44,547 - INFO - Application startup complete
+2026-03-07 23:37:44,662 - INFO - Database connections closed
+2026-03-07 23:37:44,663 - INFO - Application shutdown complete
+2026-03-07 23:37:46,062 - INFO - 
+Using Dev config...
+
+2026-03-07 23:37:47,736 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:37:47,737 - INFO - 
+ creating tables...
+
+2026-03-07 23:37:50,020 - INFO - Database tables created successfully
+2026-03-07 23:37:50,022 - INFO - Application startup complete
+2026-03-07 23:38:11,438 - INFO - Database connections closed
+2026-03-07 23:38:11,439 - INFO - Application shutdown complete
+2026-03-07 23:38:16,754 - INFO - 
+Using Dev config...
+
+2026-03-07 23:38:18,364 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:38:18,365 - INFO - 
+ creating tables...
+
+2026-03-07 23:38:20,653 - INFO - Database tables created successfully
+2026-03-07 23:38:20,655 - INFO - Application startup complete
+2026-03-07 23:40:44,754 - INFO - Database connections closed
+2026-03-07 23:40:44,755 - INFO - Application shutdown complete
+2026-03-07 23:40:47,173 - INFO - 
+Using Dev config...
+
+2026-03-07 23:40:50,201 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:40:50,201 - INFO - 
+ creating tables...
+
+2026-03-07 23:40:52,396 - INFO - Database tables created successfully
+2026-03-07 23:40:52,399 - INFO - Application startup complete
+2026-03-07 23:41:07,534 - ERROR - Interview connection error: Interview.__init__() got an unexpected keyword argument 'company_id'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 99, in start_interview
+    existing = await self._interviews.get_active_for_job_and_candidate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 227, in get_active_for_job_and_candidate
+    return self._to_domain(s, job)
+           ~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 297, in _to_domain
+    return Interview(
+        interview_id=session_row.id,
+    ...<10 lines>...
+        updated_at=session_row.updated_at,
+    )
+TypeError: Interview.__init__() got an unexpected keyword argument 'company_id'
+2026-03-07 23:41:40,019 - INFO - Database connections closed
+2026-03-07 23:41:40,020 - INFO - Application shutdown complete
+2026-03-07 23:41:41,737 - INFO - 
+Using Dev config...
+
+2026-03-07 23:41:43,606 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:41:43,606 - INFO - 
+ creating tables...
+
+2026-03-07 23:41:45,800 - INFO - Database tables created successfully
+2026-03-07 23:41:45,802 - INFO - Application startup complete
+2026-03-07 23:41:46,675 - INFO - Database connections closed
+2026-03-07 23:41:46,676 - INFO - Application shutdown complete
+2026-03-07 23:41:48,404 - INFO - 
+Using Dev config...
+
+2026-03-07 23:41:50,296 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:41:50,297 - INFO - 
+ creating tables...
+
+2026-03-07 23:41:52,589 - INFO - Database tables created successfully
+2026-03-07 23:41:52,591 - INFO - Application startup complete
+2026-03-07 23:41:52,702 - INFO - Database connections closed
+2026-03-07 23:41:52,703 - INFO - Application shutdown complete
+2026-03-07 23:41:55,500 - INFO - 
+Using Dev config...
+
+2026-03-07 23:41:57,988 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-07 23:41:57,989 - INFO - 
+ creating tables...
+
+2026-03-07 23:42:00,285 - INFO - Database tables created successfully
+2026-03-07 23:42:00,289 - INFO - Application startup complete
+2026-03-07 23:42:03,231 - INFO - Resuming existing interview a665f71c-f58e-4778-bdb6-04b6fe914101 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-07 23:49:32,511 - INFO - Resuming existing interview a665f71c-f58e-4778-bdb6-04b6fe914101 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-07 23:50:56,264 - INFO - Resuming existing interview a665f71c-f58e-4778-bdb6-04b6fe914101 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-07 23:53:56,167 - INFO - {'PATH': '/api/v1/webrtc/offer', 'METHOD': 'POST', 'STATUS_CODE': 404, 'REQ/RES_TIME': '1.375ms'}
+2026-03-07 23:54:10,493 - INFO - Resuming existing interview a665f71c-f58e-4778-bdb6-04b6fe914101 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:02:28,996 - INFO - Database connections closed
+2026-03-08 00:02:28,997 - INFO - Application shutdown complete
+2026-03-08 00:02:30,808 - INFO - 
+Using Dev config...
+
+2026-03-08 00:02:32,719 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:02:32,719 - INFO - 
+ creating tables...
+
+2026-03-08 00:02:34,978 - INFO - Database tables created successfully
+2026-03-08 00:02:34,980 - INFO - Application startup complete
+2026-03-08 00:02:35,095 - INFO - Database connections closed
+2026-03-08 00:02:35,096 - INFO - Application shutdown complete
+2026-03-08 00:02:38,444 - INFO - 
+Using Dev config...
+
+2026-03-08 00:02:40,368 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:02:40,369 - INFO - 
+ creating tables...
+
+2026-03-08 00:02:42,675 - INFO - Database tables created successfully
+2026-03-08 00:02:42,677 - INFO - Application startup complete
+2026-03-08 00:02:52,604 - INFO - Database connections closed
+2026-03-08 00:02:52,605 - INFO - Application shutdown complete
+2026-03-08 00:02:54,400 - INFO - 
+Using Dev config...
+
+2026-03-08 00:02:56,124 - INFO - 
+Using Dev config...
+
+2026-03-08 00:02:59,622 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:02:59,622 - INFO - 
+ creating tables...
+
+2026-03-08 00:03:01,933 - INFO - Database tables created successfully
+2026-03-08 00:03:01,935 - INFO - Application startup complete
+2026-03-08 00:03:02,052 - INFO - Database connections closed
+2026-03-08 00:03:02,053 - INFO - Application shutdown complete
+2026-03-08 00:03:05,192 - INFO - 
+Using Dev config...
+
+2026-03-08 00:03:09,443 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:03:09,444 - INFO - 
+ creating tables...
+
+2026-03-08 00:03:11,767 - INFO - Database tables created successfully
+2026-03-08 00:03:11,770 - INFO - Application startup complete
+2026-03-08 00:03:13,476 - INFO - Resuming existing interview a665f71c-f58e-4778-bdb6-04b6fe914101 for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:04:49,296 - INFO - Database connections closed
+2026-03-08 00:04:49,297 - INFO - Application shutdown complete
+2026-03-08 00:04:52,026 - INFO - 
+Using Dev config...
+
+2026-03-08 00:04:54,086 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:04:54,086 - INFO - 
+ creating tables...
+
+2026-03-08 00:04:56,397 - INFO - Database tables created successfully
+2026-03-08 00:04:56,401 - INFO - Application startup complete
+2026-03-08 00:04:56,510 - INFO - Database connections closed
+2026-03-08 00:04:56,512 - INFO - Application shutdown complete
+2026-03-08 00:04:58,185 - INFO - 
+Using Dev config...
+
+2026-03-08 00:05:00,362 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:05:00,362 - INFO - 
+ creating tables...
+
+2026-03-08 00:05:02,574 - INFO - Database tables created successfully
+2026-03-08 00:05:02,575 - INFO - Application startup complete
+2026-03-08 00:05:02,693 - INFO - Database connections closed
+2026-03-08 00:05:02,694 - INFO - Application shutdown complete
+2026-03-08 00:05:04,332 - INFO - 
+Using Dev config...
+
+2026-03-08 00:05:06,524 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:05:06,524 - INFO - 
+ creating tables...
+
+2026-03-08 00:05:08,805 - INFO - Database tables created successfully
+2026-03-08 00:05:08,808 - INFO - Application startup complete
+2026-03-08 00:05:08,918 - INFO - Database connections closed
+2026-03-08 00:05:08,918 - INFO - Application shutdown complete
+2026-03-08 00:05:11,310 - INFO - 
+Using Dev config...
+
+2026-03-08 00:05:14,123 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:05:14,123 - INFO - 
+ creating tables...
+
+2026-03-08 00:05:16,501 - INFO - Database tables created successfully
+2026-03-08 00:05:16,503 - INFO - Application startup complete
+2026-03-08 00:05:22,027 - ERROR - Interview connection error: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 110, in start_interview
+    candidate.register_active_interview(job_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\candidate.py", line 231, in register_active_interview
+    raise ValueError(
+        f"Candidate already has an active interview for job {job_id}"
+    )
+ValueError: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:05:33,833 - ERROR - Interview connection error: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 110, in start_interview
+    candidate.register_active_interview(job_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\candidate.py", line 231, in register_active_interview
+    raise ValueError(
+        f"Candidate already has an active interview for job {job_id}"
+    )
+ValueError: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:05:40,764 - INFO - Database connections closed
+2026-03-08 00:05:40,764 - INFO - Application shutdown complete
+2026-03-08 00:05:42,523 - INFO - 
+Using Dev config...
+
+2026-03-08 00:05:44,230 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:05:44,231 - INFO - 
+ creating tables...
+
+2026-03-08 00:05:46,393 - INFO - Database tables created successfully
+2026-03-08 00:05:46,395 - INFO - Application startup complete
+2026-03-08 00:06:16,788 - ERROR - Interview connection error: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 110, in start_interview
+    candidate.register_active_interview(job_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\candidate.py", line 231, in register_active_interview
+    raise ValueError(
+        f"Candidate already has an active interview for job {job_id}"
+    )
+ValueError: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:11:01,169 - INFO - Database connections closed
+2026-03-08 00:11:01,170 - INFO - Application shutdown complete
+2026-03-08 00:11:02,876 - INFO - 
+Using Dev config...
+
+2026-03-08 00:11:04,827 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:11:04,827 - INFO - 
+ creating tables...
+
+2026-03-08 00:11:07,000 - INFO - Database tables created successfully
+2026-03-08 00:11:07,002 - INFO - Application startup complete
+2026-03-08 00:11:07,120 - INFO - Database connections closed
+2026-03-08 00:11:07,120 - INFO - Application shutdown complete
+2026-03-08 00:11:09,169 - INFO - 
+Using Dev config...
+
+2026-03-08 00:11:13,254 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:11:13,255 - INFO - 
+ creating tables...
+
+2026-03-08 00:11:15,568 - INFO - Database tables created successfully
+2026-03-08 00:11:15,570 - INFO - Application startup complete
+2026-03-08 00:11:15,682 - INFO - Database connections closed
+2026-03-08 00:11:15,682 - INFO - Application shutdown complete
+2026-03-08 00:11:18,187 - INFO - 
+Using Dev config...
+
+2026-03-08 00:11:21,944 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:11:21,944 - INFO - 
+ creating tables...
+
+2026-03-08 00:11:24,227 - INFO - Database tables created successfully
+2026-03-08 00:11:24,230 - INFO - Application startup complete
+2026-03-08 00:13:13,144 - INFO - Database connections closed
+2026-03-08 00:13:13,145 - INFO - Application shutdown complete
+2026-03-08 00:13:14,962 - INFO - 
+Using Dev config...
+
+2026-03-08 00:13:21,681 - INFO - 
+Using Dev config...
+
+2026-03-08 00:13:23,514 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:13:23,514 - INFO - 
+ creating tables...
+
+2026-03-08 00:13:25,834 - INFO - Database tables created successfully
+2026-03-08 00:13:25,837 - INFO - Application startup complete
+2026-03-08 00:13:44,382 - INFO - Database connections closed
+2026-03-08 00:13:44,383 - INFO - Application shutdown complete
+2026-03-08 00:13:46,253 - INFO - 
+Using Dev config...
+
+2026-03-08 00:13:49,423 - INFO - 
+Using Dev config...
+
+2026-03-08 00:13:53,405 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:13:53,406 - INFO - 
+ creating tables...
+
+2026-03-08 00:13:55,773 - INFO - Database tables created successfully
+2026-03-08 00:13:55,775 - INFO - Application startup complete
+2026-03-08 00:14:10,360 - INFO - Database connections closed
+2026-03-08 00:14:10,360 - INFO - Application shutdown complete
+2026-03-08 00:14:12,015 - INFO - 
+Using Dev config...
+
+2026-03-08 00:14:15,230 - INFO - 
+Using Dev config...
+
+2026-03-08 00:14:17,178 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:14:17,179 - INFO - 
+ creating tables...
+
+2026-03-08 00:14:19,395 - INFO - Database tables created successfully
+2026-03-08 00:14:19,396 - INFO - Application startup complete
+2026-03-08 00:14:19,516 - INFO - Database connections closed
+2026-03-08 00:14:19,517 - INFO - Application shutdown complete
+2026-03-08 00:14:21,256 - INFO - 
+Using Dev config...
+
+2026-03-08 00:14:23,027 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:14:23,028 - INFO - 
+ creating tables...
+
+2026-03-08 00:14:25,326 - INFO - Database tables created successfully
+2026-03-08 00:14:25,328 - INFO - Application startup complete
+2026-03-08 00:14:25,442 - INFO - Database connections closed
+2026-03-08 00:14:25,443 - INFO - Application shutdown complete
+2026-03-08 00:14:27,097 - INFO - 
+Using Dev config...
+
+2026-03-08 00:14:30,831 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:14:30,831 - INFO - 
+ creating tables...
+
+2026-03-08 00:14:33,064 - INFO - Database tables created successfully
+2026-03-08 00:14:33,065 - INFO - Application startup complete
+2026-03-08 00:14:33,174 - INFO - Database connections closed
+2026-03-08 00:14:33,175 - INFO - Application shutdown complete
+2026-03-08 00:14:35,135 - INFO - 
+Using Dev config...
+
+2026-03-08 00:14:37,255 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:14:37,256 - INFO - 
+ creating tables...
+
+2026-03-08 00:14:39,475 - INFO - Database tables created successfully
+2026-03-08 00:14:39,477 - INFO - Application startup complete
+2026-03-08 00:14:41,578 - ERROR - Interview connection error: cannot access local variable 'existing' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 98, in start_interview
+    f"Resume check: existing={existing}, "
+                              ^^^^^^^^
+UnboundLocalError: cannot access local variable 'existing' where it is not associated with a value
+2026-03-08 00:15:01,001 - INFO - Database connections closed
+2026-03-08 00:15:01,001 - INFO - Application shutdown complete
+2026-03-08 00:15:02,621 - INFO - 
+Using Dev config...
+
+2026-03-08 00:15:04,547 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:15:04,548 - INFO - 
+ creating tables...
+
+2026-03-08 00:15:06,737 - INFO - Database tables created successfully
+2026-03-08 00:15:06,738 - INFO - Application startup complete
+2026-03-08 00:15:06,851 - INFO - Database connections closed
+2026-03-08 00:15:06,852 - INFO - Application shutdown complete
+2026-03-08 00:15:08,540 - INFO - 
+Using Dev config...
+
+2026-03-08 00:15:11,775 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:15:11,775 - INFO - 
+ creating tables...
+
+2026-03-08 00:15:13,995 - INFO - Database tables created successfully
+2026-03-08 00:15:13,997 - INFO - Application startup complete
+2026-03-08 00:15:14,105 - INFO - Database connections closed
+2026-03-08 00:15:14,106 - INFO - Application shutdown complete
+2026-03-08 00:15:15,589 - INFO - 
+Using Dev config...
+
+2026-03-08 00:15:17,314 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:15:17,315 - INFO - 
+ creating tables...
+
+2026-03-08 00:15:19,542 - INFO - Database tables created successfully
+2026-03-08 00:15:19,544 - INFO - Application startup complete
+2026-03-08 00:15:25,566 - ERROR - Interview connection error: Interview.__init__() got an unexpected keyword argument 'company_id'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 98, in start_interview
+    existing = await self._interviews.get_active_for_job_and_candidate(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 227, in get_active_for_job_and_candidate
+    return self._to_domain(s, job)
+           ~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\db\repositories\interview_repository.py", line 302, in _to_domain
+    return Interview(
+        interview_id=session_row.id,
+    ...<10 lines>...
+        updated_at=_ensure_tz(session_row.updated_at),
+    )
+TypeError: Interview.__init__() got an unexpected keyword argument 'company_id'
+2026-03-08 00:15:51,889 - INFO - Database connections closed
+2026-03-08 00:15:51,890 - INFO - Application shutdown complete
+2026-03-08 00:15:53,525 - INFO - 
+Using Dev config...
+
+2026-03-08 00:15:55,275 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:15:55,276 - INFO - 
+ creating tables...
+
+2026-03-08 00:15:57,501 - INFO - Database tables created successfully
+2026-03-08 00:15:57,502 - INFO - Application startup complete
+2026-03-08 00:15:57,623 - INFO - Database connections closed
+2026-03-08 00:15:57,623 - INFO - Application shutdown complete
+2026-03-08 00:15:59,223 - INFO - 
+Using Dev config...
+
+2026-03-08 00:16:00,909 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:16:00,909 - INFO - 
+ creating tables...
+
+2026-03-08 00:16:03,112 - INFO - Database tables created successfully
+2026-03-08 00:16:03,114 - INFO - Application startup complete
+2026-03-08 00:16:10,014 - ERROR - Interview connection error: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 136, in run
+    interview = await self._orchestration.start_interview(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\application\services\interview_orchestration.py", line 119, in start_interview
+    candidate.register_active_interview(job_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_core\domain\candidate.py", line 231, in register_active_interview
+    raise ValueError(
+        f"Candidate already has an active interview for job {job_id}"
+    )
+ValueError: Candidate already has an active interview for job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:18:27,033 - INFO - Interview f0687440-95e0-40ee-8944-2f9d29289d6f started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:21:01,032 - INFO - Database connections closed
+2026-03-08 00:21:01,033 - INFO - Application shutdown complete
+2026-03-08 00:21:02,863 - INFO - 
+Using Dev config...
+
+2026-03-08 00:21:04,733 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:21:04,733 - INFO - 
+ creating tables...
+
+2026-03-08 00:21:06,934 - INFO - Database tables created successfully
+2026-03-08 00:21:06,936 - INFO - Application startup complete
+2026-03-08 00:21:14,251 - INFO - Database connections closed
+2026-03-08 00:21:14,252 - INFO - Application shutdown complete
+2026-03-08 00:21:15,808 - INFO - 
+Using Dev config...
+
+2026-03-08 00:21:17,840 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:21:17,841 - INFO - 
+ creating tables...
+
+2026-03-08 00:21:20,101 - INFO - Database tables created successfully
+2026-03-08 00:21:20,102 - INFO - Application startup complete
+2026-03-08 00:21:20,210 - INFO - Database connections closed
+2026-03-08 00:21:20,210 - INFO - Application shutdown complete
+2026-03-08 00:21:21,781 - INFO - 
+Using Dev config...
+
+2026-03-08 00:21:24,151 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:21:24,152 - INFO - 
+ creating tables...
+
+2026-03-08 00:21:26,405 - INFO - Database tables created successfully
+2026-03-08 00:21:26,407 - INFO - Application startup complete
+2026-03-08 00:22:32,196 - INFO - Resuming existing interview f0687440-95e0-40ee-8944-2f9d29289d6f for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:23:34,318 - INFO - Resuming existing interview f0687440-95e0-40ee-8944-2f9d29289d6f for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:26:56,659 - INFO - Database connections closed
+2026-03-08 00:26:56,660 - INFO - Application shutdown complete
+2026-03-08 00:26:58,671 - INFO - 
+Using Dev config...
+
+2026-03-08 00:27:03,373 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:27:03,373 - INFO - 
+ creating tables...
+
+2026-03-08 00:27:05,568 - INFO - Database tables created successfully
+2026-03-08 00:27:05,570 - INFO - Application startup complete
+2026-03-08 00:27:05,684 - INFO - Database connections closed
+2026-03-08 00:27:05,685 - INFO - Application shutdown complete
+2026-03-08 00:27:07,797 - INFO - 
+Using Dev config...
+
+2026-03-08 00:27:10,514 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:27:10,515 - INFO - 
+ creating tables...
+
+2026-03-08 00:27:12,726 - INFO - Database tables created successfully
+2026-03-08 00:27:12,728 - INFO - Application startup complete
+2026-03-08 00:27:13,711 - INFO - Database connections closed
+2026-03-08 00:27:13,714 - INFO - Application shutdown complete
+2026-03-08 00:27:15,308 - INFO - 
+Using Dev config...
+
+2026-03-08 00:27:17,217 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:27:17,218 - INFO - 
+ creating tables...
+
+2026-03-08 00:27:19,629 - INFO - Database tables created successfully
+2026-03-08 00:27:19,632 - INFO - Application startup complete
+2026-03-08 00:28:06,621 - INFO - Resuming existing interview f0687440-95e0-40ee-8944-2f9d29289d6f for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:28:06,633 - INFO - WS receive loop started
+2026-03-08 00:28:23,291 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":'v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:29:56,082 - INFO - Resuming existing interview f0687440-95e0-40ee-8944-2f9d29289d6f for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1 / job 183c3d37-c69d-490a-8618-f06e97254317
+2026-03-08 00:29:56,102 - INFO - WS receive loop started
+2026-03-08 00:29:57,977 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:29:57,978 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] Creating RTCPeerConnection
+2026-03-08 00:29:58,054 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] Creating WebRTCClient
+2026-03-08 00:29:58,055 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] Calling setup_handlers
+2026-03-08 00:29:58,055 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] setRemoteDescription
+2026-03-08 00:29:58,056 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] createAnswer
+2026-03-08 00:29:58,056 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] setLocalDescription
+2026-03-08 00:29:58,057 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] WebRTC offer handled, answer ready
+2026-03-08 00:29:58,058 - ERROR - Interview connection error: LiveInterviewAgent.__init__() got an unexpected keyword argument 'genai_client'
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 181, in run
+    agent = LiveInterviewAgent(
+        genai_client=self._live_adapter,
+    ...<5 lines>...
+        on_text_output=self._on_text_output,
+    )
+TypeError: LiveInterviewAgent.__init__() got an unexpected keyword argument 'genai_client'
+2026-03-08 00:29:58,130 - INFO - Interview f0687440-95e0-40ee-8944-2f9d29289d6f abandoned: error
+2026-03-08 00:29:58,131 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] WebRTCClient closed
+2026-03-08 00:29:58,131 - INFO - [bee34616-15bf-449e-9169-2f5e56c3a457] Connection state: closed
+2026-03-08 00:30:31,391 - INFO - Database connections closed
+2026-03-08 00:30:31,391 - INFO - Application shutdown complete
+2026-03-08 00:30:33,575 - INFO - 
+Using Dev config...
+
+2026-03-08 00:30:35,429 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:30:35,430 - INFO - 
+ creating tables...
+
+2026-03-08 00:30:37,632 - INFO - Database tables created successfully
+2026-03-08 00:30:37,634 - INFO - Application startup complete
+2026-03-08 00:30:37,751 - INFO - Database connections closed
+2026-03-08 00:30:37,752 - INFO - Application shutdown complete
+2026-03-08 00:30:39,356 - INFO - 
+Using Dev config...
+
+2026-03-08 00:30:41,067 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:30:41,067 - INFO - 
+ creating tables...
+
+2026-03-08 00:30:43,309 - INFO - Database tables created successfully
+2026-03-08 00:30:43,311 - INFO - Application startup complete
+2026-03-08 00:30:43,420 - INFO - Database connections closed
+2026-03-08 00:30:43,421 - INFO - Application shutdown complete
+2026-03-08 00:30:45,116 - INFO - 
+Using Dev config...
+
+2026-03-08 00:30:46,859 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:30:46,859 - INFO - 
+ creating tables...
+
+2026-03-08 00:30:49,079 - INFO - Database tables created successfully
+2026-03-08 00:30:49,081 - INFO - Application startup complete
+2026-03-08 00:30:57,959 - INFO - Interview fac9bcba-c492-40de-9c14-eef7f941a385 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:30:57,984 - INFO - WS receive loop started
+2026-03-08 00:30:59,482 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:30:59,483 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] Creating RTCPeerConnection
+2026-03-08 00:30:59,493 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] Creating WebRTCClient
+2026-03-08 00:30:59,493 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] Calling setup_handlers
+2026-03-08 00:30:59,494 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] setRemoteDescription
+2026-03-08 00:30:59,495 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] createAnswer
+2026-03-08 00:30:59,496 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] setLocalDescription
+2026-03-08 00:30:59,497 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] WebRTC offer handled, answer ready
+2026-03-08 00:31:01,209 - ERROR - Interview connection error: 1007 None. API key not valid. Please pass a valid API key.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1007 (invalid frame payload data) API key not valid. Please pass a valid API key.; then sent 1007 (invalid frame payload data) API key not valid. Please pass a valid API key.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\agent\live_interview_agent.py", line 55, in run
+    async with self._adapter.open_session(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        system_prompt=build_system_prompt(context),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tools=INTERVIEW_TOOLS,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ) as session:
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\llm\gemini_live.py", line 230, in __aenter__
+    session = await self._cm.__aenter__()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1007 None. API key not valid. Please pass a valid API key.
+2026-03-08 00:31:01,399 - INFO - Interview fac9bcba-c492-40de-9c14-eef7f941a385 abandoned: error
+2026-03-08 00:31:01,400 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] WebRTCClient closed
+2026-03-08 00:31:01,401 - INFO - [02d0bb82-1b63-4203-b0d4-bb58b78467f4] Connection state: closed
+2026-03-08 00:33:38,463 - INFO - Database connections closed
+2026-03-08 00:33:38,463 - INFO - Application shutdown complete
+2026-03-08 00:33:40,220 - INFO - 
+Using Dev config...
+
+2026-03-08 00:33:43,868 - INFO - 
+Using Dev config...
+
+2026-03-08 00:33:48,238 - INFO - 
+Using Dev config...
+
+2026-03-08 00:33:49,977 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:33:49,977 - INFO - 
+ creating tables...
+
+2026-03-08 00:33:52,301 - INFO - Database tables created successfully
+2026-03-08 00:33:52,303 - INFO - Application startup complete
+2026-03-08 00:33:58,799 - INFO - Database connections closed
+2026-03-08 00:33:58,799 - INFO - Application shutdown complete
+2026-03-08 00:34:00,323 - INFO - 
+Using Dev config...
+
+2026-03-08 00:34:02,156 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:34:02,156 - INFO - 
+ creating tables...
+
+2026-03-08 00:34:04,462 - INFO - Database tables created successfully
+2026-03-08 00:34:04,465 - INFO - Application startup complete
+2026-03-08 00:38:02,582 - INFO - Interview 814eb93a-dff2-4f4c-90b0-a8e8403be882 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:38:02,610 - INFO - WS receive loop started
+2026-03-08 00:38:04,147 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:38:04,148 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] Creating RTCPeerConnection
+2026-03-08 00:38:04,174 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] Creating WebRTCClient
+2026-03-08 00:38:04,176 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] Calling setup_handlers
+2026-03-08 00:38:04,178 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] setRemoteDescription
+2026-03-08 00:38:04,179 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] createAnswer
+2026-03-08 00:38:04,181 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] setLocalDescription
+2026-03-08 00:38:04,182 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] WebRTC offer handled, answer ready
+2026-03-08 00:38:05,434 - ERROR - Interview connection error: 1007 None. API key not valid. Please pass a valid API key.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1007 (invalid frame payload data) API key not valid. Please pass a valid API key.; then sent 1007 (invalid frame payload data) API key not valid. Please pass a valid API key.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\agent\live_interview_agent.py", line 55, in run
+    async with self._adapter.open_session(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        system_prompt=build_system_prompt(context),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tools=INTERVIEW_TOOLS,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ) as session:
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\llm\gemini_live.py", line 230, in __aenter__
+    session = await self._cm.__aenter__()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1007 None. API key not valid. Please pass a valid API key.
+2026-03-08 00:38:05,568 - INFO - Interview 814eb93a-dff2-4f4c-90b0-a8e8403be882 abandoned: error
+2026-03-08 00:38:05,569 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] WebRTCClient closed
+2026-03-08 00:38:05,569 - INFO - [a958c4b8-d5f1-43e2-9c44-510f84b8ef6f] Connection state: closed
+2026-03-08 00:38:26,171 - INFO - Database connections closed
+2026-03-08 00:38:26,171 - INFO - Application shutdown complete
+2026-03-08 00:38:31,022 - INFO - 
+Using Dev config...
+
+2026-03-08 00:38:32,784 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:38:32,784 - INFO - 
+ creating tables...
+
+2026-03-08 00:38:35,006 - INFO - Database tables created successfully
+2026-03-08 00:38:35,007 - INFO - Application startup complete
+2026-03-08 00:38:47,901 - INFO - Interview 5493f196-8f32-4207-9a00-4a98d1612db1 started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:38:47,926 - INFO - WS receive loop started
+2026-03-08 00:38:49,775 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:38:49,776 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] Creating RTCPeerConnection
+2026-03-08 00:38:49,785 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] Creating WebRTCClient
+2026-03-08 00:38:49,786 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] Calling setup_handlers
+2026-03-08 00:38:49,787 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] setRemoteDescription
+2026-03-08 00:38:49,787 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] createAnswer
+2026-03-08 00:38:49,788 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] setLocalDescription
+2026-03-08 00:38:49,789 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] WebRTC offer handled, answer ready
+2026-03-08 00:38:50,632 - ERROR - Interview connection error: 1008 None. models/gemini-live-2.5-flash-native-audio is not found for API version v1beta, or is not supported for bidiGenerateContent.
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1008 (policy violation) models/gemini-live-2.5-flash-native-audio is not found for API version v1beta, or is not supported for bidiGenerateContent.; then sent 1008 (policy violation) models/gemini-live-2.5-flash-native-audio is not found for API version v1beta, or is not supported for bidiGenerateContent.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\agent\live_interview_agent.py", line 55, in run
+    async with self._adapter.open_session(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        system_prompt=build_system_prompt(context),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tools=INTERVIEW_TOOLS,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ) as session:
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\llm\gemini_live.py", line 230, in __aenter__
+    session = await self._cm.__aenter__()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1008 None. models/gemini-live-2.5-flash-native-audio is not found for API version v1beta, or is not supported for bidiGenerateContent.
+2026-03-08 00:38:50,749 - INFO - Interview 5493f196-8f32-4207-9a00-4a98d1612db1 abandoned: error
+2026-03-08 00:38:50,750 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] WebRTCClient closed
+2026-03-08 00:38:50,751 - INFO - [ba576974-f342-4679-b182-42cd0f97aeab] Connection state: closed
+2026-03-08 00:40:03,490 - INFO - Database connections closed
+2026-03-08 00:40:03,492 - INFO - Application shutdown complete
+2026-03-08 00:40:05,938 - INFO - 
+Using Dev config...
+
+2026-03-08 00:40:08,989 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:40:08,989 - INFO - 
+ creating tables...
+
+2026-03-08 00:40:11,229 - INFO - Database tables created successfully
+2026-03-08 00:40:11,234 - INFO - Application startup complete
+2026-03-08 00:40:11,372 - INFO - Database connections closed
+2026-03-08 00:40:11,385 - INFO - Application shutdown complete
+2026-03-08 00:40:14,057 - INFO - 
+Using Dev config...
+
+2026-03-08 00:40:16,477 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:40:16,478 - INFO - 
+ creating tables...
+
+2026-03-08 00:40:18,646 - INFO - Database tables created successfully
+2026-03-08 00:40:18,647 - INFO - Application startup complete
+2026-03-08 00:40:18,761 - INFO - Database connections closed
+2026-03-08 00:40:18,762 - INFO - Application shutdown complete
+2026-03-08 00:40:20,270 - INFO - 
+Using Dev config...
+
+2026-03-08 00:40:22,283 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:40:22,283 - INFO - 
+ creating tables...
+
+2026-03-08 00:40:24,522 - INFO - Database tables created successfully
+2026-03-08 00:40:24,524 - INFO - Application startup complete
+2026-03-08 00:40:24,641 - INFO - Database connections closed
+2026-03-08 00:40:24,642 - INFO - Application shutdown complete
+2026-03-08 00:40:27,804 - INFO - 
+Using Dev config...
+
+2026-03-08 00:40:32,500 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:40:32,501 - INFO - 
+ creating tables...
+
+2026-03-08 00:40:34,837 - INFO - Database tables created successfully
+2026-03-08 00:40:34,840 - INFO - Application startup complete
+2026-03-08 00:41:17,177 - INFO - Database connections closed
+2026-03-08 00:41:17,178 - INFO - Application shutdown complete
+2026-03-08 00:41:18,842 - INFO - 
+Using Dev config...
+
+2026-03-08 00:41:20,680 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:41:20,723 - INFO - 
+ creating tables...
+
+2026-03-08 00:41:23,030 - INFO - Database tables created successfully
+2026-03-08 00:41:23,032 - INFO - Application startup complete
+2026-03-08 00:41:23,144 - INFO - Database connections closed
+2026-03-08 00:41:23,146 - INFO - Application shutdown complete
+2026-03-08 00:41:25,274 - INFO - 
+Using Dev config...
+
+2026-03-08 00:41:27,163 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:41:27,163 - INFO - 
+ creating tables...
+
+2026-03-08 00:41:29,463 - INFO - Database tables created successfully
+2026-03-08 00:41:29,466 - INFO - Application startup complete
+2026-03-08 00:41:29,590 - INFO - Database connections closed
+2026-03-08 00:41:29,594 - INFO - Application shutdown complete
+2026-03-08 00:41:32,969 - INFO - 
+Using Dev config...
+
+2026-03-08 00:41:36,700 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:41:36,701 - INFO - 
+ creating tables...
+
+2026-03-08 00:41:38,968 - INFO - Database tables created successfully
+2026-03-08 00:41:38,970 - INFO - Application startup complete
+2026-03-08 00:41:49,929 - INFO - Interview e6b29e75-0131-4cd1-9850-0011b0793eda started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:41:49,955 - INFO - WS receive loop started
+2026-03-08 00:41:51,414 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:41:51,415 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] Creating RTCPeerConnection
+2026-03-08 00:41:51,427 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] Creating WebRTCClient
+2026-03-08 00:41:51,428 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] Calling setup_handlers
+2026-03-08 00:41:51,429 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] setRemoteDescription
+2026-03-08 00:41:51,430 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] createAnswer
+2026-03-08 00:41:51,431 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] setLocalDescription
+2026-03-08 00:41:51,431 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] WebRTC offer handled, answer ready
+2026-03-08 00:41:52,755 - ERROR - Interview connection error: 1008 None. models/gemini-2.0-flash-live-001 is not found for API version v1beta, or is not supported for bidiGenerateContent. Call Lis
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1008 (policy violation) models/gemini-2.0-flash-live-001 is not found for API version v1beta, or is not supported for bidiGenerateContent. Call Lis; then sent 1008 (policy violation) models/gemini-2.0-flash-live-001 is not found for API version v1beta, or is not supported for bidiGenerateContent. Call Lis
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\agent\live_interview_agent.py", line 55, in run
+    async with self._adapter.open_session(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        system_prompt=build_system_prompt(context),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tools=INTERVIEW_TOOLS,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ) as session:
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\llm\gemini_live.py", line 230, in __aenter__
+    session = await self._cm.__aenter__()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1008 None. models/gemini-2.0-flash-live-001 is not found for API version v1beta, or is not supported for bidiGenerateContent. Call Lis
+2026-03-08 00:41:52,842 - INFO - Interview e6b29e75-0131-4cd1-9850-0011b0793eda abandoned: error
+2026-03-08 00:41:52,843 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] WebRTCClient closed
+2026-03-08 00:41:52,844 - INFO - [d5271c4c-3806-4784-89ba-fb0d5b973ec1] Connection state: closed
+2026-03-08 00:46:43,282 - INFO - Database connections closed
+2026-03-08 00:46:43,283 - INFO - Application shutdown complete
+2026-03-08 00:46:45,017 - INFO - 
+Using Dev config...
+
+2026-03-08 00:46:46,922 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:46:46,923 - INFO - 
+ creating tables...
+
+2026-03-08 00:46:49,120 - INFO - Database tables created successfully
+2026-03-08 00:46:49,121 - INFO - Application startup complete
+2026-03-08 00:46:49,234 - INFO - Database connections closed
+2026-03-08 00:46:49,235 - INFO - Application shutdown complete
+2026-03-08 00:46:50,785 - INFO - 
+Using Dev config...
+
+2026-03-08 00:46:52,410 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:46:52,411 - INFO - 
+ creating tables...
+
+2026-03-08 00:46:54,623 - INFO - Database tables created successfully
+2026-03-08 00:46:54,626 - INFO - Application startup complete
+2026-03-08 00:46:54,743 - INFO - Database connections closed
+2026-03-08 00:46:54,744 - INFO - Application shutdown complete
+2026-03-08 00:46:56,377 - INFO - 
+Using Dev config...
+
+2026-03-08 00:46:58,342 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:46:58,342 - INFO - 
+ creating tables...
+
+2026-03-08 00:47:00,613 - INFO - Database tables created successfully
+2026-03-08 00:47:00,616 - INFO - Application startup complete
+2026-03-08 00:47:00,730 - INFO - Database connections closed
+2026-03-08 00:47:00,731 - INFO - Application shutdown complete
+2026-03-08 00:47:02,307 - INFO - 
+Using Dev config...
+
+2026-03-08 00:47:04,232 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:47:04,233 - INFO - 
+ creating tables...
+
+2026-03-08 00:47:06,504 - INFO - Database tables created successfully
+2026-03-08 00:47:06,507 - INFO - Application startup complete
+2026-03-08 00:47:13,090 - INFO - Interview a9c5f6c8-42f6-414b-9485-1bd4db722a7c started for candidate aa6f4e32-67b9-489e-b000-4de830d85cb1
+2026-03-08 00:47:13,118 - INFO - WS receive loop started
+2026-03-08 00:47:14,950 - INFO - WS message received: {
+    "type":"webrtc_offer",
+    "sdp":"v=0\r\no=- 4860812014277402720 2 IN IP4 127.0.0.1\r\ns…:2\
+2026-03-08 00:47:14,951 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] Creating RTCPeerConnection
+2026-03-08 00:47:14,963 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] Creating WebRTCClient
+2026-03-08 00:47:14,964 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] Calling setup_handlers
+2026-03-08 00:47:14,965 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] setRemoteDescription
+2026-03-08 00:47:14,966 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] createAnswer
+2026-03-08 00:47:14,967 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] setLocalDescription
+2026-03-08 00:47:14,968 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] WebRTC offer handled, answer ready
+2026-03-08 00:47:15,993 - ERROR - Interview connection error: 1008 None. models/gemini-live-2.5-flash-preview is not found for API version v1beta, or is not supported for bidiGenerateContent. Call
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1008 (policy violation) models/gemini-live-2.5-flash-preview is not found for API version v1beta, or is not supported for bidiGenerateContent. Call; then sent 1008 (policy violation) models/gemini-live-2.5-flash-preview is not found for API version v1beta, or is not supported for bidiGenerateContent. Call
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_api\api\v1\ws\interview_websocket.py", line 194, in run
+    await asyncio.gather(agent_task, ws_task, interrupt_task)
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\agent\live_interview_agent.py", line 55, in run
+    async with self._adapter.open_session(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        system_prompt=build_system_prompt(context),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        tools=INTERVIEW_TOOLS,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ) as session:
+    ^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\src\truefit_infra\llm\gemini_live.py", line 230, in __aenter__
+    session = await self._cm.__aenter__()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HomePC\dev\truefit.ai\apps\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1008 None. models/gemini-live-2.5-flash-preview is not found for API version v1beta, or is not supported for bidiGenerateContent. Call
+2026-03-08 00:47:16,054 - INFO - Interview a9c5f6c8-42f6-414b-9485-1bd4db722a7c abandoned: error
+2026-03-08 00:47:16,054 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] WebRTCClient closed
+2026-03-08 00:47:16,055 - INFO - [905dc28e-f173-4e53-abf2-8be6a2cf2d5b] Connection state: closed
+2026-03-08 00:58:42,900 - INFO - Database connections closed
+2026-03-08 00:58:42,900 - INFO - Application shutdown complete
+2026-03-08 00:58:44,715 - INFO - 
+Using Dev config...
+
+2026-03-08 00:58:46,614 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:58:46,615 - INFO - 
+ creating tables...
+
+2026-03-08 00:58:48,822 - INFO - Database tables created successfully
+2026-03-08 00:58:48,824 - INFO - Application startup complete
+2026-03-08 00:58:53,949 - INFO - Database connections closed
+2026-03-08 00:58:53,949 - INFO - Application shutdown complete
+2026-03-08 00:58:55,516 - INFO - 
+Using Dev config...
+
+2026-03-08 00:58:57,195 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:58:57,195 - INFO - 
+ creating tables...
+
+2026-03-08 00:58:59,433 - INFO - Database tables created successfully
+2026-03-08 00:58:59,436 - INFO - Application startup complete
+2026-03-08 00:59:20,837 - INFO - Database connections closed
+2026-03-08 00:59:20,838 - INFO - Application shutdown complete
+2026-03-08 00:59:22,547 - INFO - 
+Using Dev config...
+
+2026-03-08 00:59:24,299 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:59:24,299 - INFO - 
+ creating tables...
+
+2026-03-08 00:59:26,561 - INFO - Database tables created successfully
+2026-03-08 00:59:26,563 - INFO - Application startup complete
+2026-03-08 00:59:45,436 - INFO - Database connections closed
+2026-03-08 00:59:45,437 - INFO - Application shutdown complete
+2026-03-08 00:59:47,064 - INFO - 
+Using Dev config...
+
+2026-03-08 00:59:48,958 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 00:59:48,958 - INFO - 
+ creating tables...
+
+2026-03-08 00:59:51,285 - INFO - Database tables created successfully
+2026-03-08 00:59:51,288 - INFO - Application startup complete
+2026-03-08 00:59:58,191 - INFO - Database connections closed
+2026-03-08 00:59:58,192 - INFO - Application shutdown complete
+2026-03-08 00:59:59,814 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:01,741 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:01,742 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:04,047 - INFO - Database tables created successfully
+2026-03-08 01:00:04,049 - INFO - Application startup complete
+2026-03-08 01:00:10,108 - INFO - Database connections closed
+2026-03-08 01:00:10,109 - INFO - Application shutdown complete
+2026-03-08 01:00:11,842 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:14,037 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:14,038 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:16,249 - INFO - Database tables created successfully
+2026-03-08 01:00:16,251 - INFO - Application startup complete
+2026-03-08 01:00:18,857 - INFO - Database connections closed
+2026-03-08 01:00:18,858 - INFO - Application shutdown complete
+2026-03-08 01:00:20,409 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:22,279 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:22,279 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:24,597 - INFO - Database tables created successfully
+2026-03-08 01:00:24,599 - INFO - Application startup complete
+2026-03-08 01:00:24,818 - INFO - Database connections closed
+2026-03-08 01:00:24,819 - INFO - Application shutdown complete
+2026-03-08 01:00:26,548 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:28,251 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:28,251 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:30,474 - INFO - Database tables created successfully
+2026-03-08 01:00:30,476 - INFO - Application startup complete
+2026-03-08 01:00:33,604 - INFO - Database connections closed
+2026-03-08 01:00:33,609 - INFO - Application shutdown complete
+2026-03-08 01:00:35,148 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:36,794 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:36,794 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:39,053 - INFO - Database tables created successfully
+2026-03-08 01:00:39,054 - INFO - Application startup complete
+2026-03-08 01:00:51,529 - INFO - Database connections closed
+2026-03-08 01:00:51,531 - INFO - Application shutdown complete
+2026-03-08 01:00:53,072 - INFO - 
+Using Dev config...
+
+2026-03-08 01:00:54,800 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:00:54,800 - INFO - 
+ creating tables...
+
+2026-03-08 01:00:57,072 - INFO - Database tables created successfully
+2026-03-08 01:00:57,074 - INFO - Application startup complete
+2026-03-08 01:01:01,262 - INFO - Database connections closed
+2026-03-08 01:01:01,266 - INFO - Application shutdown complete
+2026-03-08 01:01:03,007 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:04,754 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:04,754 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:06,992 - INFO - Database tables created successfully
+2026-03-08 01:01:06,994 - INFO - Application startup complete
+2026-03-08 01:01:07,101 - INFO - Database connections closed
+2026-03-08 01:01:07,102 - INFO - Application shutdown complete
+2026-03-08 01:01:08,846 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:10,489 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:10,489 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:12,696 - INFO - Database tables created successfully
+2026-03-08 01:01:12,698 - INFO - Application startup complete
+2026-03-08 01:01:12,806 - INFO - Database connections closed
+2026-03-08 01:01:12,806 - INFO - Application shutdown complete
+2026-03-08 01:01:14,241 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:15,972 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:15,972 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:18,205 - INFO - Database tables created successfully
+2026-03-08 01:01:18,207 - INFO - Application startup complete
+2026-03-08 01:01:23,705 - INFO - Database connections closed
+2026-03-08 01:01:23,706 - INFO - Application shutdown complete
+2026-03-08 01:01:25,220 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:27,184 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:27,185 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:29,485 - INFO - Database tables created successfully
+2026-03-08 01:01:29,487 - INFO - Application startup complete
+2026-03-08 01:01:29,608 - INFO - Database connections closed
+2026-03-08 01:01:29,609 - INFO - Application shutdown complete
+2026-03-08 01:01:31,251 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:33,191 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:33,192 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:35,434 - INFO - Database tables created successfully
+2026-03-08 01:01:35,441 - INFO - Application startup complete
+2026-03-08 01:01:35,555 - INFO - Database connections closed
+2026-03-08 01:01:35,556 - INFO - Application shutdown complete
+2026-03-08 01:01:37,187 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:38,942 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:38,943 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:41,129 - INFO - Database tables created successfully
+2026-03-08 01:01:41,130 - INFO - Application startup complete
+2026-03-08 01:01:41,240 - INFO - Database connections closed
+2026-03-08 01:01:41,241 - INFO - Application shutdown complete
+2026-03-08 01:01:42,833 - INFO - 
+Using Dev config...
+
+2026-03-08 01:01:44,784 - INFO - Database initialized with URL: postgresql+asyncpg://bellz:AdminPassword@localhost:5432/truefit_db
+2026-03-08 01:01:44,784 - INFO - 
+ creating tables...
+
+2026-03-08 01:01:47,119 - INFO - Database tables created successfully
+2026-03-08 01:01:47,123 - INFO - Application startup complete
+2026-03-08 01:01:50,331 - INFO - Database connections closed
+2026-03-08 01:01:50,332 - INFO - Application shutdown complete
