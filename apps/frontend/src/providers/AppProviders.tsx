@@ -16,7 +16,7 @@ const AppProviders = ({ children }: AppProviderProp) => {
         <AuthProvider>
         <Router>
             <SidebarProvider>
-                <AppSidebar />
+                {/* <AppSidebar /> */}
                 <main>
                     {children}
                 </main>

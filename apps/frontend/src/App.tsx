@@ -11,18 +11,15 @@ import ITVPage from '@/pages/ItvPage';
 
 function App() {
   return (
-    <>
+    <div className="w-full min-h-screen">
       <Routes>
-        {/* Public Routes */}
         <Route index element={<Landing />} />
-        {/* Protected Routes */}
-        <Route element={<ProtectedRoute />} >
+        <Route element={<ProtectedRoute />}>
           <Route path="intervew/:sessionId" element={<InterviewPage />} />
         </Route>
-        {/* Test interview setup */}
         <Route path="itv/:jobId/:candidateId" element={<ITVPage/>} />
       </Routes>
-    </>
+    </div>
   )
 }
 
