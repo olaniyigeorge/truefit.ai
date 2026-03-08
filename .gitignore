@@ -218,3 +218,5 @@ dist/
 .venv/
 .pytest_cache/
 *.pyc
+"logs/" 
+"logs/" 
