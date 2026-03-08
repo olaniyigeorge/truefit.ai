@@ -671,6 +671,7 @@ export default function ItvPage() {
 
   if (started && jobId && candidateId) {
     return (
+      
       <InterviewRoom
         jobId={jobId}
         candidateId={candidateId}
@@ -680,13 +681,26 @@ export default function ItvPage() {
   }
 
   return (
-    <SetupScreen
-      jobId={jobId}
-      candidateId={candidateId}
-      onJobIdChange={setJobId}
-      onCandidateIdChange={setCandidateId}
-      onStart={handleStart}
-      isConnecting={isConnecting}
-    />
+<div
+  className="min-w-screen flex items-center justify-center h-screen"
+  style={{
+    background: "#030712",
+    backgroundImage: `
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34,197,94,0.12) 6%, transparent 95%),
+      linear-gradient(rgba(34,197,94,0.03) 0.5px, transparent 1px),
+      linear-gradient(90deg, rgba(34,197,94,0.03) 0.5px, transparent 1px)
+    `,
+    backgroundSize: "100% 100%, 48px 48px, 48px 48px",
+  }}
+>
+  <SetupScreen
+    jobId={jobId}
+    candidateId={candidateId}
+    onJobIdChange={setJobId}
+    onCandidateIdChange={setCandidateId}
+    onStart={handleStart}
+    isConnecting={isConnecting}
+  />
+</div>
   )
 }

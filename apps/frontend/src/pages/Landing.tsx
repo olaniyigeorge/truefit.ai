@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react"
 
 // ── Animated counter ──────────────────────────────────────────────────────────
@@ -158,8 +159,11 @@ export default function Landing() {
             color: "#000", fontSize: 13, fontFamily: "monospace",
             fontWeight: 700, cursor: "pointer", transition: "filter 0.15s",
           }}
-            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.1)")}
-            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.filter = "brightness(1)")}
+          // link to "https://forms.gle/truefit-early-access" in production
+          // right now, go to dev test interview page
+          onClick={() => {window.location .href = "http://{}/itv/183c3d37-c69d-490a-8618-f06e97254317/aa6f4e32-67b9-489e-b000-4de830d85cb1".replace("{}", window.location.host)}}
+          onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.1)")}
+          onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.filter = "brightness(1)")}
           >Get Early Access</button>
         </div>
       </nav>
