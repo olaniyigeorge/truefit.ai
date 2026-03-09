@@ -57,7 +57,7 @@ const SignIn = () => {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input type="email" placeholder="enter your email" {...field} />
+                                    <Input type="email" placeholder="Email" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -71,7 +71,7 @@ const SignIn = () => {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input type="password" placeholder="enter your password" {...field} />
+                                    <Input type="password" placeholder="Password" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -95,7 +95,7 @@ const SignIn = () => {
                 </div>
                 </div>
 
-                <Button variant="outline" className="w-full text-red-400" onClick={handleGoogleSignIn}>
+                <Button variant="outline" className="w-full text-red-400 hover:text-white" onClick={handleGoogleSignIn}>
                     Continue with Google
                 </Button>
 

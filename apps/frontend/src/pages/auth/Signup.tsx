@@ -56,7 +56,7 @@ const SignUp = () => {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input type="email" placeholder="enter your email" {...field} />
+                                            <Input type="email" placeholder="Email" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -70,7 +70,7 @@ const SignUp = () => {
                                     <FormItem>
                                         <FormLabel>Password</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="enter your password" {...field} />
+                                            <Input type="password" placeholder="Password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -84,7 +84,7 @@ const SignUp = () => {
                                     <FormItem>
                                         <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="confirm your password" {...field} />
+                                            <Input type="password" placeholder="Confirm your password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -108,13 +108,13 @@ const SignUp = () => {
                         </div>
                         </div>
         
-                        <Button variant="outline" className="w-full text-red-400" onClick={handleGoogleSignIn}>
+                        <Button variant="outline" className="w-full text-red-400 hover:text-white" onClick={handleGoogleSignIn}>
                             Continue with Google
                         </Button>
         
                         <p>
                             Already have an account?{' '}
-                            <Link to="/signup" className="text-primary hover:underline">
+                            <Link to="/signin" className="text-primary hover:underline">
                                 Sign In
                             </Link>
                         </p>
