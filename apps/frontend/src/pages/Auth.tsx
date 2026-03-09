@@ -12,7 +12,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 
 const googleProvider = new GoogleAuthProvider();
 
-const SignIn = () => {
+const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname ?? '/dashboard';
@@ -105,4 +105,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn
+export default AuthPage

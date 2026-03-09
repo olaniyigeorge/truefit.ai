@@ -8,7 +8,7 @@ import InterviewPage from '@/pages/InterviewPage';
 import Verification from "@/pages/Verification"
 import ITVPage from '@/pages/ItvPage';
 import Dashboard from "@/pages/Dashboard"
-import Auth from "@/pages/Auth"
+import AuthPage from "@/pages/Auth"
 
 
 
@@ -18,7 +18,7 @@ function App() {
     <div className="w-full min-h-screen">
       <Routes>
         <Route index element={<Landing />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/verify" element={<Verification />} />
         {/* protectedRoute:  protectes authenticated routes */}
         <Route element={<ProtectedRoute />}>
