@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from sqlalchemy import delete, func, select
@@ -37,110 +37,102 @@ from src.truefit_infra.db.models import (
 class SQLAlchemyInterviewRepository(InterviewRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
-
+    
     async def save(self, interview: Interview) -> None:
-        """
-        Upsert-ish behavior:
-        - If session exists, update status/timestamps and replace turns (simple + safe).
-        - If it doesn't, create session, then insert turns.
-        """
         async with self._db.get_session() as session:
-            # 1) Load existing session (and its turns)
-            existing = await session.execute(
-                select(InterviewSession)
-                .where(InterviewSession.id == interview.id)  # or interview.interview_id depending on your domain
-                .options(selectinload(InterviewSession.turns))
-            )
-            session_row = existing.scalar_one_or_none()
 
-            # 2) Create or update the InterviewSession row
+            # 1) Load existing session WITH turns eagerly
+            result = await session.execute(
+                select(InterviewSession)
+                .where(InterviewSession.id == interview.id)
+                .options(selectinload(InterviewSession.turns))  # ← must be here
+            )
+            session_row = result.scalar_one_or_none()
+
+            # 2) Create or update InterviewSession row
             if session_row is None:
-                # We need application_id to create a session.
-                # Domain interview must carry application_id OR we must find it by (job_id, candidate_id).
-                # Here we resolve application_id by job_id + candidate_id.
-                app_res = await session.execute(
-                    select(Application)
-                    .where(
+                app_result = await session.execute(
+                    select(Application).where(
                         Application.job_id == interview.job_id,
                         Application.candidate_id == interview.candidate_id,
                     )
                 )
-                app = app_res.scalar_one_or_none()
+                app = app_result.scalar_one_or_none()
                 if app is None:
-                    raise ValueError("Application not found for job_id + candidate_id; cannot create InterviewSession.")
+                    raise ValueError(
+                        "Application not found for job_id + candidate_id; "
+                        "create an application before starting an interview."
+                    )
 
                 session_row = InterviewSession(
-                    id=interview.id,  # or interview.interview_id
+                    id=interview.id,
                     application_id=app.id,
                     round=1,
                     status=interview.status.value,
                     started_at=interview.started_at,
                     ended_at=interview.ended_at,
-                    # realtime/context_snapshot can stay defaults
                 )
                 session.add(session_row)
-                await session.flush()  # ensures session_row exists for FK inserts
+                await session.flush()
+                existing_turns = []  # ← new row, no turns to delete
 
             else:
-                session_row.status = interview.status.value
+                session_row.status     = interview.status.value
                 session_row.started_at = interview.started_at
-                session_row.ended_at = interview.ended_at
+                session_row.ended_at   = interview.ended_at
+                # turns were eagerly loaded above — safe to access here
+                existing_turns = list(session_row.turns)
 
-            # 3) Replace turns (simple approach; ok for hackathon scale)
-            # Delete existing turns then insert fresh sequence
-            if session_row.turns:
-                for t in session_row.turns:
-                    await session.delete(t)
+            # 3) Delete existing turns synchronously within the session
+            for t in existing_turns:
+                await session.delete(t)
+            if existing_turns:
                 await session.flush()
 
-            # Insert new turns with sequential numbering
-            for i, turn in enumerate(interview.turns, start=1):
+            # 4) Insert new turns
+            seq = 1
+            for turn in interview.turns:
                 q = turn.question
                 a = turn.answer
 
                 payload = {
-                    "question_id": str(q.id),
-                    "question_text": q.text,
-                    "topic": q.topic,
-                    "follow_up_of": str(q.follow_up_of) if q.follow_up_of else None,
-                    "asked_at": q.asked_at.isoformat(),
-                    "answer_text": a.text if a else None,
-                    "answered_at": a.answered_at.isoformat() if a else None,
+                    "question_id":    str(q.id),
+                    "question_text":  q.text,
+                    "topic":          q.topic,
+                    "follow_up_of":   str(q.follow_up_of) if q.follow_up_of else None,
+                    "asked_at":       q.asked_at.isoformat(),
+                    "answer_text":    a.text if a else None,
+                    "answered_at":    a.answered_at.isoformat() if a else None,
                     "duration_seconds": a.duration_seconds if a else None,
                 }
 
-                # Store as a single "turn" row.
-                # If you want Q and A as separate rows, we can split it.
-                session.add(
-                    InterviewTurn(
-                        session_id=session_row.id,
-                        seq=i,
-                        speaker="agent",        # question asked by agent (adjust if your domain differs)
-                        modality="text",        # adjust if you use audio/video
-                        turn_text=q.text,       # optional
-                        payload=payload,
-                        started_at=q.asked_at,
-                        ended_at=a.answered_at if a else None,
-                    )
-                )
+                session.add(InterviewTurn(
+                    session_id=session_row.id,
+                    seq=seq,
+                    speaker="agent",
+                    modality="text",
+                    turn_text=q.text,
+                    payload=payload,
+                    started_at=q.asked_at,
+                    ended_at=a.answered_at if a else None,
+                ))
+                seq += 1
 
-                # If candidate answered, add another row (optional, but more truthful)
                 if a and a.text:
-                    i += 1
-                    session.add(
-                        InterviewTurn(
-                            session_id=session_row.id,
-                            seq=i,
-                            speaker="candidate",
-                            modality="text",
-                            turn_text=a.text,
-                            payload=payload,
-                            started_at=a.answered_at,
-                            ended_at=a.answered_at,
-                        )
-                    )
+                    session.add(InterviewTurn(
+                        session_id=session_row.id,
+                        seq=seq,
+                        speaker="candidate",
+                        modality="text",
+                        turn_text=a.text,
+                        payload=payload,
+                        started_at=a.answered_at,
+                        ended_at=a.answered_at,
+                    ))
+                    seq += 1
 
             await session.commit()
+
 
     async def get_by_id(self, interview_id: uuid.UUID) -> Optional[Interview]:
         async with self._db.get_session() as session:
@@ -201,7 +193,12 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
             return [self._to_domain(s, job) for s in sessions]
 
-    async def get_active_for_candidate_and_job(self, candidate_id: uuid.UUID, job_id: uuid.UUID) -> Optional[Interview]:
+    async def get_active_for_job_and_candidate(
+        self,
+        *,
+        job_id: uuid.UUID,
+        candidate_id: uuid.UUID,
+    ) -> Optional[Interview]:
         async with self._db.get_session() as session:
             res = await session.execute(
                 select(InterviewSession)
@@ -211,17 +208,25 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                     Application.job_id == job_id,
                     InterviewSession.status == InterviewStatus.ACTIVE.value,
                 )
-                .options(selectinload(InterviewSession.turns), selectinload(InterviewSession.application))
+                .order_by(InterviewSession.started_at.desc())
+                .limit(1)
+                .options(
+                    selectinload(InterviewSession.turns),
+                    selectinload(InterviewSession.application),
+                )
             )
             s = res.scalar_one_or_none()
             if not s:
                 return None
 
-            job_res = await session.execute(select(JobListing).where(JobListing.id == job_id))
+            job_res = await session.execute(
+                select(JobListing).where(JobListing.id == job_id)
+            )
             job = job_res.scalar_one()
 
             return self._to_domain(s, job)
 
+    
     async def list_by_status(self, status: InterviewStatus, *, limit: int = 50, offset: int = 0) -> list[Interview]:
         async with self._db.get_session() as session:
             res = await session.execute(
@@ -263,6 +268,11 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
     def _to_domain(session_row: InterviewSession, job: JobListing) -> Interview:
         app = session_row.application
 
+        def _ensure_tz(dt: Optional[datetime]) -> Optional[datetime]:
+            if dt is None:
+                return None
+            return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+
         # rebuild Turn[] from InterviewTurn rows
         turns: list[Turn] = []
         for t in sorted(session_row.turns, key=lambda x: x.seq):
@@ -293,13 +303,13 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             interview_id=session_row.id,
             job_id=app.job_id,
             candidate_id=app.candidate_id,
-            company_id=job.org_id,
+            org_id=job.org_id,
             status=InterviewStatus(session_row.status),
-            max_questions=session_row.realtime.get("max_questions", 10) if hasattr(session_row, "realtime") else 10,
-            max_duration_minutes=session_row.realtime.get("max_duration_minutes", 30) if hasattr(session_row, "realtime") else 30,
+            max_questions=session_row.realtime.get("max_questions", 10) if session_row.realtime else 10,
+            max_duration_minutes=session_row.realtime.get("max_duration_minutes", 30) if session_row.realtime else 30,
             turns=turns,
-            started_at=session_row.started_at,
-            ended_at=session_row.ended_at,
-            created_at=session_row.created_at,
-            updated_at=session_row.updated_at,
+            started_at=_ensure_tz(session_row.started_at),
+            ended_at=_ensure_tz(session_row.ended_at),
+            created_at=_ensure_tz(session_row.created_at),
+            updated_at=_ensure_tz(session_row.updated_at),
         )

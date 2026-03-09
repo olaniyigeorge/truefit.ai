@@ -85,7 +85,7 @@ class UserService:
             role = UserRole.recruiter
         else:
             # "plain" means no profile created
-            role = UserRole.candidate  # or recruiter; your choice
+            role = UserRole.candidate  # or recruiter
 
         user = User.create(
             email=email_norm,

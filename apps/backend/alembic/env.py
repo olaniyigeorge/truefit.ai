@@ -25,15 +25,14 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-# Assume this is your async DB URL from env or config
 raw_db_url  = AppConfig.DATABASE_URL 
 
 # Replace only the driver part from 'asyncpg' to 'psycopg2'
 sync_db_url = raw_db_url.replace("+asyncpg", "+psycopg2")
 
 
-print(f"\nraw_db_url: {raw_db_url}\n")
-print(f"\nsync_db_url: {sync_db_url}\n")
+# print(f"\nraw_db_url: {raw_db_url}\n")
+# print(f"\nsync_db_url: {sync_db_url}\n")
 
 # Apply to Alembic config
 config.config_ini_section = "alembic"

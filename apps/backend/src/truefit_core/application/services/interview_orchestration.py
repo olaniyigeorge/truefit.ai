@@ -25,7 +25,7 @@ from src.truefit_core.application.ports import (
     DomainEvent,
     InterviewRepository,
     JobRepository,
-    LLMPort,
+    LiveSessionPort,
     QuestionContext,
     QueuePort,
 )
@@ -52,7 +52,7 @@ class InterviewOrchestrationService:
         interview_repo: InterviewRepository,
         job_repo: JobRepository,
         candidate_repo: CandidateRepository,
-        llm: LLMPort,
+        llm: LiveSessionPort,
         queue: QueuePort,
         cache: CachePort,
     ) -> None:
@@ -94,6 +94,28 @@ class InterviewOrchestrationService:
                 raise ValueError(f"Candidate {candidate_id} not found")
             candidate.assert_eligible_to_interview()
 
+            # ── Check for a resumable session before creating a new one ──────
+            existing = await self._interviews.get_active_for_job_and_candidate(
+                job_id=job_id,
+                candidate_id=candidate_id,
+            )
+
+            
+            print(
+                f"Resume check: existing={existing}, "
+                f"status={existing.status if existing else None}, "
+                f"started_at={existing.started_at if existing else None}, "
+                f"tzinfo={existing.started_at.tzinfo if existing and existing.started_at else None}"
+            )
+
+
+            if existing is not None and _is_resumable(existing):
+                logger.info(
+                    f"Resuming existing interview {existing.id} "
+                    f"for candidate {candidate_id} / job {job_id}"
+                )
+                return existing
+
             candidate.register_active_interview(job_id)
 
             config = job.interview_config
@@ -108,6 +130,7 @@ class InterviewOrchestrationService:
 
             await self._interviews.save(interview)
             await self._candidates.save(candidate)
+
 
             await self._queue.publish(DomainEvent(
                 event_type=_EVENT_INTERVIEW_STARTED,
@@ -343,3 +366,22 @@ class InterviewOrchestrationService:
     def _remaining_topics(interview: Interview, all_topics: list[str]) -> list[str]:
         covered = {t.question.topic for t in interview.turns if t.question.topic}
         return [t for t in all_topics if t not in covered] or all_topics
+
+
+
+
+
+# A session is resumable if it's active and started within this window
+_RESUME_WINDOW_SECONDS = 60 * 60  # 1 hour — tune to your max interview duration
+
+def _is_resumable(interview: Interview) -> bool:
+    """
+    True if the interview is active and started recently enough to rejoin.
+    Guards against resuming ghost sessions from days ago.
+    """
+    if interview.status != InterviewStatus.ACTIVE:
+        return False
+    if interview.started_at is None:
+        return False
+    age = (datetime.now(timezone.utc) - interview.started_at).total_seconds()
+    return age <= _RESUME_WINDOW_SECONDS

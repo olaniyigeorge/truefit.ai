@@ -218,3 +218,8 @@ dist/
 .venv/
 .pytest_cache/
 *.pyc
+"logs/" 
+logs/ 
+"apps/backend/logs/"
+apps/backend/logs/
+

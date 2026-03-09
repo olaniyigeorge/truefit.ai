@@ -175,7 +175,6 @@ class EvaluationService:
 
         # Reset by creating a new evaluation instance with the new key is not
         # possible (immutable). We update via repo directly.
-        # If your infra repo supports partial updates, call that here.
         # Otherwise, attach_report() will raise if already set — handle appropriately
         # by updating the storage key column in the DB directly via the repo.
         logger.info(f"Report regenerated for evaluation {evaluation_id} → {storage_key}")
