@@ -12,6 +12,7 @@ from src.truefit_infra.db.database import db_manager
 from src.truefit_api.middlewares import register_error_handler, req_res_time_log_middleware
 from src.truefit_core.common.utils import logger
 from src.truefit_api.api.v1.http.health import health_router
+from src.truefit_api.api.v1.http.auth import router as auth_router
 from src.truefit_api.api.v1.http.jobs import router as jobs_router
 from src.truefit_api.api.v1.http.candidates import router as candidates_router
 from src.truefit_api.api.v1.http.interviews import router as interviews_router
@@ -79,6 +80,7 @@ app.add_middleware(
 )
 
 app.include_router(health_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 app.include_router(orgs_router, prefix="/api/v1")
 app.include_router(candidates_router, prefix="/api/v1")
