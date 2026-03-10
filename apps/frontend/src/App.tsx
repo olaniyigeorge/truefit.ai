@@ -3,11 +3,12 @@ import { Routes, Route } from "react-router";
 import Landing from "@/pages/Landing"
 // import Dashboard from "@/pages/Dashboard"
 import ProtectedRoute from "@/components/ProtectedRoute";
-import {ProtectedLayout} from "@/components/ProtectedLayout"
+import ProtectedLayout from '@/components/ProtectedLayout';
 import InterviewPage from '@/pages/InterviewPage';
+import Verification from "@/pages/Verification"
 import ITVPage from '@/pages/ItvPage';
-import SignIn from "@/pages/auth/Signin"
-import SignUp from "@/pages/auth/Signup"
+import Dashboard from "@/pages/Dashboard"
+import AuthPage from "@/pages/Auth"
 
 
 
@@ -17,15 +18,19 @@ function App() {
     <div className="w-full min-h-screen">
       <Routes>
         <Route index element={<Landing />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/verify" element={<Verification />} />
+        {/* protectedRoute:  protectes authenticated routes */}
         <Route element={<ProtectedRoute />}>
-          <Route element={<ProtectedLayout />} >
+          {/* you can add protected routes without sidebar below here. */}
+          {/* protectedLayout: populates sidebar into protected routes where needed. */}
+          <Route element={<ProtectedLayout />}>
             <Route path="intervew/:sessionId" element={<InterviewPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>
         {/* Test interview setup */}
-        <Route path="itv/:jobId/:candidateId" element={<ITVPage/>} />
+        <Route path="itv/:jobId/:candidateId" element={<ITVPage />} />
       </Routes>
     </div>
   )

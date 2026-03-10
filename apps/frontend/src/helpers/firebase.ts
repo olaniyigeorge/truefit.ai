@@ -1,13 +1,16 @@
 import {initializeApp} from "firebase/app"
 import {getAuth} from "firebase/auth"
-
+import config from "@/config"
 
 
 const firebaseConfig = {
-    apiKey: "api_key",
-    authDomain: "auth_domain",
-    projectId: "project_id"
-}
+  apiKey: config.firebaseApiKey,
+  authDomain: config.firebaseAuthDomain,
+  projectId: config.firebaseProjectId,
+  storageBucket: config.firebaseStorageBucket,
+  messagingSenderId: config.firebaseMessagingSenderId,
+  appId: config.firebaseAppId
+};
 
 
 const app = initializeApp(firebaseConfig)
