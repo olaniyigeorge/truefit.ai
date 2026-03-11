@@ -5,10 +5,10 @@ Extracts and validates JWT from Authorization header.
 
 from typing import Optional
 import jwt
-from fastapi import HTTPException, status
+from fastapi import Depends, HTTPException, status
 from starlette.requests import Request
 
-from src.truefit_infra.auth.jwt import JWTService
+from src.truefit_infra.auth.jwt import JWTService, get_jwt_service
 from src.truefit_core.common.utils import logger
 
 
@@ -101,7 +101,7 @@ async def verify_jwt_token(
 
 async def get_current_user(
     request: Request,
-    jwt_service: JWTService,
+    jwt_service: JWTService = Depends(get_jwt_service),
 ) -> TokenPayload:
     """
     FastAPI dependency to get current authenticated user.
