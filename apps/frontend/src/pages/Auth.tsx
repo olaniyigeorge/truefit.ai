@@ -44,6 +44,8 @@ const AuthPage = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      // TODO: get the idToken for the result and hit the backend with it (probably in createSession)
+      // TODO: use the auth/oauth/token endpoint to exchange the idToken for a JWT from our backend, then store that JWT in cookies for subsequent requests.
       await createSession()
       navigate(from, { replace: true });
     } catch (error: any) {
