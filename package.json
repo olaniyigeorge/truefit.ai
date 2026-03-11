@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev:fe": "pnpm --filter frontend dev",
-    "dev:be": "cd apps/backend && uvicorn src.truefit_api.main:app --reload",
+    "dev:be": "cd apps/backend && source venv/bin/activate 2>/dev/null || .\\venv\\Scripts\\activate && uvicorn src.truefit_api.main:app --reload",
     "dev": "pnpm run /dev:/",
     "install-fe": "pnpm install"
   },
