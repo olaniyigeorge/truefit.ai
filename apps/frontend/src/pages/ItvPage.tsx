@@ -344,7 +344,8 @@ function InterviewRoom({ jobId, candidateId, onExit }: RoomProps) {
   // Connect on mount
   useEffect(() => {
     connect()
-  }, [connect])
+    return () => disconnect() // cleanup on unmount
+  }, []) // empty deps, not [connect]
 
   const handleEnd = useCallback(() => {
     disconnect()

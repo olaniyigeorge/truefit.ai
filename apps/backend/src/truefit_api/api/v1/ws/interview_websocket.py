@@ -260,7 +260,7 @@ class InterviewConnection:
         """
         if not self._signaling:
             return
-
+        
         sdp_answer = await self._signaling.handle_offer(
             sdp=msg["sdp"],
             sdp_type=msg.get("sdp_type", "offer"),
@@ -275,11 +275,9 @@ class InterviewConnection:
             "sdp_type": "answer",
         })
 
+        
         # Store client reference + wire outbound audio track
         self._webrtc = self._signaling.client
-        if self._webrtc:
-            outbound_track = self._webrtc.audio_bridge.create_outbound_track()
-            self._webrtc.add_outbound_audio_track(outbound_track)
 
         # Unblock agent startup
         self._webrtc_ready.set()

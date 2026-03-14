@@ -54,7 +54,7 @@ from src.truefit_core.application.ports import LiveSessionPort
 from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 
-_MODEL = "gemini-live-2.5-flash-preview" # "gemini-2.0-flash-live-001"  # "gemini-live-2.5-flash-native-audio" or "gemini-live-2.5-flash-native-audio"
+_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"  # "gemini-live-2.5-flash-preview" # "gemini-2.0-flash-live-001"  # "gemini-live-2.5-flash-native-audio" or "gemini-live-2.5-flash-native-audio"
 _INPUT_SAMPLE_RATE = 16_000
 _OUTPUT_SAMPLE_RATE = 24_000
 _INPUT_MIME = f"audio/pcm;rate={_INPUT_SAMPLE_RATE}"
@@ -118,11 +118,9 @@ class GeminiLiveAdapter(LiveSessionPort):
         )
 
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
-        """
-        Async generator that normalises raw LiveServerMessages into typed tuples.
-        See module docstring for the full list of event types.
-        """
         _require_session(self._session)
+        _text_buf = ""
+        _input_buf = "" 
 
         async for response in self._session.receive():
 
@@ -131,14 +129,24 @@ class GeminiLiveAdapter(LiveSessionPort):
 
             sc = response.server_content
             if sc:
-                if sc.interrupted:
-                    yield ("interrupted", None)
-                if sc.turn_complete:
-                    yield ("turn_complete", None)
                 if sc.output_transcription:
-                    yield ("text", sc.output_transcription.text)
+                    _text_buf += sc.output_transcription.text
+                if sc.turn_complete:
+                    logger.info(f"\n[GeminiLive] turn_complete fired, buf='{_text_buf[:50]}'\n")
+                    if _text_buf.strip():
+                        yield ("text", _text_buf.strip())
+                        _text_buf = ""
+                    if _input_buf.strip():
+                        yield ("input_text", _input_buf.strip())
+                        _input_buf = ""
+                    yield ("turn_complete", None)
+                if sc.interrupted:
+                    if _text_buf.strip():
+                        yield ("text", _text_buf.strip())
+                        _text_buf = ""
+                    yield ("interrupted", None)
                 if sc.input_transcription:
-                    yield ("input_text", sc.input_transcription.text)
+                    _input_buf += sc.input_transcription.text
                 if sc.model_turn and sc.model_turn.parts:
                     for part in sc.model_turn.parts:
                         if part.inline_data and part.inline_data.data:
@@ -156,13 +164,14 @@ class GeminiLiveAdapter(LiveSessionPort):
                 logger.warning(f"[GeminiLive] go_away: time_left={response.go_away.time_left}")
                 yield ("go_away", None)
 
+                
     async def close(self) -> None:
         self._session = None
 
     async def is_healthy(self) -> bool:
         return self._session is not None
 
-    # ── Session context manager ───────────────────────────────────────────────
+    # ── Session context manager ──
 
     def open_session(
         self,

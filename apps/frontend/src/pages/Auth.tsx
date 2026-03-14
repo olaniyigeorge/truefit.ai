@@ -43,10 +43,13 @@ const AuthPage = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+
+      const idToken = await result.user.getIdToken()
+      // console.log("\n\n\nGoogle sign-in successful:", idToken, "\n\n\n")
       // TODO: get the idToken for the result and hit the backend with it (probably in createSession)
       // TODO: use the auth/oauth/token endpoint to exchange the idToken for a JWT from our backend, then store that JWT in cookies for subsequent requests.
-      await createSession()
+      await createSession(idToken)
       navigate(from, { replace: true });
     } catch (error: any) {
       form.setError('root', { message: getFirebaseErrorMessage(error.code) });

@@ -45,24 +45,26 @@ class LiveInterviewAgent:
         self._current_question_id: Optional[uuid.UUID] = None
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
+        self._session_ready = asyncio.Event()
 
     # ── Entry point ──
 
     async def run(self, context: InterviewContext) -> None:
         self._interview_id = context.interview_id
 
-        # open_session owns all LiveConnectConfig — agent has no SDK knowledge
         async with self._adapter.open_session(
             system_prompt=build_system_prompt(context),
             tools=INTERVIEW_TOOLS,
         ) as session:
             logger.info(f"[Agent] Session opened for interview {context.interview_id}")
             await self._inject_context(session, context)
+            self._session_ready.set()
 
             try:
                 await asyncio.gather(
                     self._send_audio_loop(session),
                     self._receive_loop(session),
+                    self._gemini_keepalive(session),  # ← add
                 )
             except InterviewCompleteSignal as sig:
                 logger.info(f"[Agent] Interview {context.interview_id} completed: {sig.reason}")
@@ -72,6 +74,19 @@ class LiveInterviewAgent:
                     context.interview_id, reason="agent_error"
                 )
                 raise
+
+    async def _gemini_keepalive(self, session: GeminiLiveAdapter) -> None:
+        """Send silence every 10s to prevent Gemini WS keepalive timeout."""
+        SILENCE = b"\x00\x00" * 160  # 10ms of 16kHz mono s16
+        while not self._session_complete.is_set():
+            await asyncio.sleep(10)
+            if self._session_complete.is_set():
+                break
+            try:
+                await session.send_audio(SILENCE)
+            except Exception as e:
+                logger.warning(f"[Agent] Keepalive failed: {e}")
+                break
 
     # ── Context injection ─────────────────────────────────────────────────────
 
@@ -94,6 +109,7 @@ class LiveInterviewAgent:
     # ── Audio sender ──────────────────────────────────────────────────────────
 
     async def _send_audio_loop(self, session: GeminiLiveAdapter) -> None:
+        await self._session_ready.wait() 
         async for chunk in self._audio_input:
             if self._session_complete.is_set():
                 break

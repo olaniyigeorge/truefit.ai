@@ -81,6 +81,12 @@ export function useInterviewSession({
   const iceBufRef  = useRef<RTCIceCandidate[]>([])
   const answerSetRef = useRef(false)
 
+
+  
+
+
+
+
   // ── Phase setter (also fires callback) ───────────────────────────────────
 
   const updatePhase = useCallback((p: SessionPhase) => {
@@ -104,7 +110,7 @@ export function useInterviewSession({
     onTranscript?.(entry)
   }, [onTranscript])
 
-  // ── Timer ─────────────────────────────────────────────────────────────────
+  // ── Timer ──
 
   const startTimer = useCallback(() => {
     timerRef.current = setInterval(() => {
@@ -117,7 +123,7 @@ export function useInterviewSession({
     setElapsedSeconds(0)
   }, [])
 
-  // ── WebRTC setup ──────────────────────────────────────────────────────────
+  // ── WebRTC setup ───
 
   const setupWebRTC = useCallback(async () => {
     const pc = new RTCPeerConnection({
@@ -197,6 +203,8 @@ export function useInterviewSession({
       new RTCSessionDescription({ type: sdpType as RTCSdpType, sdp })
     )
     answerSetRef.current = true
+
+    console.log("\nRemote description set, applying buffered ICE candidates:", iceBufRef.current)
     for (const c of iceBufRef.current) {
       await pcRef.current.addIceCandidate(c).catch(() => {})
     }
