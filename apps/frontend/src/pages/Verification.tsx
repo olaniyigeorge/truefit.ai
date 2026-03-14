@@ -27,9 +27,9 @@ const Verification = () => {
 
             setIsProcessing(true)
             try {
-                await signInWithEmailLink(auth, email, window.location.href)
+                const userCredential = await signInWithEmailLink(auth, email, window.location.href)
                 localStorage.removeItem('emailForSignIn')
-                await createSession()
+                await createSession(userCredential.user)
                 navigate(from, {replace: true})
             } catch (error: any) {
                 setError(getFirebaseErrorMessage(error.code))

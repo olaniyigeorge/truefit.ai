@@ -19,6 +19,7 @@ fastapi==0.135.0
 fastapi-cli==0.0.24
 fastapi-cloud-cli==0.14.0
 fastar==0.8.0
+firebase-admin==6.5.0
 google-auth==2.48.0
 google-crc32c==1.8.0
 google-genai==1.65.0

@@ -4,7 +4,6 @@ import Landing from "@/pages/Landing"
 // import Dashboard from "@/pages/Dashboard"
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ProtectedLayout from '@/components/ProtectedLayout';
-import InterviewPage from '@/pages/InterviewPage';
 import Verification from "@/pages/Verification"
 import ITVPage from '@/pages/ItvPage';
 import Dashboard from "@/pages/Dashboard"
@@ -25,7 +24,6 @@ function App() {
           {/* you can add protected routes without sidebar below here. */}
           {/* protectedLayout: populates sidebar into protected routes where needed. */}
           <Route element={<ProtectedLayout />}>
-            <Route path="intervew/:sessionId" element={<InterviewPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>
