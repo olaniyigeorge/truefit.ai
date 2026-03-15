@@ -14,6 +14,7 @@ from src.truefit_core.agents.interviewer.context import InterviewContext
 from src.truefit_core.agents.interviewer.prompts import build_system_prompt
 from src.truefit_core.agents.interviewer.tools import INTERVIEW_TOOLS
 from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
+from src.truefit_infra.realtime.audio_bridge import SILENCE_CHUNK
 
 INTERRUPT_CACHE_TTL = 30
 
@@ -34,6 +35,8 @@ class LiveInterviewAgent:
         audio_input_stream: AsyncIterator[bytes],
         on_audio_output: Callable[[bytes], Coroutine],
         on_text_output: Optional[Callable[[str], Coroutine]] = None,
+        on_input_text_output: Optional[Callable[[str], Coroutine]] = None, 
+        on_interrupt: Optional[Callable[[], Coroutine]] = None
     ) -> None:
         self._adapter = live_adapter
         self._orchestration = orchestration
@@ -42,6 +45,8 @@ class LiveInterviewAgent:
         self._audio_input = audio_input_stream
         self._on_audio_output = on_audio_output
         self._on_text_output = on_text_output
+        self._on_interrupt = on_interrupt
+        self._on_input_text_output = on_input_text_output
         self._current_question_id: Optional[uuid.UUID] = None
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
@@ -76,14 +81,13 @@ class LiveInterviewAgent:
                 raise
 
     async def _gemini_keepalive(self, session: GeminiLiveAdapter) -> None:
-        """Send silence every 10s to prevent Gemini WS keepalive timeout."""
-        SILENCE = b"\x00\x00" * 160  # 10ms of 16kHz mono s16
+        """Keep Gemini WS alive — send silence every 20s during long pauses."""
         while not self._session_complete.is_set():
-            await asyncio.sleep(10)
+            await asyncio.sleep(20)
             if self._session_complete.is_set():
                 break
             try:
-                await session.send_audio(SILENCE)
+                await session.send_audio(SILENCE_CHUNK)
             except Exception as e:
                 logger.warning(f"[Agent] Keepalive failed: {e}")
                 break
@@ -109,14 +113,25 @@ class LiveInterviewAgent:
     # ── Audio sender ──────────────────────────────────────────────────────────
 
     async def _send_audio_loop(self, session: GeminiLiveAdapter) -> None:
-        await self._session_ready.wait() 
+        await self._session_ready.wait()
         async for chunk in self._audio_input:
             if self._session_complete.is_set():
                 break
-            await session.send_audio(chunk)
+            if not chunk:  # empty bytes = stream pause sentinel
+                logger.debug("[Agent] Mic silence — sending audio_stream_end")
+                try:
+                    await session.send_audio_stream_end()
+                except Exception:
+                    pass
+            else:
+                await session.send_audio(chunk)
+        # Final flush
+        try:
+            await session.send_audio_stream_end()
+        except Exception:
+            pass
 
     # ── Response receiver ─────────────────────────────────────────────────────
-
     async def _receive_loop(self, session: GeminiLiveAdapter) -> None:
         async for event_type, data in session.receive():
             if self._session_complete.is_set():
@@ -128,23 +143,29 @@ class LiveInterviewAgent:
                 case "text":
                     if self._on_text_output:
                         await self._on_text_output(data)
+                case "interrupted":
+                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
+                    if self._on_interrupt:
+                        await self._on_interrupt()
                 case "input_text":
-                    logger.debug(f"[Agent] Candidate said: {data}")
+                    logger.info(f"[Agent] Candidate said: {data}")
+                    if self._on_input_text_output:
+                        await self._on_input_text_output(data)
+                case "interrupted":
+                    # Gemini detected candidate interruption
+                    # Clear the outbound audio queue so stale agent audio stops playing
+                    logger.info("[Agent] Candidate interrupted agent — clearing audio queue")
+                    if hasattr(self, '_clear_audio_queue'):
+                        await self._clear_audio_queue()
                 case "tool_call":
                     result = await self._handle_tool_call(
-                        name=data["name"],
-                        args=data["args"],
-                        call_id=data["id"],
+                        name=data["name"], args=data["args"], call_id=data["id"],
                     )
                     await session.send_tool_response(
-                        call_id=data["id"],
-                        name=data["name"],
-                        result=result,
+                        call_id=data["id"], name=data["name"], result=result,
                     )
                 case "turn_complete":
                     logger.debug("[Agent] Turn complete")
-                case "interrupted":
-                    logger.debug("[Agent] Candidate interrupted")
                 case "go_away":
                     logger.warning("[Agent] Server closing connection")
                     break

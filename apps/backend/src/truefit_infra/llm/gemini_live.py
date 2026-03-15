@@ -77,9 +77,18 @@ class GeminiLiveAdapter(LiveSessionPort):
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """Forward a 16kHz mono s16 PCM chunk from WebRTC into the live session."""
         _require_session(self._session)
+        if not pcm_bytes:
+            return
         await self._session.send_realtime_input(
             audio=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
         )
+
+
+    async def send_audio_stream_end(self) -> None:  # ← ADD THIS
+        """Send when mic pauses — flushes Gemini's audio buffer."""
+        _require_session(self._session)
+        await self._session.send_realtime_input(audio_stream_end=True)
+
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """Forward a JPEG frame (camera or screen share) into the live session."""
@@ -120,51 +129,59 @@ class GeminiLiveAdapter(LiveSessionPort):
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
         _require_session(self._session)
         _text_buf = ""
-        _input_buf = "" 
+        _input_buf = ""
 
-        async for response in self._session.receive():
+        try:
+            async for response in self._session.receive():
 
-            if response.data:
-                yield ("audio", response.data)
+                # Audio — response.data is the canonical source, don't also read model_turn
+                if response.data:
+                    yield ("audio", response.data)
 
-            sc = response.server_content
-            if sc:
-                if sc.output_transcription:
-                    _text_buf += sc.output_transcription.text
-                if sc.turn_complete:
-                    logger.info(f"\n[GeminiLive] turn_complete fired, buf='{_text_buf[:50]}'\n")
-                    if _text_buf.strip():
-                        yield ("text", _text_buf.strip())
-                        _text_buf = ""
-                    if _input_buf.strip():
-                        yield ("input_text", _input_buf.strip())
-                        _input_buf = ""
-                    yield ("turn_complete", None)
-                if sc.interrupted:
-                    if _text_buf.strip():
-                        yield ("text", _text_buf.strip())
-                        _text_buf = ""
-                    yield ("interrupted", None)
-                if sc.input_transcription:
-                    _input_buf += sc.input_transcription.text
-                if sc.model_turn and sc.model_turn.parts:
-                    for part in sc.model_turn.parts:
-                        if part.inline_data and part.inline_data.data:
-                            yield ("audio", part.inline_data.data)
+                sc = response.server_content
+                if sc:
+                    if sc.output_transcription:
+                        _text_buf += sc.output_transcription.text
+                    if sc.input_transcription:
+                        _input_buf += sc.input_transcription.text
+                        logger.info(f"[GeminiLive] Candidate speech: '{sc.input_transcription.text[:60]}'")
+                    if sc.interrupted:
+                        logger.info("[GeminiLive] Interrupted")
+                        if _text_buf.strip():
+                            yield ("text", _text_buf.strip())
+                            _text_buf = ""
+                        if _input_buf.strip():
+                            yield ("input_text", _input_buf.strip())
+                            _input_buf = ""
+                        yield ("interrupted", None)
+                    if sc.turn_complete:
+                        logger.info(f"[GeminiLive] turn_complete — buf='{_text_buf[:60]}'")
+                        if _text_buf.strip():
+                            yield ("text", _text_buf.strip())
+                            _text_buf = ""
+                        if _input_buf.strip():
+                            yield ("input_text", _input_buf.strip())
+                            _input_buf = ""
+                        yield ("turn_complete", None)
+                    # ← REMOVED sc.model_turn.parts block — duplicates response.data
 
-            if response.tool_call:
-                for fn_call in response.tool_call.function_calls:
-                    yield ("tool_call", {
-                        "id":   fn_call.id,
-                        "name": fn_call.name,
-                        "args": dict(fn_call.args),
-                    })
+                if response.tool_call:
+                    for fn_call in response.tool_call.function_calls:
+                        yield ("tool_call", {
+                            "id": fn_call.id,
+                            "name": fn_call.name,
+                            "args": dict(fn_call.args),
+                        })
 
-            if response.go_away:
-                logger.warning(f"[GeminiLive] go_away: time_left={response.go_away.time_left}")
-                yield ("go_away", None)
+                if response.go_away:
+                    logger.warning(f"[GeminiLive] go_away: time_left={response.go_away.time_left}")
+                    yield ("go_away", None)
 
-                
+        except Exception as e:
+            logger.error(f"[GeminiLive] receive() error: {type(e).__name__}: {e}")
+            raise
+
+
     async def close(self) -> None:
         self._session = None
 
@@ -220,8 +237,8 @@ class _LiveSessionContext:
         config = types.LiveConnectConfig(
             response_modalities=["AUDIO"],
             system_instruction=self._system_prompt,
-            input_audio_transcription=types.AudioTranscriptionConfig(),
             output_audio_transcription=types.AudioTranscriptionConfig(),
+            input_audio_transcription=types.AudioTranscriptionConfig(),
             speech_config=types.SpeechConfig(
                 voice_config=types.VoiceConfig(
                     prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name="Kore")
@@ -230,8 +247,11 @@ class _LiveSessionContext:
             realtime_input_config=types.RealtimeInputConfig(
                 automatic_activity_detection=types.AutomaticActivityDetection(
                     disabled=False,
+                    silence_duration_ms=800,   # respond 800ms after candidate stops
+                    prefix_padding_ms=20,
                 )
             ),
+            # No thinking_budget, no enable_affective_dialog — these need v1alpha
             tools=self._tools or None,
         )
 
@@ -240,6 +260,7 @@ class _LiveSessionContext:
         self._adapter._session = session
         logger.info("[GeminiLive] Session opened")
         return self._adapter
+
 
     async def __aexit__(self, *args) -> None:
         self._adapter._session = None

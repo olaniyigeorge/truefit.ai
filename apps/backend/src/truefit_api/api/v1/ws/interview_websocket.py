@@ -186,6 +186,8 @@ class InterviewConnection:
                 audio_input_stream=self._audio_input_stream(),
                 on_audio_output=self._on_audio_output,
                 on_text_output=self._on_text_output,
+                on_input_text_output=self._on_input_text_output,
+                on_interrupt=self._on_interrupt,
             )
 
             # ⑧ Run agent alongside the already-running tasks
@@ -214,6 +216,18 @@ class InterviewConnection:
             if self._signaling:
                 await self._signaling.close()
 
+
+    async def _on_interrupt(self) -> None:
+        if self._webrtc:
+            await self._webrtc.audio_bridge.clear_outbound_queue()
+        self._suppress_audio = True
+        await asyncio.sleep(0.3)
+        self._suppress_audio = False
+
+    async def _on_input_text_output(self, text: str) -> None:
+        """Candidate speech transcription from Gemini."""
+        await self._send({"type": "transcript", "speaker": "candidate", "text": text})
+    
     # ── WebSocket receive loop ────────────────────────────────────────────────
 
     async def _ws_receive_loop(self) -> None:
@@ -294,12 +308,11 @@ class InterviewConnection:
 
     # ── Audio I/O — WebRTC paths ──────────────────────────────────────────────
 
-    async def _audio_input_stream(self) -> AsyncIterator[bytes]:
-        """Reads PCM from AudioBridge.inbound_queue (filled by WebRTC track pump)."""
+    async def _audio_input_stream(self) -> AsyncIterator[tuple[bytes, bool]]:
         if not self._webrtc:
             raise RuntimeError("WebRTC not ready before audio stream started")
-        async for chunk in self._webrtc.audio_bridge.audio_input_stream():
-            yield chunk
+        async for chunk_tuple in self._webrtc.audio_bridge.audio_input_stream():
+            yield chunk_tuple
 
     async def _on_audio_output(self, audio_bytes: bytes) -> None:
         """Pushes agent PCM into AudioBridge.outbound_queue → WebRTC track → browser."""

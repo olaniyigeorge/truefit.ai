@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import fractions
+import time 
 from typing import AsyncIterator, Optional
 
 import av
@@ -26,9 +27,11 @@ _CHANNELS = 1           # mono
 _SAMPLE_WIDTH = 2       # 16-bit (s16)
 _CHUNK_DURATION = 0.02  # 20ms chunks → 320 samples per chunk
 _OUTPUT_SAMPLE_RATE = 24_000   # Gemini outputs this
-_OUTPUT_CHUNK_DURATION = 0.02
 SILENCE_CHUNK = b"\x00\x00" * 160  # 10ms silence at 16kHz mono s16
 _WEBRTC_SAMPLE_RATE = 48_000   # WebRTC/Opus expects this
+_CHUNK_SAMPLES = int(_SAMPLE_RATE * _CHUNK_DURATION)   # 320
+SILENCE_CHUNK = b"\x00\x00" * _CHUNK_SAMPLES       # 640 bytes — matches real frames
+
 
 
 class AudioBridge:
@@ -41,11 +44,12 @@ class AudioBridge:
     def __init__(self, *, context: SessionContext) -> None:
         self._ctx = context
         self.inbound_queue: asyncio.Queue[Optional[bytes]] = asyncio.Queue(maxsize=100)
-        self.outbound_queue: asyncio.Queue[Optional[bytes]] = asyncio.Queue(maxsize=100)
-
+        self.outbound_queue: asyncio.Queue[Optional[bytes]] = asyncio.Queue(maxsize=500)
         self._inbound_task: Optional[asyncio.Task] = None
         self._outbound_track: Optional[_AgentAudioTrack] = None
         self._closed = False
+        self._track_attached = asyncio.Event() 
+
 
     # ── Inbound (browser → agent) ─────────────────────────────────────────────
 
@@ -56,6 +60,7 @@ class AudioBridge:
             self._pump_inbound(track),
             name=f"audio-inbound-{self._ctx.session_id}",
         )
+        self._track_attached.set() 
 
     async def _pump_inbound(self, track: MediaStreamTrack) -> None:
         """
@@ -111,19 +116,26 @@ class AudioBridge:
     # ── Agent-facing async generator ─────────────────────────────────────────
 
     async def audio_input_stream(self) -> AsyncIterator[bytes]:
+        await asyncio.wait_for(self._track_attached.wait(), timeout=30.0)
         chunk_count = 0
+        consecutive_timeouts = 0
+        STREAM_END_AFTER = 10  # 10 × 100ms = 1s silence → signal stream pause
+
         while True:
             try:
-                chunk = await asyncio.wait_for(self.inbound_queue.get(), timeout=0.5)
+                chunk = await asyncio.wait_for(self.inbound_queue.get(), timeout=0.1)
                 if chunk is None:
                     return
+                consecutive_timeouts = 0
                 chunk_count += 1
-                if chunk_count % 50 == 0:
-                    logger.info(f"\n[{self._ctx.session_id}] Sent {chunk_count} chunks to Gemini\n")
+                if chunk_count % 100 == 0:
+                    logger.info(f"[{self._ctx.session_id}] Sent {chunk_count} chunks to Gemini")
                 yield chunk
             except asyncio.TimeoutError:
-                yield SILENCE_CHUNK
-
+                consecutive_timeouts += 1
+                if consecutive_timeouts == STREAM_END_AFTER:
+                    yield b""  # sentinel → _send_audio_loop sends audio_stream_end
+                
     # ── Outbound (agent → browser) ────────────────────────────────────────────
 
     def create_outbound_track(self) -> "_AgentAudioTrack":
@@ -136,6 +148,14 @@ class AudioBridge:
             session_id=self._ctx.session_id,
         )
         return self._outbound_track
+
+    async def clear_outbound_queue(self) -> None:
+        """Drain the outbound queue — called when agent is interrupted."""
+        while not self.outbound_queue.empty():
+            try:
+                self.outbound_queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
 
     async def push_audio(self, pcm_bytes: bytes) -> None:
         """
@@ -160,53 +180,75 @@ class AudioBridge:
         await self.inbound_queue.put(None)
         await self.outbound_queue.put(None)
 
+
+
+
+ 
+
 class _AgentAudioTrack(AudioStreamTrack):
     """
-    aiortc AudioStreamTrack that pulls from the agent's outbound queue.
-    aiortc calls recv() on a timer; we block until a chunk is available.
+    Pulls 24kHz PCM from the agent queue, resamples to 48kHz,
+    and outputs exactly one 20ms frame per recv() call — paced correctly.
     """
 
-    def __init__(self, *, queue, session_id):
+    def __init__(self, *, queue: asyncio.Queue, session_id: str) -> None:
         super().__init__()
         self._queue = queue
         self._session_id = session_id
-        self._timestamp = 0
-        self._sample_rate = _WEBRTC_SAMPLE_RATE
+        self._sample_rate = _WEBRTC_SAMPLE_RATE          # 48000
         self._samples_per_frame = int(_WEBRTC_SAMPLE_RATE * _CHUNK_DURATION)  # 960
         self._resampler = av.AudioResampler(
-            format="s16",
-            layout="mono",
-            rate=_WEBRTC_SAMPLE_RATE,
+            format="s16", layout="mono", rate=_WEBRTC_SAMPLE_RATE
         )
+        self._buf = bytearray()   # ring buffer of resampled 48kHz s16 PCM
+        self._pts = 0
+        self._start: Optional[float] = None
 
     async def recv(self) -> av.AudioFrame:
-        try:
-            pcm_bytes = await asyncio.wait_for(self._queue.get(), timeout=0.02)
-            if pcm_bytes is None:
-                raise Exception("AudioBridge closed")
-        except asyncio.TimeoutError:
-            pcm_bytes = b"\x00\x00" * (int(_OUTPUT_SAMPLE_RATE * _CHUNK_DURATION) * 2)
-
-        samples_in = len(pcm_bytes) // 2
-        in_frame = av.AudioFrame(format="s16", layout="mono", samples=samples_in)
-        in_frame.planes[0].update(pcm_bytes)
-        in_frame.sample_rate = _OUTPUT_SAMPLE_RATE
-        in_frame.time_base = fractions.Fraction(1, _OUTPUT_SAMPLE_RATE)
-        in_frame.pts = 0  # resampler doesn't need pts
-
-        resampled = self._resampler.resample(in_frame)
-        if not resampled:
-            samples_out = self._samples_per_frame
-            out_pcm = b"\x00\x00" * samples_out
+        # ── Pace to exactly 20ms intervals (mirrors aiortc base class) ──
+        if self._start is None:
+            self._start = time.time()
         else:
-            rf = resampled[0]
-            out_pcm = bytes(rf.planes[0])
-            samples_out = len(out_pcm) // 2  # ← derive from actual bytes, not rf.samples
+            self._pts += self._samples_per_frame
+            deadline = self._start + (self._pts / self._sample_rate)
+            wait = deadline - time.time()
+            if wait > 0:
+                await asyncio.sleep(wait)
 
-        frame = av.AudioFrame(format="s16", layout="mono", samples=samples_out)
+        # ── Drain queue into buffer until we have a full frame ──
+        target = self._samples_per_frame * 2   # bytes needed (s16 = 2 bytes/sample)
+
+        while len(self._buf) < target:
+            try:
+                pcm_24k = self._queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break   # pad with silence below
+
+            if pcm_24k is None:
+                raise Exception("AudioBridge closed")
+
+            # Resample 24kHz → 48kHz
+            n = len(pcm_24k) // 2
+            in_frame = av.AudioFrame(format="s16", layout="mono", samples=n)
+            in_frame.planes[0].update(pcm_24k)
+            in_frame.sample_rate = _OUTPUT_SAMPLE_RATE
+            in_frame.time_base = fractions.Fraction(1, _OUTPUT_SAMPLE_RATE)
+            in_frame.pts = 0
+            for rf in self._resampler.resample(in_frame):
+                self._buf.extend(bytes(rf.planes[0]))
+
+        # ── Slice exactly one frame, pad with silence if needed ──
+        if len(self._buf) >= target:
+            out_pcm = bytes(self._buf[:target])
+            del self._buf[:target]
+        else:
+            silence_needed = target - len(self._buf)
+            out_pcm = bytes(self._buf) + b"\x00\x00" * (silence_needed // 2)
+            self._buf.clear()
+
+        frame = av.AudioFrame(format="s16", layout="mono", samples=self._samples_per_frame)
         frame.planes[0].update(out_pcm)
-        frame.sample_rate = _WEBRTC_SAMPLE_RATE
-        frame.time_base = fractions.Fraction(1, _WEBRTC_SAMPLE_RATE)
-        frame.pts = self._timestamp
-        self._timestamp += samples_out
+        frame.sample_rate = self._sample_rate
+        frame.time_base = fractions.Fraction(1, self._sample_rate)
+        frame.pts = self._pts
         return frame
