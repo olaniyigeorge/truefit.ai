@@ -1,7 +1,7 @@
 import API from "@/helpers/api"
 
 
-export type JobStatus = "draft" | "active" | "pause" | "closed"
+export type JobStatus = "draft" | "active" | "paused" | "closed"
 export type ExperienceLevel = "junior" | "mid" | "senior" | "lead" | "principal"
 export type WorkArrangement = "remote" | "hyybrid" | "onsite"
 
@@ -65,8 +65,8 @@ export type UpdateJobPayload = {
 
 export type ListJobParams = {
     org_id: string
-    status: JobStatus
-    experience_level: ExperienceLevel
+    status?: JobStatus
+    experience_level?: ExperienceLevel
     limit?: number
     offset?: number
 }

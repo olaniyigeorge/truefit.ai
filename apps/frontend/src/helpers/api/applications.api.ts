@@ -49,7 +49,7 @@ export const applicationsApi = {
         const res = await API.get(`/api/v1/applications/${applicationId}`)
         return res.data
     },
-    list: async (params?: ListApplicationsParams): Promise<Application> => {
+    list: async (params?: ListApplicationsParams): Promise<Application[]> => {
         const res = await API.get(`/api/v1/applications`, {params})
         return res.data
     },

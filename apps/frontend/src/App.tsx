@@ -18,6 +18,7 @@ import CandidatesPage from "@/pages/Candidates"
 import CandidateDetailPage from "@/pages/CandidateDetail"
 import ApplicationsPage from "@/pages/Applications"
 import OrgPage from "@/pages/Org"
+import CreateJobPage from "@/pages/CreateJob"
 
 
 //candidate pages
@@ -39,6 +40,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:jobId" element={<JobsDetailPage />} />
+            <Route path="/jobs/new" element={<CreateJobPage />} />
             <Route path="/candidates" element={<CandidatesPage />} />
             <Route path="/candidates/:candidateId" element={<CandidateDetailPage />} />
             <Route path="/applications" element={<ApplicationsPage />} />
