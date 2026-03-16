@@ -114,6 +114,15 @@ class InterviewOrchestrationService:
                     f"Resuming existing interview {existing.id} "
                     f"for candidate {candidate_id} / job {job_id}"
                 )
+                # Clean up any question left open from the previous session
+                voided = await self._interviews.close_dangling_questions(existing.id)
+                if voided:
+                    existing.void_open_questions()
+                    logger.info(
+                        f"Voided {voided} dangling question(s) from previous session "
+                        f"for interview {existing.id}"
+                    )
+
                 return existing
 
             candidate.register_active_interview(job_id)
