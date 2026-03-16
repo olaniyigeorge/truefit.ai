@@ -3,7 +3,7 @@ import API from "@/helpers/api"
 
 export type ApplicationStatus = "new" | "interviewing" | "shortlisted" | "rejected" | "hired"
 
-export type ApplicationSource = "appliied" | "invited"
+export type ApplicationSource = "applied" | "invited"
 
 export type Application = {
     id: string

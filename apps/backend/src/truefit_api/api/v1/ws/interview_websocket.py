@@ -186,6 +186,7 @@ class InterviewConnection:
                 audio_input_stream=self._audio_input_stream(),
                 on_audio_output=self._on_audio_output,
                 on_text_output=self._on_text_output,
+                on_input_text_output=self._on_input_text_output,
             )
 
             # ⑧ Run agent alongside the already-running tasks
@@ -311,6 +312,10 @@ class InterviewConnection:
     async def _on_text_output(self, text: str) -> None:
         """Transcripts go over the WebSocket control channel."""
         await self._send({"type": "transcript", "speaker": "agent", "text": text})
+    
+    async def _on_input_text_output(self, text: str) -> None:
+        """Candidate speech transcript goes over the WebSocket control channel."""
+        await self._send({"type": "transcript", "speaker": "candidate", "text": text})
 
     # ── DataChannel inbound (candidate actions during the call) ──────────────
 

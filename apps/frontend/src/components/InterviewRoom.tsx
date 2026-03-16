@@ -2,7 +2,6 @@
 import {InfoRow} from "./InfoRow"
 import {useEffect, useRef, useCallback} from "react"
 import { useInterviewSession } from "@/hooks/useInterviewSession"
-import {useLocalMedia} from "@/hooks/useLocalMedia"
 import { AudioViz } from "./AudioViz"
 import {Separator} from "@/components/ui/separator"
 import {Message} from "@/components/TranscriptMessage"

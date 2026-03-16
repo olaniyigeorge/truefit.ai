@@ -34,6 +34,7 @@ class LiveInterviewAgent:
         audio_input_stream: AsyncIterator[bytes],
         on_audio_output: Callable[[bytes], Coroutine],
         on_text_output: Optional[Callable[[str], Coroutine]] = None,
+        on_input_text_output: Optional[Callable[[str], Coroutine]] = None,
     ) -> None:
         self._adapter = live_adapter
         self._orchestration = orchestration
@@ -46,6 +47,7 @@ class LiveInterviewAgent:
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
         self._session_ready = asyncio.Event()
+        self._on_input_text_output = on_input_text_output
 
     # ── Entry point ──
 
@@ -130,6 +132,8 @@ class LiveInterviewAgent:
                         await self._on_text_output(data)
                 case "input_text":
                     logger.debug(f"[Agent] Candidate said: {data}")
+                    if self.on_input_text_output:
+                        await self.on_input_text_output(data)
                 case "tool_call":
                     result = await self._handle_tool_call(
                         name=data["name"],

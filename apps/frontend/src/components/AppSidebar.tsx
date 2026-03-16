@@ -19,6 +19,7 @@ import {
     FileText,
     Building2,
     LogOut,
+    List,
     UserCircle,
 } from "lucide-react"
 import { NavLink } from "react-router";
@@ -35,6 +36,7 @@ const recruiterNav = [
 
 const candidateNav = [
     {label: "Dashboard", to: "/dashboard", icon: LayoutDashboard},
+    {label: "Browse Jobs", to: "/listings",    icon: List }, 
     {label: "Applications", to: "/applications", icon: FileText},
     {label: "Profile", to: "/profile", icon: UserCircle},
 ]
