@@ -9,26 +9,40 @@ jobs:
   deploy:
     name: Deploy to GCP Compute Engine
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
-      # ── 1. Checkout code
+      # ── 1. Checkout code ────────────────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── 2. Set up SSH key
+      # ── 2. Set up SSH key ────────────────────────────────────────────────────
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts
+          # Skip strict host checking — avoids ssh-keyscan failures
+          cat >> ~/.ssh/config <<EOF
+          Host ${{ secrets.GCP_VM_IP }}
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+          EOF
 
-      # ── 3. Copy deploy.sh to VM
+      # ── 3. Copy deploy.sh to VM ──────────────────────────────────────────────
       - name: Copy deploy script to VM
         run: |
-          scp scripts/deploy.sh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }}:~/deploy.sh
+          scp -i ~/.ssh/id_ed25519 \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              scripts/deploy.sh \
+              ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }}:~/deploy.sh
 
-      # ── 4. SSH in and run deploy.sh 
+      # ── 4. SSH in and run deploy.sh ──────────────────────────────────────────
       - name: Run deployment on VM
         run: |
-          ssh ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} "chmod +x ~/deploy.sh && bash ~/deploy.sh"
+          ssh -i ~/.ssh/id_ed25519 \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} \
+              "chmod +x ~/deploy.sh && bash ~/deploy.sh"
