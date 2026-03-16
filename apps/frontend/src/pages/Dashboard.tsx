@@ -4,7 +4,7 @@ import { useNavigate } from "react-router"
 import {jobsApi , type Job} from "@/helpers/api/jobs.api"
 import {applicationsApi, type Application} from "@/helpers/api/applications.api"
 import {StatCard} from "@/components/StatCard"
-import {statusBadge, jobStatusBadge} from "@/components/Badges"
+import {StatusBadge, JobStatusBadge} from "@/components/Badges"
 import {Skeleton} from "@/components/ui/skeleton"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
@@ -207,7 +207,7 @@ const Dashboard = () => {
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            {statusBadge(app.status)}
+                                            {StatusBadge(app.status)}
                                             <ArrowRight className="h-3 w-3 text-muted-foreground/0 group-hover:text-muted-foreground/50 transition-colors" />
                                         </div>
                                     </div>
@@ -255,7 +255,7 @@ const Dashboard = () => {
                                                 </p>
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">
-                                                {jobStatusBadge(job.status)}
+                                                {JobStatusBadge(job.status)}
                                                 <ArrowRight className="h-3 w-3 text-muted-foreground/0 group-hover:text-muted-foreground/50 transition-colors" />
                                             </div>
                                         </div>
@@ -283,7 +283,7 @@ const Dashboard = () => {
                                         if (!count) return null
                                         return (
                                             <div key={s} className="flex items-center justify-between">
-                                                {statusBadge(s)}
+                                                {StatusBadge(s)}
                                                 <span className="font-serif text-lg font-bold text-foreground">{count}</span>
                                             </div>
                                         )

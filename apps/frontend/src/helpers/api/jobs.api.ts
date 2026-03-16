@@ -46,7 +46,7 @@ export type Job = {
 
 export type CreateJobPayload = {
     org_id: string
-    createdBy: string
+    created_by: string
     title: string
     description: string
     requirements: JobRequirement
@@ -91,6 +91,10 @@ export const jobsApi = {
     },
     activate: async(jobId: string): Promise<Job> => {
         const res = await API.post(`/api/v1/jobs/${jobId}/activate`)
+        return res.data
+    },
+    pause: async (jobId: string): Promise<Job> => {
+        const res = await API.post(`/api/v1/jobs/${jobId}/pause`)
         return res.data
     },
     close: async(jobId: string): Promise<Job> => {

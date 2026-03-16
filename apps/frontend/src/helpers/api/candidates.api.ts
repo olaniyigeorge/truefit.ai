@@ -5,13 +5,13 @@ export type CandidateStatus = "active" | "inactive" | "interviewing"
 
 export type CandidateContact = {
     email: string
-    phone_number: string | null
+    phone: string | null
     linkedin_url: string | null
 }
 
 export type CandidateResume = {
     storage_key: string
-    file_name: string
+    filename: string
     content_type: string
     uploaded_at: string
 }
@@ -42,18 +42,18 @@ export type RegisterCandidatePayload = {
 
 
 export type UpdateCandidatePayload = {
-    full_name: string
+    full_name?: string
     phone?: string
     linkedin_url?: string
 }
 
 export type ListCandidateParams = {
-    limits?: number
+    limit?: number
     offset?: number
 }
 
 
-export const candidateApi = {
+export const candidatesApi = {
     register: async (payload: RegisterCandidatePayload): Promise<Candidate> => {
         const res = await API.post(`/api/v1/candidates`, payload)
         return res.data

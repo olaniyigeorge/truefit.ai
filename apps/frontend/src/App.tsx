@@ -8,6 +8,7 @@ import Verification from "@/pages/Verification"
 import ITVPage from '@/pages/ItvPage';
 import Dashboard from "@/pages/Dashboard"
 import AuthPage from "@/pages/Auth"
+import Onboarding from "@/pages/Onboarding"
 import InterviewPage from "@/pages/InterviewPage"
 
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/verify" element={<Verification />} />
         {/* protectedRoute:  protectes authenticated routes */}
         <Route element={<ProtectedRoute />}>
+        <Route path="/onboarding" element={<Onboarding />}/> 
         <Route path="/interview/:jobId/:candidateId" element={<InterviewPage />} />
           {/* you can add protected routes without sidebar below here. */}
           {/* protectedLayout: populates sidebar into protected routes where needed. */}

@@ -33,7 +33,8 @@ class AuthTokenResponse(BaseModel):
         default=1800,
         description="Token expiration time in seconds",
     )
-
+    is_new_user: bool = Field(default=False, description="True if this is the user's first sign-in")
+    
 
 class UserAuthResponse(BaseModel):
     """User information returned after successful authentication."""

@@ -4,7 +4,7 @@ import API from "@/helpers/api"
 
 export type OrgStatus = "active" | "Suspended" | "deactivated"
 export type OrgPlan = "free" | "Starter" | "growth"| "enterprise"
-export type OrgHeadcount = "1-10" | "11-50" | "51-100" | "200+"
+export type OrgHeadcount = "1-10" | "11-50" | "51-200" | "200+"
 
 
 export type OrgContact = {
@@ -25,6 +25,7 @@ export type Org = {
     slug: OrgStatus
     contact: OrgContact
     billing: OrgBilling
+    status: OrgStatus
     logo_url: string | null
     description: string | null
     industry: string | null

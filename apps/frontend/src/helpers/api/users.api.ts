@@ -26,6 +26,7 @@ export type CreateUserPayload = {
 export type UpdateUserPayload = {
     display_name?: string
     is_active?: boolean
+    role?: "candidate" | "recruiter"
 }
 
 

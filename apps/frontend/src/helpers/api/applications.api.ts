@@ -28,7 +28,7 @@ export type CreateApplicationPayload = {
 
 export type UpdateApplicationStatusPayload = {
     status: ApplicationStatus
-    meta_updates: Record<string, unknown>
+    meta_updates?: Record<string, unknown>
 }
 
 
@@ -53,7 +53,7 @@ export const applicationsApi = {
         const res = await API.get(`/api/v1/applications`, {params})
         return res.data
     },
-    update: async (applicationId: string, payload: UpdateApplicationStatusPayload): Promise<Application> => {
+    updateStatus: async (applicationId: string, payload: UpdateApplicationStatusPayload): Promise<Application> => {
         const res = await API.patch(`/api/v1/applications/${applicationId}`, payload)
         return res.data
     },
