@@ -149,6 +149,13 @@ class InterviewRepository(ABC):
     ) -> Optional[Interview]:
         ...
 
+    @abstractmethod
+    async def close_dangling_questions(self, interview_id: uuid.UUID) -> int:
+        """
+        Load the interview, void any unanswered questions, persist it.
+        Returns the number of questions voided.
+        """
+        ...
 
 class EvaluationRepository(ABC):
     @abstractmethod
