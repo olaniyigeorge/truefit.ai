@@ -330,6 +330,19 @@ class Interview:
         self._ended_at = _utcnow()
         self._touch()
 
+
+    def void_open_questions(self) -> int:
+        """
+        Remove unanswered turns from the transcript.
+        Called on session resume to clear state left by a previous disconnected session.
+        Returns the count removed.
+        """
+        open_turns = [t for t in self._turns if not t.is_answered]
+        for turn in open_turns:
+            self._turns.remove(turn)
+        self._touch()
+        return len(open_turns)
+
     def mark_evaluated(self) -> None:
         """
         Transition COMPLETED → EVALUATED once an Evaluation aggregate is persisted.
