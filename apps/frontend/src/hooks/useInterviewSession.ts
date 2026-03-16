@@ -9,6 +9,7 @@
  */
 
 import { useRef, useState, useCallback, useEffect } from "react"
+import {useLocalMedia} from "@/hooks/useLocalMedia"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -81,11 +82,7 @@ export function useInterviewSession({
   const iceBufRef  = useRef<RTCIceCandidate[]>([])
   const answerSetRef = useRef(false)
 
-
-  
-
-
-
+  const { acquireMicrophone, acquireScreenShare, releaseAll, localStreamRef} = useLocalMedia()
 
   // ── Phase setter (also fires callback) ───────────────────────────────────
 
@@ -173,11 +170,12 @@ export function useInterviewSession({
     }
 
     // Acquire mic
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 16000 },
-      video: false,
-    })
-    localRef.current = stream
+    // const stream = await navigator.mediaDevices.getUserMedia({
+    //   audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 16000 },
+    //   video: false,
+    // })
+    // localRef.current = stream
+    const stream = await acquireMicrophone()
     stream.getTracks().forEach(t => pc.addTrack(t, stream))
 
     // Create offer and send over WS
@@ -345,7 +343,8 @@ export function useInterviewSession({
       wsRef.current = null
     }
     if (pcRef.current) { pcRef.current.close(); pcRef.current = null }
-    if (localRef.current) { localRef.current.getTracks().forEach(t => t.stop()); localRef.current = null }
+    // if (localRef.current) { localRef.current.getTracks().forEach(t => t.stop()); localRef.current = null }
+    releaseAll()
     if (pingRef.current) clearInterval(pingRef.current)
     answerSetRef.current = false
     iceBufRef.current = []
@@ -360,8 +359,8 @@ export function useInterviewSession({
   // ── Mic toggle ────────────────────────────────────────────────────────────
 
   const toggleMute = useCallback(() => {
-    if (!localRef.current) return
-    const track = localRef.current.getAudioTracks()[0]
+    if (!localStreamRef.current) return
+    const track = localStreamRef.current.getAudioTracks()[0]
     if (!track) return
     track.enabled = !track.enabled
     setIsMuted(!track.enabled)
@@ -372,7 +371,8 @@ export function useInterviewSession({
   const startScreenShare = useCallback(async () => {
     if (!pcRef.current) return
     try {
-      const screen = await navigator.mediaDevices.getDisplayMedia({ video: true })
+      // const screen = await navigator.mediaDevices.getDisplayMedia({ video: true })
+      const screen = await acquireScreenShare()
       screen.getTracks().forEach(t => {
         pcRef.current!.addTrack(t, screen)
         t.onended = () => {} // handle stop sharing

@@ -2,10 +2,16 @@ import API from "./api"
 import {auth} from "@/helpers/firebase"
 import {signOut} from "firebase/auth"
 
+const getJwt = (): string | null  => {
+    const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/)
+    return match ? decodeURIComponent(match[1]) : null
+}
+
+
 API.interceptors.request.use(
     async (config) => {
         //attach token from storage
-        const token = await auth.currentUser?.getIdToken()
+        const token = getJwt()
         if(token){
             config.headers.authorization = `Bearer ${token}`
         }
@@ -32,6 +38,7 @@ API.interceptors.response.use(
 
         //handle expired access token
         if(response?.status === 401){
+            document.cookie = 'jwt=; path=/; max-age=0'
             await signOut(auth)
             window.location.href = "/auth"
         }

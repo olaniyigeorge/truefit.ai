@@ -82,7 +82,7 @@ async def oauth_authenticate(
         logger.info(f"OAuth token verified for {identity['email']}")
         
         # Step 3: Get or create user in database
-        user = await user_svc.get_or_create_oauth_user(
+        user, is_new_user = await user_svc.get_or_create_oauth_user(
             email=identity["email"],
             provider=request.provider,
             provider_subject=identity["provider_subject"],
@@ -115,6 +115,7 @@ async def oauth_authenticate(
         # Step 6: Return response
         return AuthTokenResponse(
             access_token=access_token,
+            is_new_user=is_new_user,
             user=UserAuthResponse(
                 id=user.id,
                 email=user.email,

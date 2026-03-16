@@ -15,6 +15,7 @@ fastapi==0.135.0
 fastapi-cli==0.0.24
 fastapi-cloud-cli==0.14.0
 fastar==0.8.0
+firebase-admin==6.5.0
 google-auth==2.48.0
 google-genai==1.65.0
 greenlet==3.3.2
@@ -56,3 +57,4 @@ urllib3==2.6.3
 uvicorn==0.41.0
 watchfiles==1.1.1
 websockets==16.0
+
