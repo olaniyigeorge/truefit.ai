@@ -10,6 +10,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react"
 import {useLocalMedia} from "@/hooks/useLocalMedia"
+import config from "@/config"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -75,6 +76,7 @@ export function useInterviewSession({
 
   const wsRef      = useRef<WebSocket | null>(null)
   const pcRef      = useRef<RTCPeerConnection | null>(null)
+  const phaseRef = useRef<SessionPhase>("idle")
   const localRef   = useRef<MediaStream | null>(null)
   const audioRef   = useRef<HTMLAudioElement | null>(null)
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -87,6 +89,7 @@ export function useInterviewSession({
   // ── Phase setter (also fires callback) ───────────────────────────────────
 
   const updatePhase = useCallback((p: SessionPhase) => {
+    phaseRef.current = p
     setPhase(p)
     onPhaseChange?.(p)
   }, [onPhaseChange])
@@ -296,12 +299,14 @@ export function useInterviewSession({
   const connect = useCallback(() => {
     if (wsRef.current) return
 
-    const base = (wsBaseUrl ?? import.meta.env.VITE_WS_URL ?? "ws://localhost:8000")
+    const base = (wsBaseUrl ?? config.wsUrl ?? "ws://localhost:8000")
       .replace(/\/$/, "")
     const url = `${base}/api/v1/ws/interview/${jobId}/${candidateId}`
 
     updatePhase("ws_connecting")
     addEntry("system", `Connecting to ${url}`)
+
+    console.log("Creating WebSocket:", url)
 
     const ws = new WebSocket(url)
     wsRef.current = ws
@@ -328,9 +333,9 @@ export function useInterviewSession({
     ws.onclose = ({ code, reason }) => {
       addEntry("system", `WebSocket closed: ${code} ${reason ?? ""}`)
       if (pingRef.current) clearInterval(pingRef.current)
-      if (phase !== "ended") updatePhase("ended")
+      if (phaseRef.current !== "ended") updatePhase("ended")
     }
-  }, [jobId, candidateId, wsBaseUrl, handleMessage, addEntry, updatePhase, onError, phase])
+  }, [jobId, candidateId, wsBaseUrl, handleMessage, addEntry, updatePhase, onError])
 
   // ── Disconnect ────────────────────────────────────────────────────────────
 
@@ -359,20 +364,24 @@ export function useInterviewSession({
   // ── Mic toggle ────────────────────────────────────────────────────────────
 
   const toggleMute = useCallback(() => {
-    if (!localStreamRef.current) return
-    const track = localStreamRef.current.getAudioTracks()[0]
+    const stream = localStreamRef.current
+    console.log('Muted')
+    if (!stream) return
+    const track = stream.getAudioTracks()[0]
     if (!track) return
     track.enabled = !track.enabled
     setIsMuted(!track.enabled)
-  }, [])
+  }, [localStreamRef])
 
   // ── Screen share ──────────────────────────────────────────────────────────
 
   const startScreenShare = useCallback(async () => {
     if (!pcRef.current) return
+    console.log('Sharing')
     try {
       // const screen = await navigator.mediaDevices.getDisplayMedia({ video: true })
       const screen = await acquireScreenShare()
+      console.log('screen', screen)
       screen.getTracks().forEach(t => {
         pcRef.current!.addTrack(t, screen)
         t.onended = () => {} // handle stop sharing
@@ -401,8 +410,5 @@ export function useInterviewSession({
     // Refs (for audio element)
     audioRef,
     localStreamRef
-
-
-    
   }
 }

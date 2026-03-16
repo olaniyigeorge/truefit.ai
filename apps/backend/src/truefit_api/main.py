@@ -40,6 +40,12 @@ async def lifespan(app: FastAPI):
                     "poolclass": sqlalchemy.StaticPool,
                 }
             )
+        else:
+            engine_kwargs.update(
+                {
+                    "connect_args": {"statement_cache_size": 0},
+                }
+            )
 
         db_manager.initialize(AppConfig.DATABASE_URL, **engine_kwargs)
 

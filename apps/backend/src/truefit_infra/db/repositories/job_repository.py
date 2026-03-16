@@ -194,6 +194,24 @@ class SQLAlchemyJobRepository(JobRepository):
             result = await session.execute(stmt)
             return result.scalar_one() > 0
 
+            async def list_all_active(
+                self,
+                *,
+                limit: int = 50,
+                offset: int = 0,
+            ) -> list[Job]:
+                stmt = (
+                    select(JobListing)
+                    .where(JobListing.status == JobStatus.ACTIVE.value)
+                    .order_by(JobListing.created_at.desc())
+                    .limit(limit)
+                    .offset(offset)
+                )
+                async with self._db.get_session() as session:
+                    result = await session.execute(stmt)
+                    rows = result.scalars().all()
+                return [self._to_domain(row) for row in rows]
+
     # ── Mapping: domain → DB row ──
 
     @staticmethod

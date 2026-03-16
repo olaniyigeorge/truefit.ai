@@ -324,6 +324,10 @@ class InterviewConnection:
     async def _on_text_output(self, text: str) -> None:
         """Transcripts go over the WebSocket control channel."""
         await self._send({"type": "transcript", "speaker": "agent", "text": text})
+    
+    async def _on_input_text_output(self, text: str) -> None:
+        """Candidate speech transcript goes over the WebSocket control channel."""
+        await self._send({"type": "transcript", "speaker": "candidate", "text": text})
 
     # ── DataChannel inbound (candidate actions during the call) ──────────────
 

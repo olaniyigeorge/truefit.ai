@@ -101,6 +101,10 @@ export const jobsApi = {
         const res = await API.post(`/api/v1/jobs/${jobId}/close`)
         return res.data
     },
+    listActive: async (params?: { limit?: number; offset?: number }): Promise<Job[]> => {
+        const res = await API.get("/api/v1/jobs/active", { params })
+        return res.data
+    },
     delete: async(jobId: string): Promise<void> => {
         await API.delete(`/api/v1/jobs/${jobId}`)
     },

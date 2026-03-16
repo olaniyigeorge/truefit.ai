@@ -10,6 +10,7 @@ import Dashboard from "@/pages/Dashboard"
 import AuthPage from "@/pages/Auth"
 import Onboarding from "@/pages/Onboarding"
 import InterviewPage from "@/pages/InterviewPage"
+import JobListingsPage from "@/pages/JobListings"
 
 
 //Recruiter pages
@@ -43,6 +44,7 @@ function App() {
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/:jobId" element={<JobsDetailPage />} />
             <Route path="/jobs/new" element={<CreateJobPage />} />
+            <Route path="/listings" element={<JobListingsPage />} />
             <Route path="/candidates" element={<CandidatesPage />} />
             <Route path="/candidates/:candidateId" element={<CandidateDetailPage />} />
             <Route path="/applications" element={<ApplicationsPage />} />

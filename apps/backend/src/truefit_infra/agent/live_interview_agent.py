@@ -51,6 +51,7 @@ class LiveInterviewAgent:
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
         self._session_ready = asyncio.Event()
+        self._on_input_text_output = on_input_text_output
 
     # ── Entry point ──
 
