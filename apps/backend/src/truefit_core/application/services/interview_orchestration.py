@@ -92,39 +92,30 @@ class InterviewOrchestrationService:
             candidate = await self._candidates.get_by_id(candidate_id)
             if candidate is None:
                 raise ValueError(f"Candidate {candidate_id} not found")
-            candidate.assert_eligible_to_interview()
 
-            # ── Check for a resumable session before creating a new one ──────
+            # ── Check for a resumable session BEFORE eligibility checks ──────────
+            # A candidate with an active interview is ineligible by design,
+            # but if it's their own resumable session we should let them back in.
             existing = await self._interviews.get_active_for_job_and_candidate(
                 job_id=job_id,
                 candidate_id=candidate_id,
             )
-
-            
-            print(
-                f"Resume check: existing={existing}, "
-                f"status={existing.status if existing else None}, "
-                f"started_at={existing.started_at if existing else None}, "
-                f"tzinfo={existing.started_at.tzinfo if existing and existing.started_at else None}"
-            )
-
 
             if existing is not None and _is_resumable(existing):
                 logger.info(
                     f"Resuming existing interview {existing.id} "
                     f"for candidate {candidate_id} / job {job_id}"
                 )
-                # Clean up any question left open from the previous session
                 voided = await self._interviews.close_dangling_questions(existing.id)
                 if voided:
-                    existing.void_open_questions()
+                    existing = await self._interviews.get_by_id(existing.id)
                     logger.info(
-                        f"Voided {voided} dangling question(s) from previous session "
-                        f"for interview {existing.id}"
+                        f"Voided {voided} dangling question(s) for interview {existing.id}"
                     )
-
                 return existing
 
+            # ── Only enforce eligibility when NOT resuming ────────────────────────
+            candidate.assert_eligible_to_interview()
             candidate.register_active_interview(job_id)
 
             config = job.interview_config
@@ -139,7 +130,6 @@ class InterviewOrchestrationService:
 
             await self._interviews.save(interview)
             await self._candidates.save(candidate)
-
 
             await self._queue.publish(DomainEvent(
                 event_type=_EVENT_INTERVIEW_STARTED,
@@ -161,6 +151,7 @@ class InterviewOrchestrationService:
 
         finally:
             await self._cache.delete(lock_key)
+
 
     # ── Record question (agent-driven) ──
 
@@ -392,5 +383,12 @@ def _is_resumable(interview: Interview) -> bool:
         return False
     if interview.started_at is None:
         return False
-    age = (datetime.now(timezone.utc) - interview.started_at).total_seconds()
+    
+    # Normalize: ensure both datetimes use the same UTC representation
+    started = interview.started_at
+    if started.tzinfo is not None and started.tzinfo != timezone.utc:
+        started = started.astimezone(timezone.utc)
+    
+    now = datetime.now(timezone.utc)
+    age = (now - started).total_seconds()
     return age <= _RESUME_WINDOW_SECONDS
