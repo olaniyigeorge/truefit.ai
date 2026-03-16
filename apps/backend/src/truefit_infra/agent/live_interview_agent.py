@@ -83,16 +83,18 @@ class LiveInterviewAgent:
     # ── Context injection ─────────────────────────────────────────────────────
 
     async def _inject_context(self, session: GeminiLiveAdapter, ctx: InterviewContext) -> None:
+        context_json = json.dumps({
+            'interview_id': str(ctx.interview_id),
+            'job_title': ctx.job_title,
+            'required_skills': ctx.required_skills,
+            'max_questions': ctx.max_questions,
+            'topics': ctx.topics,
+        }, indent=2)
+
         await session.send_client_content(
             text=(
                 f"Interview session is starting now.\n"
-                f"Context: {json.dumps({
-                    'interview_id': str(ctx.interview_id),
-                    'job_title': ctx.job_title,
-                    'required_skills': ctx.required_skills,
-                    'max_questions': ctx.max_questions,
-                    'topics': ctx.topics,
-                }, indent=2)}\n\n"
+                f"Context: {context_json}\n\n"
                 f"Please greet {ctx.candidate_name} warmly and begin "
                 f"the interview when you hear them speak."
             )
