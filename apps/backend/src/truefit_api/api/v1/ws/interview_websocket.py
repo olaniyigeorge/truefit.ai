@@ -308,7 +308,7 @@ class InterviewConnection:
 
     # ── Audio I/O — WebRTC paths ──────────────────────────────────────────────
 
-    async def _audio_input_stream(self) -> AsyncIterator[tuple[bytes, bool]]:
+    async def _audio_input_stream(self) -> AsyncIterator[bytes]:
         if not self._webrtc:
             raise RuntimeError("WebRTC not ready before audio stream started")
         async for chunk_tuple in self._webrtc.audio_bridge.audio_input_stream():

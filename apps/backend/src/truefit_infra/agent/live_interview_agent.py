@@ -51,7 +51,6 @@ class LiveInterviewAgent:
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
         self._session_ready = asyncio.Event()
-        self._on_input_text_output = on_input_text_output
 
     # ── Entry point ──
 
@@ -124,20 +123,16 @@ class LiveInterviewAgent:
                 case "text":
                     if self._on_text_output:
                         await self._on_text_output(data)
-                case "interrupted":
-                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
-                    if self._on_interrupt:
-                        await self._on_interrupt()
                 case "input_text":
                     logger.info(f"[Agent] Candidate said: {data}")
                     if self._on_input_text_output:
                         await self._on_input_text_output(data)
                 case "interrupted":
-                    # Gemini detected candidate interruption
-                    # Clear the outbound audio queue so stale agent audio stops playing
-                    logger.info("[Agent] Candidate interrupted agent — clearing audio queue")
-                    if hasattr(self, '_clear_audio_queue'):
-                        await self._clear_audio_queue()
+                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
+                    if self._webrtc and hasattr(self._webrtc, 'audio_bridge'):
+                        await self._webrtc.audio_bridge.clear_outbound_queue()
+                    if self._on_interrupt:
+                        await self._on_interrupt()
                 case "tool_call":
                     result = await self._handle_tool_call(
                         name=data["name"], args=data["args"], call_id=data["id"],
