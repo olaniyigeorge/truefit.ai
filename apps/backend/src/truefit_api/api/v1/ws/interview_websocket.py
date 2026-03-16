@@ -225,10 +225,11 @@ class InterviewConnection:
         self._suppress_audio = True
         await asyncio.sleep(0.3)
         self._suppress_audio = False
-        
+
     async def _on_turn_complete(self) -> None:
-        """Agent finished its turn — re-enable mic input to Gemini."""
+        """Agent finished its turn — clear audio buffer and re-enable mic."""
         if self._webrtc:
+            await self._webrtc.audio_bridge.clear_outbound_queue() 
             self._webrtc.audio_bridge.set_agent_speaking(False)
 
     async def _on_input_text_output(self, text: str) -> None:
