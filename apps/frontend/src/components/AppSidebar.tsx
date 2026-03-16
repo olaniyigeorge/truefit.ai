@@ -31,7 +31,7 @@ const recruiterNav = [
     {label: "Jobs", to: "/jobs", icon: Briefcase},
     {label: "Candidates", to: "/candidates", icon: Users},
     {label: "Applications", to: "/applications", icon: FileText},
-    {label: "Organisation", to: "/organisation", icon: Building2},
+    {label: "Organisation", to: "/org", icon: Building2},
 ]
 
 const candidateNav = [

@@ -4,7 +4,7 @@ Handles OAuth token verification and backend JWT issuance.
 """
 
 from typing import Optional
-
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 
@@ -195,6 +195,38 @@ async def get_current_user_info(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get user information",
         )
+
+@router.post("/refresh", response_model=AuthTokenResponse)
+async def refresh_token(
+    current_user: TokenPayload = Depends(get_current_user),
+    jwt_svc: JWTService = Depends(get_jwt_service),
+    user_svc: UserService = Depends(get_user_service),
+) -> AuthTokenResponse:
+    """Issue a fresh JWT with latest user data from DB."""
+    user = await user_svc.get_user(uuid.UUID(current_user.user_id))
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    access_token = jwt_svc.create_access_token(
+        subject=str(user.id),
+        user_email=user.email,
+        user_role=user.role.value if hasattr(user.role, "value") else str(user.role),
+        org_id=str(user.org_id) if user.org_id else None,
+    )
+
+    return AuthTokenResponse(
+        access_token=access_token,
+        is_new_user=False,
+        user=UserAuthResponse(
+            id=user.id,
+            email=user.email,
+            display_name=user.display_name,
+            role=user.role.value if hasattr(user.role, "value") else str(user.role),
+            org_id=user.org_id,
+            is_active=user.is_active,
+        ),
+    )
+
 
 
 @router.post("/logout")
