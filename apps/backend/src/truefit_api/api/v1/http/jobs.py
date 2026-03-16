@@ -225,6 +225,16 @@ async def create_job(
     return JobOut.from_domain(job)
 
 
+@router.get("/active", response_model=list[JobOut])
+async def list_active_jobs(
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+):
+    """List all active jobs across all orgs — for candidate job discovery."""
+    jobs = await repo.list_all_active(limit=limit, offset=offset)
+    return [JobOut.from_domain(j) for j in jobs]
+
 @router.get("/{job_id}", response_model=JobOut)
 async def get_job(
     job_id: uuid.UUID,

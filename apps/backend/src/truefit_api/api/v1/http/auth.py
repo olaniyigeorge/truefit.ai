@@ -27,6 +27,7 @@ from src.truefit_api.api.v1.http.schemas.oauth import (
     UserAuthResponse,
     CurrentUserResponse,
 )
+from src.truefit_infra.config import AppConfig
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -72,7 +73,7 @@ async def oauth_authenticate(
         # Step 1: Get OAuth service for the specified provider
         oauth_svc = get_oauth_service(
             provider_type=request.provider,
-            project_id="truefit-ai",  # TODO: Move to config
+            project_id=AppConfig.FIREBASE_PROJECT_ID
         )
         
         # Step 2: Verify OAuth token with provider
@@ -81,7 +82,7 @@ async def oauth_authenticate(
         logger.info(f"OAuth token verified for {identity['email']}")
         
         # Step 3: Get or create user in database
-        user = await user_svc.get_or_create_oauth_user(
+        user, is_new_user = await user_svc.get_or_create_oauth_user(
             email=identity["email"],
             provider=request.provider,
             provider_subject=identity["provider_subject"],
@@ -114,6 +115,7 @@ async def oauth_authenticate(
         # Step 6: Return response
         return AuthTokenResponse(
             access_token=access_token,
+            is_new_user=is_new_user,
             user=UserAuthResponse(
                 id=user.id,
                 email=user.email,

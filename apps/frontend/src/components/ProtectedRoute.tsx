@@ -11,7 +11,7 @@ export default function ProtectedRoute () {
     if(loading) return <span>Loading ...</span>
 
     if(!user){
-        return <Navigate to="/login" state={{from: location}} replace />
+        return <Navigate to="/auth" state={{from: location}} replace />
     }
     
     return <Outlet />

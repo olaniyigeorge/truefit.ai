@@ -5,6 +5,7 @@ Called directly by InterviewConnection over the WebSocket.
 from __future__ import annotations
 
 from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceCandidate
+from aiortc.sdp import candidate_from_sdp
 
 from .webrtc_client import WebRTCClient, WebRTCClientRegistry
 from src.truefit_core.common.utils import logger
@@ -51,6 +52,11 @@ class WebRTCSignaling:
         logger.info(f"[{self._session_id}] setRemoteDescription")
         await pc.setRemoteDescription(RTCSessionDescription(sdp=sdp, type=sdp_type))
         
+        # ← Add outbound audio track BEFORE createAnswer so it's negotiated
+        outbound_track = self._client.audio_bridge.create_outbound_track()
+        self._client.add_outbound_audio_track(outbound_track)
+
+
         logger.info(f"[{self._session_id}] createAnswer")
         answer = await pc.createAnswer()
         
@@ -60,6 +66,8 @@ class WebRTCSignaling:
         WebRTCClientRegistry.register(self._session_id, self._client)
         logger.info(f"[{self._session_id}] WebRTC offer handled, answer ready")
         return pc.localDescription.sdp
+    
+    
     # ── Step 2: trickle ICE candidates ───────────────────────────────────────
 
     async def handle_ice_candidate(
@@ -73,12 +81,26 @@ class WebRTCSignaling:
             logger.warning(f"[{self._session_id}] ICE candidate before offer — dropping")
             return
 
-        ice = RTCIceCandidate(
-            candidate=candidate,
-            sdpMid=sdp_mid,
-            sdpMLineIndex=sdp_mline_index,
-        )
-        await self._client.pc.addIceCandidate(ice)
+        if not candidate:
+            return  # browser sends an empty string as the end-of-candidates signal
+
+        # ice = RTCIceCandidate(
+        #     candidate=candidate,
+        #     sdpMid=sdp_mid,
+        #     sdpMLineIndex=sdp_mline_index,
+        # )
+        try:
+        # Strip the "candidate:" prefix that browsers include
+            sdp_line = candidate
+            if sdp_line.startswith("candidate:"):
+                sdp_line = sdp_line[len("candidate:"):]
+
+            ice = candidate_from_sdp(sdp_line)
+            ice.sdpMid = sdp_mid
+            ice.sdpMLineIndex = sdp_mline_index
+            await self._client.pc.addIceCandidate(ice)
+        except Exception as e:
+            logger.warning(f"[{self._session_id}] Failed to add ICE candidate: {e}")
 
     # ── Accessors ─────────────────────────────────────────────────────────────
 

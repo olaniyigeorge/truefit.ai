@@ -8,6 +8,15 @@ import httpx
 from google.auth.transport.requests import Request
 from google.oauth2 import id_token
 
+import jwt as pyjwt
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.backends import default_backend
+
+
+import firebase_admin
+from firebase_admin import auth as firebase_auth, credentials
+
+
 from src.truefit_core.common.utils import logger
 
 
@@ -30,47 +39,98 @@ class OAuthProvider:
         raise NotImplementedError
 
 
-class FirebaseOAuthProvider(OAuthProvider):
-    """OAuth provider for Firebase authentication."""
+# class FirebaseOAuthProvider(OAuthProvider):
+#     """OAuth provider for Firebase authentication."""
     
+#     def __init__(self, project_id: str):
+#         self.project_id = project_id
+#         # Firebase public certificate URL (Google manages these)
+#         self.certs_url = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+#         self.issuer_template = "https://securetoken.google.com/{}"
+    
+#     async def verify_token(self, token: str) -> Dict[str, Any]:
+#         """
+#         Verify Firebase ID token.
+        
+#         Args:
+#             token: Firebase ID token from frontend
+        
+#         Returns:
+#             Claims dictionary with user information
+        
+#         Raises:
+#             ValueError: If token is invalid or verification fails
+#         """
+#         try:
+#             # Use Google's library to verify Firebase tokens
+#             # This validates signature, expiration, and audience
+#             claims = id_token.verify_oauth2_token(
+#                 token, 
+#                 Request(), 
+#                 self.project_id
+#             )
+            
+#             # Verify the token is from Firebase (issuer check)
+#             expected_issuer = self.issuer_template.format(self.project_id)
+#             if claims.get("iss") != expected_issuer:
+#                 raise ValueError(f"Unexpected issuer: {claims.get('iss')}")
+            
+#             logger.debug(f"Firebase token verified for user {claims.get('sub')}")
+#             return claims
+#         except Exception as e:
+#             logger.error(f"Firebase token verification failed: {e}")
+#             raise ValueError(f"Invalid Firebase token: {str(e)}")
+
+class FirebaseOAuthProvider(OAuthProvider):
+
+    CERTS_URL = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+
     def __init__(self, project_id: str):
         self.project_id = project_id
-        # Firebase public certificate URL (Google manages these)
-        self.certs_url = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-        self.issuer_template = "https://securetoken.google.com/{}"
-    
+
+
     async def verify_token(self, token: str) -> Dict[str, Any]:
-        """
-        Verify Firebase ID token.
-        
-        Args:
-            token: Firebase ID token from frontend
-        
-        Returns:
-            Claims dictionary with user information
-        
-        Raises:
-            ValueError: If token is invalid or verification fails
-        """
         try:
-            # Use Google's library to verify Firebase tokens
-            # This validates signature, expiration, and audience
-            claims = id_token.verify_oauth2_token(
-                token, 
-                Request(), 
-                self.project_id
+            async with httpx.AsyncClient() as client:
+                r = await client.get(self.CERTS_URL)
+                certs = r.json()
+
+            header = pyjwt.get_unverified_header(token)
+            kid = header.get("kid")
+
+            if kid not in certs:
+                raise ValueError(f"Certificate for key id {kid} not found.")
+
+            # Load the PEM cert and extract the public key
+            cert_bytes = certs[kid].encode("utf-8")
+            cert = load_pem_x509_certificate(cert_bytes, default_backend())
+            public_key = cert.public_key()
+
+            claims = pyjwt.decode(
+                token,
+                public_key,
+                algorithms=["RS256"],
+                audience=self.project_id,
+                issuer=f"https://securetoken.google.com/{self.project_id}",
             )
-            
-            # Verify the token is from Firebase (issuer check)
-            expected_issuer = self.issuer_template.format(self.project_id)
-            if claims.get("iss") != expected_issuer:
-                raise ValueError(f"Unexpected issuer: {claims.get('iss')}")
-            
-            logger.debug(f"Firebase token verified for user {claims.get('sub')}")
             return claims
+
+        except pyjwt.ExpiredSignatureError:
+            raise ValueError("Firebase token has expired")
+        except pyjwt.InvalidTokenError as e:
+            raise ValueError(f"Invalid Firebase token: {e}")
         except Exception as e:
             logger.error(f"Firebase token verification failed: {e}")
             raise ValueError(f"Invalid Firebase token: {str(e)}")
+    
+    async def extract_identity(self, claims: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "email":            claims["email"],
+            "provider_subject": claims["sub"],   # uid is in "sub" in raw JWT
+            "name":             claims.get("name"),
+            "picture":          claims.get("picture"),
+                "email_verified":   claims.get("email_verified", False),
+            }
 
 
 class GoogleOAuthProvider(OAuthProvider):

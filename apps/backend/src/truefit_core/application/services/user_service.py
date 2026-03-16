@@ -154,6 +154,7 @@ class UserService:
         user_id: uuid.UUID,
         display_name: str | None = None,
         is_active: bool | None = None,
+        role: str | None = None,
     ) -> User:
         user = await self._users.get_by_id(user_id)
         if not user:
@@ -163,6 +164,10 @@ class UserService:
             raise ValueError("At least one field must be provided")
 
         user.update_profile(display_name=display_name, is_active=is_active)
+
+        if role is not None:
+            user.role = UserRole(role)
+            
         await self._users.save(user)
         return user
 
@@ -182,7 +187,7 @@ class UserService:
         provider: str,
         provider_subject: str,
         display_name: str | None = None,
-    ) -> User | None:
+    ) -> tuple[User, bool]: #(User, is_new_user)
         """
         Get existing OAuth user or create new one.
         
@@ -203,52 +208,28 @@ class UserService:
         Raises:
             ValueError: If there's a conflict or invalid state
         """
+
         email_norm = email.lower().strip()
-        
-        # Try to get existing user
-        existing_user = await self._users.get_by_email(email_norm)
-        
-        if existing_user:
-            # User exists - verify or update provider info
-            if existing_user.auth_provider != provider:
-                logger.warning(
-                    f"User {email_norm} exists with different provider: "
-                    f"{existing_user.auth_provider} vs {provider}"
-                )
-                # Could allow this for federated identity, but for now we require same provider
-                raise ValueError(
-                    f"User already exists with different provider ({existing_user.auth_provider})"
-                )
-            
-            # Update provider_subject if different (handles provider ID changes)
-            if existing_user.provider_subject != provider_subject:
-                logger.info(
-                    f"Updating provider_subject for user {email_norm}"
-                )
-                existing_user.provider_subject = provider_subject
-                await self._users.save(existing_user)
-            
-            # Update display_name if provided and different
-            if display_name and existing_user.display_name != display_name:
-                existing_user.display_name = display_name
-                await self._users.save(existing_user)
-            
-            logger.info(f"OAuth user authenticated: {email_norm}")
-            return existing_user
-        
-        # User doesn't exist - create new OAuth user
+        existing = await self._users.get_by_email(email_norm)
+
+        if existing:
+            # Existing user — update provider_subject if changed
+            if existing.provider_subject != provider_subject:
+                existing.provider_subject = provider_subject
+                await self._users.save(existing)
+            return existing, False  # ← not new
+
+        # New user
         try:
             user = User.create(
                 email=email_norm,
                 display_name=display_name,
-                role=UserRole.candidate,  # Default new OAuth users to candidate
+                role=UserRole.candidate,
                 auth_provider=provider,
                 provider_subject=provider_subject,
                 org_id=None,
             )
             await self._users.save(user)
-            
-            # Create candidate profile for new user
             await self._candidates.create_for_user(
                 user_id=user.id,
                 headline=None,
@@ -257,9 +238,68 @@ class UserService:
                 years_experience=None,
                 skills=[],
             )
-            
             logger.info(f"New OAuth user created: {email_norm}")
-            return user
+            return user, True  # ← is new
         except Exception as e:
             logger.error(f"Error creating OAuth user: {e}")
             raise ValueError(f"Failed to create user: {str(e)}")
+        # email_norm = email.lower().strip()
+        
+        # # Try to get existing user
+        # existing_user = await self._users.get_by_email(email_norm)
+        
+        # if existing_user:
+        #     # User exists - verify or update provider info
+        #     if existing_user.auth_provider != provider:
+        #         logger.warning(
+        #             f"User {email_norm} exists with different provider: "
+        #             f"{existing_user.auth_provider} vs {provider}"
+        #         )
+        #         # Could allow this for federated identity, but for now we require same provider
+        #         raise ValueError(
+        #             f"User already exists with different provider ({existing_user.auth_provider})"
+        #         )
+            
+        #     # Update provider_subject if different (handles provider ID changes)
+        #     if existing_user.provider_subject != provider_subject:
+        #         logger.info(
+        #             f"Updating provider_subject for user {email_norm}"
+        #         )
+        #         existing_user.provider_subject = provider_subject
+        #         await self._users.save(existing_user)
+            
+        #     # Update display_name if provided and different
+        #     if display_name and existing_user.display_name != display_name:
+        #         existing_user.display_name = display_name
+        #         await self._users.save(existing_user)
+            
+        #     logger.info(f"OAuth user authenticated: {email_norm}")
+        #     return existing_user
+        
+        # # User doesn't exist - create new OAuth user
+        # try:
+        #     user = User.create(
+        #         email=email_norm,
+        #         display_name=display_name,
+        #         role=UserRole.candidate,  # Default new OAuth users to candidate
+        #         auth_provider=provider,
+        #         provider_subject=provider_subject,
+        #         org_id=None,
+        #     )
+        #     await self._users.save(user)
+            
+        #     # Create candidate profile for new user
+        #     await self._candidates.create_for_user(
+        #         user_id=user.id,
+        #         headline=None,
+        #         bio=None,
+        #         location=None,
+        #         years_experience=None,
+        #         skills=[],
+        #     )
+            
+        #     logger.info(f"New OAuth user created: {email_norm}")
+        #     return user
+        # except Exception as e:
+        #     logger.error(f"Error creating OAuth user: {e}")
+        #     raise ValueError(f"Failed to create user: {str(e)}")

@@ -31,6 +31,7 @@ class GlobalConfig(BaseSettings):
     WEBRTC_TOKEN_SECRET: str
     WORKERS_ENABLED: str
     SENTRY_DSN: str
+    FIREBASE_PROJECT_ID: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

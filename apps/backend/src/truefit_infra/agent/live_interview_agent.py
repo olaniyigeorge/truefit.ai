@@ -14,6 +14,7 @@ from src.truefit_core.agents.interviewer.context import InterviewContext
 from src.truefit_core.agents.interviewer.prompts import build_system_prompt
 from src.truefit_core.agents.interviewer.tools import INTERVIEW_TOOLS
 from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
+from src.truefit_infra.realtime.audio_bridge import SILENCE_CHUNK
 
 INTERRUPT_CACHE_TTL = 30
 
@@ -34,6 +35,8 @@ class LiveInterviewAgent:
         audio_input_stream: AsyncIterator[bytes],
         on_audio_output: Callable[[bytes], Coroutine],
         on_text_output: Optional[Callable[[str], Coroutine]] = None,
+        on_input_text_output: Optional[Callable[[str], Coroutine]] = None, 
+        on_interrupt: Optional[Callable[[], Coroutine]] = None
     ) -> None:
         self._adapter = live_adapter
         self._orchestration = orchestration
@@ -42,22 +45,26 @@ class LiveInterviewAgent:
         self._audio_input = audio_input_stream
         self._on_audio_output = on_audio_output
         self._on_text_output = on_text_output
+        self._on_interrupt = on_interrupt
+        self._on_input_text_output = on_input_text_output
         self._current_question_id: Optional[uuid.UUID] = None
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
+        self._session_ready = asyncio.Event()
+        self._on_input_text_output = on_input_text_output
 
     # ── Entry point ──
 
     async def run(self, context: InterviewContext) -> None:
         self._interview_id = context.interview_id
 
-        # open_session owns all LiveConnectConfig — agent has no SDK knowledge
         async with self._adapter.open_session(
             system_prompt=build_system_prompt(context),
             tools=INTERVIEW_TOOLS,
         ) as session:
             logger.info(f"[Agent] Session opened for interview {context.interview_id}")
             await self._inject_context(session, context)
+            self._session_ready.set()
 
             try:
                 await asyncio.gather(
@@ -73,19 +80,22 @@ class LiveInterviewAgent:
                 )
                 raise
 
+
     # ── Context injection ─────────────────────────────────────────────────────
 
     async def _inject_context(self, session: GeminiLiveAdapter, ctx: InterviewContext) -> None:
+        context_json = json.dumps({
+            'interview_id': str(ctx.interview_id),
+            'job_title': ctx.job_title,
+            'required_skills': ctx.required_skills,
+            'max_questions': ctx.max_questions,
+            'topics': ctx.topics,
+        }, indent=2)
+
         await session.send_client_content(
             text=(
                 f"Interview session is starting now.\n"
-                f"Context: {json.dumps({
-                    'interview_id': str(ctx.interview_id),
-                    'job_title': ctx.job_title,
-                    'required_skills': ctx.required_skills,
-                    'max_questions': ctx.max_questions,
-                    'topics': ctx.topics,
-                }, indent=2)}\n\n"
+                f"Context: {context_json}\n\n"
                 f"Please greet {ctx.candidate_name} warmly and begin "
                 f"the interview when you hear them speak."
             )
@@ -93,14 +103,16 @@ class LiveInterviewAgent:
 
     # ── Audio sender ──────────────────────────────────────────────────────────
 
-    async def _send_audio_loop(self, session: GeminiLiveAdapter) -> None:
+    async def _send_audio_loop(self, session):
+        await self._session_ready.wait()
         async for chunk in self._audio_input:
             if self._session_complete.is_set():
                 break
-            await session.send_audio(chunk)
+            if chunk:  # only send non-empty chunks
+                await session.send_audio(chunk)
+
 
     # ── Response receiver ─────────────────────────────────────────────────────
-
     async def _receive_loop(self, session: GeminiLiveAdapter) -> None:
         async for event_type, data in session.receive():
             if self._session_complete.is_set():
@@ -112,23 +124,29 @@ class LiveInterviewAgent:
                 case "text":
                     if self._on_text_output:
                         await self._on_text_output(data)
+                case "interrupted":
+                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
+                    if self._on_interrupt:
+                        await self._on_interrupt()
                 case "input_text":
-                    logger.debug(f"[Agent] Candidate said: {data}")
+                    logger.info(f"[Agent] Candidate said: {data}")
+                    if self._on_input_text_output:
+                        await self._on_input_text_output(data)
+                case "interrupted":
+                    # Gemini detected candidate interruption
+                    # Clear the outbound audio queue so stale agent audio stops playing
+                    logger.info("[Agent] Candidate interrupted agent — clearing audio queue")
+                    if hasattr(self, '_clear_audio_queue'):
+                        await self._clear_audio_queue()
                 case "tool_call":
                     result = await self._handle_tool_call(
-                        name=data["name"],
-                        args=data["args"],
-                        call_id=data["id"],
+                        name=data["name"], args=data["args"], call_id=data["id"],
                     )
                     await session.send_tool_response(
-                        call_id=data["id"],
-                        name=data["name"],
-                        result=result,
+                        call_id=data["id"], name=data["name"], result=result,
                     )
                 case "turn_complete":
                     logger.debug("[Agent] Turn complete")
-                case "interrupted":
-                    logger.debug("[Agent] Candidate interrupted")
                 case "go_away":
                     logger.warning("[Agent] Server closing connection")
                     break

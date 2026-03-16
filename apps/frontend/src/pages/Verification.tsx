@@ -27,10 +27,10 @@ const Verification = () => {
 
             setIsProcessing(true)
             try {
-                await signInWithEmailLink(auth, email, window.location.href)
+                const userCredential = await signInWithEmailLink(auth, email, window.location.href)
                 localStorage.removeItem('emailForSignIn')
-                await createSession()
-                navigate(from, {replace: true})
+                const {is_new_user} = await createSession(userCredential.user)
+                navigate(is_new_user ? '/onboarding' : from, {replace: true})
             } catch (error: any) {
                 setError(getFirebaseErrorMessage(error.code))
             }finally{
