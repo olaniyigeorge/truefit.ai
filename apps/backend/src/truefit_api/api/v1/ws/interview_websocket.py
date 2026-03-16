@@ -188,6 +188,7 @@ class InterviewConnection:
                 on_text_output=self._on_text_output,
                 on_input_text_output=self._on_input_text_output,
                 on_interrupt=self._on_interrupt,
+                on_turn_complete=self._on_turn_complete,
             )
 
             # ⑧ Run agent alongside the already-running tasks
@@ -220,9 +221,15 @@ class InterviewConnection:
     async def _on_interrupt(self) -> None:
         if self._webrtc:
             await self._webrtc.audio_bridge.clear_outbound_queue()
+            self._webrtc.audio_bridge.set_agent_speaking(False)  # ← add this
         self._suppress_audio = True
         await asyncio.sleep(0.3)
         self._suppress_audio = False
+        
+    async def _on_turn_complete(self) -> None:
+        """Agent finished its turn — re-enable mic input to Gemini."""
+        if self._webrtc:
+            self._webrtc.audio_bridge.set_agent_speaking(False)
 
     async def _on_input_text_output(self, text: str) -> None:
         """Candidate speech transcription from Gemini."""
