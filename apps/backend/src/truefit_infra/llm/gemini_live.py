@@ -247,7 +247,7 @@ class _LiveSessionContext:
             realtime_input_config=types.RealtimeInputConfig(
                 automatic_activity_detection=types.AutomaticActivityDetection(
                     disabled=False,
-                    silence_duration_ms=800,   # respond 800ms after candidate stops
+                    silence_duration_ms=4000, 
                     prefix_padding_ms=20,
                 )
             ),

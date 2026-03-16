@@ -69,7 +69,6 @@ class LiveInterviewAgent:
                 await asyncio.gather(
                     self._send_audio_loop(session),
                     self._receive_loop(session),
-                    self._gemini_keepalive(session),  # ← add
                 )
             except InterviewCompleteSignal as sig:
                 logger.info(f"[Agent] Interview {context.interview_id} completed: {sig.reason}")
@@ -80,17 +79,6 @@ class LiveInterviewAgent:
                 )
                 raise
 
-    async def _gemini_keepalive(self, session: GeminiLiveAdapter) -> None:
-        """Keep Gemini WS alive — send silence every 20s during long pauses."""
-        while not self._session_complete.is_set():
-            await asyncio.sleep(20)
-            if self._session_complete.is_set():
-                break
-            try:
-                await session.send_audio(SILENCE_CHUNK)
-            except Exception as e:
-                logger.warning(f"[Agent] Keepalive failed: {e}")
-                break
 
     # ── Context injection ─────────────────────────────────────────────────────
 
@@ -112,24 +100,14 @@ class LiveInterviewAgent:
 
     # ── Audio sender ──────────────────────────────────────────────────────────
 
-    async def _send_audio_loop(self, session: GeminiLiveAdapter) -> None:
+    async def _send_audio_loop(self, session):
         await self._session_ready.wait()
         async for chunk in self._audio_input:
             if self._session_complete.is_set():
                 break
-            if not chunk:  # empty bytes = stream pause sentinel
-                logger.debug("[Agent] Mic silence — sending audio_stream_end")
-                try:
-                    await session.send_audio_stream_end()
-                except Exception:
-                    pass
-            else:
+            if chunk:  # only send non-empty chunks
                 await session.send_audio(chunk)
-        # Final flush
-        try:
-            await session.send_audio_stream_end()
-        except Exception:
-            pass
+
 
     # ── Response receiver ─────────────────────────────────────────────────────
     async def _receive_loop(self, session: GeminiLiveAdapter) -> None:

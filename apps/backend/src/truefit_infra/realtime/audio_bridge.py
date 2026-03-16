@@ -49,7 +49,11 @@ class AudioBridge:
         self._outbound_track: Optional[_AgentAudioTrack] = None
         self._closed = False
         self._track_attached = asyncio.Event() 
+        self._agent_speaking = False
 
+
+    def set_agent_speaking(self, speaking: bool) -> None:
+        self._agent_speaking = speaking
 
     # ── Inbound (browser → agent) ─────────────────────────────────────────────
 
@@ -89,6 +93,9 @@ class AudioBridge:
                     logger.warning(f"[{self._ctx.session_id}] Inbound track error: {e}")
                     break
 
+                if self._agent_speaking:
+                    continue
+
                 # Resample to target format
                 resampled_frames = resampler.resample(frame)
                 for rf in resampled_frames:
@@ -118,23 +125,17 @@ class AudioBridge:
     async def audio_input_stream(self) -> AsyncIterator[bytes]:
         await asyncio.wait_for(self._track_attached.wait(), timeout=30.0)
         chunk_count = 0
-        consecutive_timeouts = 0
-        STREAM_END_AFTER = 10  # 10 × 100ms = 1s silence → signal stream pause
-
         while True:
             try:
-                chunk = await asyncio.wait_for(self.inbound_queue.get(), timeout=0.1)
+                chunk = await asyncio.wait_for(self.inbound_queue.get(), timeout=2.0)
                 if chunk is None:
-                    return
-                consecutive_timeouts = 0
+                    return  # bridge closed
                 chunk_count += 1
                 if chunk_count % 100 == 0:
                     logger.info(f"[{self._ctx.session_id}] Sent {chunk_count} chunks to Gemini")
                 yield chunk
             except asyncio.TimeoutError:
-                consecutive_timeouts += 1
-                if consecutive_timeouts == STREAM_END_AFTER:
-                    yield b""  # sentinel → _send_audio_loop sends audio_stream_end
+                continue
                 
     # ── Outbound (agent → browser) ────────────────────────────────────────────
 
@@ -162,6 +163,7 @@ class AudioBridge:
         Called by the agent to push a PCM response chunk toward the browser.
         Non-blocking — drops if queue is full (prefer freshness over latency).
         """
+        self._agent_speaking = True
         try:
             self.outbound_queue.put_nowait(pcm_bytes)
         except asyncio.QueueFull:
