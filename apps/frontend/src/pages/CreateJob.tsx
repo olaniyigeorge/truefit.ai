@@ -20,33 +20,33 @@ import { Textarea } from "@/components/ui/textarea"
 import {SkillsEditor} from "@/components/SkillsEditor"
 
 
-type FormState = {
-    title: string
-    description: string
-    experience_level: string
-    min_total_years: string
-    location: string
-    work_arrangement: string
-    education: string
-    max_questions: string
-    max_duration_minutes: string
-    topics: string
-    custom_instructions: string
-}
+// type FormState = {
+//     title: string
+//     description: string
+//     experience_level: string
+//     min_total_years: string
+//     location: string
+//     work_arrangement: string
+//     education: string
+//     max_questions: string
+//     max_duration_minutes: string
+//     topics: string
+//     custom_instructions: string
+// }
  
-const INITIAL_FORM: FormState = {
-    title: "",
-    description: "",
-    experience_level: "mid",
-    min_total_years: "",
-    location: "",
-    work_arrangement: "remote",
-    education: "",
-    max_questions: "8",
-    max_duration_minutes: "30",
-    topics: "",
-    custom_instructions: "",
-}
+// const INITIAL_FORM: FormState = {
+//     title: "",
+//     description: "",
+//     experience_level: "mid",
+//     min_total_years: "",
+//     location: "",
+//     work_arrangement: "remote",
+//     education: "",
+//     max_questions: "8",
+//     max_duration_minutes: "30",
+//     topics: "",
+//     custom_instructions: "",
+// }
 
 
 const schema = z.object({
