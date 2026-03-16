@@ -400,5 +400,9 @@ export function useInterviewSession({
     startScreenShare,
     // Refs (for audio element)
     audioRef,
+    localStreamRef
+
+
+    
   }
 }
