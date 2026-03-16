@@ -1,6 +1,6 @@
 import {useSidebar} from "@/components/ui/sidebar";
 import {Button} from "@/components/ui/button";
-import { HamburgerIcon, Menu} from "lucide-react";
+import { Menu} from "lucide-react";
 
 
 const CustomTrigger = () =>  {
