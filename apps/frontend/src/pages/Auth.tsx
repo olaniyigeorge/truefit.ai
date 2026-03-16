@@ -10,6 +10,7 @@ import { createSession } from "@/helpers/api/auth.api"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { useAuthContext } from "@/hooks/useAuthContext"
 
 
 const googleProvider = new GoogleAuthProvider();
@@ -18,6 +19,8 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname ?? '/dashboard';
+
+  const {refreshBackendUser} = useAuthContext()
 
   const form = useForm<authFormValues>({
     resolver: zodResolver(authSchema),
@@ -51,7 +54,8 @@ const AuthPage = () => {
       // TODO: get the idToken for the result and hit the backend with it (probably in createSession)
       // TODO: use the auth/oauth/token endpoint to exchange the idToken for a JWT from our backend, then store that JWT in cookies for subsequent requests.
       const {is_new_user} = await createSession(result.user)
-      await createSession(result.user)
+      refreshBackendUser()
+      // await createSession(result.user)
       navigate(is_new_user ? '/onboarding' : from, { replace: true });
     } catch (error: any) {
       form.setError('root', { message: getFirebaseErrorMessage(error.code) });

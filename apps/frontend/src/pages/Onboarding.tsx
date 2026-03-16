@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { signOut } from "firebase/auth"
 import { auth } from "@/helpers/firebase"
 import { Users, Briefcase, ArrowRight, AlertCircle, Building2 } from "lucide-react"
+import { refreshSession } from "@/helpers/api/auth.api"
 
 
 
@@ -41,7 +42,7 @@ function Steps({ current, total }: { current: number; total: number }) {
 
 const Onboarding = () => {
     const navigate = useNavigate()
-    const { backendUser } = useAuthContext()
+    const { backendUser, loading: authLoading, refreshBackendUser } = useAuthContext()
  
     const [step, setStep] = useState<"role" | "org">("role")
     const [role, setRole] = useState<Role | null>(null)
@@ -78,11 +79,9 @@ const Onboarding = () => {
         setError(null)
         try {
             await usersApi.update(backendUser.id, { role: selectedRole })
-            document.cookie = "jwt=; path=/; max-age=0"
-            await signOut(auth)
-            // Re-hydrate context by navigating — context reads role from JWT cookie on next load
-            // For now navigate to dashboard; a full re-auth would refresh the JWT with new role
-            navigate("/auth", { replace: true })
+            await refreshSession()
+            refreshBackendUser()
+            navigate("/dashboard", { replace: true })
         } catch {
             setError("Failed to save your role. Please try again.")
         } finally {
@@ -92,9 +91,11 @@ const Onboarding = () => {
 
 
     const handleOrgSubmit = async () => {
-        if (!backendUser?.id) return
-        setLoading(true)
-        setError(null)
+        if (!backendUser?.id){
+            console.log("backendUser at submit:", backendUser)
+            setError("Session not ready. Please wait a moment and try again.")
+            return
+        }
  
         try {
             // First update role to recruiter
@@ -107,12 +108,14 @@ const Onboarding = () => {
                     return
                 }
                 const slug = orgSlug.trim() || orgName.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
-                await orgsApi.create({
+              
+                const org = await orgsApi.create({
                     name: orgName.trim(),
                     slug,
                     created_by: backendUser.id,
                     contact: { email: orgEmail.trim() },
                 })
+                await usersApi.update(backendUser.id, { org_id: org.id })
             } else {
                 // Join existing org by slug
                 if (!joinSlug.trim()) {
@@ -123,10 +126,11 @@ const Onboarding = () => {
                 const org = await orgsApi.getBySlug(joinSlug.trim())
                 await usersApi.joinOrg(backendUser.id, org.id)
             }
- 
-            document.cookie = "jwt=; path=/; max-age=0"
-            await signOut(auth)
-            navigate("/auth", { replace: true })
+
+            await new Promise(resolve => setTimeout(resolve, 100))
+            await refreshSession()
+            refreshBackendUser()
+            navigate("/dashboard", { replace: true })
         } catch (e: any) {
             const detail = e?.response?.data?.detail
             setError(typeof detail === "string" ? detail : "Something went wrong. Please try again.")
@@ -134,6 +138,12 @@ const Onboarding = () => {
             setLoading(false)
         }
     }
+
+    if (authLoading) return (
+        <div className="min-h-screen flex items-center justify-center">
+            <p className="text-muted-foreground text-[13px] font-mono">Loading session…</p>
+        </div>
+    )
 
   return (
     <div className="relative min-h-screen bg-background flex items-center justify-center p-6 overflow-hidden">

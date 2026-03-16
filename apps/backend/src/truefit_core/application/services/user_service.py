@@ -155,18 +155,22 @@ class UserService:
         display_name: str | None = None,
         is_active: bool | None = None,
         role: str | None = None,
+        org_id: uuid.UUID | None = None,
     ) -> User:
         user = await self._users.get_by_id(user_id)
         if not user:
             raise ValueError(f"User {user_id} not found")
 
-        if display_name is None and is_active is None:
+        if display_name is None and is_active is None and role is None and org_id is None:
             raise ValueError("At least one field must be provided")
 
         user.update_profile(display_name=display_name, is_active=is_active)
 
         if role is not None:
             user.role = UserRole(role)
+
+        if org_id is not None:
+            user.org_id = org_id
             
         await self._users.save(user)
         return user

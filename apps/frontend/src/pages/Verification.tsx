@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router"
 import {auth, getFirebaseErrorMessage} from "@/helpers/firebase"
 import { createSession } from "@/helpers/api/auth.api"
 import { Button } from "@/components/ui/button"
+import { useAuthContext } from "@/hooks/useAuthContext"
 
 
 const Verification = () => {
@@ -12,6 +13,7 @@ const Verification = () => {
     const from = location.state?.from?.pathname ?? "/dashboard"
     const [error , setError] = useState<string|null>(null)
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
+    const {refreshBackendUser} = useAuthContext()
 
 
 
@@ -30,6 +32,7 @@ const Verification = () => {
                 const userCredential = await signInWithEmailLink(auth, email, window.location.href)
                 localStorage.removeItem('emailForSignIn')
                 const {is_new_user} = await createSession(userCredential.user)
+                refreshBackendUser()
                 navigate(is_new_user ? '/onboarding' : from, {replace: true})
             } catch (error: any) {
                 setError(getFirebaseErrorMessage(error.code))

@@ -102,6 +102,8 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
     async def list_all(self, *, limit: int = 50, offset: int = 0) -> list[Candidate]:
         stmt = (
             select(CandidateProfileModel)
+            .join(UserModel, CandidateProfileModel.user_id == UserModel.id)
+            .where(UserModel.role == "candidate")
             .options(joinedload(CandidateProfileModel.user))
             .order_by(CandidateProfileModel.created_at.desc())
             .limit(limit)

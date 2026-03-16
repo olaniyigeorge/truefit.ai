@@ -16,3 +16,14 @@ export const createSession = async (firebaseUser: User): Promise<SessionResult> 
     document.cookie = `jwt=${access_token}; path=/; SameSite=Strict`
     return {is_new_user, role: user.role}
 };
+
+export const refreshSession = async (): Promise<void> => {
+    try {
+        const res = await API.post('/api/v1/auth/refresh')
+        const { access_token } = res.data
+        document.cookie = `jwt=${access_token}; path=/; SameSite=Strict`
+    } catch (e: any) {
+        console.error("Refresh failed:", e?.response?.data)
+        throw e
+    }
+}

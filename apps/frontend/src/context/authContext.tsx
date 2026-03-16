@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState, useCallback } from "react"
 import { onAuthStateChanged, signOut, type User } from "firebase/auth"
 import { auth } from "@/helpers/firebase"
 
@@ -20,6 +20,7 @@ interface AuthContextType {
     backendUser: BackendUser | null
     loading: boolean;
     logout: () => Promise<void>;
+    refreshBackendUser: () => void
 }
 
 //create the context with an uninitialized undefined value
@@ -30,6 +31,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [backendUser, setBackendUser] = useState<BackendUser | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
+
+    const hydrateFromCookie = useCallback(() => {
+        const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/)
+        if (!match) return
+        const token = match[1]
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]))
+            setBackendUser({
+                id:           payload.sub,
+                email:        payload.email,
+                display_name: null,
+                role:         payload.role,
+                org_id:       payload.org_id ?? null,
+                is_active:    true,
+            })
+        } catch(_){
+            // malformed token
+        }
+    }, [])
 
 
     useEffect(() => {
@@ -45,23 +65,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     }, [])
 
-    useEffect (() => {
-        const match = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/)
-        if(!match) return
-            try{
-                const payload = JSON.parse(atob(match[1].split(".")[1]))
-                setBackendUser({
-                    id: payload.sub,
-                    email: payload.email,
-                    display_name: null,
-                    role: payload.role,
-                    org_id: payload.org_id ?? null,
-                    is_active: true
-                })
-            }catch(err) {
+    useEffect(() => {
+        hydrateFromCookie()
+    }, [user, hydrateFromCookie])
 
-            }
-    }, [user])
     const logout = async () => {
         document.cookie = "jwt=; path=/; max-age=0"
         setBackendUser(null)
@@ -72,7 +79,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         backendUser,
         loading,
-        logout
+        logout,
+        refreshBackendUser: hydrateFromCookie
     }
 
     return (
