@@ -212,7 +212,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         )
 
 
-# ── Session context manager impl ─────────────────────────────────────────────
+# ── Session context manager impl ──
 
 class _LiveSessionContext:
     """
@@ -269,7 +269,7 @@ class _LiveSessionContext:
         logger.info("[GeminiLive] Session closed")
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ── Helpers ──
 
 def _require_session(session: Any) -> None:
     """Raise clearly if a method is called outside an open_session() context."""
