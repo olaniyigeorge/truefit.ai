@@ -1,1 +1,1 @@
- # ← ADD: wires all adapters, exposes singletons
+ # ← ADD: wires all adapters, exposes singletons 
