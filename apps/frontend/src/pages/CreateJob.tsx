@@ -34,19 +34,6 @@ type FormState = {
     custom_instructions: string
 }
  
-const INITIAL_FORM: FormState = {
-    title: "",
-    description: "",
-    experience_level: "mid",
-    min_total_years: "",
-    location: "",
-    work_arrangement: "remote",
-    education: "",
-    max_questions: "8",
-    max_duration_minutes: "30",
-    topics: "",
-    custom_instructions: "",
-}
 
 
 const schema = z.object({
