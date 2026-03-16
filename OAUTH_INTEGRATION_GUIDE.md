@@ -4,6 +4,7 @@
 
 This document explains the OAuth authentication flow implemented in the TrueFit backend. The system uses OAuth providers (primarily Firebase with Google OAuth) for identity verification, then issues backend JWT tokens for session management.
 
+
 ## Architecture
 
 ```

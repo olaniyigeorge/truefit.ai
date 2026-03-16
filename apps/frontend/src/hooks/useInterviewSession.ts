@@ -77,7 +77,7 @@ export function useInterviewSession({
   const wsRef      = useRef<WebSocket | null>(null)
   const pcRef      = useRef<RTCPeerConnection | null>(null)
   const phaseRef = useRef<SessionPhase>("idle")
-  const localRef   = useRef<MediaStream | null>(null)
+  // const localRef   = useRef<MediaStream | null>(null)
   const audioRef   = useRef<HTMLAudioElement | null>(null)
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
   const pingRef    = useRef<ReturnType<typeof setInterval> | null>(null)

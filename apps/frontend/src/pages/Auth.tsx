@@ -46,8 +46,8 @@ const AuthPage = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const idToken = await result.user.getIdToken()
-      console.log('firebase idToken', idToken)
+      // const idToken = await result.user.getIdToken()
+      // console.log('firebase idToken', idToken)
       // TODO: get the idToken for the result and hit the backend with it (probably in createSession)
       // TODO: use the auth/oauth/token endpoint to exchange the idToken for a JWT from our backend, then store that JWT in cookies for subsequent requests.
       const {is_new_user} = await createSession(result.user)

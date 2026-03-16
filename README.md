@@ -3,9 +3,6 @@ Truefit.ai is a Gemini-powered live AI agent that automates hiring by conducting
 
 
 
-
-
-
 ## Project Structure
 
 ```
