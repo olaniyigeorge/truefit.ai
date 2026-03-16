@@ -20,9 +20,9 @@ warn()   { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
 # =============================================================================
-# ── CONFIGURATION — edit these before running ─────────────────────────────────
+# ── CONFIGURATION ─────────────────────────────────────────────────────────────
 # =============================================================================
-REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git"   # <-- change this
+REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git"
 APP_DIR="$HOME/truefit.ai"
 FRONTEND_DIR="$APP_DIR/apps/frontend"
 BACKEND_DIR="$APP_DIR/apps/backend"
@@ -37,34 +37,25 @@ SERVICE_NAME="truefit-api"
 # =============================================================================
 log "Installing system dependencies..."
 
+export DEBIAN_FRONTEND=noninteractive
+
 sudo apt-get update -qq
 sudo apt-get install -y -qq \
     git curl wget build-essential \
-    python3 python3-pip python3-venv \
+    python3 python3-pip python3-venv python3-dev \
     nginx \
     postgresql-client \
     libpq-dev \
     redis-server
 
+# Node.js 20.x
+if ! command -v node &>/dev/null; then
+    log "Installing Node.js 20..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - > /dev/null
+    sudo apt-get install -y -qq nodejs
+fi
+
 # Enable and start Redis
-sudo systemctl enable redis-server
-sudo systemctl start redis-server
-
-if sudo systemctl is-active --quiet redis-server; then
-    success "Redis is running"
-else
-    error "Redis failed to start"
-fi \
-    libpq-dev python3-dev \
-    redis-server
-
-# Start and enable Redis
-sudo systemctl enable redis-server > /dev/null
-sudo systemctl start redis-server \
-    libpq-dev python3-dev \
-    redis-server
-
-# Start and enable Redis
 sudo systemctl enable redis-server > /dev/null
 sudo systemctl start redis-server
 
@@ -72,13 +63,6 @@ if sudo systemctl is-active --quiet redis-server; then
     success "Redis is running"
 else
     warn "Redis failed to start — check: sudo systemctl status redis-server"
-fi
-
-# Node.js 20.x
-if ! command -v node &>/dev/null; then
-    log "Installing Node.js 20..."
-    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - > /dev/null
-    sudo apt-get install -y -qq nodejs
 fi
 
 success "System dependencies ready  (node $(node -v), python $(python3 --version))"
@@ -111,7 +95,6 @@ source venv/bin/activate
 
 pip install --upgrade pip -q
 
-# Support both pip requirements.txt and pyproject.toml
 if [ -f "requirements.txt" ]; then
     pip install -r requirements.txt -q
 elif [ -f "pyproject.toml" ]; then
@@ -120,14 +103,13 @@ else
     error "No requirements.txt or pyproject.toml found in $BACKEND_DIR"
 fi
 
-# Install uvicorn if not already present
 pip install uvicorn -q
 
 deactivate
 success "Backend dependencies installed"
 
 # =============================================================================
-# ── STEP 4: Backend — Copy .env ───────────────────────────────────────────────
+# ── STEP 4: Backend — .env file ───────────────────────────────────────────────
 # =============================================================================
 if [ ! -f "$BACKEND_DIR/.env" ]; then
     if [ -f "$BACKEND_DIR/.env.example" ]; then
@@ -183,7 +165,6 @@ cd "$FRONTEND_DIR"
 npm install --silent
 npm run build
 
-# Vite outputs to dist/, CRA outputs to build/
 if [ -d "$FRONTEND_DIR/dist" ]; then
     FRONTEND_BUILD="$FRONTEND_DIR/dist"
 elif [ -d "$FRONTEND_DIR/build" ]; then
@@ -206,7 +187,6 @@ server {
     listen 80;
     server_name ${EXTERNAL_IP} _;
 
-    # ── React Frontend ──────────────────────────────────────────
     root ${FRONTEND_BUILD};
     index index.html;
 
@@ -214,7 +194,6 @@ server {
         try_files \$uri \$uri/ /index.html;
     }
 
-    # ── FastAPI Backend (proxied at /api) ───────────────────────
     location /api/ {
         proxy_pass http://127.0.0.1:${BACKEND_PORT}/;
         proxy_http_version 1.1;
@@ -226,7 +205,6 @@ server {
         proxy_read_timeout 300s;
     }
 
-    # ── WebSocket support (for /ws routes) ─────────────────────
     location /ws/ {
         proxy_pass http://127.0.0.1:${BACKEND_PORT}/ws/;
         proxy_http_version 1.1;
@@ -238,39 +216,33 @@ server {
 }
 EOF
 
-# Enable site
 sudo ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/truefit
 sudo rm -f /etc/nginx/sites-enabled/default
-
 sudo nginx -t && sudo systemctl restart nginx
 success "Nginx configured and restarted"
 
 # =============================================================================
-# ── STEP 8: Health Check ──────────────────────────────────────────────────────
+# ── STEP 8: Health Checks ─────────────────────────────────────────────────────
 # =============================================================================
 log "Running health checks..."
-
 sleep 2
 
-# Check Redis
 if redis-cli ping | grep -q "PONG"; then
-    success "Redis is running"
+    success "Redis is responding"
 else
     warn "Redis not responding — check: sudo systemctl status redis-server"
 fi
 
-# Check backend directly
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:${BACKEND_PORT} | grep -qE "^(200|404|422)$"; then
     success "Backend responding on port ${BACKEND_PORT}"
 else
-    warn "Backend not responding on port ${BACKEND_PORT} — check logs: sudo journalctl -u ${SERVICE_NAME} -n 50"
+    warn "Backend not responding — check: sudo journalctl -u ${SERVICE_NAME} -n 50"
 fi
 
-# Check nginx
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:80 | grep -qE "^(200|301|302)$"; then
     success "Nginx serving on port 80"
 else
-    warn "Nginx check failed — check logs: sudo nginx -t"
+    warn "Nginx check failed — check: sudo nginx -t"
 fi
 
 # =============================================================================
@@ -287,7 +259,7 @@ echo -e "  📖 API Docs:   http://${EXTERNAL_IP}:${BACKEND_PORT}/docs"
 echo -e "  🔁 WebSockets: ws://${EXTERNAL_IP}/ws"
 echo ""
 echo -e "Useful commands:"
-echo -e "  sudo systemctl status ${SERVICE_NAME}        # API status"
-echo -e "  sudo journalctl -u ${SERVICE_NAME} -f        # API logs"
-echo -e "  sudo systemctl status nginx                  # Nginx status"
+echo -e "  sudo systemctl status ${SERVICE_NAME}    # API status"
+echo -e "  sudo journalctl -u ${SERVICE_NAME} -f    # API logs"
+echo -e "  sudo systemctl status nginx              # Nginx status"
 echo ""
