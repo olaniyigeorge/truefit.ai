@@ -20,9 +20,9 @@ export function InterviewRoom({ jobId, candidateId, onExit }: RoomProps) {
  
   const {
     phase, transcript, sessionInfo, elapsedSeconds, isMuted,
-    connect, disconnect, toggleMute, startScreenShare, audioRef,
+    connect, disconnect, toggleMute, startScreenShare, audioRef, localStreamRef
   } = useInterviewSession({ jobId, candidateId })
- const {localStreamRef} = useLocalMedia()
+//  const {localStreamRef} = useLocalMedia()
 
   // useEffect(() => {
   //   if (phase === "live") {
