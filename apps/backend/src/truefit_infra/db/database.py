@@ -19,6 +19,12 @@ class DatabaseManager:
             logger.warning("Database already initialized")
             return
 
+        # For Supabase/pgbouncer, disable statement cache to avoid prepared statement errors
+        if "postgresql" in database_url or "asyncpg" in database_url:
+            if "connect_args" not in engine_kwargs:
+                engine_kwargs["connect_args"] = {}
+            engine_kwargs["connect_args"]["statement_cache_size"] = 0
+
         self.engine = create_async_engine(database_url, future=True, **engine_kwargs)
 
         self.session_factory = async_sessionmaker(

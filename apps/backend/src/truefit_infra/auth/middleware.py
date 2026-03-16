@@ -5,15 +5,18 @@ Extracts and validates JWT from Authorization header.
 
 from typing import Optional
 import jwt
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from starlette.requests import Request
 
-from src.truefit_infra.auth.jwt import JWTService
+from src.truefit_infra.auth.jwt import JWTService, get_jwt_service
 from src.truefit_core.common.utils import logger
 
 
 class TokenPayload:
-    """Represents verified JWT token payload."""
+    """
+    Represents verified JWT token payload.
+    Not a Pydantic model - used only internally for dependency injection.
+    """
     
     def __init__(self, user_id: str, email: str, role: str, org_id: Optional[str] = None):
         self.user_id = user_id
@@ -101,19 +104,22 @@ async def verify_jwt_token(
 
 async def get_current_user(
     request: Request,
-    jwt_service: JWTService,
+    jwt_service: JWTService = Depends(get_jwt_service),
 ) -> TokenPayload:
     """
     FastAPI dependency to get current authenticated user.
     
     Use this in endpoint route parameters:
-    @router.get("/me")
+    @router.get("/me", response_model=None)
     async def get_me(current_user: TokenPayload = Depends(get_current_user)):
         return {"user_id": current_user.user_id, "email": current_user.email}
     
+    Note: Set response_model=None to avoid FastAPI trying to validate TokenPayload
+    as a Pydantic model.
+    
     Args:
         request: FastAPI request
-        jwt_service: JWTService instance
+        jwt_service: JWTService instance (injected via Depends)
     
     Returns:
         TokenPayload with current user information

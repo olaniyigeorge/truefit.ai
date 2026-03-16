@@ -11,6 +11,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
@@ -18,7 +19,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PG_UUID
+from sqlalchemy.dialects.postgresql import ARRAY, UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship, mapped_column
 
 
@@ -151,10 +152,10 @@ class Org(Base):
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="active")
 
     contact: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+        JSON, nullable=False, default={}
     )
     billing: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+        JSON, nullable=False, default={}
     )
 
     logo_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
@@ -284,17 +285,17 @@ class JobListing(Base):
 
     # Structured skill data: [{name, required, weight, min_years}, ...]
     skills: Mapped[list[dict[str, Any]]] = mapped_column(
-        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+        JSON, nullable=False, default=[]
     )
 
     # Role-level requirements (education, certifications, location, etc.)
     requirements: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+        JSON, nullable=False, default={}
     )
 
     # AI interview configuration
     interview_config: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+        JSON, nullable=False, default={}
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -379,7 +380,7 @@ class Application(Base):
     source: Mapped[ApplicationSource] = mapped_column(String(32), nullable=False, default=ApplicationSource.applied.value)
     status: Mapped[ApplicationStatus] = mapped_column(String(32), nullable=False, default=ApplicationStatus.new.value)
 
-    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    meta: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
@@ -408,8 +409,8 @@ class InterviewSession(Base):
 
     agent_version: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
 
-    context_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
-    realtime: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    context_snapshot: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
+    realtime: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
@@ -433,7 +434,7 @@ class InterviewParticipant(Base):
     joined_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     left_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    connection_meta: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    connection_meta: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
@@ -452,7 +453,7 @@ class InterviewTurn(Base):
     modality: Mapped[Modality] = mapped_column(String(32), nullable=False)
 
     turn_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
@@ -509,7 +510,7 @@ class Transcript(Base):
     language: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
 
     transcript_text: Mapped[str] = mapped_column(Text, nullable=False)
-    segments: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    segments: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
@@ -531,10 +532,10 @@ class Evaluation(Base):
     recommendation: Mapped[Optional[Recommendation]] = mapped_column(String(32), nullable=True)
 
     summary: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    strengths: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False, server_default=text("'{}'::text[]"))
-    concerns: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False, server_default=text("'{}'::text[]"))
+    strengths: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False, default=[])
+    concerns: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False, default=[])
 
-    evidence: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    evidence: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
     report_asset_id: Mapped[Optional[UUID]] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("media_assets.id", ondelete="SET NULL"), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -557,7 +558,7 @@ class EvaluationScore(Base):
 
     score: Mapped[float] = mapped_column(Numeric(8, 3), nullable=False)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    evidence: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    evidence: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
@@ -575,7 +576,7 @@ class SessionEvent(Base):
 
     type: Mapped[SessionEventType] = mapped_column(String(64), nullable=False)
     at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    meta: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default={})
 
     session: Mapped["InterviewSession"] = relationship(back_populates="events")
 
