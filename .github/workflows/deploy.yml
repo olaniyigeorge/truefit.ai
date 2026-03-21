@@ -29,16 +29,6 @@ jobs:
             UserKnownHostsFile /dev/null
           EOF
 
-        # - temporary debug
-      - name: Debug SSH key format
-        run: |
-          echo "Key line count:"
-          wc -l ~/.ssh/id_ed25519
-          echo "First line:"
-          head -1 ~/.ssh/id_ed25519
-          echo "Last line:"
-          tail -1 ~/.ssh/id_ed25519
-
       # ── 3. Copy deploy.sh to VM ──────────────────────────────────────────────
       - name: Copy deploy script to VM
         run: |
