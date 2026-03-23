@@ -41,6 +41,7 @@ class WebRTCClient:
         candidate_id: uuid.UUID,
         frame_interval_camera: float = 5.0,
         frame_interval_screen: float = 2.0,
+        on_ice_candidate=None
     ) -> None:
         self.pc = pc
         self.context = SessionContext(
@@ -57,6 +58,7 @@ class WebRTCClient:
             screen_interval=frame_interval_screen,
         )
         self.data_channel = DataChannelManager(context=self.context)
+        self.on_ice_candidate = on_ice_candidate 
 
         self._closed = False
 
@@ -67,6 +69,10 @@ class WebRTCClient:
         Register aiortc event handlers.
         Must be called before setRemoteDescription so no events are missed.
         """
+        @self.pc.on("icecandidate")
+        async def on_ice_candidate(candidate) -> None:
+            if candidate and self.on_ice_candidate:
+                await self.on_ice_candidate(candidate)
 
         @self.pc.on("track")
         async def on_track(track: MediaStreamTrack) -> None:

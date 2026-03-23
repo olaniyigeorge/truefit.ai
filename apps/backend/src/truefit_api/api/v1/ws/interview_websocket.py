@@ -301,6 +301,19 @@ class InterviewConnection:
         # Store client reference + wire outbound audio track
         self._webrtc = self._signaling.client
 
+
+        # ── Wire ICE candidate forwarding ──────────────────────────────────
+        async def _forward_ice(candidate) -> None:
+            await self._send({
+                "type": "ice_candidate",
+                "candidate": candidate.candidate,
+                "sdpMid": candidate.sdpMid,
+                "sdpMLineIndex": candidate.sdpMLineIndex,
+            })
+
+        if self._webrtc:
+            self._webrtc.on_ice_candidate = _forward_ice
+
         # Unblock agent startup
         self._webrtc_ready.set()
 
