@@ -233,7 +233,7 @@ Add the following to `apps/backend/.env`:
 
 ```env
 # JWT
-APP_SECRET_KEY="your-secret-key-min-32-chars-random-string"
+APP_SECRET_KEY="<generate-with-python-secrets-see-command-below>"
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES="30"
 
@@ -586,12 +586,13 @@ TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/auth/oauth/token \
   -d '{"token":"FIREBASE_ID_TOKEN","provider":"firebase"}' | jq -r '.access_token')
 
 # 2. Call a protected endpoint
-curl -X GET http://localhost:8000/api/v1/auth/me \
-  -H "Authorization: Bearer $TOKEN"
++ # Replace $TOKEN with the access_token value from step 1
++ curl -X GET http://localhost:8000/api/v1/auth/me \
++   -H "Authorization: Bearer $TOKEN"
 
 # 3. Test expired/invalid token (expect 401)
 curl -X GET http://localhost:8000/api/v1/auth/me \
-  -H "Authorization: Bearer invalid.token.here"
+  -H "Authorization: Bearer <your-expired-or-invalid-token>"
 ```
 
 ### Swagger UI
@@ -648,7 +649,7 @@ LIMIT 10;
 
 ## Implementation Checklist
 
-### ✅ Backend (Complete)
+### Backend (Complete)
 
 - [x] JWT Service — token creation, verification, HS256 signing
 - [x] OAuth Service — Firebase and Google provider verification
@@ -667,7 +668,7 @@ LIMIT 10;
 - [ ] Protect routes — redirect to `/signin` when unauthenticated
 - [ ] Handle 401 responses — clear token and redirect globally
 
-### 🧪 Testing (To Do)
+###  Testing (To Do)
 
 **Backend:**
 - [ ] OAuth token exchange with valid / invalid / expired Firebase token
