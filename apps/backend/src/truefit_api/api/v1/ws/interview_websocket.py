@@ -229,7 +229,7 @@ class InterviewConnection:
     async def _on_turn_complete(self) -> None:
         """Agent finished its turn — clear audio buffer and re-enable mic."""
         if self._webrtc:
-            await self._webrtc.audio_bridge.clear_outbound_queue() 
+            # await self._webrtc.audio_bridge.clear_outbound_queue() 
             self._webrtc.audio_bridge.set_agent_speaking(False)
 
     async def _on_input_text_output(self, text: str) -> None:
@@ -337,6 +337,7 @@ class InterviewConnection:
 
     async def _on_audio_output(self, audio_bytes: bytes) -> None:
         """Pushes agent PCM into AudioBridge.outbound_queue → WebRTC track → browser."""
+        self._webrtc.audio_bridge.set_agent_speaking(True)
         if self._suppress_audio:
             return
         if self._webrtc:

@@ -54,7 +54,7 @@ from src.truefit_core.application.ports import LiveSessionPort
 from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 
-_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"  # "gemini-live-2.5-flash-preview" # "gemini-2.0-flash-live-001"  # "gemini-live-2.5-flash-native-audio" or "gemini-live-2.5-flash-native-audio"
+_MODEL = "gemini-2.0-flash-live-001"  # "gemini-2.5-flash-native-audio-preview-12-2025"  # "gemini-live-2.5-flash-preview" # "gemini-2.0-flash-live-001"  # "gemini-live-2.5-flash-native-audio" or "gemini-live-2.5-flash-native-audio"
 _INPUT_SAMPLE_RATE = 16_000
 _OUTPUT_SAMPLE_RATE = 24_000
 _INPUT_MIME = f"audio/pcm;rate={_INPUT_SAMPLE_RATE}"

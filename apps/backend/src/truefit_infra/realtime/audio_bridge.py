@@ -102,6 +102,8 @@ class AudioBridge:
                     for i in range(0, len(pcm_bytes), chunk_size):
                         chunk = pcm_bytes[i : i + chunk_size]
                         if len(chunk) == chunk_size:
+                            if self._agent_speaking:          # ← ADD THIS GATE
+                                continue
                             try:
                                 self.inbound_queue.put_nowait(chunk)
                             except asyncio.QueueFull:
