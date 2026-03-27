@@ -2,6 +2,7 @@ import {useState, useEffect} from "react"
 import {useAuthContext} from "@/hooks/useAuthContext"
 import { useNavigate } from "react-router"
 import {jobsApi , type Job} from "@/helpers/api/jobs.api"
+import { candidatesApi } from "@/helpers/api/candidates.api"
 import {applicationsApi, type Application} from "@/helpers/api/applications.api"
 import {StatCard} from "@/components/StatCard"
 import {StatusBadge, JobStatusBadge} from "@/components/Badges"
@@ -65,10 +66,16 @@ const Dashboard = () => {
                     })
                 } else {
                     // Candidate view
-                    const applications = await applicationsApi.list({
-                        candidate_id: backendUser.id,
-                        limit: 20,
+                    const allCandidates = await candidatesApi.list({ limit: 100 })
+                    const myProfile = allCandidates.find(c => c.user_id === backendUser.id)
+
+                    const applications = myProfile ? await applicationsApi.list({
+                        candidate_id: myProfile.id,
+                        limit: 20
                     })
+                    :
+                    []
+
                     setData({
                         activeJobs: [],
                         recentApplications: applications.slice(0, 8),

@@ -4,7 +4,7 @@ Called directly by InterviewConnection over the WebSocket.
 """
 from __future__ import annotations
 
-from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceCandidate
+from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceCandidate, RTCConfiguration, RTCIceServer
 from aiortc.sdp import candidate_from_sdp
 
 from .webrtc_client import WebRTCClient, WebRTCClientRegistry
@@ -34,7 +34,22 @@ class WebRTCSignaling:
         frame_interval_screen: float = 2.0,
     ) -> str:
         logger.info(f"[{self._session_id}] Creating RTCPeerConnection")
-        pc = RTCPeerConnection()
+        configuration = RTCConfiguration(
+            iceServers=[
+                RTCIceServer(urls=["stun:stun.l.google.com:19302"]),
+                RTCIceServer(
+                    urls=["turn:openrelay.metered.ca:80"],
+                    username="openrelayproject",
+                    credential="openrelayproject",
+                ),
+                RTCIceServer(
+                    urls=["turn:openrelay.metered.ca:443"],
+                    username="openrelayproject",
+                    credential="openrelayproject",
+                ),
+            ]
+        )
+        pc = RTCPeerConnection(configuration=configuration)
 
         logger.info(f"[{self._session_id}] Creating WebRTCClient")
         self._client = WebRTCClient(

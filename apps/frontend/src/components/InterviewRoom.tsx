@@ -100,8 +100,6 @@ export function InterviewRoom({ jobId, candidateId, onExit }: RoomProps) {
                 <InfoRow label="Interview" value={sessionInfo.interviewId.slice(0, 8) + "…"} accent />
                 <InfoRow label="Max Questions" value={String(sessionInfo.maxQuestions)} />
                 <InfoRow label="Duration"      value={`${sessionInfo.maxDurationMinutes} min`} />
-                <InfoRow label="Job"           value={jobId.slice(0, 8) + "…"} />
-                <InfoRow label="Candidate"     value={candidateId.slice(0, 8) + "…"} />
               </div>
             ) : (
               <p className="text-[12px] text-muted-foreground/40">Awaiting session…</p>

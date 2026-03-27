@@ -11,6 +11,7 @@
 import { useRef, useState, useCallback, useEffect } from "react"
 import {useLocalMedia} from "@/hooks/useLocalMedia"
 import config from "@/config"
+import { turnApi, type IceServer } from "@/helpers/api/turn.api"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -83,8 +84,21 @@ export function useInterviewSession({
   const pingRef    = useRef<ReturnType<typeof setInterval> | null>(null)
   const iceBufRef  = useRef<RTCIceCandidate[]>([])
   const answerSetRef = useRef(false)
+  const iceServersRef = useRef<IceServer[]>([
+    { urls: "stun:stun.l.google.com:19302" }
+])
 
   const { acquireMicrophone, acquireScreenShare, releaseAll, localStreamRef} = useLocalMedia()
+
+
+  useEffect(() => {
+    turnApi.getCredentials()
+        .then(data => { iceServersRef.current = data.ice_servers })
+        .catch(() => {
+            // fallback to STUN only — already set as default
+            console.warn("Could not fetch TURN credentials, falling back to STUN only")
+        })
+  }, [])
 
   // ── Phase setter (also fires callback) ───────────────────────────────────
 
@@ -127,7 +141,7 @@ export function useInterviewSession({
 
   const setupWebRTC = useCallback(async () => {
     const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      iceServers: iceServersRef.current,
     })
     pcRef.current = pc
     answerSetRef.current = false

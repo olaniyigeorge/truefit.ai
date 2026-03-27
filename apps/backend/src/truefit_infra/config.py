@@ -32,6 +32,9 @@ class GlobalConfig(BaseSettings):
     WORKERS_ENABLED: str
     SENTRY_DSN: str
     FIREBASE_PROJECT_ID: str
+    TURN_SERVER_URL: str
+    TURN_USERNAME: str
+    TURN_CREDENTIAL: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

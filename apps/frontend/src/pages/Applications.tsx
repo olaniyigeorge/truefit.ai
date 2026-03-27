@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { useAuthContext } from "@/hooks/useAuthContext"
 import { applicationsApi, type Application, type ApplicationStatus } from "@/helpers/api/applications.api"
+import { candidatesApi } from "@/helpers/api/candidates.api"
 import { Card, CardContent } from "@/components/ui/card"
 import { ApplicationRow } from "@/components/ApplicationRow"
 import { Skeleton } from "@/components/ui/skeleton"
 import { FileText, AlertCircle} from "lucide-react"
+import { jobsApi } from "@/helpers/api/jobs.api"
 
 
 
@@ -77,18 +79,63 @@ export default function ApplicationsPage() {
     const [error,        setError]        = useState<string | null>(null)
     const [filter,       setFilter]       = useState<ApplicationStatus | "all">("all")
     const [acting,       setActing]       = useState<string | null>(null)
+    const [myProfileId, setMyProfileId] = useState<string | null>(null)
 
     useEffect(() => {
         if (!backendUser) return
-        const params = isRecruiter
-            ? { job_id: undefined, candidate_id: undefined, limit: 100 }
-            : { candidate_id: backendUser.id, limit: 100 }
+        const load = async () => {
+           try{
+            if (isRecruiter) {
+                if (!backendUser.org_id) return
 
-        applicationsApi.list(params)
-            .then(setApplications)
-            .catch(() => setError("Failed to load applications"))
-            .finally(() => setLoading(false))
-    }, [backendUser])
+                const jobs = await jobsApi.list({
+                    org_id: backendUser.org_id,
+                    limit: 100
+                })
+
+                const appResults = await Promise.allSettled(
+                    jobs.map(j => applicationsApi.list({job_id: j.id, limit: 100}))
+                )
+
+                const allApps: Application[] = []
+                appResults.forEach(result => {
+                    if (result.status === "fulfilled"){
+                        allApps.push(...result.value)
+                    }
+                })
+
+                setApplications(allApps)
+            }else{
+                const allCandidates = await candidatesApi.list({ limit: 100 })
+                const myProfile = allCandidates.find(
+                    c => c.user_id === backendUser.id
+                )
+                if (myProfile) {
+                    setMyProfileId(myProfile.id)
+                }
+
+                if (!myProfile){
+                    setApplications([])
+                    return
+                }
+
+                const apps = await applicationsApi.list({
+                    candidate_id: myProfile.id,
+                    limit: 100
+                })
+
+                setApplications(apps)
+            }
+           }catch(err) {
+            setError("Failed to load applications")
+           }finally{
+            setLoading(false)
+           }
+        }
+
+
+        load()
+    }, [backendUser, isRecruiter])
 
     const handleStatusChange = async (app: Application, status: ApplicationStatus) => {
         setActing(app.id)
@@ -157,6 +204,7 @@ export default function ApplicationsPage() {
                             app={app}
                             isRecruiter={isRecruiter}
                             acting={acting === app.id}
+                            candidateProfileId={myProfileId ?? undefined}
                             onStatusChange={status => handleStatusChange(app, status)}
                             onWithdraw={() => handleWithdraw(app)}
                         />
