@@ -188,6 +188,7 @@ class InterviewConnection:
                 on_text_output=self._on_text_output,
                 on_input_text_output=self._on_input_text_output,
                 on_interrupt=self._on_interrupt,
+                on_turn_complete=self._on_turn_complete,
             )
 
             # ⑧ Run agent alongside the already-running tasks
@@ -220,9 +221,16 @@ class InterviewConnection:
     async def _on_interrupt(self) -> None:
         if self._webrtc:
             await self._webrtc.audio_bridge.clear_outbound_queue()
+            self._webrtc.audio_bridge.set_agent_speaking(False)  # ← add this
         self._suppress_audio = True
         await asyncio.sleep(0.3)
         self._suppress_audio = False
+
+    async def _on_turn_complete(self) -> None:
+        """Agent finished its turn — clear audio buffer and re-enable mic."""
+        if self._webrtc:
+            await self._webrtc.audio_bridge.clear_outbound_queue() 
+            self._webrtc.audio_bridge.set_agent_speaking(False)
 
     async def _on_input_text_output(self, text: str) -> None:
         """Candidate speech transcription from Gemini."""
@@ -293,6 +301,19 @@ class InterviewConnection:
         # Store client reference + wire outbound audio track
         self._webrtc = self._signaling.client
 
+
+        # ── Wire ICE candidate forwarding ──────────────────────────────────
+        async def _forward_ice(candidate) -> None:
+            await self._send({
+                "type": "ice_candidate",
+                "candidate": candidate.candidate,
+                "sdpMid": candidate.sdpMid,
+                "sdpMLineIndex": candidate.sdpMLineIndex,
+            })
+
+        if self._webrtc:
+            self._webrtc.on_ice_candidate = _forward_ice
+
         # Unblock agent startup
         self._webrtc_ready.set()
 
@@ -308,7 +329,7 @@ class InterviewConnection:
 
     # ── Audio I/O — WebRTC paths ──────────────────────────────────────────────
 
-    async def _audio_input_stream(self) -> AsyncIterator[tuple[bytes, bool]]:
+    async def _audio_input_stream(self) -> AsyncIterator[bytes]:
         if not self._webrtc:
             raise RuntimeError("WebRTC not ready before audio stream started")
         async for chunk_tuple in self._webrtc.audio_bridge.audio_input_stream():

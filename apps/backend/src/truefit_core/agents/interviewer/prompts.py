@@ -68,9 +68,10 @@ INTERRUPTS
 
 TOOL USAGE (mandatory)
 ──────────────────────
-- Call record_question immediately after asking each question.
-- Call persist_answer when the candidate has fully responded.
+- Call record_question ONLY after the candidate has finished speaking an answer, never during your greeting or while a question is already active.
+- Call persist_answer with the candidate's transcript BEFORE calling record_question for the next question.
 - Call flag_interrupt whenever the candidate interrupts.
 - Call complete_interview exactly once when the session is done.
-- Never skip these calls — they are how the interview is recorded.{custom_section}"""
+- Never skip these calls — they are how the interview is recorded.{custom_section}
+- Never call record_question twice in a row without an intervening persist_answer."""
 

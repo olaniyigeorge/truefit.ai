@@ -7,6 +7,7 @@ from typing import Optional
 from sqlalchemy import delete, func, select
 from sqlalchemy.orm import selectinload
 
+from src.truefit_core.common.utils import logger
 from src.truefit_core.application.ports import InterviewRepository
 from src.truefit_core.domain.interview import (
     Answer,
@@ -226,6 +227,23 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
             return self._to_domain(s, job)
 
+    async def close_dangling_questions(self, interview_id: uuid.UUID) -> int:
+        interview = await self.get_by_id(interview_id)
+        if interview is None:
+            logger.warning(
+                f"[InterviewRepo] close_dangling_questions: "
+                f"interview {interview_id} not found"
+            )
+            return 0
+
+        count = interview.void_open_questions()
+        if count:
+            await self.save(interview)
+            logger.info(
+                f"[InterviewRepo] Voided {count} dangling question(s) "
+                f"for interview {interview_id}"
+            )
+        return count
     
     async def list_by_status(self, status: InterviewStatus, *, limit: int = 50, offset: int = 0) -> list[Interview]:
         async with self._db.get_session() as session:

@@ -82,6 +82,7 @@ class UpdateUserRequest(BaseModel):
     display_name: Optional[str] = Field(None, max_length=255)
     is_active: Optional[bool] = None
     role: Optional[str] = Field(None, pattern="^(candidate|recruiter)$")
+    org_id: Optional[uuid.UUID] = None
 
 
 class JoinOrgRequest(BaseModel):
@@ -186,6 +187,7 @@ async def update_user(
             display_name=body.display_name,
             is_active=body.is_active,
             role=body.role,
+            org_id=body.org_id,
         )
         return _user_out(user)
     except ValueError as e:

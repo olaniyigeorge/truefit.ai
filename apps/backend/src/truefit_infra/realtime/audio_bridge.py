@@ -93,9 +93,6 @@ class AudioBridge:
                     logger.warning(f"[{self._ctx.session_id}] Inbound track error: {e}")
                     break
 
-                if self._agent_speaking:
-                    continue
-
                 # Resample to target format
                 resampled_frames = resampler.resample(frame)
                 for rf in resampled_frames:
@@ -151,12 +148,16 @@ class AudioBridge:
         return self._outbound_track
 
     async def clear_outbound_queue(self) -> None:
-        """Drain the outbound queue — called when agent is interrupted."""
+        """Drain the outbound queue and clear the resampler buffer — called on interrupt or turn complete."""
         while not self.outbound_queue.empty():
             try:
                 self.outbound_queue.get_nowait()
             except asyncio.QueueEmpty:
                 break
+        # Also clear the resampler's internal buffer so stale PCM doesn't replay
+        if self._outbound_track is not None:
+            self._outbound_track.clear_buf()
+
 
     async def push_audio(self, pcm_bytes: bytes) -> None:
         """
@@ -205,6 +206,10 @@ class _AgentAudioTrack(AudioStreamTrack):
         self._buf = bytearray()   # ring buffer of resampled 48kHz s16 PCM
         self._pts = 0
         self._start: Optional[float] = None
+
+    def clear_buf(self) -> None:
+        """Discard any buffered PCM — called when the agent turn is interrupted or complete."""
+        self._buf.clear()
 
     async def recv(self) -> av.AudioFrame:
         # ── Pace to exactly 20ms intervals (mirrors aiortc base class) ──

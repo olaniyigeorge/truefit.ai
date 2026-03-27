@@ -12,6 +12,7 @@ API.interceptors.request.use(
     async (config) => {
         //attach token from storage
         const token = getJwt()
+        console.log("JWT from cookie:", token ? "found" : "null")
         if(token){
             config.headers.authorization = `Bearer ${token}`
         }

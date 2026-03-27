@@ -13,7 +13,7 @@ from __future__ import annotations
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from pydantic import BaseModel, EmailStr, Field
 
 from src.truefit_core.domain.candidate import (
@@ -70,6 +70,7 @@ class ResumeOut(BaseModel):
 
 class CandidateOut(BaseModel):
     id: uuid.UUID
+    user_id: uuid.UUID
     full_name: str
     headline: Optional[str]
     bio: Optional[str]
@@ -140,6 +141,14 @@ async def get_candidate(
     
     return CandidateOut.from_domain(candidate)
 
+@router.get("", response_model=list[CandidateOut])
+async def list_candidates(
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+):
+    candidates = await repo.list_all(limit=limit, offset=offset)
+    return [CandidateOut.from_domain(c) for c in candidates]
 
 
 @router.patch("/{candidate_id}", response_model=CandidateOut)

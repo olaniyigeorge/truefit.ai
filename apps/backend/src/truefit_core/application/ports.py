@@ -19,7 +19,7 @@ from src.truefit_core.domain.candidate import Candidate
 from src.truefit_core.domain.evaluation import Evaluation
 from src.truefit_core.domain.interview import Interview
 from src.truefit_core.domain.job import Job
-from src.truefit_infra.db.models import User
+from src.truefit_infra.db.models import Application, User
 from src.truefit_core.domain.org import Org
 
 
@@ -149,6 +149,13 @@ class InterviewRepository(ABC):
     ) -> Optional[Interview]:
         ...
 
+    @abstractmethod
+    async def close_dangling_questions(self, interview_id: uuid.UUID) -> int:
+        """
+        Load the interview, void any unanswered questions, persist it.
+        Returns the number of questions voided.
+        """
+        ...
 
 class EvaluationRepository(ABC):
     @abstractmethod

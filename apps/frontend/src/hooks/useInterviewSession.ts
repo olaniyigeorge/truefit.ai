@@ -162,6 +162,7 @@ export function useInterviewSession({
     }
 
     pc.onconnectionstatechange = () => {
+      console.log("ICE state:", pc.iceConnectionState)
       const state = pc.connectionState
       if (state === "connected") {
         updatePhase("live")

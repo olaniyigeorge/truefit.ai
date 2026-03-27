@@ -36,7 +36,8 @@ class LiveInterviewAgent:
         on_audio_output: Callable[[bytes], Coroutine],
         on_text_output: Optional[Callable[[str], Coroutine]] = None,
         on_input_text_output: Optional[Callable[[str], Coroutine]] = None, 
-        on_interrupt: Optional[Callable[[], Coroutine]] = None
+        on_interrupt: Optional[Callable[[], Coroutine]] = None,
+        on_turn_complete: Optional[Callable[[], Coroutine]] = None,
     ) -> None:
         self._adapter = live_adapter
         self._orchestration = orchestration
@@ -47,11 +48,12 @@ class LiveInterviewAgent:
         self._on_text_output = on_text_output
         self._on_interrupt = on_interrupt
         self._on_input_text_output = on_input_text_output
+        self._on_turn_complete = on_turn_complete
         self._current_question_id: Optional[uuid.UUID] = None
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
         self._session_ready = asyncio.Event()
-        self._on_input_text_output = on_input_text_output
+        
 
     # ── Entry point ──
 
@@ -124,20 +126,14 @@ class LiveInterviewAgent:
                 case "text":
                     if self._on_text_output:
                         await self._on_text_output(data)
-                case "interrupted":
-                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
-                    if self._on_interrupt:
-                        await self._on_interrupt()
                 case "input_text":
                     logger.info(f"[Agent] Candidate said: {data}")
                     if self._on_input_text_output:
                         await self._on_input_text_output(data)
                 case "interrupted":
-                    # Gemini detected candidate interruption
-                    # Clear the outbound audio queue so stale agent audio stops playing
-                    logger.info("[Agent] Candidate interrupted agent — clearing audio queue")
-                    if hasattr(self, '_clear_audio_queue'):
-                        await self._clear_audio_queue()
+                    logger.info("[Agent] Candidate interrupted — clearing audio queue")
+                    if self._on_interrupt:
+                        await self._on_interrupt()
                 case "tool_call":
                     result = await self._handle_tool_call(
                         name=data["name"], args=data["args"], call_id=data["id"],
@@ -175,19 +171,27 @@ class LiveInterviewAgent:
     # ── Tool implementations ──────────────────────────────────────────────────
 
     async def _tool_record_question(self, args: dict) -> dict:
-        result = await self._orchestration.ask_next_question(
-            self._interview_id,
-            topic_override=args.get("topic"),
-            question_text_override=args.get("question_text"),
-            is_follow_up=args.get("is_follow_up", False),
-        )
-        self._current_question_id = uuid.UUID(result["question_id"])
-        return {
-            "success": True,
-            "question_id": result["question_id"],
-            "question_number": result["question_number"],
-            "questions_remaining": result["total_questions"] - result["question_number"],
-        }
+        try:
+            result = await self._orchestration.ask_next_question(
+                self._interview_id,
+                topic_override=args.get("topic"),
+                question_text_override=args.get("question_text"),
+                is_follow_up=args.get("is_follow_up", False),
+            )
+            self._current_question_id = uuid.UUID(result["question_id"])
+            return {
+                "success": True,
+                "question_id": result["question_id"],
+                "question_number": result["question_number"],
+                "questions_remaining": result["total_questions"] - result["question_number"],
+            }
+        except Exception as e:
+            logger.warning(f"[Agent] record_question rejected: {e}")
+            return {
+                "success": False,
+                "directive": "wait_for_candidate_answer",
+                "message": "A question is already active. Please wait for the candidate to respond before recording a new question.",
+            }
 
     async def _tool_persist_answer(self, args: dict) -> dict:
         question_id_str = args.get("question_id") or (
