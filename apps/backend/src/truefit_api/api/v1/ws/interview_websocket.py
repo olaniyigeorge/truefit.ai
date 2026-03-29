@@ -10,23 +10,35 @@ from typing import AsyncIterator, Optional
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from google import genai
 
-from src.truefit_core.application.services.interview_orchestration import InterviewOrchestrationService
-from src.truefit_core.application.ports import CachePort, CandidateRepository, JobRepository, QueuePort
+from src.truefit_core.application.services.interview_orchestration import (
+    InterviewOrchestrationService,
+)
+from src.truefit_core.application.ports import (
+    CachePort,
+    CandidateRepository,
+    JobRepository,
+    QueuePort,
+)
 from src.truefit_core.common.utils import logger
 from src.truefit_infra.realtime.signaling import WebRTCSignaling
 from src.truefit_infra.realtime.webrtc_client import WebRTCClient
 from src.truefit_infra.cache.redis_cache import RedisCacheAdapter, redis_client
-from src.truefit_infra.queue.redis_queue import RedisQueueAdapter 
+from src.truefit_infra.queue.redis_queue import RedisQueueAdapter
 from src.truefit_infra.db.database import db_manager
-from src.truefit_infra.db.repositories.interview_repository import SQLAlchemyInterviewRepository
+from src.truefit_infra.db.repositories.interview_repository import (
+    SQLAlchemyInterviewRepository,
+)
 from src.truefit_infra.db.repositories.job_repository import SQLAlchemyJobRepository
-from src.truefit_infra.db.repositories.candidate_repository import SQLAlchemyCandidateRepository
-from src.truefit_infra.agent.live_interview_agent import InterviewContext, LiveInterviewAgent
+from src.truefit_infra.db.repositories.candidate_repository import (
+    SQLAlchemyCandidateRepository,
+)
+from src.truefit_infra.agent.live_interview_agent import (
+    InterviewContext,
+    LiveInterviewAgent,
+)
 from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
 
-
-# ── Dependencies ───
-
+# ── Dependencies 
 def get_interview_repo() -> SQLAlchemyInterviewRepository:
     return SQLAlchemyInterviewRepository(db_manager)
 
@@ -37,14 +49,13 @@ def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
 
 def get_cache() -> RedisCacheAdapter:
-    return redis_client         
+    return redis_client
 
 def get_queue() -> RedisQueueAdapter:
-    return RedisQueueAdapter()  
+    return RedisQueueAdapter()
 
 def get_gemini_live() -> GeminiLiveAdapter:
-    return GeminiLiveAdapter()   
-
+    return GeminiLiveAdapter()
 
 def get_orchestration() -> InterviewOrchestrationService:
     interview_repo = get_interview_repo()
@@ -64,13 +75,9 @@ def get_orchestration() -> InterviewOrchestrationService:
     )
 
 
-
 interview_ws_router = APIRouter(tags=["interview-ws"], prefix="/api/v1")
 
 _INTERRUPT_POLL_INTERVAL = 0.05
-
-
-
 
 
 @interview_ws_router.websocket("/ws/interview/{job_id}/{candidate_id}")
@@ -86,7 +93,7 @@ async def interview_websocket(
     live_adapter: GeminiLiveAdapter = Depends(get_gemini_live),
 ) -> None:
     await websocket.accept()
-    
+
     connection = InterviewConnection(
         websocket=websocket,
         job_id=job_id,
@@ -103,8 +110,19 @@ async def interview_websocket(
 
 class InterviewConnection:
 
-    def __init__(self, *, websocket, job_id, candidate_id, orchestration,
-                 job_repo, candidate_repo, queue, cache, live_adapter) -> None:
+    def __init__(
+        self,
+        *,
+        websocket,
+        job_id,
+        candidate_id,
+        orchestration,
+        job_repo,
+        candidate_repo,
+        queue,
+        cache,
+        live_adapter,
+    ) -> None:
         self._ws = websocket
         self._job_id = job_id
         self._candidate_id = candidate_id
@@ -126,7 +144,7 @@ class InterviewConnection:
         # Unblocks agent startup after WebRTC is wired
         self._webrtc_ready = asyncio.Event()
 
-    # ── Entry point ─
+    # Entry point
 
     async def run(self) -> None:
         self._session_id = str(uuid.uuid4())
@@ -140,16 +158,20 @@ class InterviewConnection:
             self._interview_id = interview.id
             context = await self._build_context(interview.id)
 
-            print(f"\n\n\nStarted interview {interview.id} for job {self._job_id} and candidate {self._candidate_id}\n\n\n")
+            print(
+                f"\n\n\nStarted interview {interview.id} for job {self._job_id} and candidate {self._candidate_id}\n\n\n"
+            )
 
             # ② Tell the frontend the session exists + the session_id it needs for signaling
-            await self._send({
-                "type": "session_started",
-                "interview_id": str(interview.id),
-                "session_id": self._session_id,     # ← frontend uses this in webrtc_offer
-                "max_questions": interview.max_questions,
-                "max_duration_minutes": interview.max_duration_minutes,
-            })
+            await self._send(
+                {
+                    "type": "session_started",
+                    "interview_id": str(interview.id),
+                    "session_id": self._session_id,  # ← frontend uses this in webrtc_offer
+                    "max_questions": interview.max_questions,
+                    "max_duration_minutes": interview.max_duration_minutes,
+                }
+            )
 
             # ③ Instantiate signaling (no HTTP, no router)
             self._signaling = WebRTCSignaling(
@@ -161,7 +183,6 @@ class InterviewConnection:
             # ④ Start receive loop NOW so it can process the offer while we wait
             ws_task = asyncio.create_task(self._ws_receive_loop())
             interrupt_task = asyncio.create_task(self._interrupt_monitor_loop())
-
 
             # ④ Wait for WebRTC to connect before starting agent
             #    (_ws_receive_loop handles the offer/ICE messages and sets _webrtc_ready)
@@ -196,7 +217,6 @@ class InterviewConnection:
 
             await asyncio.gather(agent_task, ws_task, interrupt_task)
 
-
             # # ⑦ Run everything concurrently
             # await asyncio.gather(
             #     agent.run(context),
@@ -217,7 +237,6 @@ class InterviewConnection:
             if self._signaling:
                 await self._signaling.close()
 
-
     async def _on_interrupt(self) -> None:
         if self._webrtc:
             await self._webrtc.audio_bridge.clear_outbound_queue()
@@ -229,14 +248,14 @@ class InterviewConnection:
     async def _on_turn_complete(self) -> None:
         """Agent finished its turn — clear audio buffer and re-enable mic."""
         if self._webrtc:
-            # await self._webrtc.audio_bridge.clear_outbound_queue() 
+            # await self._webrtc.audio_bridge.clear_outbound_queue()
             self._webrtc.audio_bridge.set_agent_speaking(False)
 
     async def _on_input_text_output(self, text: str) -> None:
         """Candidate speech transcription from Gemini."""
         await self._send({"type": "transcript", "speaker": "candidate", "text": text})
-    
-    # ── WebSocket receive loop ────────────────────────────────────────────────
+
+    # ── WebSocket receive loop 
 
     async def _ws_receive_loop(self) -> None:
         """
@@ -248,7 +267,7 @@ class InterviewConnection:
         """
         logger.info("WS receive loop started")
         async for raw in self._ws.iter_text():
-            logger.info(f"WS message received: {raw[:100]}") 
+            logger.info(f"WS message received: {raw[:100]}")
             try:
                 msg = json.loads(raw)
             except json.JSONDecodeError:
@@ -256,24 +275,32 @@ class InterviewConnection:
 
             match msg.get("type"):
 
-                # ── WebRTC handshake (before agent starts) ────────────────
+                # ── WebRTC handshake (before agent starts) ──
                 case "webrtc_offer":
                     await self._handle_webrtc_offer(msg)
 
                 case "ice_candidate":
                     await self._handle_ice_candidate(msg)
 
-                # ── Control messages (after agent starts) ─────────────────
+                # ── Control messages (after agent starts) ───
                 case "end_session":
                     reason = msg.get("reason", "candidate_ended")
-                    await self._orchestration.abandon_interview(self._interview_id, reason=reason)
-                    await self._send({"type": "session_ended", "status": "abandoned", "reason": reason})
+                    await self._orchestration.abandon_interview(
+                        self._interview_id, reason=reason
+                    )
+                    await self._send(
+                        {
+                            "type": "session_ended",
+                            "status": "abandoned",
+                            "reason": reason,
+                        }
+                    )
                     break
 
                 case "ping":
                     await self._send({"type": "pong"})
 
-    # ── WebRTC handshake handlers (called from receive loop) ─────────────────
+    # ── WebRTC handshake handlers (called from receive loop) ───
 
     async def _handle_webrtc_offer(self, msg: dict) -> None:
         """
@@ -282,7 +309,7 @@ class InterviewConnection:
         """
         if not self._signaling:
             return
-        
+
         sdp_answer = await self._signaling.handle_offer(
             sdp=msg["sdp"],
             sdp_type=msg.get("sdp_type", "offer"),
@@ -291,25 +318,27 @@ class InterviewConnection:
         )
 
         # Send answer back over the same WebSocket
-        await self._send({
-            "type": "webrtc_answer",
-            "sdp": sdp_answer,
-            "sdp_type": "answer",
-        })
+        await self._send(
+            {
+                "type": "webrtc_answer",
+                "sdp": sdp_answer,
+                "sdp_type": "answer",
+            }
+        )
 
-        
         # Store client reference + wire outbound audio track
         self._webrtc = self._signaling.client
 
-
-        # ── Wire ICE candidate forwarding ──────────────────────────────────
+        # ── Wire ICE candidate forwarding 
         async def _forward_ice(candidate) -> None:
-            await self._send({
-                "type": "ice_candidate",
-                "candidate": candidate.candidate,
-                "sdpMid": candidate.sdpMid,
-                "sdpMLineIndex": candidate.sdpMLineIndex,
-            })
+            await self._send(
+                {
+                    "type": "ice_candidate",
+                    "candidate": candidate.candidate,
+                    "sdpMid": candidate.sdpMid,
+                    "sdpMLineIndex": candidate.sdpMLineIndex,
+                }
+            )
 
         if self._webrtc:
             self._webrtc.on_ice_candidate = _forward_ice
@@ -327,7 +356,7 @@ class InterviewConnection:
             sdp_mline_index=msg.get("sdpMLineIndex"),
         )
 
-    # ── Audio I/O — WebRTC paths ──────────────────────────────────────────────
+    # ── Audio I/O — WebRTC paths ────
 
     async def _audio_input_stream(self) -> AsyncIterator[bytes]:
         if not self._webrtc:
@@ -346,12 +375,12 @@ class InterviewConnection:
     async def _on_text_output(self, text: str) -> None:
         """Transcripts go over the WebSocket control channel."""
         await self._send({"type": "transcript", "speaker": "agent", "text": text})
-    
+
     async def _on_input_text_output(self, text: str) -> None:
         """Candidate speech transcript goes over the WebSocket control channel."""
         await self._send({"type": "transcript", "speaker": "candidate", "text": text})
 
-    # ── DataChannel inbound (candidate actions during the call) ──────────────
+    # ── DataChannel inbound (candidate actions during the call) 
 
     async def _on_datachannel_event(self, event: dict) -> None:
         match event.get("type"):
@@ -363,7 +392,7 @@ class InterviewConnection:
                 # Could feed into agent context if needed
                 pass
 
-    # ── Interrupt monitor — unchanged, stays on WS ───────────────────────────
+    # ── Interrupt monitor — unchanged, stays on WS ─
 
     async def _interrupt_monitor_loop(self) -> None:
         if not self._interview_id:
@@ -381,19 +410,21 @@ class InterviewConnection:
                 directive = interrupt.get("directive", "stop_and_listen")
                 self._suppress_audio = directive == "stop_and_listen"
 
-                await self._send({
-                    "type": "interrupt",
-                    "interrupt_id": interrupt.get("interrupt_id"),
-                    "directive": directive,
-                    "type_detail": interrupt.get("type"),
-                })
+                await self._send(
+                    {
+                        "type": "interrupt",
+                        "interrupt_id": interrupt.get("interrupt_id"),
+                        "directive": directive,
+                        "type_detail": interrupt.get("type"),
+                    }
+                )
                 await self._cache.delete(cache_key)
 
                 if directive == "stop_and_listen":
                     await asyncio.sleep(0.5)
                     self._suppress_audio = False
 
-    # ── Context builder — unchanged ───────────────────────────────────────────
+    # ── Context builder — unchanged ─
 
     async def _build_context(self, interview_id: uuid.UUID) -> InterviewContext:
         job = await self._job_repo.get_by_id(self._job_id)
@@ -420,7 +451,9 @@ class InterviewConnection:
 
     async def _handle_disconnect(self, reason: str) -> None:
         if self._interview_id:
-            await self._orchestration.abandon_interview(self._interview_id, reason=reason)
+            await self._orchestration.abandon_interview(
+                self._interview_id, reason=reason
+            )
 
     async def _send(self, payload: dict) -> None:
         try:

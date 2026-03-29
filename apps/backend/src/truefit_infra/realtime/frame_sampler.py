@@ -9,6 +9,7 @@ Runs two independent async loops:
 Each loop pulls a frame from its aiortc track, encodes it as JPEG,
 and puts a FrameEvent on a shared queue the agent consumes.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -66,7 +67,7 @@ class FrameSampler:
         self._screen_task: Optional[asyncio.Task] = None
         self._stop_event = asyncio.Event()
 
-    # ── Attach tracks ─────────────────────────────────────────────────────────
+    # ── Attach tracks ─
 
     async def attach_track(self, track: MediaStreamTrack, *, is_screen: bool) -> None:
         source = FrameSource.SCREEN if is_screen else FrameSource.CAMERA
@@ -87,7 +88,7 @@ class FrameSampler:
             f"{source.value} track (interval={interval}s)"
         )
 
-    # ── Sample loop ───────────────────────────────────────────────────────────
+    # ── Sample loop ───
 
     async def _sample_loop(
         self,
@@ -109,20 +110,28 @@ class FrameSampler:
                 if now < next_sample_at:
                     # Drain the track without processing (keep buffer clear)
                     try:
-                        await asyncio.wait_for(track.recv(), timeout=next_sample_at - now)
+                        await asyncio.wait_for(
+                            track.recv(), timeout=next_sample_at - now
+                        )
                     except (asyncio.TimeoutError, Exception):
                         pass
                     continue
 
                 # Time to capture a frame
                 try:
-                    frame: av.VideoFrame = await asyncio.wait_for(track.recv(), timeout=2.0)
+                    frame: av.VideoFrame = await asyncio.wait_for(
+                        track.recv(), timeout=2.0
+                    )
                 except asyncio.TimeoutError:
-                    logger.debug(f"[{self._ctx.session_id}] {source.value} frame timeout")
+                    logger.debug(
+                        f"[{self._ctx.session_id}] {source.value} frame timeout"
+                    )
                     next_sample_at = time.monotonic() + interval
                     continue
                 except Exception as e:
-                    logger.warning(f"[{self._ctx.session_id}] {source.value} track error: {e}")
+                    logger.warning(
+                        f"[{self._ctx.session_id}] {source.value} track error: {e}"
+                    )
                     break
 
                 jpeg_bytes = await asyncio.get_event_loop().run_in_executor(
@@ -150,7 +159,7 @@ class FrameSampler:
         except asyncio.CancelledError:
             pass
 
-    # ── Frame encoding ────────────────────────────────────────────────────────
+    # ── Frame encoding 
 
     def _encode_frame(self, frame: av.VideoFrame) -> bytes:
         """Convert av.VideoFrame → JPEG bytes. Runs in thread executor."""
@@ -166,7 +175,7 @@ class FrameSampler:
         img.save(buf, format="JPEG", quality=self._jpeg_quality, optimize=True)
         return buf.getvalue()
 
-    # ── Teardown ──────────────────────────────────────────────────────────────
+    # ── Teardown 
 
     def stop(self) -> None:
         self._stop_event.set()

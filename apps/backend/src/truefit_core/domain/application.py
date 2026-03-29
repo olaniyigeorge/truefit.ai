@@ -12,11 +12,11 @@ def _utcnow() -> datetime:
 
 
 class ApplicationStatus(str, Enum):
-    new          = "new"
+    new = "new"
     interviewing = "interviewing"
-    shortlisted  = "shortlisted"
-    rejected     = "rejected"
-    hired        = "hired"
+    shortlisted = "shortlisted"
+    rejected = "rejected"
+    hired = "hired"
 
 
 class ApplicationSource(str, Enum):
@@ -49,16 +49,16 @@ class Application:
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None,
     ) -> None:
-        self._id           = application_id or uuid.uuid4()
-        self._job_id       = job_id
+        self._id = application_id or uuid.uuid4()
+        self._job_id = job_id
         self._candidate_id = candidate_id
-        self._source       = source
-        self._status       = status
-        self._meta         = dict(meta or {})
-        self._created_at   = created_at or _utcnow()
-        self._updated_at   = updated_at or _utcnow()
+        self._source = source
+        self._status = status
+        self._meta = dict(meta or {})
+        self._created_at = created_at or _utcnow()
+        self._updated_at = updated_at or _utcnow()
 
-    # ── Identity ──────────────────────────────────────────────────────────────
+    # Identity 
 
     @property
     def id(self) -> uuid.UUID:
@@ -92,7 +92,7 @@ class Application:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    # ── Queries ───────────────────────────────────────────────────────────────
+    # Queries 
 
     @property
     def is_active(self) -> bool:
@@ -108,7 +108,7 @@ class Application:
             ApplicationStatus.rejected,
         )
 
-    # ── Commands ──────────────────────────────────────────────────────────────
+    # Commands 
 
     def mark_interviewing(self) -> None:
         if self._status != ApplicationStatus.new:
@@ -157,7 +157,7 @@ class Application:
         self._meta["withdrawn"] = True
         self._touch()
 
-    # ── Assertions ────────────────────────────────────────────────────────────
+    # Assertions 
 
     def assert_eligible_for_interview(self) -> None:
         if self._status not in (ApplicationStatus.new, ApplicationStatus.interviewing):
@@ -165,7 +165,7 @@ class Application:
                 f"Application is not eligible for interview: {self._status.value}"
             )
 
-    # ── Internals ─────────────────────────────────────────────────────────────
+    # Internals
 
     def _touch(self) -> None:
         self._updated_at = _utcnow()

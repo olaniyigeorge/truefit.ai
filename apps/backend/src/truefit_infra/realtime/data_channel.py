@@ -1,15 +1,16 @@
 """
 DataChannelManager — bidirectional structured event channel.
 
-Outbound (backend → frontend):
+Outbound (backend -> frontend):
   agent_thinking, question_start, interview_ended, evaluation_scores, interrupt
 
-Inbound (frontend → backend):
+Inbound (frontend -> backend):
   clarification_request, screen_share_start, screen_share_stop, candidate_ready
 
 All messages are newline-delimited JSON.
 Domain logic must NOT live here — use on_inbound_event callback to dispatch upstream.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -41,17 +42,19 @@ class DataChannelManager:
     """
 
     # Known outbound event types (for documentation; not enforced at runtime)
-    OUTBOUND_EVENTS = frozenset({
-        "agent_thinking",
-        "question_start",
-        "question_end",
-        "interview_ended",
-        "evaluation_scores",
-        "interrupt",
-        "transcript",
-        "error",
-        "pong",
-    })
+    OUTBOUND_EVENTS = frozenset(
+        {
+            "agent_thinking",
+            "question_start",
+            "question_end",
+            "interview_ended",
+            "evaluation_scores",
+            "interrupt",
+            "transcript",
+            "error",
+            "pong",
+        }
+    )
 
     def __init__(self, *, context: SessionContext) -> None:
         self._ctx = context
@@ -88,7 +91,9 @@ class DataChannelManager:
 
     # ── Outbound ───
 
-    async def send_event(self, event_type: str, payload: dict[str, Any] | None = None) -> None:
+    async def send_event(
+        self, event_type: str, payload: dict[str, Any] | None = None
+    ) -> None:
         """
         Enqueue an outbound event. Non-blocking — returns immediately.
         The sender loop drains the queue and writes to the DataChannel.

@@ -1,6 +1,6 @@
 """
 tests/unit/domain/test_job.py
-──────────────────────────────
+──
 Unit tests for the Job aggregate root and its value objects.
 No database, no I/O — pure domain logic.
 """
@@ -18,13 +18,14 @@ from src.truefit_core.domain.job import (
     SkillRequirement,
 )
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Helpers / Fixtures
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
-def make_skill(name: str = "Python", required: bool = True, weight: float = 1.0) -> SkillRequirement:
+def make_skill(
+    name: str = "Python", required: bool = True, weight: float = 1.0
+) -> SkillRequirement:
     return SkillRequirement(name=name, required=required, weight=weight)
 
 
@@ -49,14 +50,15 @@ def make_job(
         title=title,
         description=description,
         requirements=make_requirements(),
-        skills=skills or [make_skill("Python"), make_skill("PostgreSQL", required=False)],
+        skills=skills
+        or [make_skill("Python"), make_skill("PostgreSQL", required=False)],
         status=status,
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # SkillRequirement value object
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestSkillRequirement:
@@ -92,9 +94,9 @@ class TestSkillRequirement:
         assert SkillRequirement(name="Rust").weight == 1.0
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # JobRequirements value object
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestJobRequirements:
@@ -115,9 +117,9 @@ class TestJobRequirements:
         assert req.extra == {}
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # InterviewConfig value object
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestInterviewConfig:
@@ -135,14 +137,16 @@ class TestInterviewConfig:
             InterviewConfig(max_duration_minutes=4)
 
     def test_custom_config(self):
-        cfg = InterviewConfig(max_questions=5, max_duration_minutes=15, topics=["DSA", "System Design"])
+        cfg = InterviewConfig(
+            max_questions=5, max_duration_minutes=15, topics=["DSA", "System Design"]
+        )
         assert cfg.max_questions == 5
         assert "DSA" in cfg.topics
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Job — construction & validation
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestJobConstruction:
@@ -201,10 +205,24 @@ class TestJobConstruction:
         fixed_id = uuid.uuid4()
         org = uuid.uuid4()
         creator = uuid.uuid4()
-        a = Job(job_id=fixed_id, org_id=org, created_by=creator, title="A", description="D",
-                requirements=make_requirements(), skills=[make_skill()])
-        b = Job(job_id=fixed_id, org_id=org, created_by=creator, title="B", description="D2",
-                requirements=make_requirements(), skills=[make_skill()])
+        a = Job(
+            job_id=fixed_id,
+            org_id=org,
+            created_by=creator,
+            title="A",
+            description="D",
+            requirements=make_requirements(),
+            skills=[make_skill()],
+        )
+        b = Job(
+            job_id=fixed_id,
+            org_id=org,
+            created_by=creator,
+            title="B",
+            description="D2",
+            requirements=make_requirements(),
+            skills=[make_skill()],
+        )
         assert a == b
 
     def test_job_is_hashable(self):
@@ -213,9 +231,9 @@ class TestJobConstruction:
         assert job in s
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Job — status transitions
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestJobStatusTransitions:
@@ -292,9 +310,9 @@ class TestJobStatusTransitions:
         assert job.updated_at >= before
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Job — description & requirements mutations
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestJobMutations:
@@ -317,7 +335,9 @@ class TestJobMutations:
 
     def test_update_requirements(self):
         job = make_job()
-        new_req = JobRequirements(experience_level=ExperienceLevel.SENIOR, min_total_years=7)
+        new_req = JobRequirements(
+            experience_level=ExperienceLevel.SENIOR, min_total_years=7
+        )
         job.update_requirements(new_req)
         assert job.requirements.experience_level == ExperienceLevel.SENIOR
         assert job.experience_level == ExperienceLevel.SENIOR
@@ -336,9 +356,9 @@ class TestJobMutations:
             job.update_requirements(make_requirements())
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Job — skill management
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestJobSkillManagement:
@@ -406,17 +426,21 @@ class TestJobSkillManagement:
             job.add_skill(make_skill("Docker"))
 
     def test_required_skills_filter(self):
-        job = make_job(skills=[
-            make_skill("Python", required=True),
-            make_skill("Docker", required=False),
-        ])
+        job = make_job(
+            skills=[
+                make_skill("Python", required=True),
+                make_skill("Docker", required=False),
+            ]
+        )
         assert all(s.required for s in job.required_skills)
 
     def test_preferred_skills_filter(self):
-        job = make_job(skills=[
-            make_skill("Python", required=True),
-            make_skill("Docker", required=False),
-        ])
+        job = make_job(
+            skills=[
+                make_skill("Python", required=True),
+                make_skill("Docker", required=False),
+            ]
+        )
         assert all(not s.required for s in job.preferred_skills)
 
     def test_skills_property_returns_copy(self):

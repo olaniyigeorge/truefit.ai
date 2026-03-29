@@ -12,11 +12,11 @@ def _utcnow() -> datetime:
 
 
 class InterviewStatus(str, Enum):
-    SCHEDULED = "scheduled"   # created, not yet started
-    ACTIVE = "active"         # candidate is in session
-    COMPLETED = "completed"   # all questions done / candidate ended session
-    ABANDONED = "abandoned"   # timed-out or candidate disconnected
-    EVALUATED = "evaluated"   # evaluation has been generated
+    SCHEDULED = "scheduled"  # created, not yet started
+    ACTIVE = "active"  # candidate is in session
+    COMPLETED = "completed"  # all questions done / candidate ended session
+    ABANDONED = "abandoned"  # timed-out or candidate disconnected
+    EVALUATED = "evaluated"  # evaluation has been generated
 
 
 @dataclass(frozen=True)
@@ -25,10 +25,13 @@ class Question:
     Value object representing a single AI-generated question.
     Immutable — questions are never edited after they are sent.
     """
+
     id: uuid.UUID
     text: str
-    topic: Optional[str] = None       # e.g. "system design", "behavioural"
-    follow_up_of: Optional[uuid.UUID] = None  # links adaptive follow-ups to their parent
+    topic: Optional[str] = None  # e.g "system design", "behavioural"
+    follow_up_of: Optional[uuid.UUID] = (
+        None  # links adaptive follow-ups to their parent
+    )
     asked_at: datetime = field(default_factory=_utcnow)
 
     def __post_init__(self) -> None:
@@ -42,6 +45,7 @@ class Answer:
     Value object pairing an answer to its question.
     Immutable — once submitted, an answer is part of the permanent transcript.
     """
+
     question_id: uuid.UUID
     text: str
     answered_at: datetime = field(default_factory=_utcnow)
@@ -55,6 +59,7 @@ class Answer:
 @dataclass(frozen=True)
 class Turn:
     """A paired question + optional answer — one exchange in the interview."""
+
     question: Question
     answer: Optional[Answer] = None
 
@@ -112,7 +117,7 @@ class Interview:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # ── Identity ──
+    # Identity 
 
     @property
     def id(self) -> uuid.UUID:
@@ -227,14 +232,12 @@ class Interview:
             for t in self._turns
         ]
 
-    # ── Commands ──
+    # Commands 
 
     def start(self) -> None:
         """Transition SCHEDULED → ACTIVE and record start time."""
         if self._status != InterviewStatus.SCHEDULED:
-            raise ValueError(
-                f"Cannot start interview in status '{self._status.value}'"
-            )
+            raise ValueError(f"Cannot start interview in status '{self._status.value}'")
         self._status = InterviewStatus.ACTIVE
         self._started_at = _utcnow()
         self._touch()
@@ -330,7 +333,6 @@ class Interview:
         self._ended_at = _utcnow()
         self._touch()
 
-
     def void_open_questions(self) -> int:
         """
         Remove unanswered turns from the transcript.
@@ -355,7 +357,7 @@ class Interview:
         self._status = InterviewStatus.EVALUATED
         self._touch()
 
-    # ── Assertions ───
+    # Assertions 
 
     def assert_completed(self) -> None:
         if self._status != InterviewStatus.COMPLETED:
@@ -363,7 +365,7 @@ class Interview:
                 f"Interview must be COMPLETED for evaluation, got: {self._status.value}"
             )
 
-    # ── Internal helpers ──
+    # Internal helpers 
 
     def _assert_active(self) -> None:
         if not self.is_active:

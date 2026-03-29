@@ -6,6 +6,7 @@ import time
 
 from src.truefit_core.common.utils import logger
 
+
 async def req_res_time_log_middleware(request: Request, call_next):
     if request.scope["type"] == "websocket":
         return await call_next(request)
@@ -23,7 +24,8 @@ async def req_res_time_log_middleware(request: Request, call_next):
     logger.info(log_obj, extra=log_obj)
     return response
 
-# TODO: Debug or re-implement rate limiting middleware 
+
+# TODO: Debug or re-implement rate limiting middleware
 # # ----- Rate Limiting Middleware -----
 # async def identifier(request: Request) -> str:
 #   ip = request.client.host

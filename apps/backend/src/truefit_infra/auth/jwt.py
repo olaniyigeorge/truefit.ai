@@ -35,14 +35,14 @@ class JWTService:
     ) -> str:
         """
         Create a JWT access token.
-        
+
         Args:
             subject: User ID (UUID as string)
             user_email: User email address
             user_role: User role (admin, recruiter, candidate)
             org_id: Organization ID (optional)
             expires_delta: Custom expiration time (if None, uses default)
-        
+
         Returns:
             Encoded JWT token
         """
@@ -50,7 +50,7 @@ class JWTService:
             expires_delta = timedelta(minutes=self.access_token_expire_minutes)
 
         expire = datetime.now(timezone.utc) + expires_delta
-        
+
         payload = {
             "sub": subject,  # subject (user_id)
             "email": user_email,
@@ -60,11 +60,9 @@ class JWTService:
             "iat": datetime.now(timezone.utc),
             "type": "access",
         }
-        
+
         try:
-            encoded_jwt = jwt.encode(
-                payload, self.secret_key, algorithm=self.algorithm
-            )
+            encoded_jwt = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
             logger.info(f"JWT token created for user {subject}")
             return encoded_jwt
         except Exception as e:
@@ -74,25 +72,23 @@ class JWTService:
     def verify_access_token(self, token: str) -> dict:
         """
         Verify and decode a JWT access token.
-        
+
         Args:
             token: JWT token string
-        
+
         Returns:
             Decoded token payload
-        
+
         Raises:
             jwt.InvalidTokenError: If token is invalid or expired
         """
         try:
-            payload = jwt.decode(
-                token, self.secret_key, algorithms=[self.algorithm]
-            )
-            
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+
             # Verify token type
             if payload.get("type") != "access":
                 raise jwt.InvalidTokenError("Invalid token type")
-            
+
             logger.debug(f"JWT token verified for user {payload.get('sub')}")
             return payload
         except jwt.ExpiredSignatureError:
@@ -105,17 +101,15 @@ class JWTService:
     def get_user_id_from_token(self, token: str) -> str:
         """
         Extract user ID from token without full verification (for logging, etc).
-        
+
         Args:
             token: JWT token string
-        
+
         Returns:
             User ID string
         """
         try:
-            payload = jwt.decode(
-                token, self.secret_key, algorithms=[self.algorithm]
-            )
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
             return payload.get("sub")
         except Exception:
             return None

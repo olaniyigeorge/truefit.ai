@@ -4,10 +4,9 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Optional
 
-from truefit_core.application.ports import  EvaluationRepository, StoragePort
+from truefit_core.application.ports import EvaluationRepository, StoragePort
 from truefit_core.application.query import PaginationParams
 from truefit_core.domain.evaluation import Evaluation
-
 
 
 @dataclass(frozen=True)

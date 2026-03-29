@@ -4,7 +4,6 @@ import uuid
 from typing import Optional
 
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 
 from src.truefit_core.domain.application import (
     Application,
@@ -37,8 +36,8 @@ class SQLAlchemyApplicationRepository(ApplicationRepository):
                 )
                 session.add(row)
             else:
-                existing.status     = application.status.value
-                existing.meta       = application.meta
+                existing.status = application.status.value
+                existing.meta = application.meta
                 existing.updated_at = application.updated_at
             await session.commit()
 
@@ -101,7 +100,7 @@ class SQLAlchemyApplicationRepository(ApplicationRepository):
                 await session.commit()
 
 
-# ── Mapper ────────────────────────────────────────────────────────────────────
+# Mapper 
 
 def _to_domain(row: ApplicationORM) -> Application:
     return Application(

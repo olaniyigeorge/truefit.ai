@@ -41,7 +41,7 @@ class Candidate:
     Aggregate root representing a job-seeker on the platform.
 
     Schema source of truth: candidate_profiles table
-    ─────────────────────────────────────────────────
+    ─
     id               uuid
     user_id          uuid (FK users.id)
     headline         varchar(255)
@@ -101,7 +101,7 @@ class Candidate:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # ── Identity / properties ──────────────────────────────────────────────
+    # Identity / properties 
 
     @property
     def id(self) -> uuid.UUID:
@@ -159,7 +159,7 @@ class Candidate:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    # ── Queries ───────────────────────────────────────────────────────────
+    # ── Queries ───
 
     @property
     def is_eligible_to_interview(self) -> bool:
@@ -168,7 +168,7 @@ class Candidate:
     def has_active_interview_for(self, job_id: uuid.UUID) -> bool:
         return job_id in self._active_interview_job_ids
 
-    # ── Commands ──────────────────────────────────────────────────────────
+    # Commands 
 
     def update_profile(
         self,
@@ -238,7 +238,7 @@ class Candidate:
         self._active_interview_job_ids.discard(job_id)
         self._touch()
 
-    # ── Assertions ────────────────────────────────────────────────────────
+    # Assertions 
 
     def assert_eligible_to_interview(self) -> None:
         if not self.is_eligible_to_interview:
@@ -247,7 +247,7 @@ class Candidate:
                 f"(status={self._status.value})"
             )
 
-    # ── Internal ──────────────────────────────────────────────────────────
+    # Internal 
 
     def _assert_active(self) -> None:
         if self._status != CandidateStatus.ACTIVE:

@@ -2,14 +2,14 @@
 SQLAlchemy implementation of JobRepository against the job_listings table.
 
 Mapping layers
-──────────────
+
 _to_row(job)     Job domain object  →  flat dict for JobListing upsert
 _to_domain(row)  JobListing ORM row   →  reconstructed Job aggregate
 
 The two JSONB columns map to domain value objects as follows:
 
   DB column        Domain object
-  ───────────────────────────────────────────────────────────────
+  ─
   skills           list[SkillRequirement]   (name, required, weight, min_years)
   requirements     JobRequirements          (experience_level, min_total_years,
                                              education, certifications,
@@ -47,7 +47,7 @@ class SQLAlchemyJobRepository(JobRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
-    # ── JobRepository interface ──
+    # JobRepository interface 
 
     async def save(self, job: Job) -> None:
         """
@@ -64,15 +64,14 @@ class SQLAlchemyJobRepository(JobRepository):
             .on_conflict_do_update(
                 index_elements=["id"],
                 set_={
-                    "title":            data["title"],
-                    "description":      data["description"],
-                    "status":           data["status"],
+                    "title": data["title"],
+                    "description": data["description"],
+                    "status": data["status"],
                     "experience_level": data["experience_level"],
-                    "skills":           data["skills"],
-                    "requirements":     data["requirements"],
+                    "skills": data["skills"],
+                    "requirements": data["requirements"],
                     "interview_config": data["interview_config"],
-                    "updated_at":       data["updated_at"],
-                    # org_id, created_by, created_at deliberately excluded
+                    "updated_at": data["updated_at"],
                 },
             )
         )
@@ -117,7 +116,7 @@ class SQLAlchemyJobRepository(JobRepository):
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
-    # ── Extended read methods (beyond abstract port) ───
+    # Extended read methods (beyond abstract port) 
 
     async def get_by_org_and_status(
         self,
@@ -168,7 +167,7 @@ class SQLAlchemyJobRepository(JobRepository):
             rows = result.scalars().all()
 
         return [self._to_domain(row) for row in rows]
-        
+
     async def list_all_active(
         self,
         *,
@@ -206,13 +205,15 @@ class SQLAlchemyJobRepository(JobRepository):
             return result.scalar_one()
 
     async def exists(self, job_id: uuid.UUID) -> bool:
-        stmt = select(func.count()).select_from(JobListing).where(JobListing.id == job_id)
+        stmt = (
+            select(func.count()).select_from(JobListing).where(JobListing.id == job_id)
+        )
 
         async with self._db.get_session() as session:
             result = await session.execute(stmt)
             return result.scalar_one() > 0
 
-    # ── Mapping: domain → DB row ──
+    # Mapping: domain -> DB row
 
     @staticmethod
     def _to_row(job: Job) -> dict:
@@ -224,42 +225,42 @@ class SQLAlchemyJobRepository(JobRepository):
         """
         req = job.requirements
         return {
-            "id":               job.id,
-            "org_id":           job.org_id,
-            "created_by":       job.created_by,
-            "title":            job.title,
-            "description":      job.description,
-            "status":           job.status.value,
-            "experience_level": req.experience_level.value,  # denormalised column
+            "id": job.id,
+            "org_id": job.org_id,
+            "created_by": job.created_by,
+            "title": job.title,
+            "description": job.description,
+            "status": job.status.value,
+            "experience_level": req.experience_level.value,  
             "skills": [
                 {
-                    "name":      s.name,
-                    "required":  s.required,
-                    "weight":    s.weight,
+                    "name": s.name,
+                    "required": s.required,
+                    "weight": s.weight,
                     "min_years": s.min_years,
                 }
                 for s in job.skills
             ],
             "requirements": {
-                "experience_level":  req.experience_level.value,
-                "min_total_years":   req.min_total_years,
-                "education":         req.education,
-                "certifications":    req.certifications,
-                "location":          req.location,
-                "work_arrangement":  req.work_arrangement,
-                "extra":             req.extra,
+                "experience_level": req.experience_level.value,
+                "min_total_years": req.min_total_years,
+                "education": req.education,
+                "certifications": req.certifications,
+                "location": req.location,
+                "work_arrangement": req.work_arrangement,
+                "extra": req.extra,
             },
             "interview_config": {
-                "max_questions":        job.interview_config.max_questions,
+                "max_questions": job.interview_config.max_questions,
                 "max_duration_minutes": job.interview_config.max_duration_minutes,
-                "topics":               job.interview_config.topics,
-                "custom_instructions":  job.interview_config.custom_instructions,
+                "topics": job.interview_config.topics,
+                "custom_instructions": job.interview_config.custom_instructions,
             },
             "created_at": job.created_at,
             "updated_at": job.updated_at,
         }
 
-    # ── Mapping: DB row → domain ──
+    # Mapping: DB row -> domain 
 
     @staticmethod
     def _to_domain(row: JobListing) -> Job:
@@ -269,7 +270,7 @@ class SQLAlchemyJobRepository(JobRepository):
         Safe defaults on every JSONB key guard against rows written before
         a field was added — forward and backward compatible.
         """
-        # ── Skills ──
+        # Skills 
         skills = [
             SkillRequirement(
                 name=s["name"],
@@ -280,7 +281,7 @@ class SQLAlchemyJobRepository(JobRepository):
             for s in (row.skills or [])
         ]
 
-        # ── Requirements ───
+        # Requirements 
         req = row.requirements or {}
         # experience_level: prefer the dedicated column (always up-to-date),
         # fall back to the JSONB value for rows created before the column existed.
@@ -295,7 +296,7 @@ class SQLAlchemyJobRepository(JobRepository):
             extra=req.get("extra", {}),
         )
 
-        # ── Interview config ───
+        # Interview config 
         cfg = row.interview_config or {}
         interview_config = InterviewConfig(
             max_questions=cfg.get("max_questions", 10),

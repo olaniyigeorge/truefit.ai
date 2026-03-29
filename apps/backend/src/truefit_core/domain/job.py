@@ -38,6 +38,7 @@ class SkillRequirement:
     min_years   Optional minimum years of experience for this specific skill.
                 Stored here (not on JobRequirements) because it is skill-specific.
     """
+
     name: str
     required: bool = True
     weight: float = 1.0
@@ -65,6 +66,7 @@ class JobRequirements:
     work_arrangement    "remote" | "hybrid" | "onsite"
     extra               Escape hatch for bespoke criteria with no schema change needed.
     """
+
     experience_level: ExperienceLevel
     min_total_years: Optional[int] = None
     education: Optional[str] = None
@@ -84,6 +86,7 @@ class InterviewConfig:
     Controls how the AI agent conducts the interview for this job.
     Decoupled from Job so it can be updated without touching job identity.
     """
+
     max_questions: int = 10
     max_duration_minutes: int = 30
     topics: list[str] = field(default_factory=list)
@@ -101,7 +104,7 @@ class Job:
     Aggregate root representing an organisation's job listing.
 
     Invariants
-    ──────────
+
     - Interviews can only be started against an ACTIVE job.
     - Status transitions follow a strict directed graph.
     - org_id, created_by, and title are immutable after creation.
@@ -109,7 +112,7 @@ class Job:
     """
 
     _VALID_TRANSITIONS: dict[JobStatus, set[JobStatus]] = {
-        JobStatus.DRAFT:  {JobStatus.ACTIVE},
+        JobStatus.DRAFT: {JobStatus.ACTIVE},
         JobStatus.ACTIVE: {JobStatus.PAUSED, JobStatus.CLOSED},
         JobStatus.PAUSED: {JobStatus.ACTIVE, JobStatus.CLOSED},
         JobStatus.CLOSED: set(),
@@ -149,7 +152,7 @@ class Job:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # ── Identity ──────────────────────────────────────────────────────────────
+    # ── Identity 
 
     @property
     def id(self) -> uuid.UUID:
@@ -281,7 +284,7 @@ class Job:
                 return
         raise ValueError(f"Skill '{skill_name}' not found")
 
-    # ── Assertions ────────────────────────────────────────────────────────────
+    # ── Assertions ────
 
     def assert_open_for_interviews(self) -> None:
         if not self.is_open_for_interviews:
@@ -290,7 +293,7 @@ class Job:
                 f"(status={self._status.value})"
             )
 
-    # ── Internal ──────────────────────────────────────────────────────────────
+    # ── Internal 
 
     def _assert_not_closed(self) -> None:
         if self._status == JobStatus.CLOSED:
@@ -308,7 +311,7 @@ class Job:
     def _touch(self) -> None:
         self._updated_at = _utcnow()
 
-    # ── Representation ────────────────────────────────────────────────────────
+    # ── Representation 
 
     def __repr__(self) -> str:
         return (

@@ -20,7 +20,7 @@ warn()   { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
 # =============================================================================
-# ── CONFIGURATION — edit before running ───────────────────────────────────────
+# ── CONFIGURATION — edit before running ─────
 # =============================================================================
 PROJECT_ID="truefit-490409"        # <-- change this
 VM_NAME="truefit-engine"
@@ -32,7 +32,7 @@ IMAGE_PROJECT="ubuntu-os-cloud"
 REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git" 
 
 # =============================================================================
-# ── STEP 1: Verify gcloud is set up ───────────────────────────────────────────
+# ── STEP 1: Verify gcloud is set up ─
 # =============================================================================
 log "Checking gcloud setup..."
 
@@ -44,7 +44,7 @@ gcloud config set project "$PROJECT_ID"
 success "Using project: $PROJECT_ID"
 
 # =============================================================================
-# ── STEP 2: Enable required GCP APIs ──────────────────────────────────────────
+# ── STEP 2: Enable required GCP APIs 
 # =============================================================================
 log "Enabling required GCP APIs..."
 
@@ -52,7 +52,7 @@ gcloud services enable compute.googleapis.com --quiet
 success "Compute Engine API enabled"
 
 # =============================================================================
-# ── STEP 3: Create Firewall Rules ─────────────────────────────────────────────
+# ── STEP 3: Create Firewall Rules ───
 # =============================================================================
 log "Creating firewall rules..."
 
@@ -93,7 +93,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 4: Create the VM ─────────────────────────────────────────────────────
+# ── STEP 4: Create the VM ─────
 # =============================================================================
 log "Creating VM instance: $VM_NAME..."
 
@@ -116,7 +116,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 5: Reserve a Static External IP ──────────────────────────────────────
+# ── STEP 5: Reserve a Static External IP ────
 # =============================================================================
 log "Reserving static external IP..."
 
@@ -150,7 +150,7 @@ gcloud compute instances add-access-config "$VM_NAME" \
 success "Static IP $STATIC_IP assigned to $VM_NAME"
 
 # =============================================================================
-# ── STEP 6: Copy deploy.sh to VM and run it ───────────────────────────────────
+# ── STEP 6: Copy deploy.sh to VM and run it ─
 # =============================================================================
 log "Waiting for VM to be ready..."
 sleep 15
@@ -172,7 +172,7 @@ gcloud compute ssh "$VM_NAME" \
     --quiet
 
 # =============================================================================
-# ── Done ──────────────────────────────────────────────────────────────────────
+# ── Done 
 # =============================================================================
 echo ""
 echo -e "${GREEN}============================================${NC}"

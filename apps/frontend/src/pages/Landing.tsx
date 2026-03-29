@@ -6,7 +6,7 @@ import { SpiralLogo } from "@/components/Spiral"
 import {Counter} from "@/components/AnimatedCounter"
 
 
-// ── Main landing page ─────────────────────────────────────────────────────────
+// ── Main landing page ─
 export default function Landing() {
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)

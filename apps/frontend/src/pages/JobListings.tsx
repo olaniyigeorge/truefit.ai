@@ -37,7 +37,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
     )
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Page 
 
 export default function JobListingsPage() {
     const { backendUser } = useAuthContext()
@@ -51,6 +51,7 @@ export default function JobListingsPage() {
     const [error,      setError]      = useState<string | null>(null)
     const [search,     setSearch]     = useState("")
     const [successJob, setSuccessJob] = useState<Job | null>(null)
+    const [candidateProfile, setCandidateProfile] = useState<Candidate | null>(null)
 
     useEffect(() => {
         if (!backendUser?.id) return
@@ -71,6 +72,7 @@ export default function JobListingsPage() {
                 // Find this user's candidate profile
                 const mine = allCandidates.find(c => c.user_id === backendUser.id)
                 setCandidate(mine ?? null)
+                setCandidateProfile(mine ?? null)
 
                 // Track already-applied job IDs
                 setAppliedIds(new Set(myApplications.map(a => a.job_id)))
@@ -205,14 +207,12 @@ export default function JobListingsPage() {
                         </DialogTitle>
                         <DialogDescription className="text-[13px] text-muted-foreground">
                             You've successfully applied for <strong>{successJob?.title}</strong>.
-                            The recruiter will review your application and you'll be contacted if you're selected for an interview.
+                            The recruiter will review your application. Once approved,
+                            you'll be able to start your AI interview from your Applications page.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button
-                            className="font-mono text-[12px]"
-                            onClick={() => setSuccessJob(null)}
-                        >
+                        <Button className="font-mono text-[12px]" onClick={() => setSuccessJob(null)}>
                             Got it
                         </Button>
                     </DialogFooter>

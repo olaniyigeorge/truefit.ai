@@ -12,14 +12,18 @@ from datetime import datetime, timezone
 
 from src.truefit_core.common.utils import logger
 from src.truefit_core.domain.interview import InterviewStatus
-from src.truefit_core.domain.job import Job, ExperienceLevel, InterviewConfig, SkillRequirement
+from src.truefit_core.domain.job import (
+    Job,
+    ExperienceLevel,
+    InterviewConfig,
+    SkillRequirement,
+)
 from src.truefit_core.application.ports import (
     DomainEvent,
     InterviewRepository,
     JobRepository,
     QueuePort,
 )
-
 
 _EVENT_JOB_CLOSED = "job.closed"
 
@@ -83,17 +87,21 @@ class JobService:
                 await self._interviews.save(interview)
                 abandoned_count += 1
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_JOB_CLOSED,
-            aggregate_id=str(job_id),
-            aggregate_type="Job",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "job_id": str(job_id),
-                "org_id": str(job.org_id),
-                "interviews_abandoned": abandoned_count,
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_JOB_CLOSED,
+                aggregate_id=str(job_id),
+                aggregate_type="Job",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "job_id": str(job_id),
+                    "org_id": str(job.org_id),
+                    "interviews_abandoned": abandoned_count,
+                },
+            )
+        )
 
-        logger.info(f"Job {job_id} closed. {abandoned_count} active interview(s) abandoned.")
+        logger.info(
+            f"Job {job_id} closed. {abandoned_count} active interview(s) abandoned."
+        )
         return job

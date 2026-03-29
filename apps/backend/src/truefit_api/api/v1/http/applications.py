@@ -5,6 +5,7 @@ GET    /applications                           List by job_id or candidate_id
 PATCH  /applications/{application_id}/status   Update status
 DELETE /applications/{application_id}          Withdraw/delete
 """
+
 from __future__ import annotations
 
 import uuid
@@ -26,13 +27,15 @@ from src.truefit_infra.db.repositories.application_repository import (
 router = APIRouter(prefix="/applications", tags=["applications"])
 
 
-# ── Dependencies ──────────────────────────────────────────────────────────────
+# ── Dependencies 
+
 
 def get_application_repo() -> SQLAlchemyApplicationRepository:
     return SQLAlchemyApplicationRepository(db_manager)
 
 
-# ── Schemas ───────────────────────────────────────────────────────────────────
+# ── Schemas 
+
 
 class CreateApplicationRequest(BaseModel):
     job_id: uuid.UUID
@@ -70,7 +73,8 @@ class ApplicationOut(BaseModel):
         )
 
 
-# ── Endpoints ─────────────────────────────────────────────────────────────────
+# ── Endpoints ───
+
 
 @router.post("", response_model=ApplicationOut, status_code=status.HTTP_201_CREATED)
 async def create_application(
@@ -145,12 +149,18 @@ async def update_status(
 
     try:
         match body.status:
-            case ApplicationStatus.interviewing: application.mark_interviewing()
-            case ApplicationStatus.shortlisted:  application.shortlist()
-            case ApplicationStatus.rejected:     application.reject()
-            case ApplicationStatus.hired:        application.hire()
+            case ApplicationStatus.interviewing:
+                application.mark_interviewing()
+            case ApplicationStatus.shortlisted:
+                application.shortlist()
+            case ApplicationStatus.rejected:
+                application.reject()
+            case ApplicationStatus.hired:
+                application.hire()
             case _:
-                raise HTTPException(400, detail=f"Cannot manually set status to: {body.status.value}")
+                raise HTTPException(
+                    400, detail=f"Cannot manually set status to: {body.status.value}"
+                )
 
         if body.meta_updates:
             application.update_meta(body.meta_updates)

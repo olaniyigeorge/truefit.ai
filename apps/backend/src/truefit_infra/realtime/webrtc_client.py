@@ -10,6 +10,7 @@ Owns the RTCPeerConnection. On track events:
 Holds session context (job_id, candidate_id) so downstream components
 always have the right scope. Does NOT know about Gemini or domain logic.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -41,7 +42,7 @@ class WebRTCClient:
         candidate_id: uuid.UUID,
         frame_interval_camera: float = 5.0,
         frame_interval_screen: float = 2.0,
-        on_ice_candidate=None
+        on_ice_candidate=None,
     ) -> None:
         self.pc = pc
         self.context = SessionContext(
@@ -58,7 +59,7 @@ class WebRTCClient:
             screen_interval=frame_interval_screen,
         )
         self.data_channel = DataChannelManager(context=self.context)
-        self.on_ice_candidate = on_ice_candidate 
+        self.on_ice_candidate = on_ice_candidate
 
         self._closed = False
 
@@ -69,6 +70,7 @@ class WebRTCClient:
         Register aiortc event handlers.
         Must be called before setRemoteDescription so no events are missed.
         """
+
         @self.pc.on("icecandidate")
         async def on_ice_candidate(candidate) -> None:
             if candidate and self.on_ice_candidate:
@@ -131,6 +133,7 @@ class WebRTCClient:
 
 # ── Helpers ──
 
+
 def _is_screen_track(track: MediaStreamTrack) -> bool:
     """
     Heuristic: browsers set label to 'screen', 'window', or 'tab'
@@ -142,11 +145,13 @@ def _is_screen_track(track: MediaStreamTrack) -> bool:
 
 # ── Registry ──
 
+
 class WebRTCClientRegistry:
     """
     Simple in-process registry mapping session_id → WebRTCClient.
     Replace with Redis-backed registry for multi-process deployments.
     """
+
     _store: dict[str, WebRTCClient] = {}
 
     @classmethod

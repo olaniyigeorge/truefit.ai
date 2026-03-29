@@ -1,15 +1,13 @@
 import {Card, CardContent} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
-import {Field} from "./Field"
 
 
 type SetupProps = {
   jobId: string; candidateId: string
-  onJobIdChange: (v: string) => void; onCandidateIdChange: (v: string) => void
   onStart: () => void; isConnecting: boolean
 }
  
-export function SetupScreen({ jobId, candidateId, onJobIdChange, onCandidateIdChange, onStart, isConnecting }: SetupProps) {
+export function SetupScreen({ jobId, candidateId, onStart, isConnecting }: SetupProps) {
   const canStart = jobId.trim() && candidateId.trim() && !isConnecting
  
   return (
@@ -29,22 +27,12 @@ export function SetupScreen({ jobId, candidateId, onJobIdChange, onCandidateIdCh
       {/* Form card */}
       <Card>
         <CardContent className="p-7 flex flex-col gap-5">
-          <Field
-            id="candidate-id"
-            label="Candidate ID"
-            value={candidateId}
-            onChange={onCandidateIdChange}
-            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            hint="Your candidate profile UUID"
-          />
-          <Field
-            id="job-id"
-            label="Job ID"
-            value={jobId}
-            onChange={onJobIdChange}
-            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            hint="The position you're interviewing for"
-          />
+          <div className="rounded-lg border border-border bg-secondary/40 px-4 py-3">
+            <p className="text-[12px] text-muted-foreground leading-relaxed">
+              Your interview session is ready. When you start, we&apos;ll connect your microphone
+              and begin the live AI conversation.
+            </p>
+          </div>
           <Button
             onClick={onStart}
             disabled={!canStart}

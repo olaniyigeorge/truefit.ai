@@ -34,11 +34,13 @@ router = APIRouter(prefix="/orgs", tags=["orgs"])
 
 # ── Dependency ───
 
+
 def get_org_repo() -> SQLAlchemyOrgRepository:
     return SQLAlchemyOrgRepository(db_manager)
 
 
 # ── Request schemas ───
+
 
 class OrgContactIn(BaseModel):
     email: EmailStr
@@ -103,6 +105,7 @@ class UpdateOrgRequest(BaseModel):
 
 # ── Response schemas ──
 
+
 class OrgContactOut(BaseModel):
     email: str
     phone: Optional[str]
@@ -159,6 +162,7 @@ class OrgOut(BaseModel):
 
 # ── Endpoints ──
 
+
 @router.post("", response_model=OrgOut, status_code=status.HTTP_201_CREATED)
 async def create_org(
     body: CreateOrgRequest,
@@ -174,7 +178,9 @@ async def create_org(
             detail=f"Slug '{slug}' is already taken. Provide a different slug.",
         )
 
-    print(f"\n\nCreating org with name={body.name} slug={slug} created_by={body.created_by}\n\n")
+    print(
+        f"\n\nCreating org with name={body.name} slug={slug} created_by={body.created_by}\n\n"
+    )
     contact = OrgContact(
         email=body.contact.email,
         phone=body.contact.phone,
@@ -242,7 +248,9 @@ async def list_orgs(
             s = OrgStatus(status_filter)
         except ValueError:
             raise HTTPException(400, detail=f"Invalid status: {status_filter}")
-        print(f"\n\nListing orgs with status={s.value} limit={limit} offset={offset}\n\n")
+        print(
+            f"\n\nListing orgs with status={s.value} limit={limit} offset={offset}\n\n"
+        )
         orgs = await repo.list_by_status(s, limit=limit, offset=offset)
     else:
         orgs = await repo.list_all(limit=limit, offset=offset)
@@ -297,11 +305,13 @@ async def update_billing(
         raise HTTPException(404, detail=f"Org {org_id} not found")
 
     try:
-        org.update_billing(OrgBilling(
-            plan=OrgPlan(body.plan),
-            max_active_jobs=body.max_active_jobs,
-            max_interviews_per_month=body.max_interviews_per_month,
-        ))
+        org.update_billing(
+            OrgBilling(
+                plan=OrgPlan(body.plan),
+                max_active_jobs=body.max_active_jobs,
+                max_interviews_per_month=body.max_interviews_per_month,
+            )
+        )
         await repo.save(org)
     except (ValueError, PermissionError) as e:
         raise HTTPException(400, detail=str(e))

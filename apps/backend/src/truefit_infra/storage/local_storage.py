@@ -1,1 +1,0 @@
-# LocalStorageAdapter(StoragePort) — dev/v1

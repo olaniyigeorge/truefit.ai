@@ -25,9 +25,10 @@ class SkillScore:
     Score for a single skill requirement — maps directly to the
     SkillRequirement.name field on the Job.
     """
+
     skill_name: str
-    score: float          # 0.0 – 10.0
-    rationale: str        # concise LLM-generated reasoning for this score
+    score: float  # 0.0 – 10.0
+    rationale: str  # concise LLM-generated reasoning for this score
     evidence_question_ids: list[uuid.UUID] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -45,15 +46,22 @@ class EvaluationScores:
     Holistic scoring breakdown.
     All scores are 0.0 - 10.0 to make aggregation / weighting straightforward.
     """
-    technical: float                        # domain / technical skill mastery
-    communication: float                    # clarity, structure, articulation
-    problem_solving: float                  # reasoning and approach quality
-    culture_fit: float                      # alignment with role expectations
-    overall: float                          # weighted composite (computed by LLM or service)
+
+    technical: float  # domain / technical skill mastery
+    communication: float  # clarity, structure, articulation
+    problem_solving: float  # reasoning and approach quality
+    culture_fit: float  # alignment with role expectations
+    overall: float  # weighted composite (computed by LLM or service)
     skill_scores: list[SkillScore] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        for attr in ("technical", "communication", "problem_solving", "culture_fit", "overall"):
+        for attr in (
+            "technical",
+            "communication",
+            "problem_solving",
+            "culture_fit",
+            "overall",
+        ):
             v = getattr(self, attr)
             if not 0.0 <= v <= 10.0:
                 raise ValueError(f"Score '{attr}' must be between 0 and 10, got {v}")
@@ -82,12 +90,12 @@ class Evaluation:
         org_id: uuid.UUID,
         scores: EvaluationScores,
         recommendation: HiringRecommendation,
-        summary: str,               # 2-3 paragraph LLM narrative
-        strengths: list[str],       # bullet-friendly key positives
-        weaknesses: list[str],      # bullet-friendly key gaps
+        summary: str,  # 2-3 paragraph LLM narrative
+        strengths: list[str],  # bullet-friendly key positives
+        weaknesses: list[str],  # bullet-friendly key gaps
         evaluation_id: Optional[uuid.UUID] = None,
         report_storage_key: Optional[str] = None,  # set after PDF upload
-        model_version: Optional[str] = None,       # e.g. "gemini-1.5-pro"
+        model_version: Optional[str] = None,  # e.g. "gemini-1.5-pro"
         created_at: Optional[datetime] = None,
     ) -> None:
         if not summary.strip():
@@ -165,7 +173,7 @@ class Evaluation:
     def created_at(self) -> datetime:
         return self._created_at
 
-    # ── Queries ──
+    # Queries 
 
     @property
     def is_hire_recommended(self) -> bool:
@@ -188,7 +196,7 @@ class Evaluation:
                 return s
         return None
 
-    # ── Commands ──
+    # Commands 
 
     def attach_report(self, storage_key: str) -> None:
         """
@@ -204,7 +212,7 @@ class Evaluation:
             raise ValueError("storage_key cannot be empty")
         self._report_storage_key = storage_key
 
-    # ── Serialisation (convenience for passing to queues / APIs) ──
+    # Serialisation (convenience for passing to queues / APIs) 
 
     def to_summary_dict(self) -> dict:
         """

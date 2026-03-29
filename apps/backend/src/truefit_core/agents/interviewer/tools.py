@@ -1,11 +1,12 @@
-# INTERVIEW_TOOLS declaration + _classify_interrupt, _extract_action_and_input, and _format_action_and_input for the interviewer agent.
+"""
+Tool declarations
+
+These are the only ways the agent communicates state back to 
+our system. The agent calls these; we respond with the result 
+via send_tool_response.
+"""
 
 
-
-
-# ── Tool declarations ──
-# These are the only ways the agent communicates state back to our system.
-# The agent calls these; we respond with the result via send_tool_response.
 
 INTERVIEW_TOOLS = [
     {
@@ -73,7 +74,11 @@ INTERVIEW_TOOLS = [
                     "properties": {
                         "reason": {
                             "type": "string",
-                            "enum": ["questions_exhausted", "time_limit", "candidate_ended"],
+                            "enum": [
+                                "questions_exhausted",
+                                "time_limit",
+                                "candidate_ended",
+                            ],
                             "description": "Why the interview is ending.",
                         },
                         "closing_remarks": {
@@ -110,4 +115,3 @@ INTERVIEW_TOOLS = [
         ]
     }
 ]
-

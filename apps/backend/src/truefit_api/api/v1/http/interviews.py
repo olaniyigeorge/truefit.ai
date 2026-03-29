@@ -27,19 +27,22 @@ from src.truefit_infra.db.repositories.candidate_repository import (
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
-# ── Dependencies ───
+# ── Dependencies
 
 def get_interview_repo() -> SQLAlchemyInterviewRepository:
     return SQLAlchemyInterviewRepository(db_manager)
 
+
 def get_job_repo() -> SQLAlchemyJobRepository:
     return SQLAlchemyJobRepository(db_manager)
+
 
 def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
 
 
-# ── Request schemas ──
+# ── Request schemas
+
 
 class StartInterviewRequest(BaseModel):
     job_id: uuid.UUID
@@ -103,7 +106,7 @@ class TranscriptOut(BaseModel):
     turns: list[TurnOut]
 
 
-# ── Endpoints ──
+# ── Endpoints 
 
 @router.post("", response_model=InterviewOut, status_code=status.HTTP_201_CREATED)
 async def start_interview(
@@ -165,7 +168,9 @@ async def list_interviews(
         raise HTTPException(400, detail="Provide candidate_id or job_id")
 
     if candidate_id:
-        interviews = await repo.list_by_candidate(candidate_id, limit=limit, offset=offset)
+        interviews = await repo.list_by_candidate(
+            candidate_id, limit=limit, offset=offset
+        )
     else:
         interviews = await repo.list_by_job(job_id, limit=limit, offset=offset)
 
@@ -184,7 +189,9 @@ async def abandon_interview(
         raise HTTPException(404, detail=f"Interview {interview_id} not found")
 
     if interview.is_finished:
-        raise HTTPException(400, detail=f"Interview is already {interview.status.value}")
+        raise HTTPException(
+            400, detail=f"Interview is already {interview.status.value}"
+        )
 
     interview.abandon(reason=f"{body.reason}:{body.initiated_by}")
     await interview_repo.save(interview)

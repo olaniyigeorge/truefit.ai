@@ -4,7 +4,7 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Optional
 
-from truefit_core.application.ports import  JobRepository, StoragePort
+from truefit_core.application.ports import JobRepository, StoragePort
 from truefit_core.application.query import PaginationParams
 from truefit_core.domain.interview import Interview
 from truefit_core.domain.job import Job
@@ -68,6 +68,3 @@ async def list_company_jobs(
         org_id, limit=pagination.limit, offset=pagination.offset
     )
     return [GetJobResponse.from_domain(j) for j in jobs]
-
-
-

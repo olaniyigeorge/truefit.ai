@@ -6,8 +6,9 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, AsyncIterator, Callable, Coroutine, Optional
 
-# ← No google/genai imports here at all
-from src.truefit_core.application.services.interview_orchestration import InterviewOrchestrationService
+from src.truefit_core.application.services.interview_orchestration import (
+    InterviewOrchestrationService,
+)
 from src.truefit_core.application.ports import CachePort, DomainEvent, QueuePort
 from src.truefit_core.common.utils import logger
 from src.truefit_core.agents.interviewer.context import InterviewContext
@@ -35,7 +36,7 @@ class LiveInterviewAgent:
         audio_input_stream: AsyncIterator[bytes],
         on_audio_output: Callable[[bytes], Coroutine],
         on_text_output: Optional[Callable[[str], Coroutine]] = None,
-        on_input_text_output: Optional[Callable[[str], Coroutine]] = None, 
+        on_input_text_output: Optional[Callable[[str], Coroutine]] = None,
         on_interrupt: Optional[Callable[[], Coroutine]] = None,
         on_turn_complete: Optional[Callable[[], Coroutine]] = None,
     ) -> None:
@@ -53,9 +54,8 @@ class LiveInterviewAgent:
         self._interview_id: Optional[uuid.UUID] = None
         self._session_complete = asyncio.Event()
         self._session_ready = asyncio.Event()
-        
 
-    # ── Entry point ──
+    # Entry point 
 
     async def run(self, context: InterviewContext) -> None:
         self._interview_id = context.interview_id
@@ -74,7 +74,9 @@ class LiveInterviewAgent:
                     self._receive_loop(session),
                 )
             except InterviewCompleteSignal as sig:
-                logger.info(f"[Agent] Interview {context.interview_id} completed: {sig.reason}")
+                logger.info(
+                    f"[Agent] Interview {context.interview_id} completed: {sig.reason}"
+                )
             except Exception as e:
                 logger.error(f"[Agent] Interview {context.interview_id} error: {e}")
                 await self._orchestration.abandon_interview(
@@ -82,17 +84,21 @@ class LiveInterviewAgent:
                 )
                 raise
 
+    # Context injection 
 
-    # ── Context injection ─────────────────────────────────────────────────────
-
-    async def _inject_context(self, session: GeminiLiveAdapter, ctx: InterviewContext) -> None:
-        context_json = json.dumps({
-            'interview_id': str(ctx.interview_id),
-            'job_title': ctx.job_title,
-            'required_skills': ctx.required_skills,
-            'max_questions': ctx.max_questions,
-            'topics': ctx.topics,
-        }, indent=2)
+    async def _inject_context(
+        self, session: GeminiLiveAdapter, ctx: InterviewContext
+    ) -> None:
+        context_json = json.dumps(
+            {
+                "interview_id": str(ctx.interview_id),
+                "job_title": ctx.job_title,
+                "required_skills": ctx.required_skills,
+                "max_questions": ctx.max_questions,
+                "topics": ctx.topics,
+            },
+            indent=2,
+        )
 
         await session.send_client_content(
             text=(
@@ -103,8 +109,7 @@ class LiveInterviewAgent:
             )
         )
 
-    # ── Audio sender ──────────────────────────────────────────────────────────
-
+    # Audio sender 
     async def _send_audio_loop(self, session):
         await self._session_ready.wait()
         async for chunk in self._audio_input:
@@ -113,8 +118,7 @@ class LiveInterviewAgent:
             if chunk:  # only send non-empty chunks
                 await session.send_audio(chunk)
 
-
-    # ── Response receiver ─────────────────────────────────────────────────────
+    # Response receiver 
     async def _receive_loop(self, session: GeminiLiveAdapter) -> None:
         async for event_type, data in session.receive():
             if self._session_complete.is_set():
@@ -136,10 +140,14 @@ class LiveInterviewAgent:
                         await self._on_interrupt()
                 case "tool_call":
                     result = await self._handle_tool_call(
-                        name=data["name"], args=data["args"], call_id=data["id"],
+                        name=data["name"],
+                        args=data["args"],
+                        call_id=data["id"],
                     )
                     await session.send_tool_response(
-                        call_id=data["id"], name=data["name"], result=result,
+                        call_id=data["id"],
+                        name=data["name"],
+                        result=result,
                     )
                 case "turn_complete":
                     logger.debug("[Agent] Turn complete")
@@ -147,7 +155,7 @@ class LiveInterviewAgent:
                     logger.warning("[Agent] Server closing connection")
                     break
 
-    # ── Tool dispatcher ───────────────────────────────────────────────────────
+    # Tool dispatcher 
 
     async def _handle_tool_call(
         self, *, name: str, args: dict[str, Any], call_id: str
@@ -155,10 +163,14 @@ class LiveInterviewAgent:
         logger.info(f"[Agent] Tool: {name}({args})")
         try:
             match name:
-                case "record_question":    return await self._tool_record_question(args)
-                case "persist_answer":     return await self._tool_persist_answer(args)
-                case "complete_interview": return await self._tool_complete_interview(args)
-                case "flag_interrupt":     return await self._tool_flag_interrupt(args)
+                case "record_question":
+                    return await self._tool_record_question(args)
+                case "persist_answer":
+                    return await self._tool_persist_answer(args)
+                case "complete_interview":
+                    return await self._tool_complete_interview(args)
+                case "flag_interrupt":
+                    return await self._tool_flag_interrupt(args)
                 case _:
                     logger.warning(f"[Agent] Unknown tool: {name}")
                     return {"error": f"Unknown tool: {name}", "success": False}
@@ -168,7 +180,7 @@ class LiveInterviewAgent:
             logger.error(f"[Agent] Tool {name} failed: {e}")
             return {"error": str(e), "success": False}
 
-    # ── Tool implementations ──────────────────────────────────────────────────
+    # Tool implementations 
 
     async def _tool_record_question(self, args: dict) -> dict:
         try:
@@ -183,7 +195,8 @@ class LiveInterviewAgent:
                 "success": True,
                 "question_id": result["question_id"],
                 "question_number": result["question_number"],
-                "questions_remaining": result["total_questions"] - result["question_number"],
+                "questions_remaining": result["total_questions"]
+                - result["question_number"],
             }
         except Exception as e:
             logger.warning(f"[Agent] record_question rejected: {e}")
@@ -218,17 +231,19 @@ class LiveInterviewAgent:
 
     async def _tool_complete_interview(self, args: dict) -> dict:
         reason = args.get("reason", "questions_exhausted")
-        await self._queue.publish(DomainEvent(
-            event_type="interview.agent_ending",
-            aggregate_id=str(self._interview_id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(self._interview_id),
-                "reason": reason,
-                "closing_remarks": args.get("closing_remarks", ""),
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type="interview.agent_ending",
+                aggregate_id=str(self._interview_id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(self._interview_id),
+                    "reason": reason,
+                    "closing_remarks": args.get("closing_remarks", ""),
+                },
+            )
+        )
         self._session_complete.set()
         raise InterviewCompleteSignal(reason)
 
@@ -237,9 +252,9 @@ class LiveInterviewAgent:
         interrupt_type = args.get("interrupt_type", "answer")
         directive = {
             "clarification": "acknowledge_and_continue",
-            "answer":        "stop_and_listen",
-            "noise":         "resume",
-            "technical":     "stop_and_listen",
+            "answer": "stop_and_listen",
+            "noise": "resume",
+            "technical": "stop_and_listen",
         }.get(interrupt_type, "stop_and_listen")
 
         await self._cache.set(
@@ -253,20 +268,26 @@ class LiveInterviewAgent:
             },
             ttl_seconds=INTERRUPT_CACHE_TTL,
         )
-        await self._queue.publish(DomainEvent(
-            event_type="interview.interrupted",
-            aggregate_id=str(self._interview_id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(self._interview_id),
-                "interrupt_id": str(interrupt_id),
-                "type": interrupt_type,
-                "directive": directive,
-                "partial_transcript": args.get("partial_transcript"),
-            },
-        ))
-        return {"success": True, "interrupt_id": str(interrupt_id), "directive": directive}
+        await self._queue.publish(
+            DomainEvent(
+                event_type="interview.interrupted",
+                aggregate_id=str(self._interview_id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(self._interview_id),
+                    "interrupt_id": str(interrupt_id),
+                    "type": interrupt_type,
+                    "directive": directive,
+                    "partial_transcript": args.get("partial_transcript"),
+                },
+            )
+        )
+        return {
+            "success": True,
+            "interrupt_id": str(interrupt_id),
+            "directive": directive,
+        }
 
 
 class InterviewCompleteSignal(Exception):

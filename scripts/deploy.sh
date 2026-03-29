@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-# ─── Colours ──────────────────────────────────────────────────────────────────
+# ─── Colours ────
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -20,7 +20,7 @@ warn()   { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
 # =============================================================================
-# ── CONFIGURATION ─────────────────────────────────────────────────────────────
+# ── CONFIGURATION ─────
 # =============================================================================
 REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git"
 APP_DIR="$HOME/truefit.ai"
@@ -33,7 +33,7 @@ NGINX_CONF="/etc/nginx/sites-available/truefit"
 SERVICE_NAME="truefit-api"
 
 # =============================================================================
-# ── STEP 1: System Dependencies ───────────────────────────────────────────────
+# ── STEP 1: System Dependencies ─────
 # =============================================================================
 log "Installing system dependencies..."
 
@@ -68,7 +68,7 @@ fi
 success "System dependencies ready  (node $(node -v), python $(python3 --version))"
 
 # =============================================================================
-# ── STEP 2: Clone or Update Repo ──────────────────────────────────────────────
+# ── STEP 2: Clone or Update Repo ────
 # =============================================================================
 if [ -d "$APP_DIR/.git" ]; then
     log "Repo exists — pulling latest changes..."
@@ -81,7 +81,7 @@ fi
 success "Repo up to date"
 
 # =============================================================================
-# ── STEP 3: Backend — Python venv + dependencies ──────────────────────────────
+# ── STEP 3: Backend — Python venv + dependencies ──
 # =============================================================================
 log "Setting up Python virtual environment..."
 
@@ -109,7 +109,7 @@ deactivate
 success "Backend dependencies installed"
 
 # =============================================================================
-# ── STEP 4: Backend — .env file ───────────────────────────────────────────────
+# ── STEP 4: Backend — .env file ─────
 # =============================================================================
 if [ ! -f "$BACKEND_DIR/.env" ]; then
     if [ -f "$BACKEND_DIR/.env.example" ]; then
@@ -123,7 +123,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 5: Backend — systemd service ─────────────────────────────────────────
+# ── STEP 5: Backend — systemd service ─
 # =============================================================================
 log "Configuring systemd service for FastAPI..."
 
@@ -157,7 +157,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 6: Frontend — install + build ────────────────────────────────────────
+# ── STEP 6: Frontend — install + build 
 # =============================================================================
 log "Building React frontend..."
 
@@ -176,7 +176,7 @@ fi
 success "Frontend built → $FRONTEND_BUILD"
 
 # =============================================================================
-# ── STEP 7: Nginx — serve frontend + proxy API ────────────────────────────────
+# ── STEP 7: Nginx — serve frontend + proxy API ────
 # =============================================================================
 log "Configuring Nginx..."
 
@@ -222,7 +222,7 @@ sudo nginx -t && sudo systemctl restart nginx
 success "Nginx configured and restarted"
 
 # =============================================================================
-# ── STEP 8: Health Checks ─────────────────────────────────────────────────────
+# ── STEP 8: Health Checks ─────
 # =============================================================================
 log "Running health checks..."
 sleep 2
@@ -246,7 +246,7 @@ else
 fi
 
 # =============================================================================
-# ── Done ──────────────────────────────────────────────────────────────────────
+# ── Done 
 # =============================================================================
 echo ""
 echo -e "${GREEN}============================================${NC}"

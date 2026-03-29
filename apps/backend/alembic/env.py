@@ -25,7 +25,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-raw_db_url  = AppConfig.DATABASE_URL 
+raw_db_url = AppConfig.DATABASE_URL
 
 # Replace only the driver part from 'asyncpg' to 'psycopg2'
 sync_db_url = raw_db_url.replace("+asyncpg", "+psycopg2")

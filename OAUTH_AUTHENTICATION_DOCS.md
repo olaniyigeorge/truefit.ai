@@ -28,17 +28,17 @@
 
 ```
 Frontend                        Backend                        OAuth Provider
-┌─────────────┐                ┌──────────────────┐           ┌─────────────┐
+┌─┐                ┌────┐           ┌─┐
 │  React App  │                │  FastAPI App     │           │  Firebase   │
-└─────────────┘                └──────────────────┘           └─────────────┘
+└─┘                └────┘           └─┘
       │                                │                              │
       │── (1) User clicks "Sign in" ──>│                              │
-      │── (2) Firebase popup ─────────────────────────────────────>  │
-      │<─ (3) Firebase ID Token ──────────────────────────────────── │
+      │── (2) Firebase popup ───>  │
+      │<─ (3) Firebase ID Token ── │
       │                                │                              │
       │── (4) POST /auth/oauth/token ─>│                              │
-      │       { token, provider }      │── (5) Verify token ──────>  │
-      │                                │<─ Valid ✓ ────────────────── │
+      │       { token, provider }      │── (5) Verify token >  │
+      │                                │<─ Valid ✓ ──── │
       │                                │                              │
       │                                │── Get or create user in DB   │
       │                                │── Generate backend JWT       │
@@ -47,7 +47,7 @@ Frontend                        Backend                        OAuth Provider
       │                                │                              │
       │── (7) GET /api/protected ─────>│                              │
       │       Authorization: Bearer … │── Verify JWT                 │
-      │<─ (8) Protected Data ──────── │                              │
+      │<─ (8) Protected Data ── │                              │
 ```
 
 ---

@@ -1,6 +1,6 @@
 """
 tests/integration/test_repositories.py
-────────────────────────────────────────
+
 Integration tests for SQLAlchemyJobRepository and SQLAlchemyCandidateRepository.
 
 Uses an in-memory SQLite database (via aiosqlite) to verify persistence
@@ -36,10 +36,9 @@ from src.truefit_infra.db.repositories.candidate_repository import (
     SQLAlchemyCandidateRepository,
 )
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Helpers
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 def _make_requirements(level: ExperienceLevel = ExperienceLevel.MID) -> JobRequirements:
@@ -51,7 +50,9 @@ def _make_requirements(level: ExperienceLevel = ExperienceLevel.MID) -> JobRequi
     )
 
 
-def _make_job(org_id: uuid.UUID, created_by: uuid.UUID, title: str = "Backend Engineer") -> Job:
+def _make_job(
+    org_id: uuid.UUID, created_by: uuid.UUID, title: str = "Backend Engineer"
+) -> Job:
     return Job(
         org_id=org_id,
         created_by=created_by,
@@ -73,9 +74,9 @@ def _make_candidate(email: str = "alice@example.com") -> Candidate:
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# ── Job Repository Integration Tests ─────────────────────────────────────────
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
+# ── Job Repository Integration Tests ─
+# ─
 
 
 class TestSQLAlchemyJobRepository:
@@ -230,9 +231,9 @@ class TestSQLAlchemyJobRepository:
         assert count == 1
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# ── Candidate Repository Integration Tests ───────────────────────────────────
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
+# ── Candidate Repository Integration Tests ─
+# ─
 
 
 class TestSQLAlchemyCandidateRepository:

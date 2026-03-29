@@ -9,7 +9,12 @@ import uuid
 from datetime import datetime, timezone
 
 from src.truefit_core.common.utils import logger
-from src.truefit_core.domain.candidate import Candidate, CandidateStatus, ContactInfo, ResumeRef
+from src.truefit_core.domain.candidate import (
+    Candidate,
+    CandidateStatus,
+    ContactInfo,
+    ResumeRef,
+)
 from src.truefit_core.application.ports import (
     CandidateRepository,
     StoragePort,
@@ -68,7 +73,11 @@ class CandidateService:
             new_contact = ContactInfo(
                 email=candidate.contact.email,  # email is immutable
                 phone=phone if phone is not None else candidate.contact.phone,
-                linkedin_url=linkedin_url if linkedin_url is not None else candidate.contact.linkedin_url,
+                linkedin_url=(
+                    linkedin_url
+                    if linkedin_url is not None
+                    else candidate.contact.linkedin_url
+                ),
             )
 
         candidate.update_profile(full_name=full_name, contact=new_contact)

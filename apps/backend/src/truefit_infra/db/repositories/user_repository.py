@@ -39,7 +39,6 @@ class SQLAlchemyUserRepository(UserRepository):
                     "provider_subject": data["provider_subject"],
                     "is_active": data["is_active"],
                     "updated_at": data["updated_at"],
-                    # email + created_at intentionally immutable after first write
                 },
             )
         )

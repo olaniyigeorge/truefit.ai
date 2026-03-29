@@ -1,5 +1,5 @@
 """
-ports.py — Application-layer interface contracts (ports in hexagonal architecture).
+Application-layer interface contracts (ports in hexagonal architecture).
 
 Rules:
 - Every class here is abstract. Zero implementation lives here.
@@ -23,9 +23,7 @@ from src.truefit_infra.db.models import Application, User
 from src.truefit_core.domain.org import Org
 
 
-# ─────────────────
 # Repository ports
-# ─────────────────
 
 class UserRepository(ABC):
     @abstractmethod
@@ -37,11 +35,6 @@ class UserRepository(ABC):
     @abstractmethod
     async def get_by_email(self, email: str) -> Optional[User]: ...
 
-
-
-
-
-# ── Abstract port ───
 
 class OrgRepository(ABC):
     @abstractmethod
@@ -59,25 +52,6 @@ class OrgRepository(ABC):
     @abstractmethod
     async def delete(self, org_id: uuid.UUID) -> None: ...
 
-
-
-# class OrgRepository(ABC):
-    
-#     async def create_org(
-#         self,
-#         *,
-#         created_by: uuid.UUID,
-#         name: str,
-#         slug: str,
-#         contact: dict,
-#         billing: dict,
-#         description: str | None = None,
-#         industry: str | None = None,
-#         headcount: str | None = None,
-#         logo_url: str | None = None,
-#     ) -> dict: ...
-#     async def get_by_slug(self, slug: str) -> Optional[dict]: ...
-
 class CandidateProfileRepository(ABC):
     async def create_for_user(
         self,
@@ -90,7 +64,6 @@ class CandidateProfileRepository(ABC):
         skills: list[str] | None = None,
     ) -> dict: ...
     async def get_by_user_id(self, user_id: uuid.UUID) -> Optional[dict]: ...
-
 
 
 class JobRepository(ABC):
@@ -146,8 +119,7 @@ class InterviewRepository(ABC):
         *,
         job_id: uuid.UUID,
         candidate_id: uuid.UUID,
-    ) -> Optional[Interview]:
-        ...
+    ) -> Optional[Interview]: ...
 
     @abstractmethod
     async def close_dangling_questions(self, interview_id: uuid.UUID) -> int:
@@ -157,6 +129,7 @@ class InterviewRepository(ABC):
         """
         ...
 
+
 class EvaluationRepository(ABC):
     @abstractmethod
     async def save(self, evaluation: Evaluation) -> None: ...
@@ -165,7 +138,9 @@ class EvaluationRepository(ABC):
     async def get_by_id(self, evaluation_id: uuid.UUID) -> Optional[Evaluation]: ...
 
     @abstractmethod
-    async def get_by_interview(self, interview_id: uuid.UUID) -> Optional[Evaluation]: ...
+    async def get_by_interview(
+        self, interview_id: uuid.UUID
+    ) -> Optional[Evaluation]: ...
 
     @abstractmethod
     async def list_by_job(
@@ -178,9 +153,9 @@ class EvaluationRepository(ABC):
     ) -> list[Evaluation]: ...
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # LLM port
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 @dataclass
@@ -189,13 +164,14 @@ class QuestionContext:
     All context the LLM needs to produce the next adaptive question.
     Constructed by the InterviewOrchestrationService.
     """
+
     job_title: str
     job_description: str
     required_skills: list[str]
     experience_level: str
     custom_instructions: Optional[str]
-    transcript: list[dict]             # Interview.transcript so far
-    topics_remaining: list[str]        # guides topic coverage
+    transcript: list[dict] 
+    topics_remaining: list[str]  # guides topic coverage
     question_number: int
     total_questions: int
 
@@ -210,11 +186,12 @@ class GeneratedQuestion:
 @dataclass
 class EvaluationRequest:
     """Everything the LLM needs to produce a structured evaluation."""
+
     job_title: str
     job_description: str
-    required_skills: list[str]         # skill names, for score mapping
+    required_skills: list[str]  # skill names, for score mapping
     experience_level: str
-    transcript: list[dict]             # Interview.transcript
+    transcript: list[dict] 
     custom_instructions: Optional[str] = None
 
 
@@ -224,13 +201,14 @@ class LLMEvaluationResult:
     Raw structured output from the LLM evaluation call.
     The application layer maps this onto the Evaluation domain object.
     """
-    recommendation: str                    # maps to HiringRecommendation
-    overall_score: float                   # 0–10
+
+    recommendation: str  # maps to HiringRecommendation
+    overall_score: float  # 0–10
     technical_score: float
     communication_score: float
     problem_solving_score: float
     culture_fit_score: float
-    skill_scores: list[dict]               # [{skill_name, score, rationale}]
+    skill_scores: list[dict]  # [{skill_name, score, rationale}]
     summary: str
     strengths: list[str]
     weaknesses: list[str]
@@ -249,7 +227,9 @@ class LLMPort(ABC):
         ...
 
     @abstractmethod
-    async def evaluate_interview(self, request: EvaluationRequest) -> LLMEvaluationResult:
+    async def evaluate_interview(
+        self, request: EvaluationRequest
+    ) -> LLMEvaluationResult:
         """
         Produce a structured evaluation of the full interview transcript.
         """
@@ -261,10 +241,7 @@ class LLMPort(ABC):
         ...
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Queue / event bus port
-# ─────────────────────────────────────────────────────────────────────────────
-
 
 @dataclass
 class DomainEvent:
@@ -272,11 +249,12 @@ class DomainEvent:
     Base for all events published to the queue.
     Fields here are guaranteed on every event; concrete events add their own.
     """
+
     event_type: str
     payload: dict[str, Any]
     aggregate_id: str
     aggregate_type: str
-    occurred_at: str         # ISO-8601 UTC string — keep it serialisable
+    occurred_at: str  # ISO-8601 UTC string so its serialisable
 
 
 class QueuePort(ABC):
@@ -293,9 +271,7 @@ class QueuePort(ABC):
     async def is_healthy(self) -> bool: ...
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Storage port
-# ─────────────────────────────────────────────────────────────────────────────
 
 
 @dataclass
@@ -303,7 +279,7 @@ class StoredFile:
     key: str
     content_type: str
     size_bytes: int
-    url: Optional[str] = None  # presigned URL if applicable
+    url: Optional[str] = None 
 
 
 class StoragePort(ABC):
@@ -325,7 +301,9 @@ class StoragePort(ABC):
     async def delete(self, key: str) -> None: ...
 
     @abstractmethod
-    async def get_presigned_url(self, key: str, *, expires_in_seconds: int = 3600) -> str:
+    async def get_presigned_url(
+        self, key: str, *, expires_in_seconds: int = 3600
+    ) -> str:
         """Return a time-limited URL for direct client access."""
         ...
 
@@ -336,10 +314,7 @@ class StoragePort(ABC):
     async def is_healthy(self) -> bool: ...
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Cache port
-# ─────────────────────────────────────────────────────────────────────────────
-
 
 class CachePort(ABC):
     """
@@ -351,7 +326,9 @@ class CachePort(ABC):
     async def get(self, key: str) -> Optional[Any]: ...
 
     @abstractmethod
-    async def set(self, key: str, value: Any, *, ttl_seconds: Optional[int] = None) -> None: ...
+    async def set(
+        self, key: str, value: Any, *, ttl_seconds: Optional[int] = None
+    ) -> None: ...
 
     @abstractmethod
     async def delete(self, key: str) -> None: ...
@@ -366,8 +343,6 @@ class CachePort(ABC):
 
     @abstractmethod
     async def is_healthy(self) -> bool: ...
-
-
 
 
 class ApplicationRepository(ABC):
@@ -406,7 +381,6 @@ class ApplicationRepository(ABC):
     async def delete(self, application_id: uuid.UUID) -> None: ...
 
 
-
 class LiveSessionPort(ABC):
     """
     Abstraction over a real-time multimodal AI session.
@@ -416,7 +390,7 @@ class LiveSessionPort(ABC):
     AI SDK directly — all SDK types are confined to the adapter.
 
     Lifecycle
-    ─────────
+    ───
     All methods except open_session() require an active session.
     Sessions are opened and closed via the open_session() context manager:
 
@@ -427,13 +401,13 @@ class LiveSessionPort(ABC):
                 ...
 
     Audio format contract
-    ─────────────────────
+    ─
     Implementations must accept 16kHz mono s16 PCM for send_audio().
     Callers must not assume a specific output sample rate — check the
     concrete adapter's docstring (Gemini Live returns 24kHz).
     """
 
-    # ── Session lifecycle ─────────────────────────────────────────────────────
+    # ── Session lifecycle
 
     @abstractmethod
     def open_session(
@@ -453,7 +427,7 @@ class LiveSessionPort(ABC):
         """Tear down the active session. Called automatically by open_session()."""
         ...
 
-    # ── Sending ───────────────────────────────────────────────────────────────
+    # ── Sending
 
     @abstractmethod
     async def send_audio(self, pcm_bytes: bytes) -> None:
@@ -495,7 +469,7 @@ class LiveSessionPort(ABC):
         """
         ...
 
-    # ── Receiving ─────────────────────────────────────────────────────────────
+    # ── Receiving
 
     @abstractmethod
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
@@ -515,7 +489,7 @@ class LiveSessionPort(ABC):
         """
         ...
 
-    # ── Health ────────────────────────────────────────────────────────────────
+    # ── Health 
 
     @abstractmethod
     async def is_healthy(self) -> bool:

@@ -34,9 +34,10 @@ def _utcnow_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-# ──────────────────────────────────────────────
+# ────
 # Input dataclasses  (what the handler receives)
-# ──────────────────────────────────────────────
+# ────
+
 
 @dataclass(frozen=True)
 class StartSessionCommand:
@@ -73,29 +74,33 @@ class InterruptCommand:
     The interrupt carries whatever partial transcript was captured before
     the agent stopped, and a reason so the agent can decide how to respond.
     """
+
     interview_id: uuid.UUID
-    turn_id: Optional[uuid.UUID]         # the turn that was interrupted
-    partial_transcript: Optional[str]    # STT of what the candidate said so far
-    interrupt_at_ms: int                 # ms into the agent's audio playback
+    turn_id: Optional[uuid.UUID]  # the turn that was interrupted
+    partial_transcript: Optional[str]  # STT of what the candidate said so far
+    interrupt_at_ms: int  # ms into the agent's audio playback
 
 
 class InterruptReason(str, Enum):
-    CANDIDATE_SPOKE = "candidate_spoke"   # normal interrupt — candidate has something to say
-    CLARIFICATION = "clarification"       # agent detects this is a question, not an answer
-    NOISE = "noise"                       # VAD false positive — agent should resume
-    TECHNICAL = "technical"              # connectivity / audio issue
+    CANDIDATE_SPOKE = (
+        "candidate_spoke"  # normal interrupt — candidate has something to say
+    )
+    CLARIFICATION = "clarification"  # agent detects this is a question, not an answer
+    NOISE = "noise"  # VAD false positive — agent should resume
+    TECHNICAL = "technical"  # connectivity / audio issue
 
 
 @dataclass(frozen=True)
 class AbandonSessionCommand:
     interview_id: uuid.UUID
     reason: str = "unknown"
-    initiated_by: str = "system"   # "candidate" | "system" | "timeout"
+    initiated_by: str = "system"  # "candidate" | "system" | "timeout"
 
 
-# ────────────────────────────────────────────────
+# 
 # Response dataclasses  (what the handler returns)
-# ────────────────────────────────────────────────
+# 
+
 
 @dataclass(frozen=True)
 class StartSessionResponse:
@@ -118,7 +123,7 @@ class AskQuestionResponse:
 
 @dataclass(frozen=True)
 class SubmitAnswerResponse:
-    status: str                          # "answer_recorded" | "completed"
+    status: str  # "answer_recorded" | "completed"
     interview_id: uuid.UUID
     answered_count: int
     remaining_questions: int
@@ -128,9 +133,9 @@ class SubmitAnswerResponse:
 @dataclass(frozen=True)
 class InterruptResponse:
     interview_id: uuid.UUID
-    interrupt_id: uuid.UUID              # unique ID so the agent can ack it
+    interrupt_id: uuid.UUID  # unique ID so the agent can ack it
     reason: InterruptReason
-    agent_should: str                    # "stop_and_listen" | "resume" | "acknowledge_and_continue"
+    agent_should: str  # "stop_and_listen" | "resume" | "acknowledge_and_continue"
     partial_transcript: Optional[str]
 
 
@@ -141,9 +146,10 @@ class AbandonSessionResponse:
     reason: str
 
 
-# ────────
+# ──
 # Handlers
-# ─────────
+# ───
+
 
 async def handle_start_session(
     cmd: StartSessionCommand,
@@ -165,7 +171,9 @@ async def handle_start_session(
         session_status=interview.status.value,
         max_questions=interview.max_questions,
         max_duration_minutes=interview.max_duration_minutes,
-        started_at=interview.started_at.isoformat() if interview.started_at else _utcnow_iso(),
+        started_at=(
+            interview.started_at.isoformat() if interview.started_at else _utcnow_iso()
+        ),
     )
 
 
@@ -275,21 +283,23 @@ async def handle_interrupt(
         ttl_seconds=30,
     )
 
-    await queue.publish(DomainEvent(
-        event_type="interview.interrupted",
-        aggregate_id=str(cmd.interview_id),
-        aggregate_type="Interview",
-        occurred_at=_utcnow_iso(),
-        payload={
-            "interview_id": str(cmd.interview_id),
-            "interrupt_id": str(interrupt_id),
-            "turn_id": str(cmd.turn_id) if cmd.turn_id else None,
-            "reason": reason.value,
-            "directive": directive,
-            "partial_transcript": cmd.partial_transcript,
-            "interrupt_at_ms": cmd.interrupt_at_ms,
-        },
-    ))
+    await queue.publish(
+        DomainEvent(
+            event_type="interview.interrupted",
+            aggregate_id=str(cmd.interview_id),
+            aggregate_type="Interview",
+            occurred_at=_utcnow_iso(),
+            payload={
+                "interview_id": str(cmd.interview_id),
+                "interrupt_id": str(interrupt_id),
+                "turn_id": str(cmd.turn_id) if cmd.turn_id else None,
+                "reason": reason.value,
+                "directive": directive,
+                "partial_transcript": cmd.partial_transcript,
+                "interrupt_at_ms": cmd.interrupt_at_ms,
+            },
+        )
+    )
 
     logger.info(
         f"Interrupt {interrupt_id} on interview {cmd.interview_id}: "
@@ -327,9 +337,10 @@ async def handle_abandon_session(
     )
 
 
-# ───────────────────
+# ─────
 # Internal helpers
-# ───────────────────
+# ─────
+
 
 def _classify_interrupt(cmd: InterruptCommand) -> tuple[InterruptReason, str]:
     """
@@ -356,10 +367,26 @@ def _classify_interrupt(cmd: InterruptCommand) -> tuple[InterruptReason, str]:
     return InterruptReason.CANDIDATE_SPOKE, "stop_and_listen"
 
 
-_QUESTION_STARTERS = frozenset({
-    "what", "when", "where", "who", "why", "how", "could", "can",
-    "would", "should", "is", "are", "do", "does", "did", "will",
-})
+_QUESTION_STARTERS = frozenset(
+    {
+        "what",
+        "when",
+        "where",
+        "who",
+        "why",
+        "how",
+        "could",
+        "can",
+        "would",
+        "should",
+        "is",
+        "are",
+        "do",
+        "does",
+        "did",
+        "will",
+    }
+)
 
 
 def _is_question(text: str) -> bool:

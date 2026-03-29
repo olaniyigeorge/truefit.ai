@@ -1,4 +1,3 @@
-# src/truefit_infra/llm/gemini_live.py
 """
 GeminiLiveAdapter — Gemini Live API session wrapper for real-time interviews.
 
@@ -7,7 +6,7 @@ Google GenAI SDK. All other layers (agent, websocket handler, orchestration)
 interact with Gemini exclusively through this adapter's interface.
 
 Responsibilities
-────────────────
+──
 - Own the genai.Client and the Live session lifecycle
 - Accept raw PCM audio from the WebRTC AudioBridge and forward to Gemini
 - Accept JPEG frames from the FrameSampler and forward to Gemini
@@ -16,14 +15,14 @@ Responsibilities
 - Expose send_tool_response() so the agent can respond to Gemini tool calls
 
 Audio format contract
-─────────────────────
+─
   Inbound  (browser → Gemini):  16kHz mono s16 PCM
   Outbound (Gemini → browser):  24kHz mono s16 PCM
 
   The WebRTC AudioBridge handles resampling on both ends.
 
 Event types yielded by receive()
-─────────────────────────────────
+─────
   ("audio",         bytes)  — 24kHz PCM chunk, forward to candidate speaker
   ("text",          str)    — agent output transcript (captions)
   ("input_text",    str)    — candidate speech transcript (captions)
@@ -43,6 +42,7 @@ Usage
           receive_loop(session),
       )
 """
+
 from __future__ import annotations
 
 from typing import Any, AsyncGenerator, Optional
@@ -69,10 +69,12 @@ class GeminiLiveAdapter(LiveSessionPort):
         self._client = genai.Client(api_key=key)
         self._session: Optional[Any] = None
 
-    # ── LiveSessionPort interface ──
+    #LiveSessionPort interface
 
     async def connect(self, system_prompt: str) -> None:
-        raise NotImplementedError("Use GeminiLiveAdapter.open_session() context manager.")
+        raise NotImplementedError(
+            "Use GeminiLiveAdapter.open_session() context manager."
+        )
 
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """Forward a 16kHz mono s16 PCM chunk from WebRTC into the live session."""
@@ -83,12 +85,10 @@ class GeminiLiveAdapter(LiveSessionPort):
             audio=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
         )
 
-
     async def send_audio_stream_end(self) -> None:  # ← ADD THIS
         """Send when mic pauses — flushes Gemini's audio buffer."""
         _require_session(self._session)
         await self._session.send_realtime_input(audio_stream_end=True)
-
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """Forward a JPEG frame (camera or screen share) into the live session."""
@@ -112,7 +112,9 @@ class GeminiLiveAdapter(LiveSessionPort):
             turn_complete=True,
         )
 
-    async def send_tool_response(self, *, call_id: str, name: str, result: dict) -> None:
+    async def send_tool_response(
+        self, *, call_id: str, name: str, result: dict
+    ) -> None:
         """
         Respond to a tool_call event. Must be called for every tool_call
         received — Gemini blocks the session until a response is provided.
@@ -144,7 +146,9 @@ class GeminiLiveAdapter(LiveSessionPort):
                         _text_buf += sc.output_transcription.text
                     if sc.input_transcription:
                         _input_buf += sc.input_transcription.text
-                        logger.info(f"[GeminiLive] Candidate speech: '{sc.input_transcription.text[:60]}'")
+                        logger.info(
+                            f"[GeminiLive] Candidate speech: '{sc.input_transcription.text[:60]}'"
+                        )
                     if sc.interrupted:
                         logger.info("[GeminiLive] Interrupted")
                         if _text_buf.strip():
@@ -155,7 +159,9 @@ class GeminiLiveAdapter(LiveSessionPort):
                             _input_buf = ""
                         yield ("interrupted", None)
                     if sc.turn_complete:
-                        logger.info(f"[GeminiLive] turn_complete — buf='{_text_buf[:60]}'")
+                        logger.info(
+                            f"[GeminiLive] turn_complete — buf='{_text_buf[:60]}'"
+                        )
                         if _text_buf.strip():
                             yield ("text", _text_buf.strip())
                             _text_buf = ""
@@ -163,24 +169,27 @@ class GeminiLiveAdapter(LiveSessionPort):
                             yield ("input_text", _input_buf.strip())
                             _input_buf = ""
                         yield ("turn_complete", None)
-                    # ← REMOVED sc.model_turn.parts block — duplicates response.data
 
                 if response.tool_call:
                     for fn_call in response.tool_call.function_calls:
-                        yield ("tool_call", {
-                            "id": fn_call.id,
-                            "name": fn_call.name,
-                            "args": dict(fn_call.args),
-                        })
+                        yield (
+                            "tool_call",
+                            {
+                                "id": fn_call.id,
+                                "name": fn_call.name,
+                                "args": dict(fn_call.args),
+                            },
+                        )
 
                 if response.go_away:
-                    logger.warning(f"[GeminiLive] go_away: time_left={response.go_away.time_left}")
+                    logger.warning(
+                        f"[GeminiLive] go_away: time_left={response.go_away.time_left}"
+                    )
                     yield ("go_away", None)
 
         except Exception as e:
             logger.error(f"[GeminiLive] receive() error: {type(e).__name__}: {e}")
             raise
-
 
     async def close(self) -> None:
         self._session = None
@@ -188,7 +197,7 @@ class GeminiLiveAdapter(LiveSessionPort):
     async def is_healthy(self) -> bool:
         return self._session is not None
 
-    # ── Session context manager ──
+    # Session context manager 
 
     def open_session(
         self,
@@ -212,7 +221,8 @@ class GeminiLiveAdapter(LiveSessionPort):
         )
 
 
-# ── Session context manager impl ──
+# Session context manager impl 
+
 
 class _LiveSessionContext:
     """
@@ -247,11 +257,11 @@ class _LiveSessionContext:
             realtime_input_config=types.RealtimeInputConfig(
                 automatic_activity_detection=types.AutomaticActivityDetection(
                     disabled=False,
-                    silence_duration_ms=4000, 
+                    silence_duration_ms=4000,
                     prefix_padding_ms=20,
                 )
             ),
-            # No thinking_budget, no enable_affective_dialog — these need v1alpha
+            # TODO: thinking_budget, no enable_affective_dialog — these need v1alpha
             tools=self._tools or None,
         )
 
@@ -261,7 +271,6 @@ class _LiveSessionContext:
         logger.info("[GeminiLive] Session opened")
         return self._adapter
 
-
     async def __aexit__(self, *args) -> None:
         self._adapter._session = None
         if self._cm:
@@ -269,7 +278,8 @@ class _LiveSessionContext:
         logger.info("[GeminiLive] Session closed")
 
 
-# ── Helpers ──
+# Helpers
+
 
 def _require_session(session: Any) -> None:
     """Raise clearly if a method is called outside an open_session() context."""

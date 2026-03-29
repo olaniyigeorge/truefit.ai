@@ -34,7 +34,6 @@ from src.truefit_core.application.ports import (
     StoragePort,
 )
 
-
 _EVENT_EVALUATION_COMPLETED = "evaluation.completed"
 _EVENT_REPORT_READY = "evaluation.report_ready"
 
@@ -82,7 +81,9 @@ class EvaluationService:
         # Idempotency guard
         existing = await self._evaluations.get_by_interview(interview_id)
         if existing is not None:
-            logger.info(f"Evaluation already exists for interview {interview_id}, returning cached")
+            logger.info(
+                f"Evaluation already exists for interview {interview_id}, returning cached"
+            )
             return existing
 
         interview = await self._interviews.get_by_id(interview_id)
@@ -121,16 +122,18 @@ class EvaluationService:
         interview.mark_evaluated()
         await self._interviews.save(interview)
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_EVALUATION_COMPLETED,
-            aggregate_id=str(evaluation.id),
-            aggregate_type="Evaluation",
-            occurred_at=_utcnow_iso(),
-            payload={
-                **evaluation.to_summary_dict(),
-                "model_version": evaluation.model_version,
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_EVALUATION_COMPLETED,
+                aggregate_id=str(evaluation.id),
+                aggregate_type="Evaluation",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    **evaluation.to_summary_dict(),
+                    "model_version": evaluation.model_version,
+                },
+            )
+        )
 
         # ── Generate and store report ────
         try:
@@ -138,20 +141,24 @@ class EvaluationService:
             evaluation.attach_report(storage_key)
             await self._evaluations.save(evaluation)
 
-            await self._queue.publish(DomainEvent(
-                event_type=_EVENT_REPORT_READY,
-                aggregate_id=str(evaluation.id),
-                aggregate_type="Evaluation",
-                occurred_at=_utcnow_iso(),
-                payload={
-                    "evaluation_id": str(evaluation.id),
-                    "interview_id": str(interview_id),
-                    "candidate_id": str(interview.candidate_id),
-                    "org_id": str(interview.org_id),
-                    "storage_key": storage_key,
-                },
-            ))
-            logger.info(f"Report uploaded for evaluation {evaluation.id} → {storage_key}")
+            await self._queue.publish(
+                DomainEvent(
+                    event_type=_EVENT_REPORT_READY,
+                    aggregate_id=str(evaluation.id),
+                    aggregate_type="Evaluation",
+                    occurred_at=_utcnow_iso(),
+                    payload={
+                        "evaluation_id": str(evaluation.id),
+                        "interview_id": str(interview_id),
+                        "candidate_id": str(interview.candidate_id),
+                        "org_id": str(interview.org_id),
+                        "storage_key": storage_key,
+                    },
+                )
+            )
+            logger.info(
+                f"Report uploaded for evaluation {evaluation.id} → {storage_key}"
+            )
 
         except Exception as e:
             # Report generation failure is non-fatal — evaluation is already persisted.
@@ -177,7 +184,9 @@ class EvaluationService:
         # possible (immutable). We update via repo directly.
         # Otherwise, attach_report() will raise if already set — handle appropriately
         # by updating the storage key column in the DB directly via the repo.
-        logger.info(f"Report regenerated for evaluation {evaluation_id} → {storage_key}")
+        logger.info(
+            f"Report regenerated for evaluation {evaluation_id} → {storage_key}"
+        )
         return storage_key
 
     # ── Internal helpers ─────

@@ -14,8 +14,10 @@ from src.truefit_core.common.utils import logger
 
 class TokenPayload:
     """Represents verified JWT token payload."""
-    
-    def __init__(self, user_id: str, email: str, role: str, org_id: Optional[str] = None):
+
+    def __init__(
+        self, user_id: str, email: str, role: str, org_id: Optional[str] = None
+    ):
         self.user_id = user_id
         self.email = email
         self.role = role
@@ -25,15 +27,15 @@ class TokenPayload:
 def extract_token_from_header(authorization: str) -> str:
     """
     Extract JWT token from Authorization header.
-    
+
     Expected format: "Bearer <token>"
-    
+
     Args:
         authorization: Authorization header value
-    
+
     Returns:
         JWT token string
-    
+
     Raises:
         HTTPException: If header format is invalid
     """
@@ -56,19 +58,19 @@ async def verify_jwt_token(
 ) -> TokenPayload:
     """
     Verify JWT token and return token payload.
-    
+
     Args:
         jwt_service: JWTService instance
         authorization: Authorization header value
-    
+
     Returns:
         TokenPayload with verified user information
-    
+
     Raises:
         HTTPException: If token is invalid or expired
     """
     token = extract_token_from_header(authorization)
-    
+
     try:
         payload = jwt_service.verify_access_token(token)
         return TokenPayload(
@@ -105,19 +107,19 @@ async def get_current_user(
 ) -> TokenPayload:
     """
     FastAPI dependency to get current authenticated user.
-    
+
     Use this in endpoint route parameters:
     @router.get("/me")
     async def get_me(current_user: TokenPayload = Depends(get_current_user)):
         return {"user_id": current_user.user_id, "email": current_user.email}
-    
+
     Args:
         request: FastAPI request
         jwt_service: JWTService instance
-    
+
     Returns:
         TokenPayload with current user information
-    
+
     Raises:
         HTTPException: If no valid token provided
     """
@@ -128,5 +130,5 @@ async def get_current_user(
             detail="Missing authorization header",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return await verify_jwt_token(jwt_service, authorization)

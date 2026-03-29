@@ -68,12 +68,12 @@ class UserService:
           }
         """
 
-
         email_norm = email.lower().strip()
         existing = await self._users.get_by_email(email_norm)
 
-
-        print(f"\n\n\nCreating user with email={email_norm} account_type={account_type}\n\n")
+        print(
+            f"\n\n\nCreating user with email={email_norm} account_type={account_type}\n\n"
+        )
         if existing:
             raise ValueError(f"User with email '{email_norm}' already exists")
 
@@ -134,13 +134,23 @@ class UserService:
             )
 
             # Make creator a member (via users.org_id)
-            user.set_org(uuid.UUID(created_org["id"]) if isinstance(created_org["id"], str) else created_org["id"])
+            user.set_org(
+                uuid.UUID(created_org["id"])
+                if isinstance(created_org["id"], str)
+                else created_org["id"]
+            )
             await self._users.save(user)
 
             logger.info(f"Org created: {created_org['id']} by user {user.id}")
 
-        logger.info(f"User created: {user.id} email={user.email} role={user.role.value}")
-        return {"user": user, "org": created_org, "candidate_profile": created_candidate_profile}
+        logger.info(
+            f"User created: {user.id} email={user.email} role={user.role.value}"
+        )
+        return {
+            "user": user,
+            "org": created_org,
+            "candidate_profile": created_candidate_profile,
+        }
 
     async def get_user(self, user_id: uuid.UUID) -> User | None:
         return await self._users.get_by_id(user_id)
@@ -161,7 +171,12 @@ class UserService:
         if not user:
             raise ValueError(f"User {user_id} not found")
 
-        if display_name is None and is_active is None and role is None and org_id is None:
+        if (
+            display_name is None
+            and is_active is None
+            and role is None
+            and org_id is None
+        ):
             raise ValueError("At least one field must be provided")
 
         user.update_profile(display_name=display_name, is_active=is_active)
@@ -171,7 +186,7 @@ class UserService:
 
         if org_id is not None:
             user.org_id = org_id
-            
+
         await self._users.save(user)
         return user
 
@@ -191,24 +206,24 @@ class UserService:
         provider: str,
         provider_subject: str,
         display_name: str | None = None,
-    ) -> tuple[User, bool]: #(User, is_new_user)
+    ) -> tuple[User, bool]:  # (User, is_new_user)
         """
         Get existing OAuth user or create new one.
-        
+
         This method is used during OAuth authentication flow:
         1. If user with email exists, verify provider_subject matches
         2. If user exists with different provider_subject, update it
         3. If user doesn't exist, create new OAuth user as candidate
-        
+
         Args:
             email: User email (normalized)
             provider: OAuth provider name (e.g., 'firebase', 'google')
             provider_subject: Provider's unique user ID
             display_name: User's display name from provider
-        
+
         Returns:
             User object or None if creation failed
-        
+
         Raises:
             ValueError: If there's a conflict or invalid state
         """
@@ -248,10 +263,10 @@ class UserService:
             logger.error(f"Error creating OAuth user: {e}")
             raise ValueError(f"Failed to create user: {str(e)}")
         # email_norm = email.lower().strip()
-        
+
         # # Try to get existing user
         # existing_user = await self._users.get_by_email(email_norm)
-        
+
         # if existing_user:
         #     # User exists - verify or update provider info
         #     if existing_user.auth_provider != provider:
@@ -263,7 +278,7 @@ class UserService:
         #         raise ValueError(
         #             f"User already exists with different provider ({existing_user.auth_provider})"
         #         )
-            
+
         #     # Update provider_subject if different (handles provider ID changes)
         #     if existing_user.provider_subject != provider_subject:
         #         logger.info(
@@ -271,15 +286,15 @@ class UserService:
         #         )
         #         existing_user.provider_subject = provider_subject
         #         await self._users.save(existing_user)
-            
+
         #     # Update display_name if provided and different
         #     if display_name and existing_user.display_name != display_name:
         #         existing_user.display_name = display_name
         #         await self._users.save(existing_user)
-            
+
         #     logger.info(f"OAuth user authenticated: {email_norm}")
         #     return existing_user
-        
+
         # # User doesn't exist - create new OAuth user
         # try:
         #     user = User.create(
@@ -291,7 +306,7 @@ class UserService:
         #         org_id=None,
         #     )
         #     await self._users.save(user)
-            
+
         #     # Create candidate profile for new user
         #     await self._candidates.create_for_user(
         #         user_id=user.id,
@@ -301,7 +316,7 @@ class UserService:
         #         years_experience=None,
         #         skills=[],
         #     )
-            
+
         #     logger.info(f"New OAuth user created: {email_norm}")
         #     return user
         # except Exception as e:

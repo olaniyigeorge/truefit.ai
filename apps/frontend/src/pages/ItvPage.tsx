@@ -20,8 +20,8 @@ export default function ItvPage() {
     jobId: string; candidateId: string
   }>()
  
-  const [jobId,       setJobId]       = useState(urlJobId       ?? "")
-  const [candidateId, setCandidateId] = useState(urlCandidateId ?? "")
+  const jobId = urlJobId ?? ""
+  const candidateId = urlCandidateId ?? ""
   const [started,     setStarted]     = useState(false)
  
   const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -57,8 +57,6 @@ export default function ItvPage() {
       <SetupScreen
         jobId={jobId}
         candidateId={candidateId}
-        onJobIdChange={setJobId}
-        onCandidateIdChange={setCandidateId}
         onStart={handleStart}
         isConnecting={isConnecting}
       />

@@ -11,8 +11,9 @@
 import { useRef, useState, useCallback, useEffect } from "react"
 import {useLocalMedia} from "@/hooks/useLocalMedia"
 import config from "@/config"
+import { turnApi, type IceServer } from "@/helpers/api/turn.api"
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ── Types ─
 
 export type SessionPhase =
   | "idle"
@@ -55,7 +56,7 @@ type UseInterviewSessionOptions = {
   onError?: (message: string) => void
 }
 
-// ── Hook ──────────────────────────────────────────────────────────────────────
+// ── Hook 
 
 export function useInterviewSession({
   jobId,
@@ -83,10 +84,23 @@ export function useInterviewSession({
   const pingRef    = useRef<ReturnType<typeof setInterval> | null>(null)
   const iceBufRef  = useRef<RTCIceCandidate[]>([])
   const answerSetRef = useRef(false)
+  const iceServersRef = useRef<IceServer[]>([
+    { urls: "stun:stun.l.google.com:19302" }
+])
 
   const { acquireMicrophone, acquireScreenShare, releaseAll, localStreamRef} = useLocalMedia()
 
-  // ── Phase setter (also fires callback) ───────────────────────────────────
+
+  useEffect(() => {
+    turnApi.getCredentials()
+        .then(data => { iceServersRef.current = data.ice_servers })
+        .catch(() => {
+            // fallback to STUN only — already set as default
+            console.warn("Could not fetch TURN credentials, falling back to STUN only")
+        })
+  }, [])
+
+  // ── Phase setter (also fires callback) ─
 
   const updatePhase = useCallback((p: SessionPhase) => {
     phaseRef.current = p
@@ -94,7 +108,7 @@ export function useInterviewSession({
     onPhaseChange?.(p)
   }, [onPhaseChange])
 
-  // ── Transcript helper ─────────────────────────────────────────────────────
+  // ── Transcript helper ─────
 
   const addEntry = useCallback((
     speaker: TranscriptEntry["speaker"],
@@ -127,7 +141,7 @@ export function useInterviewSession({
 
   const setupWebRTC = useCallback(async () => {
     const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      iceServers: iceServersRef.current,
     })
     pcRef.current = pc
     answerSetRef.current = false
@@ -197,7 +211,7 @@ export function useInterviewSession({
     }))
   }, [addEntry, updatePhase, startTimer])
 
-  // ── Apply remote answer + flush ICE ──────────────────────────────────────
+  // ── Apply remote answer + flush ICE ────
 
   const applyAnswer = useCallback(async (sdp: string, sdpType: string) => {
     if (!pcRef.current) return
@@ -213,7 +227,7 @@ export function useInterviewSession({
     iceBufRef.current = []
   }, [])
 
-  // ── WS message handler ────────────────────────────────────────────────────
+  // ── WS message handler ────
 
   const handleMessage = useCallback(async (raw: string) => {
     let msg: Record<string, unknown>
@@ -295,7 +309,7 @@ export function useInterviewSession({
     }
   }, [setupWebRTC, applyAnswer, addEntry, updatePhase, onSessionInfo, onInterrupt, onError])
 
-  // ── Connect ───────────────────────────────────────────────────────────────
+  // ── Connect ─
 
   const connect = useCallback(() => {
     if (wsRef.current) return
@@ -338,7 +352,7 @@ export function useInterviewSession({
     }
   }, [jobId, candidateId, wsBaseUrl, handleMessage, addEntry, updatePhase, onError])
 
-  // ── Disconnect ────────────────────────────────────────────────────────────
+  // ── Disconnect ────
 
   const cleanup = useCallback((closeWs = true) => {
     if (closeWs && wsRef.current) {
@@ -362,7 +376,7 @@ export function useInterviewSession({
     updatePhase("ended")
   }, [cleanup, updatePhase])
 
-  // ── Mic toggle ────────────────────────────────────────────────────────────
+  // ── Mic toggle ────
 
   const toggleMute = useCallback(() => {
     const stream = localStreamRef.current
@@ -374,7 +388,7 @@ export function useInterviewSession({
     setIsMuted(!track.enabled)
   }, [localStreamRef])
 
-  // ── Screen share ──────────────────────────────────────────────────────────
+  // ── Screen share ──
 
   const startScreenShare = useCallback(async () => {
     if (!pcRef.current) return
@@ -392,7 +406,7 @@ export function useInterviewSession({
     }
   }, [addEntry])
 
-  // ── Cleanup on unmount ────────────────────────────────────────────────────
+  // ── Cleanup on unmount ────
 
   useEffect(() => () => cleanup(true), [cleanup])
 

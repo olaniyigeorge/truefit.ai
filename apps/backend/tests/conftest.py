@@ -1,6 +1,6 @@
 """
 tests/conftest.py
-──────────────────
+────
 Shared pytest fixtures for all test layers.
 
 - async_db_session:  in-memory SQLite engine + session factory for integration tests.
@@ -19,10 +19,9 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from src.truefit_infra.db.database import DatabaseManager
 from src.truefit_infra.db.models import Base, Org, User, UserRole
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # In-memory SQLite engine (integration tests only)
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 SQLITE_URL = "sqlite+aiosqlite:///:memory:"
 
@@ -75,9 +74,9 @@ async def db_manager(async_engine) -> DatabaseManager:
     return manager
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Seed data helpers
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 async def _create_org(session: AsyncSession, name: str = "Acme Corp") -> Org:
@@ -128,7 +127,8 @@ async def recruiter_user(async_session: AsyncSession, org: Org) -> User:
 @pytest_asyncio.fixture()
 async def candidate_user(async_session: AsyncSession, org: Org) -> User:
     return await _create_user(
-        async_session, org,
+        async_session,
+        org,
         email="candidate@example.com",
         role=UserRole.candidate.value,
         display_name="Alice Smith",

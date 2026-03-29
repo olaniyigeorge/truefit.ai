@@ -11,7 +11,9 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 from src.truefit_infra.db.database import db_manager
 from src.truefit_infra.db.repositories.user_repository import SQLAlchemyUserRepository
 from src.truefit_infra.db.repositories.org_repository import SQLAlchemyOrgRepository
-from src.truefit_infra.db.repositories.candidate_profile_repository import SQLAlchemyCandidateProfileRepository
+from src.truefit_infra.db.repositories.candidate_profile_repository import (
+    SQLAlchemyCandidateProfileRepository,
+)
 
 from src.truefit_core.application.services.user_service import (
     UserService,
@@ -44,6 +46,7 @@ class CandidateProfileIn(BaseModel):
 
 
 _SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
 
 class OrgIn(BaseModel):
     name: str = Field(..., min_length=2, max_length=255)
@@ -91,6 +94,7 @@ class JoinOrgRequest(BaseModel):
 
 # ── Response schemas ───
 
+
 class UserOut(BaseModel):
     id: uuid.UUID
     email: str
@@ -123,6 +127,7 @@ class CreateUserResponse(BaseModel):
 
 # ── Endpoints ──
 
+
 @router.post("", response_model=CreateUserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
     body: CreateUserRequest,
@@ -136,7 +141,11 @@ async def create_user(
             provider_subject=body.provider_subject,
             account_type=body.account_type,
             org=OrgCreateInput(**body.org.model_dump()) if body.org else None,
-            candidate_profile=CandidateProfileInput(**body.candidate_profile.model_dump()) if body.candidate_profile else None,
+            candidate_profile=(
+                CandidateProfileInput(**body.candidate_profile.model_dump())
+                if body.candidate_profile
+                else None
+            ),
         )
         return CreateUserResponse(
             user=_user_out(result["user"]),

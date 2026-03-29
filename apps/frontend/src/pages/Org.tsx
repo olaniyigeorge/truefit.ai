@@ -11,12 +11,12 @@ import { Building2, Globe, Mail, Phone, AlertCircle, Pencil } from "lucide-react
 import { OrgHeader } from "@/components/OrgHeader"
 import {EditForm} from "@/components/OrgEditForm"
 
-// ── Schema ────────────────────────────────────────────────────────────────────
+// ── Schema 
 
 
 
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Sub-components ────
 
 
 
@@ -75,7 +75,7 @@ function ContactCard({ org }: { org: Org }) {
 
 
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Page 
 
 export default function OrgPage() {
     const { backendUser } = useAuthContext()

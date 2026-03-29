@@ -2,7 +2,6 @@
 Aggregate root representing an organisation (company) on the platform.
 
 Invariants
-──────────
 - An org must always have a name and a valid slug.
 - Only ACTIVE orgs can create job listings.
 - Slug is immutable after creation — it's used in URLs and external references.
@@ -28,7 +27,7 @@ _SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 class OrgStatus(str, Enum):
     ACTIVE = "active"
-    SUSPENDED = "suspended"   # billing / policy issue — jobs paused
+    SUSPENDED = "suspended"  # billing / policy issue — jobs paused
     DEACTIVATED = "deactivated"  # permanently off
 
 
@@ -45,6 +44,7 @@ class OrgBilling:
     Billing metadata. Not a payment processor record —
     just enough for the platform to know what the org is entitled to.
     """
+
     plan: OrgPlan = OrgPlan.FREE
     max_active_jobs: int = 3
     max_interviews_per_month: int = 50
@@ -60,6 +60,7 @@ class OrgBilling:
 @dataclass(frozen=True)
 class OrgContact:
     """Primary contact for the organisation."""
+
     email: str
     phone: Optional[str] = None
     website: Optional[str] = None
@@ -78,8 +79,8 @@ class Org:
     """
 
     _VALID_TRANSITIONS: dict[OrgStatus, set[OrgStatus]] = {
-        OrgStatus.ACTIVE:      {OrgStatus.SUSPENDED, OrgStatus.DEACTIVATED},
-        OrgStatus.SUSPENDED:   {OrgStatus.ACTIVE, OrgStatus.DEACTIVATED},
+        OrgStatus.ACTIVE: {OrgStatus.SUSPENDED, OrgStatus.DEACTIVATED},
+        OrgStatus.SUSPENDED: {OrgStatus.ACTIVE, OrgStatus.DEACTIVATED},
         OrgStatus.DEACTIVATED: set(),
     }
 
@@ -96,7 +97,7 @@ class Org:
         logo_url: Optional[str] = None,
         description: Optional[str] = None,
         industry: Optional[str] = None,
-        headcount: Optional[str] = None,   # "1-10" | "11-50" | "51-200" | "200+"
+        headcount: Optional[str] = None,  # "1-10" | "11-50" | "51-200" | "200+"
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None,
     ) -> None:
@@ -110,7 +111,7 @@ class Org:
 
         self._id: uuid.UUID = org_id or uuid.uuid4()
         self._name: str = name.strip()
-        self._slug: str = slug  
+        self._slug: str = slug
         self._contact: OrgContact = contact
         self._created_by: uuid.UUID = created_by
         self._status: OrgStatus = status

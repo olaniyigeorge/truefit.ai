@@ -1,6 +1,6 @@
 """
 tests/unit/application/test_candidate_service.py
-──────────────────────────────────────────────────
+──
 Unit tests for CandidateService — mock-based, no database.
 
 All external dependencies (CandidateRepository, StoragePort) are replaced
@@ -22,10 +22,9 @@ from src.truefit_core.domain.candidate import (
     ResumeRef,
 )
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Fixtures
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 def _make_contact(email: str = "alice@example.com") -> ContactInfo:
@@ -48,7 +47,9 @@ def candidate_repo():
 @pytest.fixture()
 def storage():
     s = AsyncMock()
-    s.upload = AsyncMock(return_value=MagicMock(url="https://cdn.example.com/resume.pdf"))
+    s.upload = AsyncMock(
+        return_value=MagicMock(url="https://cdn.example.com/resume.pdf")
+    )
     s.delete = AsyncMock(return_value=None)
     s.get_presigned_url = AsyncMock(return_value="https://cdn.example.com/signed-url")
     return s
@@ -59,9 +60,9 @@ def service(candidate_repo, storage) -> CandidateService:
     return CandidateService(candidate_repo=candidate_repo, storage=storage)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # register_candidate
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestRegisterCandidate:
@@ -96,16 +97,18 @@ class TestRegisterCandidate:
     async def test_check_email_before_save(self, service, candidate_repo):
         """Ensures get_by_email is called BEFORE save — order matters."""
         call_order = []
-        candidate_repo.get_by_email.side_effect = lambda e: call_order.append("get") or None
+        candidate_repo.get_by_email.side_effect = (
+            lambda e: call_order.append("get") or None
+        )
         candidate_repo.save.side_effect = lambda c: call_order.append("save")
 
         await service.register_candidate(full_name="Alice", email="new@example.com")
         assert call_order == ["get", "save"]
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # update_profile
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestUpdateProfile:
@@ -154,9 +157,9 @@ class TestUpdateProfile:
         candidate_repo.save.assert_awaited_once()
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # upload_resume
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestUploadResume:
@@ -175,7 +178,9 @@ class TestUploadResume:
         storage.upload.assert_awaited_once()
         candidate_repo.save.assert_awaited_once()
 
-    async def test_storage_key_uses_candidate_id(self, service, candidate_repo, storage):
+    async def test_storage_key_uses_candidate_id(
+        self, service, candidate_repo, storage
+    ):
         candidate = _make_candidate()
         candidate_repo.get_by_id.return_value = candidate
 
@@ -191,21 +196,25 @@ class TestUploadResume:
         with pytest.raises(ValueError, match="not found"):
             await service.upload_resume(uuid.uuid4(), filename="cv.pdf", data=b"data")
 
-    async def test_custom_content_type_is_passed_to_storage(self, service, candidate_repo, storage):
+    async def test_custom_content_type_is_passed_to_storage(
+        self, service, candidate_repo, storage
+    ):
         candidate = _make_candidate()
         candidate_repo.get_by_id.return_value = candidate
 
         await service.upload_resume(
-            candidate.id, filename="cv.docx", data=b"data",
-            content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            candidate.id,
+            filename="cv.docx",
+            data=b"data",
+            content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
         call_kwargs = storage.upload.call_args.kwargs
         assert "wordprocessingml" in call_kwargs["content_type"]
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # delete_resume
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestDeleteResume:
@@ -232,26 +241,30 @@ class TestDeleteResume:
         with pytest.raises(ValueError, match="no resume"):
             await service.delete_resume(candidate.id)
 
-    async def test_delete_resume_raises_if_candidate_not_found(self, service, candidate_repo):
+    async def test_delete_resume_raises_if_candidate_not_found(
+        self, service, candidate_repo
+    ):
         candidate_repo.get_by_id.return_value = None
 
         with pytest.raises(ValueError, match="not found"):
             await service.delete_resume(uuid.uuid4())
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # get_resume_url
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestGetResumeUrl:
     async def test_returns_presigned_url(self, service, candidate_repo, storage):
         candidate = _make_candidate()
-        candidate.attach_resume(ResumeRef(
-            storage_key="resumes/abc/cv.pdf",
-            filename="cv.pdf",
-            uploaded_at=datetime.now(timezone.utc),
-        ))
+        candidate.attach_resume(
+            ResumeRef(
+                storage_key="resumes/abc/cv.pdf",
+                filename="cv.pdf",
+                uploaded_at=datetime.now(timezone.utc),
+            )
+        )
         candidate_repo.get_by_id.return_value = candidate
         storage.get_presigned_url.return_value = "https://cdn.example.com/signed"
 
@@ -267,11 +280,13 @@ class TestGetResumeUrl:
 
     async def test_passes_expiry_to_storage(self, service, candidate_repo, storage):
         candidate = _make_candidate()
-        candidate.attach_resume(ResumeRef(
-            storage_key="resumes/abc/cv.pdf",
-            filename="cv.pdf",
-            uploaded_at=datetime.now(timezone.utc),
-        ))
+        candidate.attach_resume(
+            ResumeRef(
+                storage_key="resumes/abc/cv.pdf",
+                filename="cv.pdf",
+                uploaded_at=datetime.now(timezone.utc),
+            )
+        )
         candidate_repo.get_by_id.return_value = candidate
 
         await service.get_resume_url(candidate.id, expires_in_seconds=600)

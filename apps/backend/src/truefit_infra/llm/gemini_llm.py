@@ -2,9 +2,10 @@
 GeminiLLMAdapter — standard (non-live) Gemini for text generation tasks.
 Used for: question generation, answer evaluation, candidate scoring.
 """
+
 from __future__ import annotations
 
-from typing import Any, Type, TypeVar
+from typing import Type, TypeVar
 import json
 
 from google import genai

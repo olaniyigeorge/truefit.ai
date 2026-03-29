@@ -1,6 +1,6 @@
 """
 tests/unit/application/test_job_service.py
-──────────────────────────────────────────
+
 Unit tests for JobService — mock-based, no database.
 
 Dependencies (JobRepository, InterviewRepository, QueuePort) are replaced
@@ -23,10 +23,9 @@ from src.truefit_core.domain.job import (
     SkillRequirement,
 )
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Helpers
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 def _make_requirements() -> JobRequirements:
@@ -62,9 +61,9 @@ def _make_active_interview(job_id: uuid.UUID) -> Interview:
     return iv
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Fixtures
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 @pytest.fixture()
@@ -95,9 +94,9 @@ def service(job_repo, interview_repo, queue) -> JobService:
     return JobService(job_repo=job_repo, interview_repo=interview_repo, queue=queue)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # create_job
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCreateJob:
@@ -146,9 +145,9 @@ class TestCreateJob:
         assert job.status == JobStatus.DRAFT
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # close_job
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCloseJob:

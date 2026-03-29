@@ -32,17 +32,18 @@ class GlobalConfig(BaseSettings):
     WORKERS_ENABLED: str
     SENTRY_DSN: str
     FIREBASE_PROJECT_ID: str
+    TURN_SERVER_URL: str
+    TURN_USERNAME: str
+    TURN_CREDENTIAL: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
 class DevConfig(GlobalConfig):
-
     pass
 
 
 class TestConfig(GlobalConfig):
-
     pass
 
 
@@ -51,7 +52,7 @@ class ProdConfig(GlobalConfig):
 
 
 def get_config():
-    env_state = GlobalConfig().ENV.lower()  # Load from `.env` automatically
+    env_state = GlobalConfig().ENV.lower()
     configs = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
     if env_state not in configs:
         raise ValueError(f"Invalid ENVT_STATE: {env_state}")

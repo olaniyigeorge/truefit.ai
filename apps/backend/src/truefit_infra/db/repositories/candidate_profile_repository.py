@@ -66,21 +66,27 @@ class SQLAlchemyCandidateProfileRepository(CandidateProfileRepository):
         return self._to_dict(row)
 
     async def get_by_user_id(self, user_id: uuid.UUID) -> Optional[dict]:
-        stmt = select(CandidateProfileModel).where(CandidateProfileModel.user_id == user_id)
+        stmt = select(CandidateProfileModel).where(
+            CandidateProfileModel.user_id == user_id
+        )
         async with self._db.get_session() as session:
             result = await session.execute(stmt)
             row = result.scalar_one_or_none()
         return self._to_dict(row) if row else None
 
     async def get_by_id(self, candidate_profile_id: uuid.UUID) -> Optional[dict]:
-        stmt = select(CandidateProfileModel).where(CandidateProfileModel.id == candidate_profile_id)
+        stmt = select(CandidateProfileModel).where(
+            CandidateProfileModel.id == candidate_profile_id
+        )
         async with self._db.get_session() as session:
             result = await session.execute(stmt)
             row = result.scalar_one_or_none()
         return self._to_dict(row) if row else None
 
     async def delete(self, candidate_profile_id: uuid.UUID) -> None:
-        stmt = delete(CandidateProfileModel).where(CandidateProfileModel.id == candidate_profile_id)
+        stmt = delete(CandidateProfileModel).where(
+            CandidateProfileModel.id == candidate_profile_id
+        )
         async with self._db.get_session() as session:
             await session.execute(stmt)
 

@@ -24,21 +24,10 @@ from src.truefit_infra.db.models import (
     JobListing,
 )
 
-# Notes on mapping:
-# - InterviewSession.id                 -> Interview.interview_id
-# - InterviewSession.application_id     -> join Application for job_id + candidate_id
-# - Application.job_id                  -> Interview.job_id
-# - Application.candidate_id            -> Interview.candidate_id
-# - JobListing.org_id                   -> Interview.company_id
-# - InterviewTurn rows                  -> Interview.turns (Turn(question, answer))
-#
-# This repo treats "one Interview" == "one InterviewSession".
-
-
 class SQLAlchemyInterviewRepository(InterviewRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
-    
+
     async def save(self, interview: Interview) -> None:
         async with self._db.get_session() as session:
 
@@ -75,13 +64,12 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 )
                 session.add(session_row)
                 await session.flush()
-                existing_turns = []  # ← new row, no turns to delete
+                existing_turns = [] 
 
             else:
-                session_row.status     = interview.status.value
+                session_row.status = interview.status.value
                 session_row.started_at = interview.started_at
-                session_row.ended_at   = interview.ended_at
-                # turns were eagerly loaded above — safe to access here
+                session_row.ended_at = interview.ended_at
                 existing_turns = list(session_row.turns)
 
             # 3) Delete existing turns synchronously within the session
@@ -97,43 +85,46 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 a = turn.answer
 
                 payload = {
-                    "question_id":    str(q.id),
-                    "question_text":  q.text,
-                    "topic":          q.topic,
-                    "follow_up_of":   str(q.follow_up_of) if q.follow_up_of else None,
-                    "asked_at":       q.asked_at.isoformat(),
-                    "answer_text":    a.text if a else None,
-                    "answered_at":    a.answered_at.isoformat() if a else None,
+                    "question_id": str(q.id),
+                    "question_text": q.text,
+                    "topic": q.topic,
+                    "follow_up_of": str(q.follow_up_of) if q.follow_up_of else None,
+                    "asked_at": q.asked_at.isoformat(),
+                    "answer_text": a.text if a else None,
+                    "answered_at": a.answered_at.isoformat() if a else None,
                     "duration_seconds": a.duration_seconds if a else None,
                 }
 
-                session.add(InterviewTurn(
-                    session_id=session_row.id,
-                    seq=seq,
-                    speaker="agent",
-                    modality="text",
-                    turn_text=q.text,
-                    payload=payload,
-                    started_at=q.asked_at,
-                    ended_at=a.answered_at if a else None,
-                ))
+                session.add(
+                    InterviewTurn(
+                        session_id=session_row.id,
+                        seq=seq,
+                        speaker="agent",
+                        modality="text",
+                        turn_text=q.text,
+                        payload=payload,
+                        started_at=q.asked_at,
+                        ended_at=a.answered_at if a else None,
+                    )
+                )
                 seq += 1
 
                 if a and a.text:
-                    session.add(InterviewTurn(
-                        session_id=session_row.id,
-                        seq=seq,
-                        speaker="candidate",
-                        modality="text",
-                        turn_text=a.text,
-                        payload=payload,
-                        started_at=a.answered_at,
-                        ended_at=a.answered_at,
-                    ))
+                    session.add(
+                        InterviewTurn(
+                            session_id=session_row.id,
+                            seq=seq,
+                            speaker="candidate",
+                            modality="text",
+                            turn_text=a.text,
+                            payload=payload,
+                            started_at=a.answered_at,
+                            ended_at=a.answered_at,
+                        )
+                    )
                     seq += 1
 
             await session.commit()
-
 
     async def get_by_id(self, interview_id: uuid.UUID) -> Optional[Interview]:
         async with self._db.get_session() as session:
@@ -151,12 +142,16 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
             # load job listing to get org_id
             app = s.application
-            job_res = await session.execute(select(JobListing).where(JobListing.id == app.job_id))
+            job_res = await session.execute(
+                select(JobListing).where(JobListing.id == app.job_id)
+            )
             job = job_res.scalar_one()
 
             return self._to_domain(session_row=s, job=job)
 
-    async def list_by_candidate(self, candidate_id: uuid.UUID, *, limit: int = 50, offset: int = 0) -> list[Interview]:
+    async def list_by_candidate(
+        self, candidate_id: uuid.UUID, *, limit: int = 50, offset: int = 0
+    ) -> list[Interview]:
         async with self._db.get_session() as session:
             res = await session.execute(
                 select(InterviewSession)
@@ -165,18 +160,25 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 .order_by(InterviewSession.created_at.desc())
                 .limit(limit)
                 .offset(offset)
-                .options(selectinload(InterviewSession.turns), selectinload(InterviewSession.application))
+                .options(
+                    selectinload(InterviewSession.turns),
+                    selectinload(InterviewSession.application),
+                )
             )
             sessions = res.scalars().all()
 
             # batch load jobs for org_id mapping
             job_ids = {s.application.job_id for s in sessions}
-            jobs_res = await session.execute(select(JobListing).where(JobListing.id.in_(job_ids)))
+            jobs_res = await session.execute(
+                select(JobListing).where(JobListing.id.in_(job_ids))
+            )
             jobs = {j.id: j for j in jobs_res.scalars().all()}
 
             return [self._to_domain(s, jobs[s.application.job_id]) for s in sessions]
 
-    async def list_by_job(self, job_id: uuid.UUID, *, limit: int = 50, offset: int = 0) -> list[Interview]:
+    async def list_by_job(
+        self, job_id: uuid.UUID, *, limit: int = 50, offset: int = 0
+    ) -> list[Interview]:
         async with self._db.get_session() as session:
             res = await session.execute(
                 select(InterviewSession)
@@ -185,11 +187,16 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 .order_by(InterviewSession.created_at.desc())
                 .limit(limit)
                 .offset(offset)
-                .options(selectinload(InterviewSession.turns), selectinload(InterviewSession.application))
+                .options(
+                    selectinload(InterviewSession.turns),
+                    selectinload(InterviewSession.application),
+                )
             )
             sessions = res.scalars().all()
 
-            job_res = await session.execute(select(JobListing).where(JobListing.id == job_id))
+            job_res = await session.execute(
+                select(JobListing).where(JobListing.id == job_id)
+            )
             job = job_res.scalar_one()
 
             return [self._to_domain(s, job) for s in sessions]
@@ -244,8 +251,10 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 f"for interview {interview_id}"
             )
         return count
-    
-    async def list_by_status(self, status: InterviewStatus, *, limit: int = 50, offset: int = 0) -> list[Interview]:
+
+    async def list_by_status(
+        self, status: InterviewStatus, *, limit: int = 50, offset: int = 0
+    ) -> list[Interview]:
         async with self._db.get_session() as session:
             res = await session.execute(
                 select(InterviewSession)
@@ -253,12 +262,17 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 .order_by(InterviewSession.created_at.desc())
                 .limit(limit)
                 .offset(offset)
-                .options(selectinload(InterviewSession.turns), selectinload(InterviewSession.application))
+                .options(
+                    selectinload(InterviewSession.turns),
+                    selectinload(InterviewSession.application),
+                )
             )
             sessions = res.scalars().all()
 
             job_ids = {s.application.job_id for s in sessions}
-            jobs_res = await session.execute(select(JobListing).where(JobListing.id.in_(job_ids)))
+            jobs_res = await session.execute(
+                select(JobListing).where(JobListing.id.in_(job_ids))
+            )
             jobs = {j.id: j for j in jobs_res.scalars().all()}
 
             return [self._to_domain(s, jobs[s.application.job_id]) for s in sessions]
@@ -275,12 +289,12 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
     async def delete(self, interview_id: uuid.UUID) -> None:
         async with self._db.get_session() as session:
-            await session.execute(delete(InterviewSession).where(InterviewSession.id == interview_id))
+            await session.execute(
+                delete(InterviewSession).where(InterviewSession.id == interview_id)
+            )
             await session.commit()
 
-    # -----------------------
     # Mapping helpers
-    # -----------------------
 
     @staticmethod
     def _to_domain(session_row: InterviewSession, job: JobListing) -> Interview:
@@ -301,8 +315,16 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                     id=uuid.UUID(payload["question_id"]),
                     text=payload["question_text"],
                     topic=payload.get("topic"),
-                    follow_up_of=(uuid.UUID(payload["follow_up_of"]) if payload.get("follow_up_of") else None),
-                    asked_at=datetime.fromisoformat(payload["asked_at"]) if payload.get("asked_at") else (t.started_at or session_row.created_at),
+                    follow_up_of=(
+                        uuid.UUID(payload["follow_up_of"])
+                        if payload.get("follow_up_of")
+                        else None
+                    ),
+                    asked_at=(
+                        datetime.fromisoformat(payload["asked_at"])
+                        if payload.get("asked_at")
+                        else (t.started_at or session_row.created_at)
+                    ),
                 )
 
                 answer = None
@@ -311,7 +333,11 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                     answer = Answer(
                         question_id=uuid.UUID(payload["question_id"]),
                         text=payload["answer_text"],
-                        answered_at=datetime.fromisoformat(answered_at) if answered_at else (t.ended_at or session_row.updated_at),
+                        answered_at=(
+                            datetime.fromisoformat(answered_at)
+                            if answered_at
+                            else (t.ended_at or session_row.updated_at)
+                        ),
                         duration_seconds=payload.get("duration_seconds"),
                     )
 
@@ -323,8 +349,16 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             candidate_id=app.candidate_id,
             org_id=job.org_id,
             status=InterviewStatus(session_row.status),
-            max_questions=session_row.realtime.get("max_questions", 10) if session_row.realtime else 10,
-            max_duration_minutes=session_row.realtime.get("max_duration_minutes", 30) if session_row.realtime else 30,
+            max_questions=(
+                session_row.realtime.get("max_questions", 10)
+                if session_row.realtime
+                else 10
+            ),
+            max_duration_minutes=(
+                session_row.realtime.get("max_duration_minutes", 30)
+                if session_row.realtime
+                else 30
+            ),
             turns=turns,
             started_at=_ensure_tz(session_row.started_at),
             ended_at=_ensure_tz(session_row.ended_at),

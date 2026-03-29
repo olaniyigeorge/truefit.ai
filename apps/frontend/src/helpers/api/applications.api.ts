@@ -54,7 +54,7 @@ export const applicationsApi = {
         return res.data
     },
     updateStatus: async (applicationId: string, payload: UpdateApplicationStatusPayload): Promise<Application> => {
-        const res = await API.patch(`/api/v1/applications/${applicationId}`, payload)
+        const res = await API.patch(`/api/v1/applications/${applicationId}/status`, payload)
         return res.data
     },
     withdraw: async (applicationId: string): Promise<void> => {

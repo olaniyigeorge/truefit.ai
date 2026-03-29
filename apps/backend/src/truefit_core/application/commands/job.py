@@ -24,9 +24,7 @@ from src.truefit_core.domain.job import (
 )
 
 
-# ──────────────────
 # Input dataclasses
-# ──────────────────
 
 @dataclass(frozen=True)
 class SkillInput:
@@ -48,7 +46,7 @@ class CreateJobCommand:
     org_id: uuid.UUID
     title: str
     description: str
-    experience_level: str               # validated against ExperienceLevel enum
+    experience_level: str  
     skills: list[SkillInput]
     interview_config: Optional[InterviewConfigInput] = None
 
@@ -56,7 +54,7 @@ class CreateJobCommand:
 @dataclass(frozen=True)
 class ActivateJobCommand:
     job_id: uuid.UUID
-    activated_by: uuid.UUID             # user performing the action (for audit)
+    activated_by: uuid.UUID 
 
 
 @dataclass(frozen=True)
@@ -71,12 +69,13 @@ class UpdateJobCommand:
 class CloseJobCommand:
     job_id: uuid.UUID
     closed_by: uuid.UUID
-    reason: Optional[str] = None        # "filled" | "cancelled" | "budget" etc.
+    reason: Optional[str] = None  # "filled" | "cancelled" | "budget".
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Response dataclasses
-# ─────────────────────────────────────────────────────────────────────────────
+
+
 
 @dataclass(frozen=True)
 class JobResponse:
@@ -107,9 +106,7 @@ class JobResponse:
         )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Handlers
-# ─────────────────────────────────────────────────────────────────────────────
 
 async def handle_create_job(
     cmd: CreateJobCommand,

@@ -33,17 +33,20 @@ from src.truefit_core.domain.job import (
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
 
-# ── Dependency ───
+# ── Dependency
 
 def get_job_repo() -> SQLAlchemyJobRepository:
     return SQLAlchemyJobRepository(db_manager)
 
-def get_job_service(repo: SQLAlchemyJobRepository = Depends(get_job_repo)) -> JobService:
+
+def get_job_service(
+    repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+) -> JobService:
     # InterviewRepository injected as None here — wire fully when available
     return JobService(job_repo=repo, interview_repo=None, queue=None)
 
 
-# ── Request schemas ───
+# ── Request schemas
 
 class SkillIn(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
@@ -98,12 +101,12 @@ class CreateJobRequest(BaseModel):
 class UpdateJobRequest(BaseModel):
     description: Optional[str] = Field(None, min_length=10)
     requirements: Optional[RequirementsIn] = None
-    skills_add: Optional[list[SkillIn]] = None      # skills to add
-    skills_remove: Optional[list[str]] = None        # skill names to remove
+    skills_add: Optional[list[SkillIn]] = None  # skills to add
+    skills_remove: Optional[list[str]] = None  # skill names to remove
     interview_config: Optional[InterviewConfigIn] = None
 
 
-# ── Response schema ──
+# ── Response schema 
 
 class SkillOut(BaseModel):
     name: str
@@ -179,7 +182,7 @@ class JobOut(BaseModel):
         )
 
 
-# ── Endpoints ───
+# ── Endpoints 
 
 @router.post("", response_model=JobOut, status_code=status.HTTP_201_CREATED)
 async def create_job(
@@ -235,6 +238,7 @@ async def list_active_jobs(
     jobs = await repo.list_all_active(limit=limit, offset=offset)
     return [JobOut.from_domain(j) for j in jobs]
 
+
 @router.get("/{job_id}", response_model=JobOut)
 async def get_job(
     job_id: uuid.UUID,
@@ -266,8 +270,12 @@ async def list_jobs(
         try:
             exp = ExperienceLevel(experience_level)
         except ValueError:
-            raise HTTPException(400, detail=f"Invalid experience_level: {experience_level}")
-        jobs = await repo.get_by_org_and_experience(org_id, exp, limit=limit, offset=offset)
+            raise HTTPException(
+                400, detail=f"Invalid experience_level: {experience_level}"
+            )
+        jobs = await repo.get_by_org_and_experience(
+            org_id, exp, limit=limit, offset=offset
+        )
 
     else:
         jobs = await repo.get_by_company(org_id, limit=limit, offset=offset)
@@ -300,22 +308,28 @@ async def update_job(
             )
             job.update_requirements(req)
 
-        for skill_name in (body.skills_remove or []):
+        for skill_name in body.skills_remove or []:
             job.remove_skill(skill_name)
 
-        for s in (body.skills_add or []):
-            job.add_skill(SkillRequirement(
-                name=s.name, required=s.required,
-                weight=s.weight, min_years=s.min_years,
-            ))
+        for s in body.skills_add or []:
+            job.add_skill(
+                SkillRequirement(
+                    name=s.name,
+                    required=s.required,
+                    weight=s.weight,
+                    min_years=s.min_years,
+                )
+            )
 
         if body.interview_config:
-            job.update_interview_config(InterviewConfig(
-                max_questions=body.interview_config.max_questions,
-                max_duration_minutes=body.interview_config.max_duration_minutes,
-                topics=body.interview_config.topics,
-                custom_instructions=body.interview_config.custom_instructions,
-            ))
+            job.update_interview_config(
+                InterviewConfig(
+                    max_questions=body.interview_config.max_questions,
+                    max_duration_minutes=body.interview_config.max_duration_minutes,
+                    topics=body.interview_config.topics,
+                    custom_instructions=body.interview_config.custom_instructions,
+                )
+            )
 
         await repo.save(job)
     except (ValueError, PermissionError) as e:

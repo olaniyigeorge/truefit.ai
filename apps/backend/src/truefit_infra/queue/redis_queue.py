@@ -1,8 +1,6 @@
-# src/truefit_infra/queue/redis_queue.py
 from __future__ import annotations
 
 import json
-from dataclasses import asdict
 
 import redis.asyncio as redis
 
@@ -28,11 +26,11 @@ class RedisQueueAdapter(QueuePort):
             await self._client.xadd(
                 stream_key,
                 {
-                    "event_type":     event.event_type,
-                    "aggregate_id":   event.aggregate_id,
+                    "event_type": event.event_type,
+                    "aggregate_id": event.aggregate_id,
                     "aggregate_type": event.aggregate_type,
-                    "occurred_at":    event.occurred_at,
-                    "payload":        json.dumps(event.payload),
+                    "occurred_at": event.occurred_at,
+                    "payload": json.dumps(event.payload),
                 },
                 maxlen=_MAX_STREAM_LEN,
                 approximate=True,

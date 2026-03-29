@@ -58,7 +58,9 @@ class User:
         self.org_id = org_id
         self.updated_at = utcnow()
 
-    def update_profile(self, *, display_name: str | None = None, is_active: bool | None = None) -> None:
+    def update_profile(
+        self, *, display_name: str | None = None, is_active: bool | None = None
+    ) -> None:
         if display_name is not None:
             self.display_name = display_name
         if is_active is not None:

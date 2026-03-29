@@ -14,7 +14,7 @@ import {
 import { applicationsApi as appApi } from "@/helpers/api/applications.api"
 import {StatusBadgeComp, AppStatusBadge} from "@/components/Badges"
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Helpers ─────
 
 
 
@@ -29,7 +29,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
     )
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Page 
 
 export default function JobDetailPage() {
     const { jobId } = useParams<{ jobId: string }>()

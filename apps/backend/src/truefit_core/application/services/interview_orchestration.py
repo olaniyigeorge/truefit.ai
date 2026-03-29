@@ -30,7 +30,6 @@ from src.truefit_core.application.ports import (
     QueuePort,
 )
 
-
 _EVENT_INTERVIEW_STARTED = "interview.started"
 _EVENT_QUESTION_ASKED = "interview.question_asked"
 _EVENT_ANSWER_SUBMITTED = "interview.answer_submitted"
@@ -93,7 +92,7 @@ class InterviewOrchestrationService:
             if candidate is None:
                 raise ValueError(f"Candidate {candidate_id} not found")
 
-            # ── Check for a resumable session BEFORE eligibility checks ──────────
+            # ── Check for a resumable session BEFORE eligibility checks ────
             # A candidate with an active interview is ineligible by design,
             # but if it's their own resumable session we should let them back in.
             existing = await self._interviews.get_active_for_job_and_candidate(
@@ -114,7 +113,7 @@ class InterviewOrchestrationService:
                     )
                 return existing
 
-            # ── Only enforce eligibility when NOT resuming ────────────────────────
+            # ── Only enforce eligibility when NOT resuming ────
             candidate.assert_eligible_to_interview()
             candidate.register_active_interview(job_id)
 
@@ -131,27 +130,30 @@ class InterviewOrchestrationService:
             await self._interviews.save(interview)
             await self._candidates.save(candidate)
 
-            await self._queue.publish(DomainEvent(
-                event_type=_EVENT_INTERVIEW_STARTED,
-                aggregate_id=str(interview.id),
-                aggregate_type="Interview",
-                occurred_at=_utcnow_iso(),
-                payload={
-                    "interview_id": str(interview.id),
-                    "job_id": str(job_id),
-                    "candidate_id": str(candidate_id),
-                    "org_id": str(job.org_id),
-                    "max_questions": config.max_questions,
-                    "max_duration_minutes": config.max_duration_minutes,
-                },
-            ))
+            await self._queue.publish(
+                DomainEvent(
+                    event_type=_EVENT_INTERVIEW_STARTED,
+                    aggregate_id=str(interview.id),
+                    aggregate_type="Interview",
+                    occurred_at=_utcnow_iso(),
+                    payload={
+                        "interview_id": str(interview.id),
+                        "job_id": str(job_id),
+                        "candidate_id": str(candidate_id),
+                        "org_id": str(job.org_id),
+                        "max_questions": config.max_questions,
+                        "max_duration_minutes": config.max_duration_minutes,
+                    },
+                )
+            )
 
-            logger.info(f"Interview {interview.id} started for candidate {candidate_id}")
+            logger.info(
+                f"Interview {interview.id} started for candidate {candidate_id}"
+            )
             return interview
 
         finally:
             await self._cache.delete(lock_key)
-
 
     # ── Record question (agent-driven) ──
 
@@ -177,7 +179,9 @@ class InterviewOrchestrationService:
         interview = await self._get_active_interview(interview_id)
 
         if interview.awaiting_answer:
-            raise ValueError("Cannot record a new question while the previous is unanswered")
+            raise ValueError(
+                "Cannot record a new question while the previous is unanswered"
+            )
         if not interview.can_ask_more:
             raise ValueError(
                 f"Interview has reached the maximum of {interview.max_questions} questions"
@@ -219,19 +223,21 @@ class InterviewOrchestrationService:
         )
         await self._interviews.save(interview)
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_QUESTION_ASKED,
-            aggregate_id=str(interview_id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(interview_id),
-                "question_id": str(question.id),
-                "question_number": interview.question_count,
-                "total_questions": interview.max_questions,
-                "topic": question.topic,
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_QUESTION_ASKED,
+                aggregate_id=str(interview_id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(interview_id),
+                    "question_id": str(question.id),
+                    "question_number": interview.question_count,
+                    "total_questions": interview.max_questions,
+                    "topic": question.topic,
+                },
+            )
+        )
 
         return {
             "question_id": str(question.id),
@@ -261,17 +267,19 @@ class InterviewOrchestrationService:
         )
         await self._interviews.save(interview)
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_ANSWER_SUBMITTED,
-            aggregate_id=str(interview_id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(interview_id),
-                "question_id": str(question_id),
-                "answered_count": interview.answered_count,
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_ANSWER_SUBMITTED,
+                aggregate_id=str(interview_id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(interview_id),
+                    "question_id": str(question_id),
+                    "answered_count": interview.answered_count,
+                },
+            )
+        )
 
         if not interview.can_ask_more and not interview.awaiting_answer:
             return await self._complete_and_respond(interview)
@@ -302,19 +310,21 @@ class InterviewOrchestrationService:
         await self._interviews.save(interview)
         await self._release_candidate_lock(interview)
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_INTERVIEW_ABANDONED,
-            aggregate_id=str(interview_id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(interview_id),
-                "candidate_id": str(interview.candidate_id),
-                "job_id": str(interview.job_id),
-                "reason": reason,
-                "questions_answered": interview.answered_count,
-            },
-        ))
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_INTERVIEW_ABANDONED,
+                aggregate_id=str(interview_id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(interview_id),
+                    "candidate_id": str(interview.candidate_id),
+                    "job_id": str(interview.job_id),
+                    "reason": reason,
+                    "questions_answered": interview.answered_count,
+                },
+            )
+        )
         logger.info(f"Interview {interview_id} abandoned: {reason}")
 
     # ── Internal helpers ──
@@ -324,21 +334,25 @@ class InterviewOrchestrationService:
         await self._interviews.save(interview)
         await self._release_candidate_lock(interview)
 
-        await self._queue.publish(DomainEvent(
-            event_type=_EVENT_INTERVIEW_COMPLETED,
-            aggregate_id=str(interview.id),
-            aggregate_type="Interview",
-            occurred_at=_utcnow_iso(),
-            payload={
-                "interview_id": str(interview.id),
-                "candidate_id": str(interview.candidate_id),
-                "job_id": str(interview.job_id),
-                "org_id": str(interview.org_id),
-                "questions_answered": interview.answered_count,
-                "elapsed_minutes": interview.elapsed_minutes,
-            },
-        ))
-        logger.info(f"Interview {interview.id} completed ({interview.answered_count} answers)")
+        await self._queue.publish(
+            DomainEvent(
+                event_type=_EVENT_INTERVIEW_COMPLETED,
+                aggregate_id=str(interview.id),
+                aggregate_type="Interview",
+                occurred_at=_utcnow_iso(),
+                payload={
+                    "interview_id": str(interview.id),
+                    "candidate_id": str(interview.candidate_id),
+                    "job_id": str(interview.job_id),
+                    "org_id": str(interview.org_id),
+                    "questions_answered": interview.answered_count,
+                    "elapsed_minutes": interview.elapsed_minutes,
+                },
+            )
+        )
+        logger.info(
+            f"Interview {interview.id} completed ({interview.answered_count} answers)"
+        )
 
         return {
             "status": "completed",
@@ -368,11 +382,9 @@ class InterviewOrchestrationService:
         return [t for t in all_topics if t not in covered] or all_topics
 
 
-
-
-
 # A session is resumable if it's active and started within this window
 _RESUME_WINDOW_SECONDS = 60 * 60  # 1 hour — tune to your max interview duration
+
 
 def _is_resumable(interview: Interview) -> bool:
     """
@@ -383,12 +395,12 @@ def _is_resumable(interview: Interview) -> bool:
         return False
     if interview.started_at is None:
         return False
-    
+
     # Normalize: ensure both datetimes use the same UTC representation
     started = interview.started_at
     if started.tzinfo is not None and started.tzinfo != timezone.utc:
         started = started.astimezone(timezone.utc)
-    
+
     now = datetime.now(timezone.utc)
     age = (now - started).total_seconds()
     return age <= _RESUME_WINDOW_SECONDS

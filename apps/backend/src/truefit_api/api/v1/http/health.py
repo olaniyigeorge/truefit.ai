@@ -25,7 +25,11 @@ async def _check_database() -> Dict[str, Any]:
 async def _check_cache() -> Dict[str, Any]:
     try:
         status = await redis_client.is_healthy()
-        return {"status": "ok"} if status else {"status": "down", "error": "Cache is not healthy"}  
+        return (
+            {"status": "ok"}
+            if status
+            else {"status": "down", "error": "Cache is not healthy"}
+        )
     except Exception:
         return {"status": "down", "error": "Cache is not healthy"}
 
@@ -83,9 +87,7 @@ async def health_check() -> JSONResponse:
     }
 
     http_status = (
-        status.HTTP_503_SERVICE_UNAVAILABLE
-        if overall == "down"
-        else status.HTTP_200_OK
+        status.HTTP_503_SERVICE_UNAVAILABLE if overall == "down" else status.HTTP_200_OK
     )
     return JSONResponse(status_code=http_status, content=payload)
 

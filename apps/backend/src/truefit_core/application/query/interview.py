@@ -4,10 +4,9 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Optional
 
-from truefit_core.application.ports import  InterviewRepository, StoragePort
+from truefit_core.application.ports import InterviewRepository, StoragePort
 from truefit_core.application.query import PaginationParams
 from truefit_core.domain.interview import Interview
-
 
 
 @dataclass(frozen=True)
@@ -23,7 +22,7 @@ class GetInterviewResponse:
     elapsed_minutes: Optional[float]
     started_at: Optional[str]
     ended_at: Optional[str]
-    transcript: list[dict]             # full Q&A pairs
+    transcript: list[dict]  # full Q&A pairs
 
     @classmethod
     def from_domain(cls, i: Interview) -> "GetInterviewResponse":

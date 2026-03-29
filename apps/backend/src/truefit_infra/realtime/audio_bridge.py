@@ -7,11 +7,12 @@ Outbound: asyncio.Queue[bytes] (agent writes this)  →  WebRTC audio track
 
 No blocking calls. No domain logic.
 """
+
 from __future__ import annotations
 
 import asyncio
 import fractions
-import time 
+import time
 from typing import AsyncIterator, Optional
 
 import av
@@ -22,16 +23,15 @@ from src.truefit_infra.realtime.session_context import SessionContext
 from src.truefit_core.common.utils import logger
 
 # PCM format expected by Gemini Live API
-_SAMPLE_RATE = 16_000   # 16 kHz
-_CHANNELS = 1           # mono
-_SAMPLE_WIDTH = 2       # 16-bit (s16)
+_SAMPLE_RATE = 16_000  # 16 kHz
+_CHANNELS = 1  # mono
+_SAMPLE_WIDTH = 2  # 16-bit (s16)
 _CHUNK_DURATION = 0.02  # 20ms chunks → 320 samples per chunk
-_OUTPUT_SAMPLE_RATE = 24_000   # Gemini outputs this
+_OUTPUT_SAMPLE_RATE = 24_000  # Gemini outputs this
 SILENCE_CHUNK = b"\x00\x00" * 160  # 10ms silence at 16kHz mono s16
-_WEBRTC_SAMPLE_RATE = 48_000   # WebRTC/Opus expects this
-_CHUNK_SAMPLES = int(_SAMPLE_RATE * _CHUNK_DURATION)   # 320
-SILENCE_CHUNK = b"\x00\x00" * _CHUNK_SAMPLES       # 640 bytes — matches real frames
-
+_WEBRTC_SAMPLE_RATE = 48_000  # WebRTC/Opus expects this
+_CHUNK_SAMPLES = int(_SAMPLE_RATE * _CHUNK_DURATION)  # 320
+SILENCE_CHUNK = b"\x00\x00" * _CHUNK_SAMPLES  # 640 bytes — matches real frames
 
 
 class AudioBridge:
@@ -48,14 +48,13 @@ class AudioBridge:
         self._inbound_task: Optional[asyncio.Task] = None
         self._outbound_track: Optional[_AgentAudioTrack] = None
         self._closed = False
-        self._track_attached = asyncio.Event() 
+        self._track_attached = asyncio.Event()
         self._agent_speaking = False
-
 
     def set_agent_speaking(self, speaking: bool) -> None:
         self._agent_speaking = speaking
 
-    # ── Inbound (browser → agent) ─────────────────────────────────────────────
+    # ── Inbound (browser → agent) ───
 
     async def attach_inbound_track(self, track: MediaStreamTrack) -> None:
         """Start pumping audio from the WebRTC track into inbound_queue."""
@@ -64,20 +63,20 @@ class AudioBridge:
             self._pump_inbound(track),
             name=f"audio-inbound-{self._ctx.session_id}",
         )
-        self._track_attached.set() 
+        self._track_attached.set()
 
     async def _pump_inbound(self, track: MediaStreamTrack) -> None:
         """
         Tight async loop: pull frames from aiortc, resample to 16kHz mono s16,
         chunk into 20ms pieces, enqueue raw bytes.
         """
-        logger.info(f"\n\n[{self._ctx.session_id}] _pump_inbound started\n") 
+        logger.info(f"\n\n[{self._ctx.session_id}] _pump_inbound started\n")
         resampler = av.AudioResampler(
             format="s16",
             layout="mono",
             rate=_SAMPLE_RATE,
         )
-        frame_count = 0 
+        frame_count = 0
         try:
             while not self._closed:
                 try:
@@ -86,7 +85,9 @@ class AudioBridge:
                     )
                     frame_count += 1
                     if frame_count % 50 == 0:  # ← log every ~1s
-                        logger.info(f"\n[{self._ctx.session_id}] Inbound frames: {frame_count}\n")
+                        logger.info(
+                            f"\n[{self._ctx.session_id}] Inbound frames: {frame_count}\n"
+                        )
                 except asyncio.TimeoutError:
                     continue
                 except Exception as e:
@@ -102,7 +103,7 @@ class AudioBridge:
                     for i in range(0, len(pcm_bytes), chunk_size):
                         chunk = pcm_bytes[i : i + chunk_size]
                         if len(chunk) == chunk_size:
-                            if self._agent_speaking:          # ← ADD THIS GATE
+                            if self._agent_speaking:  # ← ADD THIS GATE
                                 continue
                             try:
                                 self.inbound_queue.put_nowait(chunk)
@@ -119,7 +120,7 @@ class AudioBridge:
         finally:
             await self.inbound_queue.put(None)  # sentinel → agent sees end of stream
 
-    # ── Agent-facing async generator ─────────────────────────────────────────
+    # ── Agent-facing async generator ─
 
     async def audio_input_stream(self) -> AsyncIterator[bytes]:
         await asyncio.wait_for(self._track_attached.wait(), timeout=30.0)
@@ -131,12 +132,14 @@ class AudioBridge:
                     return  # bridge closed
                 chunk_count += 1
                 if chunk_count % 100 == 0:
-                    logger.info(f"[{self._ctx.session_id}] Sent {chunk_count} chunks to Gemini")
+                    logger.info(
+                        f"[{self._ctx.session_id}] Sent {chunk_count} chunks to Gemini"
+                    )
                 yield chunk
             except asyncio.TimeoutError:
                 continue
-                
-    # ── Outbound (agent → browser) ────────────────────────────────────────────
+
+    # ── Outbound (agent → browser) ──
 
     def create_outbound_track(self) -> "_AgentAudioTrack":
         """
@@ -160,7 +163,6 @@ class AudioBridge:
         if self._outbound_track is not None:
             self._outbound_track.clear_buf()
 
-
     async def push_audio(self, pcm_bytes: bytes) -> None:
         """
         Called by the agent to push a PCM response chunk toward the browser.
@@ -170,9 +172,11 @@ class AudioBridge:
         try:
             self.outbound_queue.put_nowait(pcm_bytes)
         except asyncio.QueueFull:
-            logger.debug(f"[{self._ctx.session_id}] Outbound audio queue full, dropping chunk")
+            logger.debug(
+                f"[{self._ctx.session_id}] Outbound audio queue full, dropping chunk"
+            )
 
-    # ── Teardown ──────────────────────────────────────────────────────────────
+    # ── Teardown 
 
     async def close(self) -> None:
         self._closed = True
@@ -186,10 +190,6 @@ class AudioBridge:
         await self.outbound_queue.put(None)
 
 
-
-
- 
-
 class _AgentAudioTrack(AudioStreamTrack):
     """
     Pulls 24kHz PCM from the agent queue, resamples to 48kHz,
@@ -200,12 +200,12 @@ class _AgentAudioTrack(AudioStreamTrack):
         super().__init__()
         self._queue = queue
         self._session_id = session_id
-        self._sample_rate = _WEBRTC_SAMPLE_RATE          # 48000
+        self._sample_rate = _WEBRTC_SAMPLE_RATE  # 48000
         self._samples_per_frame = int(_WEBRTC_SAMPLE_RATE * _CHUNK_DURATION)  # 960
         self._resampler = av.AudioResampler(
             format="s16", layout="mono", rate=_WEBRTC_SAMPLE_RATE
         )
-        self._buf = bytearray()   # ring buffer of resampled 48kHz s16 PCM
+        self._buf = bytearray()  # ring buffer of resampled 48kHz s16 PCM
         self._pts = 0
         self._start: Optional[float] = None
 
@@ -225,13 +225,13 @@ class _AgentAudioTrack(AudioStreamTrack):
                 await asyncio.sleep(wait)
 
         # ── Drain queue into buffer until we have a full frame ──
-        target = self._samples_per_frame * 2   # bytes needed (s16 = 2 bytes/sample)
+        target = self._samples_per_frame * 2  # bytes needed (s16 = 2 bytes/sample)
 
         while len(self._buf) < target:
             try:
                 pcm_24k = self._queue.get_nowait()
             except asyncio.QueueEmpty:
-                break   # pad with silence below
+                break  # pad with silence below
 
             if pcm_24k is None:
                 raise Exception("AudioBridge closed")
@@ -255,7 +255,9 @@ class _AgentAudioTrack(AudioStreamTrack):
             out_pcm = bytes(self._buf) + b"\x00\x00" * (silence_needed // 2)
             self._buf.clear()
 
-        frame = av.AudioFrame(format="s16", layout="mono", samples=self._samples_per_frame)
+        frame = av.AudioFrame(
+            format="s16", layout="mono", samples=self._samples_per_frame
+        )
         frame.planes[0].update(out_pcm)
         frame.sample_rate = self._sample_rate
         frame.time_base = fractions.Fraction(1, self._sample_rate)

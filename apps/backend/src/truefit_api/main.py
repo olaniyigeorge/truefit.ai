@@ -8,8 +8,11 @@ from contextlib import asynccontextmanager
 
 load_dotenv()
 from src.truefit_infra.config import AppConfig
-from src.truefit_infra.db.database import db_manager 
-from src.truefit_api.middlewares import register_error_handler, req_res_time_log_middleware
+from src.truefit_infra.db.database import db_manager
+from src.truefit_api.middlewares import (
+    register_error_handler,
+    req_res_time_log_middleware,
+)
 from src.truefit_core.common.utils import logger
 from src.truefit_api.api.v1.http.health import health_router
 from src.truefit_api.api.v1.http.auth import router as auth_router
@@ -20,15 +23,16 @@ from src.truefit_api.api.v1.http.orgs import router as orgs_router
 from src.truefit_api.api.v1.http.users import router as users_router
 from src.truefit_api.api.v1.ws.interview_websocket import interview_ws_router
 from src.truefit_api.api.v1.http.applications import router as applications_router
+from src.truefit_api.api.v1.http.turn import router as turn_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-        Manages the lifespan of the Truefit API. It
-        initializes the initializes the database manager which
-        manages data on server wake up and cleanly closes it on
-        shutdown
+    Manages the lifespan of the Truefit API. It
+    initializes the initializes the database manager which
+    manages data on server wake up and cleanly closes it on
+    shutdown
     """
     try:
         # Initialize database
@@ -49,9 +53,8 @@ async def lifespan(app: FastAPI):
 
         db_manager.initialize(AppConfig.DATABASE_URL, **engine_kwargs)
 
-        # # Create tables 
+        # # Create tables
         await db_manager.create_tables()
-        
 
         logger.info("Application startup complete")
         yield
@@ -84,7 +87,9 @@ app.add_middleware(
     ],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],  # TODO : Update request headers coming from all whitelisted clients
+    allow_headers=[
+        "*"
+    ],  # TODO : Update request headers coming from all whitelisted clients
 )
 
 app.include_router(health_router, prefix="/api/v1")
@@ -96,15 +101,8 @@ app.include_router(jobs_router, prefix="/api/v1")
 app.include_router(interviews_router, prefix="/api/v1")
 app.include_router(applications_router, prefix="/api/v1")
 app.include_router(interview_ws_router)
-
-
+app.include_router(turn_router, prefix="/api/v1")
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "main:app", 
-        host="0.0.0.0", 
-        reload=True, 
-        port=8000
-    )
-
+    uvicorn.run("main:app", host="0.0.0.0", reload=True, port=8000)

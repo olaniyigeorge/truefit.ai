@@ -6,11 +6,12 @@ mapped to response dataclasses).
 Because queries are read-only they can bypass the domain layer entirely
 and talk to read-optimised repo methods or even raw SQL projections.
 """
+
 from __future__ import annotations
 from dataclasses import dataclass
 
-
 # Shared pagination input
+
 
 @dataclass(frozen=True)
 class PaginationParams:
@@ -22,4 +23,3 @@ class PaginationParams:
             raise ValueError("limit must be between 1 and 100")
         if self.offset < 0:
             raise ValueError("offset cannot be negative")
-

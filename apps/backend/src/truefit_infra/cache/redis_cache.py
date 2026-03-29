@@ -1,4 +1,3 @@
-# src/truefit_infra/cache/redis_cache.py
 import redis.asyncio as redis
 from typing import Any, Optional
 import json
@@ -14,18 +13,23 @@ class RedisCacheAdapter(CachePort):
         url = conn_url or AppConfig.REDIS_URL
         if not url:
             raise RuntimeError("Redis URL is not configured.")
-        # ← was ignoring conn_url and always using AppConfig.REDIS_URL
         self._client: redis.Redis = redis.from_url(url, decode_responses=True)
 
     async def get(self, key: str) -> Optional[Any]:
         data = await self._client.get(key)
         return json.loads(data) if data else None
 
-    async def set(self, key: str, value: Any, *, ttl_seconds: Optional[int] = None) -> bool:
+    async def set(
+        self, key: str, value: Any, *, ttl_seconds: Optional[int] = None
+    ) -> bool:
         try:
-            serialized = json.dumps(value)  # ← was passing raw value, setex needs a string
+            serialized = json.dumps(
+                value
+            )  
             if ttl_seconds is not None:
-                await self._client.setex(key, ttl_seconds, serialized)  # ← wrong arg order: (key, time, value)
+                await self._client.setex(
+                    key, ttl_seconds, serialized
+                ) 
             else:
                 await self._client.set(key, serialized)
             return True

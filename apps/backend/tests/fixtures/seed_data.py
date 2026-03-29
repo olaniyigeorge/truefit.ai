@@ -10,7 +10,7 @@ Seeds resources in dependency order (FULLY SELF-CONTAINED):
   6) Interview Sessions (+ optional turns) -> requires application
 
 USAGE
-──────
+
   uvicorn src.truefit_api.main:app --reload --port 8000
   python -m tests.fixtures.seed_data
   python -m tests.fixtures.seed_data --curl
@@ -32,7 +32,7 @@ BASE_URL = "http://localhost:8000/api/v1"
 DEFAULT_HEADERS = {"Content-Type": "application/json"}
 
 
-# ── Users ─────────────────────────────────────────────────────────────────────
+# ── Users ─
 # We create these first, then use returned ids for orgs/jobs.
 USER_PAYLOADS: list[dict[str, Any]] = [
     {
@@ -52,7 +52,7 @@ USER_PAYLOADS: list[dict[str, Any]] = [
 ]
 
 
-# ── Orgs ──────────────────────────────────────────────────────────────────────
+# ── Orgs 
 def make_org_payloads(created_by: str) -> list[dict[str, Any]]:
     return [
         {
@@ -93,7 +93,7 @@ def make_org_payloads(created_by: str) -> list[dict[str, Any]]:
     ]
 
 
-# ── Jobs (org_id injected at runtime) ─────────────────────────────────────────
+# ── Jobs (org_id injected at runtime) ─
 def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
     return [
         {
@@ -118,7 +118,12 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
                 {"name": "FastAPI", "required": True, "weight": 0.9, "min_years": 2},
                 {"name": "PostgreSQL", "required": True, "weight": 0.8, "min_years": 3},
                 {"name": "Redis", "required": True, "weight": 0.7, "min_years": 2},
-                {"name": "System Design", "required": True, "weight": 1.0, "min_years": 3},
+                {
+                    "name": "System Design",
+                    "required": True,
+                    "weight": 1.0,
+                    "min_years": 3,
+                },
                 {"name": "Docker", "required": False, "weight": 0.6},
                 {"name": "Kubernetes", "required": False, "weight": 0.5},
             ],
@@ -151,13 +156,23 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
             "skills": [
                 {"name": "Python", "required": True, "weight": 1.0, "min_years": 3},
                 {"name": "PyTorch", "required": True, "weight": 0.9, "min_years": 2},
-                {"name": "LLM Prompting", "required": True, "weight": 1.0, "min_years": 1},
+                {
+                    "name": "LLM Prompting",
+                    "required": True,
+                    "weight": 1.0,
+                    "min_years": 1,
+                },
                 {"name": "Vertex AI", "required": False, "weight": 0.8},
             ],
             "interview_config": {
                 "max_questions": 10,
                 "max_duration_minutes": 30,
-                "topics": ["ML fundamentals", "LLM architecture", "inference", "behavioural"],
+                "topics": [
+                    "ML fundamentals",
+                    "LLM architecture",
+                    "inference",
+                    "behavioural",
+                ],
             },
         },
         {
@@ -186,7 +201,7 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
     ]
 
 
-# ── Candidates (align to the DB: users + candidate_profiles) ─────────────────
+# ── Candidates (align to the DB: users + candidate_profiles) ───
 CANDIDATE_USER_PAYLOADS: list[dict[str, Any]] = [
     {
         "email": "amara.nwosu@example.com",
@@ -236,7 +251,7 @@ CANDIDATE_PROFILE_PAYLOADS_BY_EMAIL: dict[str, dict[str, Any]] = {
 }
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ── Helpers ─────
 @dataclass
 class SeededResources:
     users: list[dict] = field(default_factory=list)
@@ -328,7 +343,7 @@ async def _ensure_candidate_profile(
     """
     Creates candidate profile for a given user_id.
     Requires:
-      POST /candidate-profiles  
+      POST /candidate-profiles
       GET  /candidate-profiles/by-user/{user_id}
     Adjust endpoints to match the API.
     """
@@ -343,24 +358,34 @@ async def _ensure_candidate_profile(
         return r2.json()
 
     if r.status_code == 422:
-        raise RuntimeError(f"CandidateProfile validation error: {r.json().get('detail')}")
+        raise RuntimeError(
+            f"CandidateProfile validation error: {r.json().get('detail')}"
+        )
 
     raise RuntimeError(f"CandidateProfile create failed ({r.status_code}): {r.text}")
 
 
-async def _ensure_application(client: httpx.AsyncClient, job_id: str, candidate_profile_id: str) -> dict:
+async def _ensure_application(
+    client: httpx.AsyncClient, job_id: str, candidate_profile_id: str
+) -> dict:
     """
     Requires:
       POST /applications
       GET  /applications?job_id=...&candidate_id=... (or a dedicated endpoint)
     """
-    payload = {"job_id": job_id, "candidate_id": candidate_profile_id, "source": "applied"}
+    payload = {
+        "job_id": job_id,
+        "candidate_id": candidate_profile_id,
+        "source": "applied",
+    }
     r = await client.post("/applications", json=payload)
     if r.status_code in (200, 201):
         return r.json()
 
     if r.status_code == 409:
-        r2 = await client.get(f"/applications?job_id={job_id}&candidate_id={candidate_profile_id}")
+        r2 = await client.get(
+            f"/applications?job_id={job_id}&candidate_id={candidate_profile_id}"
+        )
         r2.raise_for_status()
         # assume list
         data = r2.json()
@@ -372,35 +397,43 @@ async def _ensure_application(client: httpx.AsyncClient, job_id: str, candidate_
     raise RuntimeError(f"Application create failed ({r.status_code}): {r.text}")
 
 
-async def _start_interview(client: httpx.AsyncClient, job_id: str, candidate_profile_id: str) -> dict:
+async def _start_interview(
+    client: httpx.AsyncClient, job_id: str, candidate_profile_id: str
+) -> dict:
     # existing endpoint
-    r = await client.post("/interviews", json={"job_id": job_id, "candidate_id": candidate_profile_id})
+    r = await client.post(
+        "/interviews", json={"job_id": job_id, "candidate_id": candidate_profile_id}
+    )
     if r.status_code in (200, 201):
         return r.json()
     raise RuntimeError(f"Interview start failed ({r.status_code}): {r.text}")
 
 
-# ── Seeder ────────────────────────────────────────────────────────────────────
+# ── Seeder 
 async def seed(activate_jobs: bool = True) -> SeededResources:
     resources = SeededResources()
     print(f"\nConnecting to {BASE_URL} ...")
 
-    async with httpx.AsyncClient(base_url=BASE_URL, timeout=20.0, headers=DEFAULT_HEADERS) as client:
+    async with httpx.AsyncClient(
+        base_url=BASE_URL, timeout=20.0, headers=DEFAULT_HEADERS
+    ) as client:
         if not await _health(client):
             return resources
 
         # 1) Users
-        print("── Step 1: Users ───────────────────────────────────────────")
+        print("── Step 1: Users ─")
         for p in USER_PAYLOADS:
             u = await _ensure_user(client, p)
             print(f"  ✓  User: {u['id']}  {u.get('email')}  role={u.get('role')}")
             resources.users.append(u)
 
         admin_user = next(u for u in resources.users if u.get("role") == "admin")
-        recruiter_user = next(u for u in resources.users if u.get("role") == "recruiter")
+        recruiter_user = next(
+            u for u in resources.users if u.get("role") == "recruiter"
+        )
 
         # 2) Orgs (created_by = admin)
-        print("\n── Step 2: Orgs ────────────────────────────────────────────")
+        print("\n── Step 2: Orgs ──")
         for payload in make_org_payloads(created_by=admin_user["id"]):
             org = await _ensure_org(client, payload)
             print(f"  ✓  Org: {org['id']}  [{org['name']}]  slug={org['slug']}")
@@ -409,19 +442,23 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
         primary_org = resources.orgs[0]
 
         # 3) Candidate users + profiles
-        print("\n── Step 3: Candidates (users + profiles) ────────────────────")
+        print("\n── Step 3: Candidates (users + profiles) ")
         for p in CANDIDATE_USER_PAYLOADS:
             u = await _ensure_user(client, p)
             resources.candidate_users.append(u)
             print(f"  ✓  Candidate user: {u['id']}  {u.get('email')}")
 
-            prof = await _ensure_candidate_profile(client, user_id=u["id"], email=u["email"])
+            prof = await _ensure_candidate_profile(
+                client, user_id=u["id"], email=u["email"]
+            )
             resources.candidate_profiles.append(prof)
             print(f"     → Profile: {prof['id']}  user_id={prof['user_id']}")
 
         # 4) Jobs (created_by = recruiter; org_id = primary org)
-        print("\n── Step 4: Jobs ────────────────────────────────────────────")
-        for payload in make_job_payloads(primary_org["id"], created_by=recruiter_user["id"]):
+        print("\n── Step 4: Jobs ──")
+        for payload in make_job_payloads(
+            primary_org["id"], created_by=recruiter_user["id"]
+        ):
             job = await _create_job(client, payload)
             print(f"  ✓  Job: {job['id']}  [{job['title']}]  status={job['status']}")
 
@@ -431,12 +468,14 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
                     job = job2
                     print(f"     → Activated  status={job['status']}")
                 else:
-                    print(f"     ⚠  Could not activate ({job2.get('activation_error', 'unknown')})")
+                    print(
+                        f"     ⚠  Could not activate ({job2.get('activation_error', 'unknown')})"
+                    )
 
             resources.jobs.append(job)
 
         # 5) Applications + 6) Interviews
-        print("\n── Step 5/6: Applications + Interviews ─────────────────────")
+        print("\n── Step 5/6: Applications + Interviews ─")
         active_jobs = [j for j in resources.jobs if j.get("status") == "active"]
         if not active_jobs:
             print("  ⚠  No active jobs — skipping applications/interviews")
@@ -444,17 +483,23 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
 
         first_job = active_jobs[0]
         for prof in resources.candidate_profiles[:2]:
-            app = await _ensure_application(client, job_id=first_job["id"], candidate_profile_id=prof["id"])
+            app = await _ensure_application(
+                client, job_id=first_job["id"], candidate_profile_id=prof["id"]
+            )
             resources.applications.append(app)
-            print(f"  ✓  Application: {app.get('id')}  job={first_job['id']} candidate={prof['id']}")
+            print(
+                f"  ✓  Application: {app.get('id')}  job={first_job['id']} candidate={prof['id']}"
+            )
 
-            interview = await _start_interview(client, job_id=first_job["id"], candidate_profile_id=prof["id"])
+            interview = await _start_interview(
+                client, job_id=first_job["id"], candidate_profile_id=prof["id"]
+            )
             resources.interviews.append(interview)
             print(f"     → Interview: {interview['id']}")
 
     # Summary
     print(f"""
-── Seed complete ────────────────────────────────────────────
+── Seed complete ──
    Users:              {len(resources.users)}
    Orgs:               {len(resources.orgs)}
    Candidate users:    {len(resources.candidate_users)}
@@ -464,8 +509,13 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
    Interviews:         {len(resources.interviews)}
 """)
 
-    if resources.orgs or resources.jobs or resources.candidate_profiles or resources.interviews:
-        print("── Resource IDs ────────────────────────────────────────────")
+    if (
+        resources.orgs
+        or resources.jobs
+        or resources.candidate_profiles
+        or resources.interviews
+    ):
+        print("── Resource IDs ──")
         for u in resources.users:
             print(f"   user       {u['id']}  {u.get('email')} [{u.get('role')}]")
         for o in resources.orgs:
@@ -483,7 +533,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
     return resources
 
 
-# ── curl examples ─────────────────────────────────────────────────────────────
+# ── curl examples ─────
 CURL_EXAMPLES = """
 # NOTE: This seed script now creates users + candidates using API endpoints.
 # You can still create resources manually with these examples if needed.

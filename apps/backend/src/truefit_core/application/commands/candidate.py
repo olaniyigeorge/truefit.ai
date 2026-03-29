@@ -1,7 +1,3 @@
-"""
-Command handlers for candidate registration and profile management.
-"""
-
 from __future__ import annotations
 
 import uuid
@@ -11,10 +7,6 @@ from typing import Optional
 from src.truefit_core.application.services import CandidateService
 from src.truefit_core.domain.candidate import Candidate
 
-
-# ───────────────────────
-# Input dataclasses
-# ───────────────────────
 
 @dataclass(frozen=True)
 class RegisterCandidateCommand:
@@ -36,7 +28,7 @@ class UpdateCandidateProfileCommand:
 class UploadResumeCommand:
     candidate_id: uuid.UUID
     filename: str
-    data: bytes                        
+    data: bytes
     content_type: str = "application/pdf"
 
 
@@ -45,9 +37,10 @@ class DeleteResumeCommand:
     candidate_id: uuid.UUID
 
 
-# ──────────────────────
+# ──
 # Response dataclasses
-# ──────────────────────
+# ──
+
 
 @dataclass(frozen=True)
 class CandidateResponse:
@@ -84,9 +77,10 @@ class ResumeUploadResponse:
     content_type: str
 
 
-# ──────────
+# ────
 # Handlers
-# ──────────
+# ────
+
 
 async def handle_register_candidate(
     cmd: RegisterCandidateCommand,

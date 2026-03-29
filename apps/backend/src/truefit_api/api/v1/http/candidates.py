@@ -18,7 +18,6 @@ from pydantic import BaseModel, EmailStr, Field
 
 from src.truefit_core.domain.candidate import (
     Candidate,
-    CandidateStatus,
     ContactInfo,
     ResumeRef,
 )
@@ -32,13 +31,12 @@ router = APIRouter(prefix="/candidates", tags=["candidates"])
 _MAX_RESUME_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
-# ── Dependency ───
-
+# ── Dependency 
 def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
 
 
-# ── Request schemas ───
+# ── Request schemas
 
 class RegisterCandidateRequest(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=200)
@@ -98,18 +96,22 @@ class CandidateOut(BaseModel):
                 linkedin_url=c.contact.linkedin_url,
             ),
             status=c.status.value,
-            resume=ResumeOut(
-                storage_key=c.resume.storage_key,
-                filename=c.resume.filename,
-                content_type=c.resume.content_type,
-                uploaded_at=c.resume.uploaded_at.isoformat(),
-            ) if c.resume else None,
+            resume=(
+                ResumeOut(
+                    storage_key=c.resume.storage_key,
+                    filename=c.resume.filename,
+                    content_type=c.resume.content_type,
+                    uploaded_at=c.resume.uploaded_at.isoformat(),
+                )
+                if c.resume
+                else None
+            ),
             created_at=c.created_at.isoformat(),
             updated_at=c.updated_at.isoformat(),
         )
 
 
-# ── Endpoints ──
+# ── Endpoints
 
 @router.post("", response_model=CandidateOut, status_code=status.HTTP_201_CREATED)
 async def register_candidate(
@@ -118,7 +120,9 @@ async def register_candidate(
 ):
     existing = await repo.get_by_email(body.email)
     if existing:
-        raise HTTPException(409, detail=f"Candidate with email '{body.email}' already exists")
+        raise HTTPException(
+            409, detail=f"Candidate with email '{body.email}' already exists"
+        )
 
     contact = ContactInfo(
         email=body.email,
@@ -138,8 +142,9 @@ async def get_candidate(
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
-    
+
     return CandidateOut.from_domain(candidate)
+
 
 @router.get("", response_model=list[CandidateOut])
 async def list_candidates(
@@ -170,7 +175,11 @@ async def update_candidate(
             new_contact = ContactInfo(
                 email=candidate.contact.email,
                 phone=body.phone if body.phone is not None else candidate.contact.phone,
-                linkedin_url=body.linkedin_url if body.linkedin_url is not None else candidate.contact.linkedin_url,
+                linkedin_url=(
+                    body.linkedin_url
+                    if body.linkedin_url is not None
+                    else candidate.contact.linkedin_url
+                ),
             )
         candidate.update_profile(full_name=body.full_name, contact=new_contact)
         await repo.save(candidate)
@@ -191,8 +200,11 @@ async def upload_resume(
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
 
     content_type = file.content_type or "application/octet-stream"
-    if content_type not in ("application/pdf", "application/msword",
-                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"):
+    if content_type not in (
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ):
         raise HTTPException(400, detail="Resume must be PDF or Word document")
 
     data = await file.read()
@@ -202,6 +214,7 @@ async def upload_resume(
     # TODO: replace with StoragePort.upload() when wired
     # For now store key as a local reference for testing
     from datetime import datetime, timezone
+
     storage_key = f"resumes/{candidate_id}/{file.filename}"
     resume_ref = ResumeRef(
         storage_key=storage_key,

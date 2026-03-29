@@ -1,6 +1,6 @@
 """
 tests/unit/domain/test_candidate.py
-────────────────────────────────────
+──
 Unit tests for the Candidate aggregate root.
 No database, no I/O — pure domain logic.
 """
@@ -17,14 +17,15 @@ from src.truefit_core.domain.candidate import (
     ResumeRef,
 )
 
-
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Fixtures
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 def make_contact(email: str = "alice@example.com") -> ContactInfo:
-    return ContactInfo(email=email, phone="+1-555-0100", linkedin_url="https://linkedin.com/in/alice")
+    return ContactInfo(
+        email=email, phone="+1-555-0100", linkedin_url="https://linkedin.com/in/alice"
+    )
 
 
 def make_candidate(
@@ -47,9 +48,9 @@ def make_resume(key: str = "resumes/abc/cv.pdf") -> ResumeRef:
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # ContactInfo value object
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestContactInfo:
@@ -81,9 +82,9 @@ class TestContactInfo:
         assert a != b
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — construction & validation
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateConstruction:
@@ -136,8 +137,12 @@ class TestCandidateConstruction:
 
     def test_candidate_equality_by_id(self):
         fixed_id = uuid.uuid4()
-        a = Candidate(candidate_id=fixed_id, full_name="A", contact=make_contact("a@x.com"))
-        b = Candidate(candidate_id=fixed_id, full_name="B", contact=make_contact("b@x.com"))
+        a = Candidate(
+            candidate_id=fixed_id, full_name="A", contact=make_contact("a@x.com")
+        )
+        b = Candidate(
+            candidate_id=fixed_id, full_name="B", contact=make_contact("b@x.com")
+        )
         assert a == b
 
     def test_different_candidates_are_not_equal(self):
@@ -151,9 +156,9 @@ class TestCandidateConstruction:
         assert c in s
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — eligibility queries
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateEligibility:
@@ -177,9 +182,9 @@ class TestCandidateEligibility:
             c.assert_eligible_to_interview()
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — profile updates
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateProfileUpdate:
@@ -217,9 +222,9 @@ class TestCandidateProfileUpdate:
             c.update_profile(full_name="New Name")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — resume management
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateResume:
@@ -257,9 +262,9 @@ class TestCandidateResume:
             c.attach_resume(make_resume())
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — status transitions
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateStatusTransitions:
@@ -292,9 +297,9 @@ class TestCandidateStatusTransitions:
             c.withdraw()
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 # Candidate — active interview tracking
-# ─────────────────────────────────────────────────────────────────────────────
+# ─
 
 
 class TestCandidateInterviewTracking:

@@ -1,7 +1,6 @@
 from typing import Annotated, AsyncGenerator
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from contextlib import asynccontextmanager
 
 from db.database import db_manager
 

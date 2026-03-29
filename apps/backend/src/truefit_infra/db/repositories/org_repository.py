@@ -33,7 +33,6 @@ from src.truefit_infra.db.models import Org as OrgModel
 from src.truefit_core.application.ports import OrgRepository
 
 
-
 class SQLAlchemyOrgRepository(OrgRepository):
 
     def __init__(self, db: DatabaseManager) -> None:
@@ -47,16 +46,15 @@ class SQLAlchemyOrgRepository(OrgRepository):
             .on_conflict_do_update(
                 index_elements=["id"],
                 set_={
-                    "name":        data["name"],
-                    "status":      data["status"],
-                    "contact":     data["contact"],
-                    "billing":     data["billing"],
-                    "logo_url":    data["logo_url"],
+                    "name": data["name"],
+                    "status": data["status"],
+                    "contact": data["contact"],
+                    "billing": data["billing"],
+                    "logo_url": data["logo_url"],
                     "description": data["description"],
-                    "industry":    data["industry"],
-                    "headcount":   data["headcount"],
-                    "updated_at":  data["updated_at"],
-                    # slug and created_by are immutable — excluded
+                    "industry": data["industry"],
+                    "headcount": data["headcount"],
+                    "updated_at": data["updated_at"],
                 },
             )
         )
@@ -126,38 +124,38 @@ class SQLAlchemyOrgRepository(OrgRepository):
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
-    # ── Mapping: domain → row ───
+    # Mapping: domain -> row 
 
     @staticmethod
     def _to_row(org: OrgModel) -> dict:
         b = org.billing
         c = org.contact
         return {
-            "id":          org.id,
-            "created_by":  org.created_by,
-            "name":        org.name,
-            "slug":        org.slug,
-            "status":      org.status.value,
+            "id": org.id,
+            "created_by": org.created_by,
+            "name": org.name,
+            "slug": org.slug,
+            "status": org.status.value,
             "contact": {
-                "email":   c.email,
-                "phone":   c.phone,
+                "email": c.email,
+                "phone": c.phone,
                 "website": c.website,
             },
             "billing": {
-                "plan":                      b.plan.value,
-                "max_active_jobs":           b.max_active_jobs,
-                "max_interviews_per_month":  b.max_interviews_per_month,
-                "extra":                     b.extra,
+                "plan": b.plan.value,
+                "max_active_jobs": b.max_active_jobs,
+                "max_interviews_per_month": b.max_interviews_per_month,
+                "extra": b.extra,
             },
-            "logo_url":    org.logo_url,
+            "logo_url": org.logo_url,
             "description": org.description,
-            "industry":    org.industry,
-            "headcount":   org.headcount,
-            "created_at":  org.created_at,
-            "updated_at":  org.updated_at,
+            "industry": org.industry,
+            "headcount": org.headcount,
+            "created_at": org.created_at,
+            "updated_at": org.updated_at,
         }
 
-    # ── Mapping: row → domain ───
+    # Mapping: row -> domain 
 
     @staticmethod
     def _to_domain(row: OrgModel) -> Org:
@@ -191,4 +189,3 @@ class SQLAlchemyOrgRepository(OrgRepository):
             created_at=row.created_at,
             updated_at=row.updated_at,
         )
-
