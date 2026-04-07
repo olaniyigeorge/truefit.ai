@@ -2,10 +2,10 @@
  * useInterviewSession
  * 
  * Manages the full lifecycle of an interview session:
- *   WS connect → session_started → webrtc_offer (over WS) → webrtc_answer → ICE → audio
+ *   WS connect -> session_started -> webrtc_offer (over WS) -> webrtc_answer -> ICE -> audio
  * 
  * Backend WS endpoint: ws://host/api/v1/ws/interview/{job_id}/{candidate_id}
- * All signaling flows over the single WS connection — no separate HTTP signaling.
+ * All signaling flows over the single WS connection - no separate HTTP signaling.
  */
 
 import { useRef, useState, useCallback, useEffect } from "react"
@@ -95,7 +95,7 @@ export function useInterviewSession({
     turnApi.getCredentials()
         .then(data => { iceServersRef.current = data.ice_servers })
         .catch(() => {
-            // fallback to STUN only — already set as default
+            // fallback to STUN only - already set as default
             console.warn("Could not fetch TURN credentials, falling back to STUN only")
         })
   }, [])
@@ -147,12 +147,12 @@ export function useInterviewSession({
     answerSetRef.current = false
     iceBufRef.current = []
 
-    // DataChannel — frontend must create it (backend uses ondatachannel)
+    // DataChannel - frontend must create it (backend uses ondatachannel)
     const dc = pc.createDataChannel("interview")
     dc.onopen  = () => addEntry("system", "DataChannel open")
     dc.onclose = () => addEntry("system", "DataChannel closed")
 
-    // Remote audio → play agent voice
+    // Remote audio -> play agent voice
     const remoteAudio = audioRef.current ?? new Audio()
     remoteAudio.autoplay = true
     audioRef.current = remoteAudio
@@ -164,7 +164,7 @@ export function useInterviewSession({
       }
     }
 
-    // ICE candidates → send over WS (not HTTP)
+    // ICE candidates -> send over WS (not HTTP)
     pc.onicecandidate = ({ candidate }) => {
       if (!candidate || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
       wsRef.current.send(JSON.stringify({
@@ -181,7 +181,7 @@ export function useInterviewSession({
       if (state === "connected") {
         updatePhase("live")
         startTimer()
-        addEntry("system", "WebRTC connected — interview in progress")
+        addEntry("system", "WebRTC connected - interview in progress")
       } else if (state === "failed" || state === "closed") {
         updatePhase("ended")
       }
@@ -253,7 +253,7 @@ export function useInterviewSession({
 
       case "webrtc_answer": {
         await applyAnswer(msg.sdp as string, msg.sdp_type as string)
-        addEntry("system", "SDP answer received — establishing connection…")
+        addEntry("system", "SDP answer received - establishing connection…")
         break
       }
 
@@ -328,7 +328,7 @@ export function useInterviewSession({
 
     ws.onopen = () => {
       updatePhase("ws_connected")
-      addEntry("system", "WebSocket connected — waiting for session…")
+      addEntry("system", "WebSocket connected - waiting for session…")
       // Heartbeat
       pingRef.current = setInterval(() => {
         if (ws.readyState === WebSocket.OPEN) {
@@ -340,7 +340,7 @@ export function useInterviewSession({
     ws.onmessage = ({ data }) => handleMessage(data)
 
     ws.onerror = () => {
-      addEntry("system", "WebSocket error — check backend URL")
+      addEntry("system", "WebSocket error - check backend URL")
       onError?.("WebSocket connection error")
       updatePhase("error")
     }

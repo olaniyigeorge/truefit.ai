@@ -39,7 +39,7 @@ export function JobCard({
                         </h3>
                     </div>
  
-                    {/* Actions menu — stop propagation so click doesn't navigate */}
+                    {/* Actions menu - stop propagation so click doesn't navigate */}
                     <div onClick={e => e.stopPropagation()}>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

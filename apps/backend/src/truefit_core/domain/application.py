@@ -28,12 +28,12 @@ class Application:
     """
     Aggregate root for a candidate's application to a job.
 
-    Lifecycle:  new → interviewing → shortlisted → hired
+    Lifecycle:  new -> interviewing -> shortlisted -> hired
                                    ↘ rejected
 
     Invariants:
     - A candidate can only have one application per job (enforced at DB level too).
-    - Status transitions are explicit — no arbitrary status assignment.
+    - Status transitions are explicit - no arbitrary status assignment.
     - meta is a free-form dict for recruiter notes, scores, tags etc.
     """
 
@@ -58,7 +58,7 @@ class Application:
         self._created_at = created_at or _utcnow()
         self._updated_at = updated_at or _utcnow()
 
-    # Identity 
+    # Identity
 
     @property
     def id(self) -> uuid.UUID:
@@ -92,7 +92,7 @@ class Application:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    # Queries 
+    # Queries
 
     @property
     def is_active(self) -> bool:
@@ -108,7 +108,7 @@ class Application:
             ApplicationStatus.rejected,
         )
 
-    # Commands 
+    # Commands
 
     def mark_interviewing(self) -> None:
         if self._status != ApplicationStatus.new:
@@ -143,12 +143,12 @@ class Application:
         self._touch()
 
     def update_meta(self, updates: dict[str, Any]) -> None:
-        """Merge updates into meta dict — does not replace, only adds/overwrites keys."""
+        """Merge updates into meta dict - does not replace, only adds/overwrites keys."""
         self._meta.update(updates)
         self._touch()
 
     def withdraw(self) -> None:
-        """Candidate withdraws — treated as a rejection for pipeline purposes."""
+        """Candidate withdraws - treated as a rejection for pipeline purposes."""
         if self.is_closed:
             raise ValueError(
                 f"Application already closed with status: {self._status.value}"
@@ -157,7 +157,7 @@ class Application:
         self._meta["withdrawn"] = True
         self._touch()
 
-    # Assertions 
+    # Assertions
 
     def assert_eligible_for_interview(self) -> None:
         if self._status not in (ApplicationStatus.new, ApplicationStatus.interviewing):

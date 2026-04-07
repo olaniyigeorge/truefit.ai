@@ -104,7 +104,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (!backendUser?.id) return
-        // Candidate profile is linked to the user — fetch by user context
+        // Candidate profile is linked to the user - fetch by user context
         // The /candidates endpoint requires a candidate_id, not user_id
         // For now we list and find the matching one
         candidatesApi.list({ limit: 100 })
@@ -133,7 +133,7 @@ export default function ProfilePage() {
         try {
             const formData = new FormData()
             formData.append("file", file)
-            // Resume upload is multipart — use fetch directly
+            // Resume upload is multipart - use fetch directly
             const res = await fetch(
                 `${config.publicApiUrl ?? "http://localhost:8000"}/api/v1/candidates/${candidate.id}/resume`,
                 { method: "POST", body: formData }

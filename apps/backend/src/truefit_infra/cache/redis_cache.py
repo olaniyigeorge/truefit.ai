@@ -23,13 +23,9 @@ class RedisCacheAdapter(CachePort):
         self, key: str, value: Any, *, ttl_seconds: Optional[int] = None
     ) -> bool:
         try:
-            serialized = json.dumps(
-                value
-            )  
+            serialized = json.dumps(value)
             if ttl_seconds is not None:
-                await self._client.setex(
-                    key, ttl_seconds, serialized
-                ) 
+                await self._client.setex(key, ttl_seconds, serialized)
             else:
                 await self._client.set(key, serialized)
             return True

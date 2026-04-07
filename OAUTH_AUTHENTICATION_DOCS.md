@@ -1,4 +1,4 @@
-# OAuth Authentication — Consolidated Documentation
+# OAuth Authentication - Consolidated Documentation
 
 > **Project:** TrueFit  
 > **Stack:** React (Frontend) · FastAPI (Backend) · Firebase / Google OAuth  
@@ -70,9 +70,9 @@ Frontend                        Backend                        OAuth Provider
 Manages creation and verification of backend JWT tokens.
 
 **Key methods:**
-- `create_access_token()` — Create a JWT with user claims
-- `verify_access_token()` — Verify and decode a JWT
-- `get_user_id_from_token()` — Extract user ID without full verification
+- `create_access_token()` - Create a JWT with user claims
+- `verify_access_token()` - Verify and decode a JWT
+- `get_user_id_from_token()` - Extract user ID without full verification
 
 **Features:**
 - HS256 algorithm (HMAC-SHA256)
@@ -84,8 +84,8 @@ Manages creation and verification of backend JWT tokens.
 Handles provider token verification and identity extraction.
 
 **Supported providers:**
-- `FirebaseOAuthProvider` — Verifies Firebase ID tokens
-- `GoogleOAuthProvider` — Verifies raw Google OAuth tokens
+- `FirebaseOAuthProvider` - Verifies Firebase ID tokens
+- `GoogleOAuthProvider` - Verifies raw Google OAuth tokens
 
 **Extracted identity shape:**
 ```json
@@ -102,9 +102,9 @@ Handles provider token verification and identity extraction.
 Validates JWT tokens in incoming requests.
 
 **Key functions:**
-- `extract_token_from_header()` — Parses `Bearer <token>` format
-- `verify_jwt_token()` — Verifies signature and claims
-- `get_current_user()` — FastAPI dependency for protected endpoints
+- `extract_token_from_header()` - Parses `Bearer <token>` format
+- `verify_jwt_token()` - Verifies signature and claims
+- `get_current_user()` - FastAPI dependency for protected endpoints
 
 **Usage:**
 ```python
@@ -220,9 +220,9 @@ CREATE TABLE users (
 2. Extract `sub`, `email`, and other claims
 3. Look up user by email
 4. **Create or update:**
-   - Same provider → update `provider_subject` if changed
-   - Different provider → reject (federation not yet implemented)
-   - New user → create with `role = "candidate"`, create default candidate profile
+   - Same provider -> update `provider_subject` if changed
+   - Different provider -> reject (federation not yet implemented)
+   - New user -> create with `role = "candidate"`, create default candidate profile
 5. Generate backend JWT with user claims
 
 ---
@@ -390,7 +390,7 @@ export const ProtectedComponent = () => {
 
 ## Protecting Endpoints
 
-### Pattern 1 — Required Authentication
+### Pattern 1 - Required Authentication
 
 ```python
 from src.truefit_infra.auth.middleware import get_current_user, TokenPayload
@@ -410,7 +410,7 @@ async def list_users(
     return await svc.list_users()
 ```
 
-### Pattern 2 — Resource Ownership
+### Pattern 2 - Resource Ownership
 
 ```python
 @router.post("/jobs")
@@ -427,7 +427,7 @@ async def create_job(
     )
 ```
 
-### Pattern 3 — Role-Based Access Control
+### Pattern 3 - Role-Based Access Control
 
 ```python
 @router.post("/rubrics")
@@ -446,7 +446,7 @@ async def create_rubric(
     )
 ```
 
-### Pattern 4 — Authorization Check by Ownership
+### Pattern 4 - Authorization Check by Ownership
 
 ```python
 @router.get("/interviews/{interview_id}")
@@ -464,7 +464,7 @@ async def get_interview(
     return interview
 ```
 
-### Pattern 5 — Optional Authentication
+### Pattern 5 - Optional Authentication
 
 ```python
 from typing import Optional
@@ -558,7 +558,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Production — restrict to your domain
+# Production - restrict to your domain
 allow_origins=["https://yourdomain.com"]
 ```
 
@@ -577,7 +577,7 @@ allow_origins=["https://yourdomain.com"]
 
 ## Testing
 
-### cURL — Full Flow
+### cURL - Full Flow
 
 ```bash
 # 1. Exchange Firebase token for backend JWT
@@ -651,22 +651,22 @@ LIMIT 10;
 
 ### Backend (Complete)
 
-- [x] JWT Service — token creation, verification, HS256 signing
-- [x] OAuth Service — Firebase and Google provider verification
-- [x] Auth Middleware — JWT extraction and validation dependency
-- [x] Auth Endpoints — `/oauth/token`, `/me`, `/logout`
-- [x] Pydantic Schemas — request / response validation
-- [x] UserService — OAuth user creation, candidate profile auto-creation
-- [x] Main app updated — auth router registered
-- [x] `requirements.txt` updated — `PyJWT==2.10.1`, `google-auth-httplib2==0.2.0`
+- [x] JWT Service - token creation, verification, HS256 signing
+- [x] OAuth Service - Firebase and Google provider verification
+- [x] Auth Middleware - JWT extraction and validation dependency
+- [x] Auth Endpoints - `/oauth/token`, `/me`, `/logout`
+- [x] Pydantic Schemas - request / response validation
+- [x] UserService - OAuth user creation, candidate profile auto-creation
+- [x] Main app updated - auth router registered
+- [x] `requirements.txt` updated - `PyJWT==2.10.1`, `google-auth-httplib2==0.2.0`
 
 ### 📋 Frontend (To Do)
 
-- [ ] Update `Signin.tsx` — exchange Firebase token for backend JWT
-- [ ] Create `src/helpers/api.ts` — `ApiClient` with auto-auth headers
-- [ ] Create / update `useAuth` hook — login, logout, token state
-- [ ] Protect routes — redirect to `/signin` when unauthenticated
-- [ ] Handle 401 responses — clear token and redirect globally
+- [ ] Update `Signin.tsx` - exchange Firebase token for backend JWT
+- [ ] Create `src/helpers/api.ts` - `ApiClient` with auto-auth headers
+- [ ] Create / update `useAuth` hook - login, logout, token state
+- [ ] Protect routes - redirect to `/signin` when unauthenticated
+- [ ] Handle 401 responses - clear token and redirect globally
 
 ###  Testing (To Do)
 
@@ -685,7 +685,7 @@ LIMIT 10;
 - [ ] Sign-out clears token and user data
 
 **Integration:**
-- [ ] Full flow: click Google → authenticate → redirect → API call succeeds
+- [ ] Full flow: click Google -> authenticate -> redirect -> API call succeeds
 - [ ] Token persists across page refreshes
 - [ ] Expired token triggers re-login
 

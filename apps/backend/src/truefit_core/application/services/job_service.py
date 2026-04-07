@@ -1,7 +1,7 @@
 """
 Handles job lifecycle operations that require cross-aggregate coordination.
 Single-aggregate operations (update description, add skill) are thin enough
-to be handled directly in command handlers — this service handles the cases
+to be handled directly in command handlers - this service handles the cases
 that aren't.
 """
 
@@ -63,7 +63,7 @@ class JobService:
             interview_config=interview_config,
         )
         await self._jobs.save(job)
-        logger.info(f"Job created: {job.id} — '{job.title}' for company {org_id}")
+        logger.info(f"Job created: {job.id} - '{job.title}' for company {org_id}")
         return job
 
     async def close_job(self, job_id: uuid.UUID) -> Job:

@@ -23,6 +23,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, relationship, mapped_column
 
 # Base
 
+
 class Base(DeclarativeBase):
     pass
 

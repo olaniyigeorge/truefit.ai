@@ -53,7 +53,7 @@ async def _check_storage() -> Dict[str, Any]:
 @health_router.get("/health", include_in_schema=False)
 async def health_check() -> JSONResponse:
     """
-    Health endpoint. Checks all internal dependencies directly — no HTTP round-trips.
+    Health endpoint. Checks all internal dependencies directly - no HTTP round-trips.
     Returns: ok | degraded | down
     """
     started = time.perf_counter()

@@ -98,10 +98,10 @@ const AppSidebar = () => {
                         </Avatar>
                         <div className="min-w-0">
                             <p className="text-[12px] font-medium text-foreground truncate">
-                                {backendUser?.email ?? "—"}
+                                {backendUser?.email ?? "-"}
                             </p>
                             <p className="text-[10px] text-muted-foreground capitalize">
-                                {backendUser?.role ?? "—"}
+                                {backendUser?.role ?? "-"}
                             </p>
                         </div>
                     </div>

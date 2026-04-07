@@ -2,7 +2,7 @@
 tests/unit/domain/test_candidate.py
 ──
 Unit tests for the Candidate aggregate root.
-No database, no I/O — pure domain logic.
+No database, no I/O - pure domain logic.
 """
 
 import uuid
@@ -83,7 +83,7 @@ class TestContactInfo:
 
 
 # ─
-# Candidate — construction & validation
+# Candidate - construction & validation
 # ─
 
 
@@ -157,7 +157,7 @@ class TestCandidateConstruction:
 
 
 # ─
-# Candidate — eligibility queries
+# Candidate - eligibility queries
 # ─
 
 
@@ -183,7 +183,7 @@ class TestCandidateEligibility:
 
 
 # ─
-# Candidate — profile updates
+# Candidate - profile updates
 # ─
 
 
@@ -223,7 +223,7 @@ class TestCandidateProfileUpdate:
 
 
 # ─
-# Candidate — resume management
+# Candidate - resume management
 # ─
 
 
@@ -263,7 +263,7 @@ class TestCandidateResume:
 
 
 # ─
-# Candidate — status transitions
+# Candidate - status transitions
 # ─
 
 
@@ -298,7 +298,7 @@ class TestCandidateStatusTransitions:
 
 
 # ─
-# Candidate — active interview tracking
+# Candidate - active interview tracking
 # ─
 
 

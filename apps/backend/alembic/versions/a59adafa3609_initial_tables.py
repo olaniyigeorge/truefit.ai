@@ -53,7 +53,7 @@ def upgrade() -> None:
         sa.UniqueConstraint("email"),
     )
 
-    # ── TIER 2: Depends on users only 
+    # ── TIER 2: Depends on users only
 
     # orgs depends on users.created_by
     op.create_table(
@@ -101,7 +101,7 @@ def upgrade() -> None:
     op.create_index("ix_orgs_slug", "orgs", ["slug"], unique=True)
     op.create_index("ix_orgs_status", "orgs", ["status"], unique=False)
 
-    # Now that orgs exists, add the FK from users.org_id → orgs.id
+    # Now that orgs exists, add the FK from users.org_id -> orgs.id
     op.create_foreign_key(
         "fk_users_org_id", "users", "orgs", ["org_id"], ["id"], ondelete="SET NULL"
     )

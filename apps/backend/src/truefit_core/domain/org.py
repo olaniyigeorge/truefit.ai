@@ -4,7 +4,7 @@ Aggregate root representing an organisation (company) on the platform.
 Invariants
 - An org must always have a name and a valid slug.
 - Only ACTIVE orgs can create job listings.
-- Slug is immutable after creation — it's used in URLs and external references.
+- Slug is immutable after creation - it's used in URLs and external references.
 - Status transitions are strictly controlled.
 """
 
@@ -27,7 +27,7 @@ _SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 class OrgStatus(str, Enum):
     ACTIVE = "active"
-    SUSPENDED = "suspended"  # billing / policy issue — jobs paused
+    SUSPENDED = "suspended"  # billing / policy issue - jobs paused
     DEACTIVATED = "deactivated"  # permanently off
 
 
@@ -41,7 +41,7 @@ class OrgPlan(str, Enum):
 @dataclass
 class OrgBilling:
     """
-    Billing metadata. Not a payment processor record —
+    Billing metadata. Not a payment processor record -
     just enough for the platform to know what the org is entitled to.
     """
 
@@ -261,7 +261,7 @@ class Org:
         allowed = self._VALID_TRANSITIONS[self._status]
         if new_status not in allowed:
             raise ValueError(
-                f"Invalid status transition: {self._status.value} → {new_status.value}"
+                f"Invalid status transition: {self._status.value} -> {new_status.value}"
             )
         self._status = new_status
         self._touch()

@@ -1,5 +1,5 @@
 """
-DataChannelManager — bidirectional structured event channel.
+DataChannelManager - bidirectional structured event channel.
 
 Outbound (backend -> frontend):
   agent_thinking, question_start, interview_ended, evaluation_scores, interrupt
@@ -8,7 +8,7 @@ Inbound (frontend -> backend):
   clarification_request, screen_share_start, screen_share_stop, candidate_ready
 
 All messages are newline-delimited JSON.
-Domain logic must NOT live here — use on_inbound_event callback to dispatch upstream.
+Domain logic must NOT live here - use on_inbound_event callback to dispatch upstream.
 """
 
 from __future__ import annotations
@@ -95,7 +95,7 @@ class DataChannelManager:
         self, event_type: str, payload: dict[str, Any] | None = None
     ) -> None:
         """
-        Enqueue an outbound event. Non-blocking — returns immediately.
+        Enqueue an outbound event. Non-blocking - returns immediately.
         The sender loop drains the queue and writes to the DataChannel.
         """
         message = json.dumps({"type": event_type, **(payload or {})})

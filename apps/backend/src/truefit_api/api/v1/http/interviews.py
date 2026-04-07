@@ -29,6 +29,7 @@ router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 # ── Dependencies
 
+
 def get_interview_repo() -> SQLAlchemyInterviewRepository:
     return SQLAlchemyInterviewRepository(db_manager)
 
@@ -55,6 +56,7 @@ class AbandonRequest(BaseModel):
 
 
 # ── Response schemas ──
+
 
 class TurnOut(BaseModel):
     question_id: uuid.UUID
@@ -106,7 +108,8 @@ class TranscriptOut(BaseModel):
     turns: list[TurnOut]
 
 
-# ── Endpoints 
+# ── Endpoints
+
 
 @router.post("", response_model=InterviewOut, status_code=status.HTTP_201_CREATED)
 async def start_interview(

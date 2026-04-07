@@ -1,7 +1,7 @@
 """
 tests/unit/application/test_job_service.py
 
-Unit tests for JobService — mock-based, no database.
+Unit tests for JobService - mock-based, no database.
 
 Dependencies (JobRepository, InterviewRepository, QueuePort) are replaced
 with AsyncMock so these tests verify only the service's orchestration logic.

@@ -2,7 +2,7 @@
 tests/unit/domain/test_job.py
 ──
 Unit tests for the Job aggregate root and its value objects.
-No database, no I/O — pure domain logic.
+No database, no I/O - pure domain logic.
 """
 
 import uuid
@@ -145,7 +145,7 @@ class TestInterviewConfig:
 
 
 # ─
-# Job — construction & validation
+# Job - construction & validation
 # ─
 
 
@@ -232,7 +232,7 @@ class TestJobConstruction:
 
 
 # ─
-# Job — status transitions
+# Job - status transitions
 # ─
 
 
@@ -311,7 +311,7 @@ class TestJobStatusTransitions:
 
 
 # ─
-# Job — description & requirements mutations
+# Job - description & requirements mutations
 # ─
 
 
@@ -357,7 +357,7 @@ class TestJobMutations:
 
 
 # ─
-# Job — skill management
+# Job - skill management
 # ─
 
 

@@ -24,6 +24,7 @@ from src.truefit_infra.db.models import (
     JobListing,
 )
 
+
 class SQLAlchemyInterviewRepository(InterviewRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
@@ -64,7 +65,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                 )
                 session.add(session_row)
                 await session.flush()
-                existing_turns = [] 
+                existing_turns = []
 
             else:
                 session_row.status = interview.status.value

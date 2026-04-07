@@ -22,7 +22,7 @@ class HiringRecommendation(str, Enum):
 @dataclass(frozen=True)
 class SkillScore:
     """
-    Score for a single skill requirement — maps directly to the
+    Score for a single skill requirement - maps directly to the
     SkillRequirement.name field on the Job.
     """
 
@@ -75,7 +75,7 @@ class Evaluation:
     - An Evaluation can only be created for a COMPLETED interview (enforced by
       the application layer before construction; the entity validates it has an
       interview_id to tie to).
-    - Once created, an Evaluation is effectively immutable — it is a historical
+    - Once created, an Evaluation is effectively immutable - it is a historical
       record of the AI's judgement at a point in time.
     - A report_storage_key (set after the PDF is persisted) is the only mutable
       field after creation, and it can only be set once.
@@ -173,7 +173,7 @@ class Evaluation:
     def created_at(self) -> datetime:
         return self._created_at
 
-    # Queries 
+    # Queries
 
     @property
     def is_hire_recommended(self) -> bool:
@@ -196,12 +196,12 @@ class Evaluation:
                 return s
         return None
 
-    # Commands 
+    # Commands
 
     def attach_report(self, storage_key: str) -> None:
         """
         Link the generated PDF report (stored in truefit_infra storage) to this evaluation.
-        Can only be set once — reports are immutable once generated.
+        Can only be set once - reports are immutable once generated.
         """
         if self._report_storage_key is not None:
             raise ValueError(
@@ -212,12 +212,12 @@ class Evaluation:
             raise ValueError("storage_key cannot be empty")
         self._report_storage_key = storage_key
 
-    # Serialisation (convenience for passing to queues / APIs) 
+    # Serialisation (convenience for passing to queues / APIs)
 
     def to_summary_dict(self) -> dict:
         """
         Lightweight dict suitable for embedding in job dashboards
-        or recommendation feeds — no full transcript.
+        or recommendation feeds - no full transcript.
         """
         return {
             "evaluation_id": str(self._id),

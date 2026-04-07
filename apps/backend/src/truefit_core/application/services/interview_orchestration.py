@@ -4,9 +4,9 @@ Updated for agent-driven flow.
 Key changes from the original:
 - ask_next_question now accepts question_text_override and is_follow_up.
   In agent-driven mode the agent already SPOKE the question before calling
-  record_question — so we record what it said rather than generating new text.
-- submit_answer is unchanged — the agent calls it with STT transcript.
-- start_interview is unchanged — still called once by the WebSocket handler.
+  record_question - so we record what it said rather than generating new text.
+- submit_answer is unchanged - the agent calls it with STT transcript.
+- start_interview is unchanged - still called once by the WebSocket handler.
 - The service is now a state guardian, not a flow controller.
   It enforces domain rules and persists state; the agent decides what to say.
 """
@@ -171,7 +171,7 @@ class InterviewOrchestrationService:
 
         Two modes:
         1. Agent-driven (v1):  question_text_override is provided.
-           The agent already said the question aloud — we record what it said.
+           The agent already said the question aloud - we record what it said.
 
         2. Service-driven (fallback / future text mode): no override.
            We call the LLM port to generate the next question.
@@ -383,7 +383,7 @@ class InterviewOrchestrationService:
 
 
 # A session is resumable if it's active and started within this window
-_RESUME_WINDOW_SECONDS = 60 * 60  # 1 hour — tune to your max interview duration
+_RESUME_WINDOW_SECONDS = 60 * 60  # 1 hour - tune to your max interview duration
 
 
 def _is_resumable(interview: Interview) -> bool:

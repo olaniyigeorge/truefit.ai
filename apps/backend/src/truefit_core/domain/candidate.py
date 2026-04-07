@@ -101,7 +101,7 @@ class Candidate:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # Identity / properties 
+    # Identity / properties
 
     @property
     def id(self) -> uuid.UUID:
@@ -168,7 +168,7 @@ class Candidate:
     def has_active_interview_for(self, job_id: uuid.UUID) -> bool:
         return job_id in self._active_interview_job_ids
 
-    # Commands 
+    # Commands
 
     def update_profile(
         self,
@@ -238,7 +238,7 @@ class Candidate:
         self._active_interview_job_ids.discard(job_id)
         self._touch()
 
-    # Assertions 
+    # Assertions
 
     def assert_eligible_to_interview(self) -> None:
         if not self.is_eligible_to_interview:
@@ -247,7 +247,7 @@ class Candidate:
                 f"(status={self._status.value})"
             )
 
-    # Internal 
+    # Internal
 
     def _assert_active(self) -> None:
         if self._status != CandidateStatus.ACTIVE:

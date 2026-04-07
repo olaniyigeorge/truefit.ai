@@ -1,5 +1,5 @@
 """
-GeminiLLMAdapter — standard (non-live) Gemini for text generation tasks.
+GeminiLLMAdapter - standard (non-live) Gemini for text generation tasks.
 Used for: question generation, answer evaluation, candidate scoring.
 """
 

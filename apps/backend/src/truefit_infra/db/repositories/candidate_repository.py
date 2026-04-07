@@ -30,14 +30,14 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
-    # Write 
+    # Write
 
     async def save(self, candidate: Candidate) -> None:
         """
         Only persists columns that exist on candidate_profiles.
-        full_name / status / contact live on `users` — not touched here.
-        active_interview_job_ids is derived at read-time via joins — not stored.
-        resume is stored as resume_asset_id FK — update only if a ResumeRef exists.
+        full_name / status / contact live on `users` - not touched here.
+        active_interview_job_ids is derived at read-time via joins - not stored.
+        resume is stored as resume_asset_id FK - update only if a ResumeRef exists.
         """
         data = self._to_row(candidate)
         insert_stmt = pg_insert(CandidateProfileModel).values(**data)
@@ -56,7 +56,7 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
-    # Read 
+    # Read
 
     async def get_by_id(self, candidate_profile_id: uuid.UUID) -> Optional[Candidate]:
         stmt = (
@@ -136,7 +136,7 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
             result = await session.execute(stmt)
             return result.scalar_one()
 
-    # Private helpers 
+    # Private helpers
 
     @staticmethod
     async def _active_job_ids_for_candidate_profile(
@@ -176,7 +176,7 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
             content_type=asset.content_type or "application/pdf",
         )
 
-    # Mappers 
+    # Mappers
 
     @staticmethod
     def _to_row(candidate: Candidate) -> dict:

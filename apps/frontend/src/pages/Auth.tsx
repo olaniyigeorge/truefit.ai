@@ -49,13 +49,8 @@ const AuthPage = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      // const idToken = await result.user.getIdToken()
-      // console.log('firebase idToken', idToken)
-      // TODO: get the idToken for the result and hit the backend with it (probably in createSession)
-      // TODO: use the auth/oauth/token endpoint to exchange the idToken for a JWT from our backend, then store that JWT in cookies for subsequent requests.
       const {is_new_user} = await createSession(result.user)
       refreshBackendUser()
-      // await createSession(result.user)
       navigate(is_new_user ? '/onboarding' : from, { replace: true });
     } catch (error: any) {
       form.setError('root', { message: getFirebaseErrorMessage(error.code) });
@@ -160,7 +155,7 @@ const AuthPage = () => {
               className="w-full bg-primary text-primary-foreground font-bold tracking-wide hover:brightness-110 transition-all"
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Sending link…" : "Get Magic Link →"}
+              {form.formState.isSubmitting ? "Sending link…" : "Get Magic Link ->"}
             </Button>
           </form>
         </Form>

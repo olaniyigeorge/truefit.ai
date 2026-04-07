@@ -1,5 +1,5 @@
 """
-WebRTC signaling logic — no HTTP endpoints.
+WebRTC signaling logic - no HTTP endpoints.
 Called directly by InterviewConnection over the WebSocket.
 """
 
@@ -22,7 +22,7 @@ class WebRTCSignaling:
     """
     Handles the WebRTC handshake for one session.
     Instantiated by InterviewConnection and called as messages arrive over WS.
-    No HTTP, no routers — pure async methods.
+    No HTTP, no routers - pure async methods.
     """
 
     def __init__(self, *, session_id: str, job_id, candidate_id) -> None:
@@ -99,7 +99,7 @@ class WebRTCSignaling:
         """Add a trickle ICE candidate from the browser."""
         if not self._client:
             logger.warning(
-                f"[{self._session_id}] ICE candidate before offer — dropping"
+                f"[{self._session_id}] ICE candidate before offer - dropping"
             )
             return
 
@@ -124,13 +124,13 @@ class WebRTCSignaling:
         except Exception as e:
             logger.warning(f"[{self._session_id}] Failed to add ICE candidate: {e}")
 
-    # ── Accessors ─────
+    # Accessors 
 
     @property
     def client(self) -> WebRTCClient | None:
         return self._client
 
-    # ── Teardown 
+    # Teardown
 
     async def close(self) -> None:
         if self._client:

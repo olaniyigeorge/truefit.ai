@@ -1,1 +1,1 @@
-# Consumes interview.completed → triggers evaluation
+# Consumes interview.completed -> triggers evaluation

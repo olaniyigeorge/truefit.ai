@@ -117,7 +117,7 @@ const Dashboard = () => {
                         onClick={() => navigate("/jobs")}
                         className="font-mono text-[12px] tracking-wide"
                     >
-                        Post a Job →
+                        Post a Job ->
                     </Button>
                 )}
             </div>
@@ -244,7 +244,7 @@ const Dashboard = () => {
                                     {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-14 w-full" />)}
                                 </div>
                             ) : !data?.activeJobs.length ? (
-                                <EmptyState message="No active jobs — post one to get started" />
+                                <EmptyState message="No active jobs - post one to get started" />
                             ) : (
                                 <div className="space-y-1">
                                     {data.activeJobs.map(job => (
@@ -258,7 +258,7 @@ const Dashboard = () => {
                                                     {job.title}
                                                 </p>
                                                 <p className="text-[11px] text-muted-foreground mt-0.5 capitalize">
-                                                    {job.requirements.experience_level} · {job.requirements.work_arrangement ?? "—"}
+                                                    {job.requirements.experience_level} · {job.requirements.work_arrangement ?? "-"}
                                                 </p>
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">

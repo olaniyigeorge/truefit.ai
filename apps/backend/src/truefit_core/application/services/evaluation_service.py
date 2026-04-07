@@ -70,8 +70,8 @@ class EvaluationService:
         1. Load + validate interview (must be COMPLETED)
         2. Load job for context
         3. Call LLM with full transcript
-        4. Map result → Evaluation domain object
-        5. Persist evaluation, update interview → EVALUATED
+        4. Map result -> Evaluation domain object
+        5. Persist evaluation, update interview -> EVALUATED
         6. Generate and upload the report
         7. Publish events
 
@@ -157,11 +157,11 @@ class EvaluationService:
                 )
             )
             logger.info(
-                f"Report uploaded for evaluation {evaluation.id} → {storage_key}"
+                f"Report uploaded for evaluation {evaluation.id} -> {storage_key}"
             )
 
         except Exception as e:
-            # Report generation failure is non-fatal — evaluation is already persisted.
+            # Report generation failure is non-fatal - evaluation is already persisted.
             # The report can be regenerated on demand.
             logger.error(f"Report upload failed for evaluation {evaluation.id}: {e}")
 
@@ -182,10 +182,10 @@ class EvaluationService:
 
         # Reset by creating a new evaluation instance with the new key is not
         # possible (immutable). We update via repo directly.
-        # Otherwise, attach_report() will raise if already set — handle appropriately
+        # Otherwise, attach_report() will raise if already set - handle appropriately
         # by updating the storage key column in the DB directly via the repo.
         logger.info(
-            f"Report regenerated for evaluation {evaluation_id} → {storage_key}"
+            f"Report regenerated for evaluation {evaluation_id} -> {storage_key}"
         )
         return storage_key
 

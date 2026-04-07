@@ -52,7 +52,7 @@ USER_PAYLOADS: list[dict[str, Any]] = [
 ]
 
 
-# ── Orgs 
+# ── Orgs
 def make_org_payloads(created_by: str) -> list[dict[str, Any]]:
     return [
         {
@@ -140,7 +140,7 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
         {
             "org_id": org_id,
             "created_by": created_by,
-            "title": "ML Engineer — Inference",
+            "title": "ML Engineer - Inference",
             "description": (
                 "Join our AI team to build and optimise the inference pipelines "
                 "powering Truefit's real-time interview agent."
@@ -195,7 +195,7 @@ def make_job_payloads(org_id: str, created_by: str) -> list[dict[str, Any]]:
                 "max_questions": 6,
                 "max_duration_minutes": 20,
                 "topics": ["react", "typescript", "behavioural"],
-                "custom_instructions": "Keep questions approachable — this is a junior role.",
+                "custom_instructions": "Keep questions approachable - this is a junior role.",
             },
         },
     ]
@@ -409,7 +409,7 @@ async def _start_interview(
     raise RuntimeError(f"Interview start failed ({r.status_code}): {r.text}")
 
 
-# ── Seeder 
+# ── Seeder
 async def seed(activate_jobs: bool = True) -> SeededResources:
     resources = SeededResources()
     print(f"\nConnecting to {BASE_URL} ...")
@@ -452,7 +452,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
                 client, user_id=u["id"], email=u["email"]
             )
             resources.candidate_profiles.append(prof)
-            print(f"     → Profile: {prof['id']}  user_id={prof['user_id']}")
+            print(f"     -> Profile: {prof['id']}  user_id={prof['user_id']}")
 
         # 4) Jobs (created_by = recruiter; org_id = primary org)
         print("\n── Step 4: Jobs ──")
@@ -466,7 +466,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
                 job2 = await _activate_job(client, job["id"])
                 if job2.get("status") == "active":
                     job = job2
-                    print(f"     → Activated  status={job['status']}")
+                    print(f"     -> Activated  status={job['status']}")
                 else:
                     print(
                         f"     ⚠  Could not activate ({job2.get('activation_error', 'unknown')})"
@@ -478,7 +478,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
         print("\n── Step 5/6: Applications + Interviews ─")
         active_jobs = [j for j in resources.jobs if j.get("status") == "active"]
         if not active_jobs:
-            print("  ⚠  No active jobs — skipping applications/interviews")
+            print("  ⚠  No active jobs - skipping applications/interviews")
             return resources
 
         first_job = active_jobs[0]
@@ -495,7 +495,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
                 client, job_id=first_job["id"], candidate_profile_id=prof["id"]
             )
             resources.interviews.append(interview)
-            print(f"     → Interview: {interview['id']}")
+            print(f"     -> Interview: {interview['id']}")
 
     # Summary
     print(f"""

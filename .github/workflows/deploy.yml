@@ -22,7 +22,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # Skip strict host checking — avoids ssh-keyscan failures
+          # Skip strict host checking - avoids ssh-keyscan failures
           cat >> ~/.ssh/config <<EOF
           Host ${{ secrets.GCP_VM_IP }}
             StrictHostKeyChecking no

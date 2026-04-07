@@ -232,7 +232,7 @@ class UserService:
         existing = await self._users.get_by_email(email_norm)
 
         if existing:
-            # Existing user — update provider_subject if changed
+            # Existing user - update provider_subject if changed
             if existing.provider_subject != provider_subject:
                 existing.provider_subject = provider_subject
                 await self._users.save(existing)

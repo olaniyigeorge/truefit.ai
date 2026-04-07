@@ -22,8 +22,8 @@ from src.truefit_core.domain.job import Job
 from src.truefit_infra.db.models import Application, User
 from src.truefit_core.domain.org import Org
 
-
 # Repository ports
+
 
 class UserRepository(ABC):
     @abstractmethod
@@ -51,6 +51,7 @@ class OrgRepository(ABC):
 
     @abstractmethod
     async def delete(self, org_id: uuid.UUID) -> None: ...
+
 
 class CandidateProfileRepository(ABC):
     async def create_for_user(
@@ -170,7 +171,7 @@ class QuestionContext:
     required_skills: list[str]
     experience_level: str
     custom_instructions: Optional[str]
-    transcript: list[dict] 
+    transcript: list[dict]
     topics_remaining: list[str]  # guides topic coverage
     question_number: int
     total_questions: int
@@ -191,7 +192,7 @@ class EvaluationRequest:
     job_description: str
     required_skills: list[str]  # skill names, for score mapping
     experience_level: str
-    transcript: list[dict] 
+    transcript: list[dict]
     custom_instructions: Optional[str] = None
 
 
@@ -222,7 +223,7 @@ class LLMPort(ABC):
     async def generate_question(self, context: QuestionContext) -> GeneratedQuestion:
         """
         Generate the next interview question given the current conversation context.
-        Must be adaptive — prior answers should influence the question.
+        Must be adaptive - prior answers should influence the question.
         """
         ...
 
@@ -242,6 +243,7 @@ class LLMPort(ABC):
 
 
 # Queue / event bus port
+
 
 @dataclass
 class DomainEvent:
@@ -279,7 +281,7 @@ class StoredFile:
     key: str
     content_type: str
     size_bytes: int
-    url: Optional[str] = None 
+    url: Optional[str] = None
 
 
 class StoragePort(ABC):
@@ -316,6 +318,7 @@ class StoragePort(ABC):
 
 # Cache port
 
+
 class CachePort(ABC):
     """
     Thin abstraction over a key-value cache (e.g. Redis).
@@ -338,7 +341,7 @@ class CachePort(ABC):
 
     @abstractmethod
     async def increment(self, key: str, *, ttl_seconds: Optional[int] = None) -> int:
-        """Atomic increment — useful for rate limiting."""
+        """Atomic increment - useful for rate limiting."""
         ...
 
     @abstractmethod
@@ -387,7 +390,7 @@ class LiveSessionPort(ABC):
 
     Implementations wrap a live AI API (e.g. Gemini Live) and expose a
     uniform interface for the agent layer. The agent never imports any
-    AI SDK directly — all SDK types are confined to the adapter.
+    AI SDK directly - all SDK types are confined to the adapter.
 
     Lifecycle
     ───
@@ -403,7 +406,7 @@ class LiveSessionPort(ABC):
     Audio format contract
     ─
     Implementations must accept 16kHz mono s16 PCM for send_audio().
-    Callers must not assume a specific output sample rate — check the
+    Callers must not assume a specific output sample rate - check the
     concrete adapter's docstring (Gemini Live returns 24kHz).
     """
 
@@ -441,7 +444,7 @@ class LiveSessionPort(ABC):
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """
         Send a JPEG frame into the session for visual context.
-        source: "camera" | "screen" — used for logging/context only.
+        source: "camera" | "screen" - used for logging/context only.
         """
         ...
 
@@ -450,7 +453,7 @@ class LiveSessionPort(ABC):
         """
         Inject a one-time structured text message into the session.
         Used before audio begins to pre-load context (job, candidate data).
-        Not for conversational turns — use send_audio() for those.
+        Not for conversational turns - use send_audio() for those.
         """
         ...
 
@@ -464,7 +467,7 @@ class LiveSessionPort(ABC):
     ) -> None:
         """
         Respond to a tool_call event from receive().
-        Must be called for every tool_call received — the session blocks
+        Must be called for every tool_call received - the session blocks
         until a response is provided.
         """
         ...
@@ -477,19 +480,19 @@ class LiveSessionPort(ABC):
         Async generator yielding normalised events from the model.
 
         Event types:
-          ("audio",         bytes)  — PCM audio to play to the candidate
-          ("text",          str)    — agent output transcript
-          ("input_text",    str)    — candidate speech transcript
-          ("tool_call",     dict)   — {"id": str, "name": str, "args": dict}
-          ("turn_complete", None)   — agent finished its speaking turn
-          ("interrupted",   None)   — agent was interrupted mid-speech
-          ("go_away",       None)   — server is closing the connection
+          ("audio",         bytes)  - PCM audio to play to the candidate
+          ("text",          str)    - agent output transcript
+          ("input_text",    str)    - candidate speech transcript
+          ("tool_call",     dict)   - {"id": str, "name": str, "args": dict}
+          ("turn_complete", None)   - agent finished its speaking turn
+          ("interrupted",   None)   - agent was interrupted mid-speech
+          ("go_away",       None)   - server is closing the connection
 
-        Implementations must not raise on end-of-stream — simply stop yielding.
+        Implementations must not raise on end-of-stream - simply stop yielding.
         """
         ...
 
-    # ── Health 
+    # ── Health
 
     @abstractmethod
     async def is_healthy(self) -> bool:

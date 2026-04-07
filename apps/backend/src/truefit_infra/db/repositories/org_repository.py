@@ -124,7 +124,7 @@ class SQLAlchemyOrgRepository(OrgRepository):
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
-    # Mapping: domain -> row 
+    # Mapping: domain -> row
 
     @staticmethod
     def _to_row(org: OrgModel) -> dict:
@@ -155,7 +155,7 @@ class SQLAlchemyOrgRepository(OrgRepository):
             "updated_at": org.updated_at,
         }
 
-    # Mapping: row -> domain 
+    # Mapping: row -> domain
 
     @staticmethod
     def _to_domain(row: OrgModel) -> Org:

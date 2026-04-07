@@ -184,7 +184,7 @@ export default function CreateJobPage() {
                                 <FormField control={form.control} name="location" render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-[11px] tracking-[0.1em] uppercase text-muted-foreground">Location</FormLabel>
-                                        <FormControl><Input placeholder="e.g. Remote — Global" className="bg-background" {...field} /></FormControl>
+                                        <FormControl><Input placeholder="e.g. Remote - Global" className="bg-background" {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )} />
@@ -248,7 +248,7 @@ export default function CreateJobPage() {
                     <div className="flex items-center gap-3 pb-8">
                         <Button type="submit" variant="outline" disabled={submitting} className="font-mono text-[12px]">Save as Draft</Button>
                         <Button type="button" disabled={submitting} className="font-mono text-[12px]" onClick={form.handleSubmit(v => submit(v, true))}>
-                            {submitting ? "Creating…" : "Create & Activate →"}
+                            {submitting ? "Creating…" : "Create & Activate ->"}
                         </Button>
                     </div>
                 </form>

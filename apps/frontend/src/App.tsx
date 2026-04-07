@@ -37,8 +37,6 @@ function App() {
         <Route element={<ProtectedRoute />}>
         <Route path="/onboarding" element={<Onboarding />}/> 
         <Route path="/interview/:jobId/:candidateId" element={<InterviewPage />} />
-          {/* you can add protected routes without sidebar below here. */}
-          {/* protectedLayout: populates sidebar into protected routes where needed. */}
           <Route element={<ProtectedLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/jobs" element={<JobsPage />} />

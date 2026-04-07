@@ -23,7 +23,7 @@ class InterviewStatus(str, Enum):
 class Question:
     """
     Value object representing a single AI-generated question.
-    Immutable — questions are never edited after they are sent.
+    Immutable - questions are never edited after they are sent.
     """
 
     id: uuid.UUID
@@ -43,7 +43,7 @@ class Question:
 class Answer:
     """
     Value object pairing an answer to its question.
-    Immutable — once submitted, an answer is part of the permanent transcript.
+    Immutable - once submitted, an answer is part of the permanent transcript.
     """
 
     question_id: uuid.UUID
@@ -58,7 +58,7 @@ class Answer:
 
 @dataclass(frozen=True)
 class Turn:
-    """A paired question + optional answer — one exchange in the interview."""
+    """A paired question + optional answer - one exchange in the interview."""
 
     question: Question
     answer: Optional[Answer] = None
@@ -72,7 +72,7 @@ class Interview:
     """
     Aggregate root for a live AI interview session.
 
-    Lifecycle:  SCHEDULED → ACTIVE → COMPLETED → EVALUATED
+    Lifecycle:  SCHEDULED -> ACTIVE -> COMPLETED -> EVALUATED
                                    ↘ ABANDONED
 
     Invariants enforced:
@@ -117,7 +117,7 @@ class Interview:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # Identity 
+    # Identity
 
     @property
     def id(self) -> uuid.UUID:
@@ -232,10 +232,10 @@ class Interview:
             for t in self._turns
         ]
 
-    # Commands 
+    # Commands
 
     def start(self) -> None:
-        """Transition SCHEDULED → ACTIVE and record start time."""
+        """Transition SCHEDULED -> ACTIVE and record start time."""
         if self._status != InterviewStatus.SCHEDULED:
             raise ValueError(f"Cannot start interview in status '{self._status.value}'")
         self._status = InterviewStatus.ACTIVE
@@ -302,14 +302,14 @@ class Interview:
             text=text,
             duration_seconds=duration_seconds,
         )
-        # Replace the last turn (frozen dataclass — rebuild it)
+        # Replace the last turn (frozen dataclass - rebuild it)
         current_turn = self._turns[-1]
         self._turns[-1] = Turn(question=current_turn.question, answer=answer)
         self._touch()
 
     def complete(self) -> None:
         """
-        Transition ACTIVE → COMPLETED.
+        Transition ACTIVE -> COMPLETED.
         Called by the orchestration service when the session is naturally done
         (max questions reached, candidate ends session, or time limit hit gracefully).
         """
@@ -320,7 +320,7 @@ class Interview:
 
     def abandon(self, *, reason: str = "unknown") -> None:  # noqa: ARG002
         """
-        Transition ACTIVE → ABANDONED.
+        Transition ACTIVE -> ABANDONED.
         Called on timeout, disconnection, or explicit cancellation.
         The reason is passed for logging upstream; not stored on the entity
         to keep the domain free of infrastructure concerns.
@@ -347,7 +347,7 @@ class Interview:
 
     def mark_evaluated(self) -> None:
         """
-        Transition COMPLETED → EVALUATED once an Evaluation aggregate is persisted.
+        Transition COMPLETED -> EVALUATED once an Evaluation aggregate is persisted.
         Called by the application layer, not by Evaluation itself (to keep aggregates decoupled).
         """
         if self._status != InterviewStatus.COMPLETED:
@@ -357,7 +357,7 @@ class Interview:
         self._status = InterviewStatus.EVALUATED
         self._touch()
 
-    # Assertions 
+    # Assertions
 
     def assert_completed(self) -> None:
         if self._status != InterviewStatus.COMPLETED:
@@ -365,7 +365,7 @@ class Interview:
                 f"Interview must be COMPLETED for evaluation, got: {self._status.value}"
             )
 
-    # Internal helpers 
+    # Internal helpers
 
     def _assert_active(self) -> None:
         if not self.is_active:

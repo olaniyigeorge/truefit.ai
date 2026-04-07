@@ -31,12 +31,13 @@ router = APIRouter(prefix="/candidates", tags=["candidates"])
 _MAX_RESUME_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
-# ── Dependency 
+# ── Dependency
 def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
 
 
 # ── Request schemas
+
 
 class RegisterCandidateRequest(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=200)
@@ -52,6 +53,7 @@ class UpdateCandidateRequest(BaseModel):
 
 
 # ── Response schemas ───
+
 
 class ContactOut(BaseModel):
     email: str
@@ -112,6 +114,7 @@ class CandidateOut(BaseModel):
 
 
 # ── Endpoints
+
 
 @router.post("", response_model=CandidateOut, status_code=status.HTTP_201_CREATED)
 async def register_candidate(

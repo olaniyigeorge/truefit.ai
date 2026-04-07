@@ -1,7 +1,7 @@
 """
 tests/unit/application/test_candidate_service.py
 ──
-Unit tests for CandidateService — mock-based, no database.
+Unit tests for CandidateService - mock-based, no database.
 
 All external dependencies (CandidateRepository, StoragePort) are replaced
 with MagicMock / AsyncMock instances so the tests verify only the service's
@@ -95,7 +95,7 @@ class TestRegisterCandidate:
         assert candidate.contact.linkedin_url == "https://linkedin.com/in/alice"
 
     async def test_check_email_before_save(self, service, candidate_repo):
-        """Ensures get_by_email is called BEFORE save — order matters."""
+        """Ensures get_by_email is called BEFORE save - order matters."""
         call_order = []
         candidate_repo.get_by_email.side_effect = (
             lambda e: call_order.append("get") or None

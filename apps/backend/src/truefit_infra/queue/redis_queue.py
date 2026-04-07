@@ -35,7 +35,7 @@ class RedisQueueAdapter(QueuePort):
                 maxlen=_MAX_STREAM_LEN,
                 approximate=True,
             )
-            logger.debug(f"[Queue] {event.event_type} → {stream_key}")
+            logger.debug(f"[Queue] {event.event_type} -> {stream_key}")
         except redis.RedisError as e:
             logger.error(f"[Queue] Failed to publish {event.event_type}: {e}")
 

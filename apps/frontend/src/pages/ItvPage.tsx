@@ -1,9 +1,9 @@
 /**
- * ItvPage — /itv/:jobId/:candidateId
+ * ItvPage - /itv/:jobId/:candidateId
  * 
  * Two states:
- *  1. Setup — shows ID fields pre-filled from URL params, lets user start
- *  2. Live  — full interview room with transcript, audio viz, controls
+ *  1. Setup - shows ID fields pre-filled from URL params, lets user start
+ *  2. Live  - full interview room with transcript, audio viz, controls
  */
 
 import { useState } from "react"

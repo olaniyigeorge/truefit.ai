@@ -1,6 +1,5 @@
-# /truefit_infra/realtime/frame_sampler.py
 """
-FrameSampler — periodic video frame extraction.
+FrameSampler - periodic video frame extraction.
 
 Runs two independent async loops:
   - camera loop   (default: every 5s)
@@ -147,7 +146,7 @@ class FrameSampler:
                 try:
                     self.frame_queue.put_nowait(event)
                 except asyncio.QueueFull:
-                    # Drop oldest frame — freshness matters more than completeness
+                    # Drop oldest frame - freshness matters more than completeness
                     try:
                         self.frame_queue.get_nowait()
                     except asyncio.QueueEmpty:
@@ -159,10 +158,10 @@ class FrameSampler:
         except asyncio.CancelledError:
             pass
 
-    # ── Frame encoding 
+    # ── Frame encoding
 
     def _encode_frame(self, frame: av.VideoFrame) -> bytes:
-        """Convert av.VideoFrame → JPEG bytes. Runs in thread executor."""
+        """Convert av.VideoFrame -> JPEG bytes. Runs in thread executor."""
         img: Image.Image = frame.to_image()
 
         # Resize if too large
@@ -175,7 +174,7 @@ class FrameSampler:
         img.save(buf, format="JPEG", quality=self._jpeg_quality, optimize=True)
         return buf.getvalue()
 
-    # ── Teardown 
+    # ── Teardown
 
     def stop(self) -> None:
         self._stop_event.set()

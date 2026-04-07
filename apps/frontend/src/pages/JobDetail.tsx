@@ -198,7 +198,7 @@ export default function JobDetailPage() {
 
             {/* Main layout */}
             <div className="grid lg:grid-cols-3 gap-6">
-                {/* Left column — content */}
+                {/* Left column - content */}
                 <div className="lg:col-span-2 space-y-5">
                     {/* Description */}
                     <Card>
@@ -296,7 +296,7 @@ export default function JobDetailPage() {
                     </Card>
                 </div>
 
-                {/* Right column — metadata */}
+                {/* Right column - metadata */}
                 <div className="space-y-5">
                     {/* Job details */}
                     <Card>
@@ -305,8 +305,8 @@ export default function JobDetailPage() {
                         </CardHeader>
                         <CardContent className="px-6 pb-6 pt-0">
                             <InfoRow label="Experience"     value={job.requirements.experience_level} />
-                            <InfoRow label="Arrangement"    value={job.requirements.work_arrangement ?? "—"} />
-                            <InfoRow label="Location"       value={job.requirements.location ?? "—"} />
+                            <InfoRow label="Arrangement"    value={job.requirements.work_arrangement ?? "-"} />
+                            <InfoRow label="Location"       value={job.requirements.location ?? "-"} />
                             {job.requirements.min_total_years && (
                                 <InfoRow label="Min. Years"  value={`${job.requirements.min_total_years}+ years`} />
                             )}

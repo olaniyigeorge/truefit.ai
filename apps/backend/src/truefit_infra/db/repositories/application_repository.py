@@ -100,7 +100,8 @@ class SQLAlchemyApplicationRepository(ApplicationRepository):
                 await session.commit()
 
 
-# Mapper 
+# Mapper
+
 
 def _to_domain(row: ApplicationORM) -> Application:
     return Application(

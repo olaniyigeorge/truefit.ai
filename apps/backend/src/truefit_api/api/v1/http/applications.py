@@ -27,14 +27,14 @@ from src.truefit_infra.db.repositories.application_repository import (
 router = APIRouter(prefix="/applications", tags=["applications"])
 
 
-# Dependencies 
+# Dependencies
 
 
 def get_application_repo() -> SQLAlchemyApplicationRepository:
     return SQLAlchemyApplicationRepository(db_manager)
 
 
-# Schemas 
+# Schemas
 
 
 class CreateApplicationRequest(BaseModel):

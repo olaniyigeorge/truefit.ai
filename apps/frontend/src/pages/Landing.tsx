@@ -79,7 +79,7 @@ export default function Landing() {
  
         <p className="text-[clamp(15px,2vw,18px)] text-muted-foreground max-w-[560px] leading-relaxed mb-11">
           TrueFit runs AI-powered voice interviews that screen candidates, generate structured evaluations,
-          and surface the right hires — so your team focuses on decisions, not scheduling.
+          and surface the right hires - so your team focuses on decisions, not scheduling.
         </p>
  
         <div className="flex flex-wrap gap-3 justify-center mb-16">
@@ -87,7 +87,7 @@ export default function Landing() {
             href="/auth"
             className="px-6 py-3.5 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded hover:brightness-110 transition-all no-underline"
           >
-            Start Hiring Smarter →
+            Start Hiring Smarter ->
           </a>
           <a
             href="#"
@@ -117,7 +117,7 @@ export default function Landing() {
               {
                 who: "CANDIDATE", color: "text-blue-400",
                 bg: "bg-[#0d1527]", border: "border-[#1e3a5f]",
-                text: "During our last product launch, our privacy decisions started showing latency spikes — a few hours before go live. I had to decide between rolling back the query optimisation or patching the cache pipeline...",
+                text: "During our last product launch, our privacy decisions started showing latency spikes - a few hours before go live. I had to decide between rolling back the query optimisation or patching the cache pipeline...",
                 align: "items-end",
                 radius: "rounded-tl-2xl rounded-bl-2xl rounded-br-2xl",
               },
@@ -179,11 +179,11 @@ export default function Landing() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <FeatureCard icon="🎙" title="Real-time Voice Interviews" body="AI conducts full spoken interviews over WebRTC. Natural conversation, no scripts — the agent adapts to each answer and asks intelligent follow-ups." />
-          <FeatureCard icon="⚡" title="Instant Structured Evaluation" body="Every interview generates a structured scorecard: technical depth, communication clarity, culture signals — with verbatim evidence from the conversation." />
+          <FeatureCard icon="🎙" title="Real-time Voice Interviews" body="AI conducts full spoken interviews over WebRTC. Natural conversation, no scripts - the agent adapts to each answer and asks intelligent follow-ups." />
+          <FeatureCard icon="⚡" title="Instant Structured Evaluation" body="Every interview generates a structured scorecard: technical depth, communication clarity, culture signals - with verbatim evidence from the conversation." />
           <FeatureCard icon="🎯" title="Role-specific Intelligence" body="Configure interview depth, topics, and question weighting per job. A senior backend engineer interview is nothing like a product manager screen." />
           <FeatureCard icon="📊" title="Comparative Candidate Ranking" body="See every candidate scored on the same rubric, side by side. Remove unconscious bias from the top of your funnel." />
-          <FeatureCard icon="🔄" title="Resume-aware Questioning" body="TrueFit reads candidate resumes and probes their actual experience — not generic questions. Every interview is personalised." />
+          <FeatureCard icon="🔄" title="Resume-aware Questioning" body="TrueFit reads candidate resumes and probes their actual experience - not generic questions. Every interview is personalised." />
           <FeatureCard icon="🛡" title="Candidate-grade Experience" body="Candidates get a fair, stress-reduced interview. No scheduling friction, no intimidating panels for a first screen." />
         </div>
       </section>
@@ -198,7 +198,7 @@ export default function Landing() {
         </div>
         <div className="flex flex-col gap-10">
           <Step n="01" title="Post a role and configure your interview" body="Define the skills, topics, and depth you need. Set duration, focus areas. TrueFit builds the interview brief." />
-          <Step n="02" title="Candidates join via a link — no app required" body="Share a link. Each candidate accesses a unique interview session from any browser. No app, no scheduling friction." />
+          <Step n="02" title="Candidates join via a link - no app required" body="Share a link. Each candidate accesses a unique interview session from any browser. No app, no scheduling friction." />
           <Step n="03" title="Receive scored evaluations instantly" body="The moment the interview ends, you get a structured scorecard with transcript citations and a hire/no-hire signal." />
           <Step n="04" title="Shortlist and schedule the right people" body="Use TrueFit's scoring to decide who moves forward. Spend your team interview time on actually deciding." />
         </div>
@@ -219,7 +219,7 @@ export default function Landing() {
             </p>
             <div className="flex flex-col gap-3">
               {[
-                "Interviews based on actual job descriptions — not generic questions",
+                "Interviews based on actual job descriptions - not generic questions",
                 "Detailed feedback on content, clarity, and confidence signals",
                 "Track improvement across multiple sessions",
                 "Get recommended to companies hiring for your profile",
@@ -286,7 +286,7 @@ export default function Landing() {
               onClick={() => { if (email.includes("@")) setSubmitted(true) }}
               className="px-6 py-3.5 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded-r hover:brightness-110 transition-all whitespace-nowrap"
             >
-              Join Waitlist →
+              Join Waitlist ->
             </button>
           </div>
         )}

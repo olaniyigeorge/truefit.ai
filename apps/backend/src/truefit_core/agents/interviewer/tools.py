@@ -1,12 +1,10 @@
 """
 Tool declarations
 
-These are the only ways the agent communicates state back to 
-our system. The agent calls these; we respond with the result 
+These are the only ways the agent communicates state back to
+our system. The agent calls these; we respond with the result
 via send_tool_response.
 """
-
-
 
 INTERVIEW_TOOLS = [
     {
@@ -66,7 +64,7 @@ INTERVIEW_TOOLS = [
             {
                 "name": "complete_interview",
                 "description": (
-                    "Call this when the interview is naturally complete — all questions asked "
+                    "Call this when the interview is naturally complete - all questions asked "
                     "and answered, or max duration reached. Do NOT call this mid-interview."
                 ),
                 "parameters": {

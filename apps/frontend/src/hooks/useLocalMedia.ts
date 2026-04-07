@@ -34,13 +34,13 @@ export function useLocalMedia(): UseLocalMediaReturn {
   const acquireScreenShare = useCallback(async (): Promise<MediaStream> => {
     const stream = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        frameRate: { ideal: 5 },  // low FPS — sampler does the throttling anyway
+        frameRate: { ideal: 5 },  // low FPS - sampler does the throttling anyway
       },
       audio: false,
     })
     // Label the track so backend frame_sampler detects it as screen
     // (track.label is set by browser, but we can use a convention via a 
-    //  DataChannel event instead — see InterviewRoom below)
+    //  DataChannel event instead - see InterviewRoom below)
     screenStreamRef.current = stream
     return stream
   }, [])

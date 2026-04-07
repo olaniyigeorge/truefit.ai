@@ -4,7 +4,7 @@ Command handlers for the interview session lifecycle.
 Each handler is a plain async function that:
   1. Validates / loads its inputs
   2. Delegates to the appropriate service
-  3. Returns a typed response dataclass — never a raw dict
+  3. Returns a typed response dataclass - never a raw dict
 
 These are called from:
   - WebSocket message handlers  (StartSession, Interrupt, AbandonSession)
@@ -83,10 +83,10 @@ class InterruptCommand:
 
 class InterruptReason(str, Enum):
     CANDIDATE_SPOKE = (
-        "candidate_spoke"  # normal interrupt — candidate has something to say
+        "candidate_spoke"  # normal interrupt - candidate has something to say
     )
     CLARIFICATION = "clarification"  # agent detects this is a question, not an answer
-    NOISE = "noise"  # VAD false positive — agent should resume
+    NOISE = "noise"  # VAD false positive - agent should resume
     TECHNICAL = "technical"  # connectivity / audio issue
 
 
@@ -97,9 +97,9 @@ class AbandonSessionCommand:
     initiated_by: str = "system"  # "candidate" | "system" | "timeout"
 
 
-# 
+#
 # Response dataclasses  (what the handler returns)
-# 
+#
 
 
 @dataclass(frozen=True)
@@ -216,7 +216,7 @@ async def handle_submit_answer(
     Record the candidate's answer (STT transcript) for the current question.
 
     media_asset_keys are stored for audit / replay but do not affect
-    domain state — they're linked at the infra layer via InterviewTurn.
+    domain state - they're linked at the infra layer via InterviewTurn.
     """
     result = await orchestration.submit_answer(
         interview_id=cmd.interview_id,
@@ -246,14 +246,14 @@ async def handle_interrupt(
     """
     Handle a mid-speech interrupt from the candidate.
 
-    This handler does NOT touch the Interview domain aggregate directly —
+    This handler does NOT touch the Interview domain aggregate directly -
     interrupts are session-level events, not transcript-level events.
     The agent decides how to respond based on the returned `agent_should` directive.
 
     Interrupt classification logic:
-    - Short utterance + question pattern  → CLARIFICATION  → agent acknowledges and re-asks
-    - Substantive speech                  → CANDIDATE_SPOKE → agent stops and listens
-    - Very short / low confidence STT     → NOISE           → agent resumes
+    - Short utterance + question pattern  -> CLARIFICATION  -> agent acknowledges and re-asks
+    - Substantive speech                  -> CANDIDATE_SPOKE -> agent stops and listens
+    - Very short / low confidence STT     -> NOISE           -> agent resumes
     """
     interrupt_id = uuid.uuid4()
 
@@ -303,7 +303,7 @@ async def handle_interrupt(
 
     logger.info(
         f"Interrupt {interrupt_id} on interview {cmd.interview_id}: "
-        f"{reason.value} → {directive}"
+        f"{reason.value} -> {directive}"
     )
 
     return InterruptResponse(
@@ -323,7 +323,7 @@ async def handle_abandon_session(
     """
     Abandon an in-progress interview.
     Safe to call on timeout, disconnect, or explicit cancellation.
-    Idempotent — calling on an already-finished interview is a no-op.
+    Idempotent - calling on an already-finished interview is a no-op.
     """
     await orchestration.abandon_interview(
         cmd.interview_id,
@@ -348,22 +348,22 @@ def _classify_interrupt(cmd: InterruptCommand) -> tuple[InterruptReason, str]:
 
     Returns (reason, agent_directive).
 
-    This is intentionally kept simple — in production you'd call a fast
+    This is intentionally kept simple - in production you'd call a fast
     classification model or use a rules engine. Swap out this function
     without touching the handler.
     """
     transcript = (cmd.partial_transcript or "").strip().lower()
     word_count = len(transcript.split()) if transcript else 0
 
-    # Very short utterance — likely noise or filler word
+    # Very short utterance - likely noise or filler word
     if word_count == 0 or (word_count <= 2 and not _is_question(transcript)):
         return InterruptReason.NOISE, "resume"
 
-    # Ends with a question mark or starts with a question word → clarification
+    # Ends with a question mark or starts with a question word -> clarification
     if _is_question(transcript):
         return InterruptReason.CLARIFICATION, "acknowledge_and_continue"
 
-    # Substantive speech — candidate wants to answer or redirect
+    # Substantive speech - candidate wants to answer or redirect
     return InterruptReason.CANDIDATE_SPOKE, "stop_and_listen"
 
 

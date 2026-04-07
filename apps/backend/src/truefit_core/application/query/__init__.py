@@ -1,5 +1,5 @@
 """
-Read-only handlers. No state mutation. No domain aggregates loaded —
+Read-only handlers. No state mutation. No domain aggregates loaded -
 queries work with whatever the repo returns (can be DTOs or ORM models
 mapped to response dataclasses).
 

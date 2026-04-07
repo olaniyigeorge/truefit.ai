@@ -1,7 +1,7 @@
 """
 Command handlers for job listing lifecycle.
 
-Thin by design — most business logic lives in JobService or on the Job aggregate.
+Thin by design - most business logic lives in JobService or on the Job aggregate.
 Handlers are responsible for:
   - Input validation before touching the domain
   - Calling the right service / repo method
@@ -23,8 +23,8 @@ from src.truefit_core.domain.job import (
     SkillRequirement,
 )
 
-
 # Input dataclasses
+
 
 @dataclass(frozen=True)
 class SkillInput:
@@ -46,7 +46,7 @@ class CreateJobCommand:
     org_id: uuid.UUID
     title: str
     description: str
-    experience_level: str  
+    experience_level: str
     skills: list[SkillInput]
     interview_config: Optional[InterviewConfigInput] = None
 
@@ -54,7 +54,7 @@ class CreateJobCommand:
 @dataclass(frozen=True)
 class ActivateJobCommand:
     job_id: uuid.UUID
-    activated_by: uuid.UUID 
+    activated_by: uuid.UUID
 
 
 @dataclass(frozen=True)
@@ -72,9 +72,7 @@ class CloseJobCommand:
     reason: Optional[str] = None  # "filled" | "cancelled" | "budget".
 
 
-
 # Response dataclasses
-
 
 
 @dataclass(frozen=True)
@@ -107,6 +105,7 @@ class JobResponse:
 
 
 # Handlers
+
 
 async def handle_create_job(
     cmd: CreateJobCommand,

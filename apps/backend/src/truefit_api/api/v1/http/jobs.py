@@ -5,9 +5,9 @@ POST   /jobs                    Create a job (DRAFT)
 GET    /jobs/{job_id}           Get a single job
 GET    /jobs                    List jobs for an org
 PATCH  /jobs/{job_id}           Update description / interview config / skills
-POST   /jobs/{job_id}/activate  Transition DRAFT → ACTIVE
-POST   /jobs/{job_id}/pause     Transition ACTIVE → PAUSED
-POST   /jobs/{job_id}/close     Transition → CLOSED (also abandons active interviews)
+POST   /jobs/{job_id}/activate  Transition DRAFT -> ACTIVE
+POST   /jobs/{job_id}/pause     Transition ACTIVE -> PAUSED
+POST   /jobs/{job_id}/close     Transition -> CLOSED (also abandons active interviews)
 DELETE /jobs/{job_id}           Hard delete (DRAFT only)
 """
 
@@ -35,6 +35,7 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 
 # ── Dependency
 
+
 def get_job_repo() -> SQLAlchemyJobRepository:
     return SQLAlchemyJobRepository(db_manager)
 
@@ -42,11 +43,12 @@ def get_job_repo() -> SQLAlchemyJobRepository:
 def get_job_service(
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
 ) -> JobService:
-    # InterviewRepository injected as None here — wire fully when available
+    # InterviewRepository injected as None here - wire fully when available
     return JobService(job_repo=repo, interview_repo=None, queue=None)
 
 
 # ── Request schemas
+
 
 class SkillIn(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
@@ -106,7 +108,8 @@ class UpdateJobRequest(BaseModel):
     interview_config: Optional[InterviewConfigIn] = None
 
 
-# ── Response schema 
+# ── Response schema
+
 
 class SkillOut(BaseModel):
     name: str
@@ -182,7 +185,8 @@ class JobOut(BaseModel):
         )
 
 
-# ── Endpoints 
+# ── Endpoints
+
 
 @router.post("", response_model=JobOut, status_code=status.HTTP_201_CREATED)
 async def create_job(
@@ -234,7 +238,7 @@ async def list_active_jobs(
     offset: int = Query(0, ge=0),
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
 ):
-    """List all active jobs across all orgs — for candidate job discovery."""
+    """List all active jobs across all orgs - for candidate job discovery."""
     jobs = await repo.list_all_active(limit=limit, offset=offset)
     return [JobOut.from_domain(j) for j in jobs]
 

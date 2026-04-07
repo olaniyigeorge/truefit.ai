@@ -168,8 +168,8 @@ export default function OrgPage() {
                                     <p className="text-[13px] text-muted-foreground leading-relaxed mb-4">{org.description}</p>
                                 )}
                                 {[
-                                    { label: "Industry",  value: org.industry ?? "—" },
-                                    { label: "Headcount", value: org.headcount ?? "—" },
+                                    { label: "Industry",  value: org.industry ?? "-" },
+                                    { label: "Headcount", value: org.headcount ?? "-" },
                                 ].map(({ label, value }) => (
                                     <div key={label} className="flex justify-between items-center py-2.5 border-b border-border last:border-0">
                                         <span className="text-[12px] text-muted-foreground">{label}</span>

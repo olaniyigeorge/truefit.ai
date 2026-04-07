@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# deploy.sh — TrueFit Full Stack Deployment Script
+# deploy.sh - TrueFit Full Stack Deployment Script
 # Runs ON the GCP Compute Engine VM
 # Usage: bash deploy.sh
 # =============================================================================
@@ -62,7 +62,7 @@ sudo systemctl start redis-server
 if sudo systemctl is-active --quiet redis-server; then
     success "Redis is running"
 else
-    warn "Redis failed to start — check: sudo systemctl status redis-server"
+    warn "Redis failed to start - check: sudo systemctl status redis-server"
 fi
 
 success "System dependencies ready  (node $(node -v), python $(python3 --version))"
@@ -71,7 +71,7 @@ success "System dependencies ready  (node $(node -v), python $(python3 --version
 # ── STEP 2: Clone or Update Repo ────
 # =============================================================================
 if [ -d "$APP_DIR/.git" ]; then
-    log "Repo exists — pulling latest changes..."
+    log "Repo exists - pulling latest changes..."
     git -C "$APP_DIR" pull origin main
 else
     log "Cloning repo..."
@@ -81,7 +81,7 @@ fi
 success "Repo up to date"
 
 # =============================================================================
-# ── STEP 3: Backend — Python venv + dependencies ──
+# ── STEP 3: Backend - Python venv + dependencies ──
 # =============================================================================
 log "Setting up Python virtual environment..."
 
@@ -109,11 +109,11 @@ deactivate
 success "Backend dependencies installed"
 
 # =============================================================================
-# ── STEP 4: Backend — .env file ─────
+# ── STEP 4: Backend - .env file ─────
 # =============================================================================
 if [ ! -f "$BACKEND_DIR/.env" ]; then
     if [ -f "$BACKEND_DIR/.env.example" ]; then
-        warn ".env not found — copying from .env.example. Fill in real values!"
+        warn ".env not found - copying from .env.example. Fill in real values!"
         cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
     else
         warn "No .env or .env.example found. Make sure environment variables are set."
@@ -123,7 +123,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 5: Backend — systemd service ─
+# ── STEP 5: Backend - systemd service ─
 # =============================================================================
 log "Configuring systemd service for FastAPI..."
 
@@ -157,7 +157,7 @@ else
 fi
 
 # =============================================================================
-# ── STEP 6: Frontend — install + build 
+# ── STEP 6: Frontend - install + build 
 # =============================================================================
 log "Building React frontend..."
 
@@ -173,10 +173,10 @@ else
     error "Frontend build output not found (expected dist/ or build/)"
 fi
 
-success "Frontend built → $FRONTEND_BUILD"
+success "Frontend built -> $FRONTEND_BUILD"
 
 # =============================================================================
-# ── STEP 7: Nginx — serve frontend + proxy API ────
+# ── STEP 7: Nginx - serve frontend + proxy API ────
 # =============================================================================
 log "Configuring Nginx..."
 
@@ -230,19 +230,19 @@ sleep 2
 if redis-cli ping | grep -q "PONG"; then
     success "Redis is responding"
 else
-    warn "Redis not responding — check: sudo systemctl status redis-server"
+    warn "Redis not responding - check: sudo systemctl status redis-server"
 fi
 
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:${BACKEND_PORT} | grep -qE "^(200|404|422)$"; then
     success "Backend responding on port ${BACKEND_PORT}"
 else
-    warn "Backend not responding — check: sudo journalctl -u ${SERVICE_NAME} -n 50"
+    warn "Backend not responding - check: sudo journalctl -u ${SERVICE_NAME} -n 50"
 fi
 
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:80 | grep -qE "^(200|301|302)$"; then
     success "Nginx serving on port 80"
 else
-    warn "Nginx check failed — check: sudo nginx -t"
+    warn "Nginx check failed - check: sudo nginx -t"
 fi
 
 # =============================================================================

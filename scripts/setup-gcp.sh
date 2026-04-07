@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# setup-gcp.sh — TrueFit GCP Infrastructure Provisioning Script
+# setup-gcp.sh - TrueFit GCP Infrastructure Provisioning Script
 # Runs on your LOCAL machine
 # Usage: bash setup-gcp.sh
 # Requires: gcloud CLI installed and authenticated
@@ -20,7 +20,7 @@ warn()   { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
 # =============================================================================
-# ── CONFIGURATION — edit before running ─────
+# ── CONFIGURATION - edit before running ─────
 # =============================================================================
 PROJECT_ID="truefit-490409"        # <-- change this
 VM_NAME="truefit-engine"
@@ -65,7 +65,7 @@ if ! gcloud compute firewall-rules describe allow-http --quiet &>/dev/null; then
         --quiet
     success "Firewall rule: allow-http created"
 else
-    warn "Firewall rule allow-http already exists — skipping"
+    warn "Firewall rule allow-http already exists - skipping"
 fi
 
 # Allow HTTPS (port 443)
@@ -77,10 +77,10 @@ if ! gcloud compute firewall-rules describe allow-https --quiet &>/dev/null; the
         --quiet
     success "Firewall rule: allow-https created"
 else
-    warn "Firewall rule allow-https already exists — skipping"
+    warn "Firewall rule allow-https already exists - skipping"
 fi
 
-# Allow FastAPI direct access (port 8000) — for debugging
+# Allow FastAPI direct access (port 8000) - for debugging
 if ! gcloud compute firewall-rules describe allow-truefit-api --quiet &>/dev/null; then
     gcloud compute firewall-rules create allow-truefit-api \
         --allow tcp:8000 \
@@ -89,7 +89,7 @@ if ! gcloud compute firewall-rules describe allow-truefit-api --quiet &>/dev/nul
         --quiet
     success "Firewall rule: allow-truefit-api created"
 else
-    warn "Firewall rule allow-truefit-api already exists — skipping"
+    warn "Firewall rule allow-truefit-api already exists - skipping"
 fi
 
 # =============================================================================
@@ -98,7 +98,7 @@ fi
 log "Creating VM instance: $VM_NAME..."
 
 if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --quiet &>/dev/null; then
-    warn "VM $VM_NAME already exists — skipping creation"
+    warn "VM $VM_NAME already exists - skipping creation"
 else
     gcloud compute instances create "$VM_NAME" \
         --zone="$ZONE" \
@@ -128,7 +128,7 @@ if ! gcloud compute addresses describe "$STATIC_IP_NAME" --region="${ZONE%-*}" -
         --quiet
     success "Static IP reserved: $STATIC_IP_NAME"
 else
-    warn "Static IP $STATIC_IP_NAME already exists — skipping"
+    warn "Static IP $STATIC_IP_NAME already exists - skipping"
 fi
 
 STATIC_IP=$(gcloud compute addresses describe "$STATIC_IP_NAME" \

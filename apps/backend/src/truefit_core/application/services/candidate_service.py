@@ -55,7 +55,7 @@ class CandidateService:
         candidate = Candidate(full_name=full_name, contact=contact)
         await self._candidates.save(candidate)
 
-        logger.info(f"Candidate registered: {candidate.id} — {email}")
+        logger.info(f"Candidate registered: {candidate.id} - {email}")
         return candidate
 
     async def update_profile(

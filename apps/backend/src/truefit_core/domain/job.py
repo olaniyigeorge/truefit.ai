@@ -58,7 +58,7 @@ class JobRequirements:
     """
     Role-level requirements that sit above individual skills.
 
-    experience_level    The seniority band — first-class field, also indexed on DB.
+    experience_level    The seniority band - first-class field, also indexed on DB.
     min_total_years     Total career experience (vs per-skill min_years on SkillRequirement).
     education           Free text e.g. "Bachelor's in CS or equivalent"
     certifications      e.g. ["AWS Solutions Architect", "PMP"]
@@ -152,7 +152,7 @@ class Job:
         self._created_at: datetime = created_at or _utcnow()
         self._updated_at: datetime = updated_at or _utcnow()
 
-    # ── Identity 
+    # ── Identity
 
     @property
     def id(self) -> uuid.UUID:
@@ -180,7 +180,7 @@ class Job:
 
     @property
     def experience_level(self) -> ExperienceLevel:
-        """Convenience shortcut — experience_level lives on requirements."""
+        """Convenience shortcut - experience_level lives on requirements."""
         return self._requirements.experience_level
 
     @property
@@ -293,7 +293,7 @@ class Job:
                 f"(status={self._status.value})"
             )
 
-    # ── Internal 
+    # ── Internal
 
     def _assert_not_closed(self) -> None:
         if self._status == JobStatus.CLOSED:
@@ -303,7 +303,7 @@ class Job:
         allowed = self._VALID_TRANSITIONS[self._status]
         if new_status not in allowed:
             raise ValueError(
-                f"Invalid status transition: {self._status.value} → {new_status.value}"
+                f"Invalid status transition: {self._status.value} -> {new_status.value}"
             )
         self._status = new_status
         self._touch()
@@ -311,7 +311,7 @@ class Job:
     def _touch(self) -> None:
         self._updated_at = _utcnow()
 
-    # ── Representation 
+    # ── Representation
 
     def __repr__(self) -> str:
         return (

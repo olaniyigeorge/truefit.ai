@@ -3,17 +3,17 @@
 
 ## High-level entities
 
-- **Organizations** (companies) → create Job Listings
-- **Users** (both recruiters + candidates) → belong to org optionally
-- **Candidates** (profile) → apply to jobs
-- **Applications** → job ↔ candidate relationship + status
-- **Interview Sessions** → one per application (or multiple rounds)
-- **Interview Turns** → each message/utterance (candidate/agent/system)
-- **Media Assets** → audio/video chunks, recordings, images, attachments
-- **Transcripts** → derived text from audio + alignment
-- **Evaluations** → scoring + recommendation + report output
-- **Rubrics & Criteria** → job-specific scoring definition
-- **Audit/Event Log** → important for debugging live sessions (interruptions, reconnects)
+- **Organizations** (companies) -> create Job Listings
+- **Users** (both recruiters + candidates) -> belong to org optionally
+- **Candidates** (profile) -> apply to jobs
+- **Applications** -> job ↔ candidate relationship + status
+- **Interview Sessions** -> one per application (or multiple rounds)
+- **Interview Turns** -> each message/utterance (candidate/agent/system)
+- **Media Assets** -> audio/video chunks, recordings, images, attachments
+- **Transcripts** -> derived text from audio + alignment
+- **Evaluations** -> scoring + recommendation + report output
+- **Rubrics & Criteria** -> job-specific scoring definition
+- **Audit/Event Log** -> important for debugging live sessions (interruptions, reconnects)
 
 ## Core tables (recommended)
 
@@ -34,7 +34,7 @@ Auth identity. Can represent recruiter or candidate account (or both).
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| org_id | uuid fk | → orgs.id, nullable (recruiters belong to org) |
+| org_id | uuid fk | -> orgs.id, nullable (recruiters belong to org) |
 | email | string | unique |
 | display_name | string | |
 | role | enum | recruiter \| admin \| candidate |
@@ -52,13 +52,13 @@ Candidate-specific details.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| user_id | uuid fk | unique → users.id |
+| user_id | uuid fk | unique -> users.id |
 | headline | string | |
 | bio | text | |
 | location | string | |
 | years_experience | int | |
 | skills | text[] or jsonb | |
-| resume_asset_id | uuid fk | → media_assets.id, nullable |
+| resume_asset_id | uuid fk | -> media_assets.id, nullable |
 | created_at | timestamp | |
 | updated_at | timestamp | |
 
@@ -68,8 +68,8 @@ Job definitions and interview configuration.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| org_id | uuid fk | → orgs.id |
-| created_by | uuid fk | → users.id |
+| org_id | uuid fk | -> orgs.id |
+| created_by | uuid fk | -> users.id |
 | title | string | |
 | description | text | |
 | requirements | jsonb | structured requirements |
@@ -84,7 +84,7 @@ Reusable scoring rubric.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| org_id | uuid fk | → orgs.id |
+| org_id | uuid fk | -> orgs.id |
 | name | string | |
 | version | int | |
 | notes | text | |
@@ -97,7 +97,7 @@ Rubric criteria rows.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| rubric_id | uuid fk | → rubrics.id |
+| rubric_id | uuid fk | -> rubrics.id |
 | key | string | e.g. communication, problem_solving |
 | label | string | |
 | description | text | |
@@ -113,15 +113,15 @@ Candidate applying for a job (or invited).
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| job_id | uuid fk | → job_listings.id |
-| candidate_id | uuid fk | → candidate_profiles.id |
+| job_id | uuid fk | -> job_listings.id |
+| candidate_id | uuid fk | -> candidate_profiles.id |
 | source | enum | applied \| invited |
 | status | enum | new \| interviewing \| shortlisted \| rejected \| hired |
 | meta | jsonb | extra fields, e.g. referral, tags |
 | created_at | timestamp | |
 | updated_at | timestamp | |
 
-> **Constraint:** Unique (job_id, candidate_id) — prevents duplicate applications.
+> **Constraint:** Unique (job_id, candidate_id) - prevents duplicate applications.
 
 ## Live interview tables
 
@@ -131,7 +131,7 @@ Anchor for WebRTC + WebSocket control + agent context.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| application_id | uuid fk | → applications.id |
+| application_id | uuid fk | -> applications.id |
 | round | int | default 1 |
 | status | enum | created \| active \| ended \| cancelled \| failed |
 | started_at | timestamp | |
@@ -148,8 +148,8 @@ Tracks who joined the session and reconnections.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| session_id | uuid fk | → interview_sessions.id |
-| user_id | uuid fk | → users.id, nullable (agent could be null or system user) |
+| session_id | uuid fk | -> interview_sessions.id |
+| user_id | uuid fk | -> users.id, nullable (agent could be null or system user) |
 | participant_type | enum | candidate \| recruiter \| agent \| system |
 | joined_at | timestamp | |
 | left_at | timestamp | |
@@ -163,7 +163,7 @@ Every "turn" in the conversation (candidate utterance, agent response, system no
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| session_id | uuid fk | → interview_sessions.id |
+| session_id | uuid fk | -> interview_sessions.id |
 | seq | int | strict ordering per session |
 | speaker | enum | candidate \| agent \| system |
 | modality | enum | text \| audio \| video \| mixed |
@@ -183,8 +183,8 @@ Stores references to uploaded/recorded chunks or files (GCS paths later).
 | id | uuid pk | Primary key |
 | owner_type | enum | candidate \| org \| session |
 | owner_id | uuid | |
-| session_id | uuid fk | → interview_sessions.id, nullable |
-| turn_id | uuid fk | → interview_turns.id, nullable |
+| session_id | uuid fk | -> interview_sessions.id, nullable |
+| turn_id | uuid fk | -> interview_turns.id, nullable |
 | kind | enum | audio_chunk \| video_chunk \| recording \| image \| resume \| report |
 | storage_provider | enum | local \| gcs |
 | uri | text | path or gs:// later |
@@ -199,9 +199,9 @@ Speech-to-text results, kept separate for re-running or improvements.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| session_id | uuid fk | → interview_sessions.id |
-| turn_id | uuid fk | → interview_turns.id, nullable |
-| source_asset_id | uuid fk | → media_assets.id |
+| session_id | uuid fk | -> interview_sessions.id |
+| turn_id | uuid fk | -> interview_turns.id, nullable |
+| source_asset_id | uuid fk | -> media_assets.id |
 | engine | string | gemini, whisper, etc. |
 | language | string | |
 | text | text | |
@@ -216,15 +216,15 @@ Final scoring output for an interview session (or per round).
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| session_id | uuid fk | unique → interview_sessions.id |
-| rubric_id | uuid fk | → rubrics.id, nullable (or snapshot only) |
+| session_id | uuid fk | unique -> interview_sessions.id |
+| rubric_id | uuid fk | -> rubrics.id, nullable (or snapshot only) |
 | overall_score | numeric | |
 | recommendation | enum | strong_yes \| yes \| maybe \| no \| strong_no |
 | summary | text | |
 | strengths | text[] | |
 | concerns | text[] | |
 | evidence | jsonb | citations to turns, timestamps, snippets |
-| report_asset_id | uuid fk | → media_assets.id, nullable (pdf/html) |
+| report_asset_id | uuid fk | -> media_assets.id, nullable (pdf/html) |
 | created_at | timestamp | |
 | updated_at | timestamp | |
 
@@ -234,8 +234,8 @@ Per-criterion score rows.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| evaluation_id | uuid fk | → evaluations.id |
-| criterion_id | uuid fk | → rubric_criteria.id |
+| evaluation_id | uuid fk | -> evaluations.id |
+| criterion_id | uuid fk | -> rubric_criteria.id |
 | score | numeric | |
 | notes | text | |
 | evidence | jsonb | |
@@ -251,7 +251,7 @@ Useful for interruptions and real-time reliability.
 | Field | Type | Notes |
 |-------|------|-------|
 | id | uuid pk | Primary key |
-| session_id | uuid fk | → interview_sessions.id |
+| session_id | uuid fk | -> interview_sessions.id |
 | type | enum | ws_connected, ws_disconnected, rtc_connected, rtc_disconnected, interrupt_detected, barge_in, agent_tool_call, candidate_muted, candidate_unmuted, error |
 | at | timestamp | |
 | meta | jsonb | reason, latency, etc. |
