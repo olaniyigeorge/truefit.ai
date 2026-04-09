@@ -53,6 +53,7 @@ export default function JobListingsPage() {
     const [successJob, setSuccessJob] = useState<Job | null>(null)
     const [candidateProfile, setCandidateProfile] = useState<Candidate | null>(null)
 
+    console.log("Candidate profile:", candidateProfile)
     useEffect(() => {
         if (!backendUser?.id) return
 
