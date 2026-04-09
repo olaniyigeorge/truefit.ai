@@ -494,11 +494,11 @@ class InterviewConnection:
         """
         logger.info("WS receive loop started")
         async for raw in self._ws.iter_text():
-            logger.info(f"\nWS message received: {raw}\n")
+            logger.info(f"\nWS message received: {raw[:20]}\n")
             try:
                 msg = json.loads(raw)
             except json.JSONDecodeError:
-                logger.warning(f"Invalid JSON message: {raw}")
+                logger.warning(f"Invalid JSON message: {raw[:20]}")
                 continue
 
             match msg.get("type"):

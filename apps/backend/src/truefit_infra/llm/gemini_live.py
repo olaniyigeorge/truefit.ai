@@ -73,7 +73,7 @@ from src.truefit_core.common.utils import logger
 # separately; this model does it natively and sounds more natural.
 
 
-_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"
+_MODEL = "gemini-live-2.5-flash-native-audio" # "gemini-3.1-flash-live-preview" # gemini-2.5-flash-native-audio-preview-12-2025" - "gemini-live-2.5-flash-native-audio" - 
 _INPUT_SAMPLE_RATE = 16_000  # Gemini expects 16kHz inbound
 _OUTPUT_SAMPLE_RATE = 24_000  # Gemini outputs at 24kHz
 _INPUT_MIME = f"audio/pcm;rate={_INPUT_SAMPLE_RATE}"  # MIME type for sending audio

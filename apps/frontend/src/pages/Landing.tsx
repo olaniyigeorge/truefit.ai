@@ -4,6 +4,7 @@ import {FeatureCard} from "@/components/FeatureCard"
 import {Step} from "@/components/NumberedStep"
 import { SpiralLogo } from "@/components/Spiral"
 import {Counter} from "@/components/AnimatedCounter"
+import { ChevronRight } from "lucide-react"
 
 
 // ── Main landing page ─
@@ -85,9 +86,10 @@ export default function Landing() {
         <div className="flex flex-wrap gap-3 justify-center mb-16">
           <a
             href="/auth"
-            className="px-6 py-3.5 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded hover:brightness-110 transition-all no-underline"
+            className="px-6 py-3.5 flex items-center gap-2 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded hover:brightness-110 transition-all no-underline"
           >
-            Start Hiring Smarter ->
+            <>Start Hiring Smarter</>
+            <ChevronRight size={16} className="ml-1" />
           </a>
           <a
             href="#"
@@ -284,9 +286,10 @@ export default function Landing() {
             />
             <button
               onClick={() => { if (email.includes("@")) setSubmitted(true) }}
-              className="px-6 py-3.5 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded-r hover:brightness-110 transition-all whitespace-nowrap"
+              className="px-6 py-3.5 flex items-center gap-2 bg-primary text-primary-foreground text-[13px] font-bold tracking-wide rounded-r hover:brightness-110 transition-all whitespace-nowrap"
             >
-              Join Waitlist ->
+              <>Join Waitlist</>
+              <ChevronRight size={16} className="ml-1" />
             </button>
           </div>
         )}

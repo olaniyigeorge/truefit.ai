@@ -171,6 +171,7 @@ class AudioBridge:
             self._pump_inbound(track),
             name=f"audio-inbound-{self._ctx.session_id}",
         )
+        
         self._track_attached.set()
 
     async def _pump_inbound(self, track: MediaStreamTrack) -> None:
