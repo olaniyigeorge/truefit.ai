@@ -36,7 +36,7 @@ class DatabaseManager:
         )
 
         self._is_initialized = True
-        logger.info(f"Database initialized with URL: {database_url}")
+        logger.debug(f"Database initialized with URL: {database_url}")
 
     async def create_tables(self):
         """Create all database tables"""

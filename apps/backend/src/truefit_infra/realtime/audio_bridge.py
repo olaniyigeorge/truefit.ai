@@ -342,6 +342,7 @@ class AudioBridge:
         browser consumes frames fast enough that the queue stays shallow.
         """
         try:
+            logger.debug(f"[AudioBridge] Queueing {len(pcm_bytes)} bytes of agent audio")
             self.outbound_queue.put_nowait(pcm_bytes)
         except asyncio.QueueFull:
             logger.debug(
@@ -376,172 +377,311 @@ class AudioBridge:
 # OUTBOUND AUDIO TRACK
 # ────────────────────
 
-
 class _AgentAudioTrack(AudioStreamTrack):
     """
     aiortc-compatible audio track that delivers the agent's voice to the browser.
 
-    This is a standard aiortc MediaStreamTrack subclass. aiortc calls recv()
-    on it in a loop to get frames to send to the browser via the WebRTC
-    peer connection. We provide exactly one 20ms frame per call, paced to
-    the correct clock rate.
+    PIPELINE (per recv() call):
+      1. Sleep until the next 20ms wall-clock deadline (pacing)
+      2. Pull ONE chunk from outbound_queue (blocking with short timeout)
+      3. Resample that chunk 24kHz -> 48kHz and append to _buf
+      4. Slice exactly 1920 bytes (one 20ms frame at 48kHz s16 mono) from _buf
+      5. Pad with silence if _buf doesn't have enough yet
+      6. Build and return an av.AudioFrame
 
-    Pipeline (per recv() call):
-      1. Check timing - sleep until the next 20ms deadline
-      2. Drain outbound_queue into _buf (resampling 24kHz -> 48kHz as we go)
-      3. Slice exactly one 20ms frame from _buf (960 samples × 2 bytes = 1920 bytes)
-      4. Pad with silence if we don't have enough data (agent hasn't responded yet)
-      5. Build and return an av.AudioFrame
+    WHY ONE CHUNK PER recv() CALL, NOT A GREEDY DRAIN?
+    The greedy drain (pulling the entire queue into _buf in one call) causes
+    the resampler to receive large irregular bursts and produce proportionally
+    large output bursts. Since recv() is called every 20ms, one 20ms input
+    chunk per call keeps the resampler operating on uniformly-sized inputs,
+    producing uniformly-sized outputs, and the pacing clock stays accurate.
 
-    The pts-based pacing clock mirrors aiortc's own AudioStreamTrack base class.
-    We reset it (via clear_buf) between turns to prevent drift accumulation.
+    WHY av.AudioResampler WITH frame_size?
+    libswresample (underneath av.AudioResampler) has an internal ring buffer.
+    Without a fixed output frame_size, it can accumulate samples and release
+    them in bursts whose size depends on the ratio of input to output sample
+    rate and the internal buffer fill level. Passing frame_size=960 (20ms at
+    48kHz) forces it to emit exactly 960 samples per output frame, making
+    the resampler behave as a proper stream converter rather than a bursty
+    block converter.
+
+    WHY NOT RESET _pts AND _start IN clear_buf()?
+    The pacing clock anchors to wall-clock time at the first recv() call and
+    advances by exactly one frame per call thereafter. If _start is reset to
+    None, the next recv() re-anchors to the current wall-clock time, which
+    means all the accumulated pts offset since session start is lost. Every
+    deadline computed after the reset is in the past (because pts is 0 but
+    real time has advanced), so wait is always negative, asyncio.sleep(0) is
+    called, and recv() spins as fast as the event loop allows — draining the
+    queue faster than real-time and causing the audio loop.
     """
 
     def __init__(self, *, queue: asyncio.Queue, session_id: str) -> None:
         super().__init__()
         self._queue = queue
         self._session_id = session_id
-        self._sample_rate = _WEBRTC_SAMPLE_RATE  # 48000 - what WebRTC expects
+        self._sample_rate = _WEBRTC_SAMPLE_RATE        # 48000Hz output to WebRTC
         self._samples_per_frame = int(
-            _WEBRTC_SAMPLE_RATE * _CHUNK_DURATION
-        )  # 960 samples/frame
-        self._resampler = av.AudioResampler(
-            format="s16", layout="mono", rate=_WEBRTC_SAMPLE_RATE  # 48kHz output
+            _WEBRTC_SAMPLE_RATE * _CHUNK_DURATION      # 960 samples = 20ms at 48kHz
         )
-        self._buf = bytearray()  # ring buffer of resampled 48kHz s16 PCM
-        self._pts = 0  # presentation timestamp, increments by samples_per_frame
-        self._start: Optional[float] = None  # wall clock anchor for pacing
+        # frame_size=960 forces libswresample to emit exactly one 20ms frame
+        # per resample() call, preventing burst output that causes audio loops.
+        self._resampler = av.AudioResampler(
+            format="s16",
+            layout="mono",
+            rate=_WEBRTC_SAMPLE_RATE,
+            frame_size=self._samples_per_frame,
+        )
+        self._buf = bytearray()   # accumulator for resampled 48kHz s16 PCM
+        self._pts: int = 0        # output presentation timestamp, advances by 960 per frame
+        self._start: Optional[float] = None   # wall-clock anchor, set on first recv()
+        self._input_pts: int = 0  # input pts fed to resampler, advances by input samples
 
     @property
     def has_buffered_audio(self) -> bool:
         """
-        Returns True if there is resampled audio waiting in _buf to be
-        delivered to the browser.
-
-        Used by InterviewConnection._on_turn_complete() to know when it's
-        safe to call clear_outbound_queue() - we wait until this is False,
-        meaning all buffered audio has been consumed by recv() and sent to
-        the browser before we reset the resampler.
+        True if resampled audio is waiting in _buf.
+        Used by _on_turn_complete() to know when the current turn's audio
+        has fully drained out of the track before resetting the resampler.
         """
         return len(self._buf) > 0
 
     def clear_buf(self) -> None:
         """
-        Discards all buffered audio, flushes and resets the resampler,
-        and resets the pts clock to zero.
+        Discards buffered audio and resets the resampler for the next turn.
+        Called by AudioBridge.clear_outbound_queue() at end-of-turn or interrupt.
 
-        Called by AudioBridge.clear_outbound_queue() - either during an
-        interrupt (immediate stop) or at end-of-turn cleanup (safe reset).
+        WHAT IS RESET:
+          _buf        — discard any partially-played audio from the old turn
+          _resampler  — reinstantiate to guarantee clean internal state; the
+                        old instance may hold partially-compensated delay frames
+                        from the previous turn that would corrupt the next one
+          _input_pts  — reset to 0 because the new resampler has no history;
+                        its timeline starts fresh
 
-        WHY REINSTANTIATE THE RESAMPLER?
-        av.AudioResampler holds internal state (filter graph, delay compensation
-        buffers). Flushing with resample(None) helps but doesn't guarantee
-        complete state reset. Reinstantiating is the only way to guarantee
-        the next turn starts with a clean resampler.
-
-        WHY RESET pts AND _start?
-        Each turn is effectively a new audio stream. Resetting pts to 0 and
-        _start to None means the pacing clock restarts from zero at the
-        first recv() of the new turn, preventing timestamp drift.
+        WHAT IS NOT RESET:
+          _pts and _start — the output pacing clock is NOT reset. It must remain
+          continuous across turns. If reset, every deadline after the reset is
+          computed relative to a new _start anchored at the reset moment, but
+          _pts would be 0 while real time has advanced by minutes — so every
+          deadline is instantly in the past, wait is always negative, and recv()
+          spins without sleeping, consuming the queue faster than real-time.
         """
         self._buf.clear()
-        # Flush any samples held inside the resampler's internal state
         try:
-            flush_frames = self._resampler.resample(None)  # None = flush
-            # discard - we don't want the flushed frames, just clearing state
+            self._resampler.resample(None)  # flush internal libswresample buffers
         except Exception:
             pass
-        # Reinstantiate to guarantee clean state
+        # Reinstantiate — the only guaranteed way to get a clean resampler state
         self._resampler = av.AudioResampler(
-            format="s16", layout="mono", rate=_WEBRTC_SAMPLE_RATE
+            format="s16",
+            layout="mono",
+            rate=_WEBRTC_SAMPLE_RATE,
+            frame_size=self._samples_per_frame,
         )
-        # Reset pts and start so the pacing clock restarts cleanly for the next turn
-        self._pts = 0
-        self._start = None  # will be re-anchored on next recv() call
+        self._input_pts = 0
+        # _pts and _start deliberately NOT reset — see docstring above
 
     async def recv(self) -> av.AudioFrame:
         """
-        Called by aiortc's send loop to get the next audio frame to deliver
-        to the browser. Must return exactly one 20ms frame per call.
+        Called by aiortc every ~20ms to get the next audio frame for the browser.
 
-        PACING (timing) 
-        On the first call: anchor _start to now.
-        On subsequent calls: compute when the next frame is due (based on pts),
-        and sleep until that deadline. This produces a steady 50fps (20ms/frame)
-        cadence that matches WebRTC's expectation.
+        ──────────────────
+        SECTION 1: PACING
+        ──────────────────
+        recv() must return exactly one frame every 20ms. aiortc does not
+        enforce timing on its own — it calls recv() and immediately uses
+        whatever comes back. If recv() returns too fast, frames pile up in
+        the browser's jitter buffer and audio plays back at higher-than-normal
+        speed. If it returns too slow, there are gaps and stutters.
 
-        Without this pacing, frames would be delivered as fast as the queue
-        fills, causing the browser to receive bursts of audio which it can't
-        play in real-time - resulting in choppy or fast-forwarded speech.
+        We implement pacing with a simple wall-clock anchor:
+          - On the first call, record _start = time.time() and use pts=0.
+          - On every subsequent call, advance _pts by 960 (one frame's worth
+            of samples at 48kHz), compute the wall-clock deadline as:
+              deadline = _start + (_pts / 48000)
+            and sleep until that deadline.
 
-        QUEUE DRAIN
-        We drain the queue greedily (get_nowait() in a loop) into _buf until
-        we have at least one full frame's worth of data, or the queue is empty.
-        Each chunk from the queue is resampled 24kHz -> 48kHz before going in.
+        This produces a steady 20ms cadence regardless of how long the queue
+        drain and resampling take (as long as they complete in under 20ms,
+        which they always do for small inputs).
 
-        SILENCE PADDING
-        If after draining the queue we still don't have a full frame, we pad
-        with silence. This happens between agent turns when the queue is empty
-        - it keeps the WebRTC stream alive (browser expects continuous frames)
-        without playing anything audible.
+        Why _pts / sample_rate and not just asyncio.sleep(0.02)?
+        Cumulative drift. asyncio.sleep(0.02) drifts by several milliseconds
+        per call due to event loop scheduling jitter. Over a 60-second interview
+        that's hundreds of milliseconds of drift. The pts-based approach
+        self-corrects on every frame — if a frame runs long, the next sleep
+        is shorter to compensate.
 
-        FRAME CONSTRUCTION
-        Build an av.AudioFrame at 48kHz mono s16 with the correct pts.
-        aiortc uses this to package the audio as an Opus RTP packet and send
-        it to the browser.
+        ────────────────────────────────────────────
+        SECTION 2: QUEUE DRAIN (ONE CHUNK PER CALL)
+        ────────────────────────────────────────────
+        We pull at most one chunk from the queue per recv() call. This is
+        intentional and critical. The previous implementation used a greedy
+        drain (loop until _buf >= target), which caused two problems:
+
+          a) The resampler received large irregular inputs and produced large
+             irregular outputs, filling _buf with many seconds of audio at once.
+             recv() then sliced through this in subsequent calls without ever
+             sleeping (because the pacing deadline was already past), playing
+             the audio at ~48× normal speed.
+
+          b) Even with correct pacing, pulling the entire queue in one call
+             means _buf can grow to 10+ seconds of audio. Subsequent calls
+             find _buf already full, skip the queue entirely, and the pacing
+             clock drifts relative to the actual audio content.
+
+        One chunk per call means _buf grows by at most one resampled chunk
+        (≈1920 bytes = 20ms) per recv() call, keeping _buf shallow and the
+        resampler operating on uniform 20ms inputs.
+
+        We use asyncio.wait_for with a short timeout instead of get_nowait()
+        so that when the queue is empty (silence between turns) recv() still
+        returns on schedule rather than blocking indefinitely.
+
+        ──────────────────────
+        SECTION 3: RESAMPLING
+        ──────────────────────
+        Input:  24kHz mono s16 PCM from Gemini (variable chunk sizes)
+        Output: 48kHz mono s16 PCM for WebRTC (fixed 960 samples = 1920 bytes)
+
+        The resampler is configured with frame_size=960, which forces
+        libswresample to emit exactly 960 output samples per resample() call.
+        This prevents the burst-output behaviour of an unconstrained resampler.
+
+        input_pts is tracked and incremented by the number of input samples
+        on each call. This gives libswresample a continuous timeline, which
+        it uses for its compensation calculations. Without a monotonically
+        advancing pts, some versions of libswresample re-initialise their
+        internal state on each call, producing the burst output.
+
+        ───────────────────────
+        SECTION 4: SLICE / PAD
+        ───────────────────────
+        After resampling (or if the queue was empty), we need exactly 1920
+        bytes to fill one output frame. If _buf has >= 1920 bytes we slice.
+        If not, we pad with silence. Silence padding happens during the gap
+        between turns — it keeps the WebRTC stream alive without audible gaps.
+
+        ────────────────────────
+        SECTION 5: FRAME BUILD
+        ────────────────────────
+        We build an av.AudioFrame with the correct sample_rate, time_base,
+        and pts. aiortc uses pts to sequence the RTP packets it sends to the
+        browser. Incorrect pts causes the browser's jitter buffer to discard
+        or reorder frames.
         """
-        # Pace to exactly 20ms intervals
+
+        frame_num = getattr(self, '_frame_count', 0)
+        self._frame_count = frame_num + 1
+
+        # SECTION 1: PACING 
         if self._start is None:
-            self._start = time.time()  # anchor the clock on first frame
+            self._start = time.time()
+            logger.info(
+                f"\n[AudioTrack/{self._session_id}] "
+                f"frame={frame_num} | clock ANCHORED at {self._start:.4f} | "
+                f"pts={self._pts} | buf={len(self._buf)}B | queue~={self._queue.qsize()}\n"
+            )
         else:
             self._pts += self._samples_per_frame
             deadline = self._start + (self._pts / self._sample_rate)
             wait = deadline - time.time()
+            logger.info(
+                f"\n[AudioTrack/{self._session_id}] "
+                f"frame={frame_num} | pts -> {self._pts} | "
+                f"deadline={deadline:.4f} | "
+                f"wait={'%.1fms' % (wait*1000) if wait > 0 else 'LATE %.1fms' % (abs(wait)*1000)} | "
+                f"buf={len(self._buf)}B | queue~={self._queue.qsize()}\n"
+            )
             if wait > 0:
                 await asyncio.sleep(wait)
+            else:
+                logger.info(
+                    f"\n[AudioTrack/{self._session_id}] "
+                    f"frame={frame_num} | LATE by {abs(wait)*1000:.1f}ms\n"
+                )
 
-        # Drain queue into buffer until we have a full frame 
-        target = (
-            self._samples_per_frame * 2
-        )  # bytes needed (960 samples × 2 bytes = 1920)
-
-        while len(self._buf) < target:
-            try:
-                pcm_24k = self._queue.get_nowait()
-            except asyncio.QueueEmpty:
-                break  # not enough data - will pad with silence below
+        # SECTION 2 & 3: PULL ONE CHUNK AND RESAMPLE 
+        # Pull at most one chunk. Use a short timeout so we return on schedule
+        # even when the queue is empty (silence between turns).
+        try:
+            pcm_24k = await asyncio.wait_for(
+                self._queue.get(), timeout=0.005  # 5ms — well within our 20ms budget
+            )
 
             if pcm_24k is None:
-                raise Exception("AudioBridge closed")  # sentinel - bridge is done
+                logger.info(
+                    f"\n[AudioTrack/{self._session_id}] "
+                    f"frame={frame_num} | got None sentinel — bridge is CLOSED\n"
+                )
+                raise Exception("AudioBridge closed")
 
-            # Resample from 24kHz (Gemini output) -> 48kHz (WebRTC expected)
-            n = len(pcm_24k) // 2  # number of samples in the 24kHz chunk
-            in_frame = av.AudioFrame(format="s16", layout="mono", samples=n)
+            n_samples_in = len(pcm_24k) // 2
+            in_frame = av.AudioFrame(
+                format="s16", layout="mono", samples=n_samples_in
+            )
             in_frame.planes[0].update(pcm_24k)
-            in_frame.sample_rate = _OUTPUT_SAMPLE_RATE  # 24000 input
+            in_frame.sample_rate = _OUTPUT_SAMPLE_RATE
             in_frame.time_base = fractions.Fraction(1, _OUTPUT_SAMPLE_RATE)
-            in_frame.pts = 0
-            for rf in self._resampler.resample(in_frame):
-                self._buf.extend(
-                    bytes(rf.planes[0])
-                )  # append resampled 48kHz PCM to buf
+            in_frame.pts = self._input_pts
+            self._input_pts += n_samples_in
 
-        # Slice exactly one frame, pad with silence if needed
+            resampled_bytes = 0
+            for rf in self._resampler.resample(in_frame):
+                chunk = bytes(rf.planes[0])
+                self._buf.extend(chunk)
+                resampled_bytes += len(chunk)
+
+            logger.info(
+                f"\n[AudioTrack/{self._session_id}] "
+                f"frame={frame_num} | "
+                f"in={len(pcm_24k)}B ({n_samples_in} samples @24kHz) -> "
+                f"resampled={resampled_bytes}B | buf={len(self._buf)}B\n"
+            )
+
+        except asyncio.TimeoutError:
+            # Queue empty — no audio this frame, will pad with silence below
+            logger.info(
+                f"\n[AudioTrack/{self._session_id}] "
+                f"frame={frame_num} | queue empty — will pad with silence | "
+                f"buf={len(self._buf)}B\n"
+            )
+
+        # SECTION 4: SLICE / PAD 
+        target = self._samples_per_frame * 2  # 1920 bytes
+
         if len(self._buf) >= target:
             out_pcm = bytes(self._buf[:target])
-            del self._buf[:target]  # consume from front of ring buffer
+            del self._buf[:target]
+            logger.info(
+                f"\n[AudioTrack/{self._session_id}] "
+                f"frame={frame_num} | SLICE {target}B | "
+                f"buf remaining={len(self._buf)}B\n"
+            )
         else:
-            # Not enough data - deliver silence for this frame
-            silence_needed = target - len(self._buf)
-            out_pcm = bytes(self._buf) + b"\x00\x00" * (silence_needed // 2)
+            available = len(self._buf)
+            out_pcm = bytes(self._buf) + b"\x00\x00" * ((target - available) // 2)
             self._buf.clear()
+            if available > 0:
+                logger.info(
+                    f"\n[AudioTrack/{self._session_id}] "
+                    f"frame={frame_num} | PARTIAL+PAD | "
+                    f"real={available}B silence={target - available}B\n"
+                )
+            else:
+                logger.info(
+                    f"\n[AudioTrack/{self._session_id}] "
+                    f"frame={frame_num} | FULL SILENCE\n"
+                )
 
-        # Build the av.AudioFrame and return to aiortc
+        # SECTION 5: FRAME BUILD 
         frame = av.AudioFrame(
             format="s16", layout="mono", samples=self._samples_per_frame
         )
         frame.planes[0].update(out_pcm)
-        frame.sample_rate = self._sample_rate  # 48000
+        frame.sample_rate = self._sample_rate
         frame.time_base = fractions.Fraction(1, self._sample_rate)
         frame.pts = self._pts
+
         return frame

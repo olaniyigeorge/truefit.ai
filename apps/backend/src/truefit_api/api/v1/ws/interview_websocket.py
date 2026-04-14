@@ -454,15 +454,22 @@ class InterviewConnection:
         # Close mic immediately - no candidate audio to Gemini while we transition
         bridge.close_mic()
 
-        # Wait for the queue and track buffer to fully drain naturally
-        # (recv() is still running and consuming frames - let it finish)
-        while not bridge.outbound_queue.empty() or (track and track.has_buffered_audio):
+        # # Wait for the queue and track buffer to fully drain naturally
+        # # (recv() is still running and consuming frames - let it finish)
+        # while not bridge.outbound_queue.empty() or (track and track.has_buffered_audio):
+        #     await asyncio.sleep(0.02)
+
+        # (recv() is consuming from _buf — let it finish the current turn's audio)
+        while track and track.has_buffered_audio:
             await asyncio.sleep(0.02)
 
         # Give the WebRTC stack time to clock out the last frames to the browser
         await asyncio.sleep(0.3)
-
-        # NOW clear - all legitimate audio has played, resampler + pts reset cleanly
+   
+        # NOW drain the queue — any chunks that arrived during the turn
+        # completion window are stale and must be discarded BEFORE clear_buf()
+        # is called, otherwise clear_buf() resets the resampler while the
+        # queue still has data that recv() will immediately pull and replay.
         await bridge.clear_outbound_queue()  # clears buf, resets resampler, resets pts/_start
 
         # Open mic for candidate response

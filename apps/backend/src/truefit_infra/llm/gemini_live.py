@@ -73,7 +73,7 @@ from src.truefit_core.common.utils import logger
 # separately; this model does it natively and sounds more natural.
 
 
-_MODEL = "gemini-live-2.5-flash-native-audio" # "gemini-3.1-flash-live-preview" # gemini-2.5-flash-native-audio-preview-12-2025" - "gemini-live-2.5-flash-native-audio" - 
+_MODEL =  "gemini-2.5-flash-native-audio-preview-12-2025" # "gemini-2.5-flash-native-audio-preview-12-2025" # "gemini-live-2.5-flash-native-audio" - 
 _INPUT_SAMPLE_RATE = 16_000  # Gemini expects 16kHz inbound
 _OUTPUT_SAMPLE_RATE = 24_000  # Gemini outputs at 24kHz
 _INPUT_MIME = f"audio/pcm;rate={_INPUT_SAMPLE_RATE}"  # MIME type for sending audio
@@ -245,8 +245,8 @@ class GeminiLiveAdapter(LiveSessionPort):
         ("go_away",       None)   - Gemini server is closing the connection
         """
         _require_session(self._session)
-        _text_buf = ""  # Accumulates agent speech transcript across streaming chunks
-        _input_buf = (
+        _text_buffer = ""  # Accumulates agent speech transcript across streaming chunks
+        _input_buffer = (
             ""  # Accumulates candidate speech transcript across streaming chunks
         )
 
@@ -257,6 +257,7 @@ class GeminiLiveAdapter(LiveSessionPort):
                 # response.data contains the raw 24kHz PCM audio bytes.
                 # We yield this immediately without any buffering.
                 if response.data:
+                    logger.debug(f"[GeminiLive] Received audio chunk: {len(response.data)} bytes")
                     yield ("audio", response.data)
 
                 sc = response.server_content
@@ -265,9 +266,9 @@ class GeminiLiveAdapter(LiveSessionPort):
                     # output_transcription = what the agent is saying (its speech -> text)
                     # input_transcription  = what the candidate is saying (their speech -> text)
                     if sc.output_transcription:
-                        _text_buf += sc.output_transcription.text
+                        _text_buffer += sc.output_transcription.text
                     if sc.input_transcription:
-                        _input_buf += sc.input_transcription.text
+                        _input_buffer += sc.input_transcription.text
                         logger.info(
                             f"[GeminiLive] Candidate speech: '{sc.input_transcription.text[:60]}'"
                         )
@@ -277,12 +278,12 @@ class GeminiLiveAdapter(LiveSessionPort):
                     # then signal the agent so it can stop playing audio.
                     if sc.interrupted:
                         logger.info("[GeminiLive] Interrupted")
-                        if _text_buf.strip():
-                            yield ("text", _text_buf.strip())
-                            _text_buf = ""
-                        if _input_buf.strip():
-                            yield ("input_text", _input_buf.strip())
-                            _input_buf = ""
+                        if _text_buffer.strip():
+                            yield ("text", _text_buffer.strip())
+                            _text_buffer = ""
+                        if _input_buffer.strip():
+                            yield ("input_text", _input_buffer.strip())
+                            _input_buffer = ""
                         yield ("interrupted", None)
 
                     # Turn complete: agent finished speaking, flush and signal ─
@@ -290,14 +291,14 @@ class GeminiLiveAdapter(LiveSessionPort):
                     # then signal the agent to open the mic for the candidate.
                     if sc.turn_complete:
                         logger.info(
-                            f"[GeminiLive] turn_complete - buf='{_text_buf[:60]}'"
+                            f"[GeminiLive] turn_complete - buf='{_text_buffer[:60]}'"
                         )
-                        if _text_buf.strip():
-                            yield ("text", _text_buf.strip())
-                            _text_buf = ""
-                        if _input_buf.strip():
-                            yield ("input_text", _input_buf.strip())
-                            _input_buf = ""
+                        if _text_buffer.strip():
+                            yield ("text", _text_buffer.strip())
+                            _text_buffer = ""
+                        if _input_buffer.strip():
+                            yield ("input_text", _input_buffer.strip())
+                            _input_buffer = ""
                         yield ("turn_complete", None)
 
                 # Tool calls: Gemini wants to call one of our functions
@@ -457,6 +458,10 @@ class _LiveSessionContext:
                     prefix_padding_ms=20,  # 20ms buffer before VAD triggers
                 )
             ),
+            thinking_config=types.ThinkingConfig(
+                    thinking_budget=0,
+                    include_thoughts=False,
+            ),
             # TODO: thinking_budget, no enable_affective_dialog - these need v1alpha
             tools=self._tools or None,
         )
@@ -465,7 +470,7 @@ class _LiveSessionContext:
         self._cm = self._adapter._client.aio.live.connect(model=_MODEL, config=config)
         session = await self._cm.__aenter__()
         self._adapter._session = session  # Now all send/receive methods will work
-        logger.info("[GeminiLive] Session opened")
+        logger.info("[LiveSessionContext] Session opened")
         return self._adapter  # Return adapter so `as session` gives the adapter
 
     async def __aexit__(self, *args) -> None:

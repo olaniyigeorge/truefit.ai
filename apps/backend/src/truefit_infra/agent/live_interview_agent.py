@@ -211,6 +211,7 @@ class LiveInterviewAgent:
             tools=INTERVIEW_TOOLS,
         ) as session:
             logger.info(f"[Agent] Session opened for interview {context.interview_id}")
+            logger.debug(f"\n[Agent] Injecting context: {context}\n")
             await self._inject_context(session, context)
 
             # _send_audio_loop can now proceed, but AudioBridge still gates mic
@@ -372,10 +373,12 @@ class LiveInterviewAgent:
             match event_type:
                 case "audio":
                     # 24kHz PCM chunk from Gemini - forward to browser immediately
+                    logger.debug(f"[Agent] Received audio chunk of size {len(data)}")
                     await self._on_audio_output(data)
 
                 case "text":
                     # Agent speech transcript - forward to frontend as captions
+                    logger.debug(f"[Agent] Received text chunk: {data}")
                     if self._on_text_output:
                         await self._on_text_output(data)
 

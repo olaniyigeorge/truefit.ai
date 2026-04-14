@@ -30,6 +30,7 @@ export function ApplicationRow({
 
     const canStartInterview = !isRecruiter && app.status === "interviewing" && candidateProfileId
 
+    console.log(canStartInterview)
     return (
         <div className={`flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-secondary/50 transition-colors ${acting ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="min-w-0 flex-1">
@@ -49,18 +50,18 @@ export function ApplicationRow({
 
             <div className="flex items-center gap-3 shrink-0">
                 {/* Candidate: Start Interview button */}
-                {canStartInterview && (
+                {/* TODO: Remove check after test and switch "itv" for "interview" in link -  {canStartInterview && ( */}
                     <Button
                         size="sm"
                         className="font-mono text-[11px] gap-1.5 bg-primary text-primary-foreground"
                         onClick={() =>
-                            navigate(`/interview/${app.job_id}/${candidateProfileId}`)
+                            navigate(`/itv/${app.job_id}/${candidateProfileId}`)
                         }
                     >
                         <Mic className="h-3.5 w-3.5" />
                         Start Interview
                     </Button>
-                )}
+                {/* )} */}
 
                 <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                     <Clock className="h-3 w-3" />
