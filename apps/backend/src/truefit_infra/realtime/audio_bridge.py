@@ -47,7 +47,9 @@ from __future__ import annotations
 import asyncio
 import fractions
 import time
-from typing import AsyncIterator, Optional
+from typing import AsyncIterator, Callable, Optional
+import struct
+import math
 
 import av
 from aiortc import MediaStreamTrack
@@ -108,6 +110,21 @@ class AudioBridge:
         self._mic_open = (
             asyncio.Event()
         )  # Gate: inbound audio only flows when this is set
+        self._on_activity_start: Optional[Callable] = None
+        self._on_activity_end: Optional[Callable] = None
+        self._last_activity_start: float = 0.0
+        self._last_activity_end: float = 0.0
+        self._activity_send_lock = asyncio.Lock()
+
+
+        self._vad_is_speaking = False
+        self._vad_consecutive_silent = 0
+        self._vad_waiting_for_response = False  # KEY: locked after ActivityEnd
+        self._vad_response_timeout_task: Optional[asyncio.Task] = None
+        self._last_activity_start: float = 0.0
+        self._last_activity_end: float = 0.0
+
+        self._vad_unlock_task: Optional[asyncio.Task] = None
 
     def open_mic(self) -> None:
         """
@@ -135,6 +152,37 @@ class AudioBridge:
             reaching Gemini during the turn transition / resampler reset window.
         """
         self._mic_open.clear()
+
+        
+    def _schedule_vad_unlock_timeout(self, timeout_seconds: float = 10.0) -> None:
+        """Safety net: force-unlock VAD if Gemini never fires turn_complete."""
+        if self._vad_response_timeout_task:
+            self._vad_response_timeout_task.cancel()
+        
+        async def _unlock_after_timeout():
+            await asyncio.sleep(timeout_seconds)
+            if self._vad_waiting_for_response:
+                logger.warning("[Bridge] VAD unlock timeout — forcing unlock (Gemini may have dropped the turn)")
+                self.on_agent_responded()
+        
+        self._vad_response_timeout_task = asyncio.create_task(_unlock_after_timeout())        
+
+    def _arm_vad_unlock_timeout(self, timeout: float = 12.0) -> None:
+        """
+        If Gemini doesn't fire turn_complete within `timeout` seconds,
+        force-unlock the VAD so the candidate can speak again.
+        """
+        if self._vad_unlock_task and not self._vad_unlock_task.done():
+            self._vad_unlock_task.cancel()
+
+        async def _unlock():
+            await asyncio.sleep(timeout)
+            if self._vad_waiting_for_response:
+                logger.warning("[Bridge] VAD deadlock timeout — force-unlocking VAD")
+                self.on_agent_responded()
+
+        self._vad_unlock_task = asyncio.create_task(_unlock())
+
 
     def set_agent_speaking(self, speaking: bool) -> None:
         """
@@ -203,13 +251,36 @@ class AudioBridge:
             layout="mono",
             rate=_SAMPLE_RATE,  # 16kHz target
         )
-        frame_count = 0
+
+        # Silence detection state
+        SPEECH_THRESHOLD = 400    # Peak amplitude to trigger START (tune upward if noisy)
+        SILENCE_THRESHOLD = 200   # Peak amplitude to count as silence
+        SILENCE_DURATION = 0.8    # Seconds of silence before ActivityEnd
+        silence_samples = int(_SAMPLE_RATE * SILENCE_DURATION)
+
+            
         try:
             while not self._closed:
                 try:
                     frame = await asyncio.wait_for(track.recv(), timeout=1.0)
                 except asyncio.TimeoutError:
-                    # No frame for 1s - normal during silences, just continue
+                    # Track delivered no frame for 1s.
+                    # Treat as silence for VAD — this fires ActivityEnd when the
+                    # candidate has stopped and the WebRTC track goes quiet.
+                    if self._vad_is_speaking and self._mic_open.is_set():
+                        self._vad_consecutive_silent += _TIMEOUT_SILENCE_INCREMENT
+                        if self._vad_consecutive_silent >= silence_samples:
+                            now = time.monotonic()
+                            if now - self._last_activity_end > 0.5:
+                                self._vad_is_speaking = False
+                                self._vad_consecutive_silent = 0
+                                self._vad_waiting_for_response = True
+                                self._last_activity_end = now
+                                logger.info("[Bridge] VAD: speech END (track quiet) — waiting for Gemini")
+                                if self._on_activity_end:
+                                    asyncio.create_task(
+                                        self._safe_callback(self._on_activity_end)
+                                    )
                     continue
                 except Exception as e:
                     logger.warning(f"[{self._ctx.session_id}] Inbound track error: {e}")
@@ -218,6 +289,10 @@ class AudioBridge:
                 # MIC GATE: discard frame if mic is closed (agent is speaking
                 # or we're in the transition window)
                 if not self._mic_open.is_set():
+                    # Mic closed — reset speaking state so we start fresh next turn
+                    if self._vad_is_speaking:
+                        self._vad_is_speaking = False
+                        self._vad_consecutive_silent = 0
                     continue  # discard frame entirely, don't even resample
 
                 resampled_frames = resampler.resample(frame)
@@ -228,24 +303,88 @@ class AudioBridge:
                     )  # 640 bytes
                     for i in range(0, len(pcm_bytes), chunk_size):
                         chunk = pcm_bytes[i : i + chunk_size]
-                        if len(chunk) == chunk_size:  # Only enqueue full 20ms chunks
-                            # ECHO SUPPRESSION: drop chunk during cooldown window
-                            if time.monotonic() < self._speaking_cooldown_until:
-                                continue
+                        
+                        # Only enqueue full 20ms chunks
+                        if len(chunk) != chunk_size:
+                            continue
+ 
+                        # ECHO SUPPRESSION: drop chunk during cooldown window
+                        if time.monotonic() < self._speaking_cooldown_until:
+                            continue
+
+                        # Fast peak detection — sample every 8th s16 value
+                        # Much faster than full RMS, good enough for VAD
+                        peak = max(
+                            abs(int.from_bytes(chunk[j:j+2], 'little', signed=True))
+                            for j in range(0, min(len(chunk), 64), 2)
+                        )
+
+                        if peak > SPEECH_THRESHOLD:
+                            self._vad_consecutive_silent = 0
+                            # Only fire ActivityStart if:
+                            # - not already speaking
+                            # - NOT waiting for Gemini to respond (key lock!)
+                            # - debounce ok
+                            if (not self._vad_is_speaking
+                                    and not self._vad_waiting_for_response):
+                                now = time.monotonic()
+                                if now - self._last_activity_start > 0.5:
+                                    self._vad_is_speaking = True
+                                    self._last_activity_start = now
+                                    logger.info("[Bridge] VAD: speech START")
+                                    if self._on_activity_start:
+                                        asyncio.create_task(
+                                            self._safe_callback(self._on_activity_start)
+                                        )
+                        else:
+                            if self._vad_is_speaking:
+                                self._vad_consecutive_silent += chunk_size // _SAMPLE_WIDTH
+                                if self._vad_consecutive_silent >= silence_samples:
+                                    now = time.monotonic()
+                                    if now - self._last_activity_end > 0.5:
+                                        self._vad_is_speaking = False
+                                        self._vad_consecutive_silent = 0
+                                        self._vad_waiting_for_response = True  # LOCK
+                                        self._last_activity_end = now
+                                        logger.info("[Bridge] VAD: speech END — waiting for Gemini")
+                                        if self._on_activity_end:
+                                            asyncio.create_task(
+                                                self._safe_callback(self._on_activity_end)
+                                            )
+
+                        # Enqueue chunk regardless     
+                        try:
+                            self.inbound_queue.put_nowait(chunk)
+                        except asyncio.QueueFull:
+                            # Drop oldest to make room for newest
                             try:
-                                self.inbound_queue.put_nowait(chunk)
-                            except asyncio.QueueFull:
-                                # Drop oldest to make room for newest
-                                try:
-                                    self.inbound_queue.get_nowait()
-                                except asyncio.QueueEmpty:
-                                    pass
-                                self.inbound_queue.put_nowait(chunk)
+                                self.inbound_queue.get_nowait()
+                            except asyncio.QueueEmpty:
+                                pass
+                            self.inbound_queue.put_nowait(chunk)
         except asyncio.CancelledError:
             pass
         finally:
             # Sentinel: tells audio_input_stream() the bridge is done
             await self.inbound_queue.put(None)
+
+    async def _safe_callback(self, cb) -> None:
+        """Fire a VAD callback, silently swallow closed-session errors."""
+        try:
+            await cb()
+        except Exception as e:
+            logger.debug(f"[Bridge] VAD callback swallowed: {e}")
+    
+    def on_agent_responded(self) -> None:
+        """
+        Called when Gemini's turn_complete fires — unlocks the VAD so the
+        candidate can trigger ActivityStart for the next answer.
+        """
+        logger.info("[Bridge] VAD unlocked — Gemini responded, mic ready for candidate")
+        self._vad_waiting_for_response = False
+        self._vad_is_speaking = False
+        self._vad_consecutive_silent = 0
+
 
     # ────────────────────────────
     # AGENT-FACING ASYNC GENERATOR
@@ -524,7 +663,7 @@ class _AgentAudioTrack(AudioStreamTrack):
              irregular outputs, filling _buf with many seconds of audio at once.
              recv() then sliced through this in subsequent calls without ever
              sleeping (because the pacing deadline was already past), playing
-             the audio at ~48× normal speed.
+             the audio at ~48x normal speed.
 
           b) Even with correct pacing, pulling the entire queue in one call
              means _buf can grow to 10+ seconds of audio. Subsequent calls
@@ -575,46 +714,31 @@ class _AgentAudioTrack(AudioStreamTrack):
         frame_num = getattr(self, '_frame_count', 0)
         self._frame_count = frame_num + 1
 
-        # SECTION 1: PACING 
         if self._start is None:
             self._start = time.time()
-            logger.info(
-                f"\n[AudioTrack/{self._session_id}] "
-                f"frame={frame_num} | clock ANCHORED at {self._start:.4f} | "
-                f"pts={self._pts} | buf={len(self._buf)}B | queue~={self._queue.qsize()}\n"
-            )
         else:
             self._pts += self._samples_per_frame
             deadline = self._start + (self._pts / self._sample_rate)
             wait = deadline - time.time()
-            logger.info(
-                f"\n[AudioTrack/{self._session_id}] "
-                f"frame={frame_num} | pts -> {self._pts} | "
-                f"deadline={deadline:.4f} | "
-                f"wait={'%.1fms' % (wait*1000) if wait > 0 else 'LATE %.1fms' % (abs(wait)*1000)} | "
-                f"buf={len(self._buf)}B | queue~={self._queue.qsize()}\n"
-            )
             if wait > 0:
                 await asyncio.sleep(wait)
             else:
-                logger.info(
-                    f"\n[AudioTrack/{self._session_id}] "
-                    f"frame={frame_num} | LATE by {abs(wait)*1000:.1f}ms\n"
-                )
+                # logger.debug(
+                #     f"\n[AudioTrack/{self._session_id}] "
+                #     f"frame={frame_num} | LATE by {abs(wait)*1000:.1f}ms\n"
+                # )
+                pass
 
-        # SECTION 2 & 3: PULL ONE CHUNK AND RESAMPLE 
-        # Pull at most one chunk. Use a short timeout so we return on schedule
-        # even when the queue is empty (silence between turns).
         try:
             pcm_24k = await asyncio.wait_for(
-                self._queue.get(), timeout=0.005  # 5ms — well within our 20ms budget
+                self._queue.get(), timeout=0.005  # 5ms - well within our 20ms budget
             )
 
             if pcm_24k is None:
-                logger.info(
-                    f"\n[AudioTrack/{self._session_id}] "
-                    f"frame={frame_num} | got None sentinel — bridge is CLOSED\n"
-                )
+                # logger.info(
+                #     f"\n[AudioTrack/{self._session_id}]"
+                #     f"frame={frame_num} | got None sentinel — bridge is CLOSED\n"
+                # )
                 raise Exception("AudioBridge closed")
 
             n_samples_in = len(pcm_24k) // 2
@@ -633,49 +757,38 @@ class _AgentAudioTrack(AudioStreamTrack):
                 self._buf.extend(chunk)
                 resampled_bytes += len(chunk)
 
-            logger.info(
-                f"\n[AudioTrack/{self._session_id}] "
-                f"frame={frame_num} | "
-                f"in={len(pcm_24k)}B ({n_samples_in} samples @24kHz) -> "
-                f"resampled={resampled_bytes}B | buf={len(self._buf)}B\n"
-            )
-
         except asyncio.TimeoutError:
-            # Queue empty — no audio this frame, will pad with silence below
-            logger.info(
-                f"\n[AudioTrack/{self._session_id}] "
-                f"frame={frame_num} | queue empty — will pad with silence | "
-                f"buf={len(self._buf)}B\n"
-            )
-
-        # SECTION 4: SLICE / PAD 
+            # Queue empty: no audio in  this frame, will pad with silence below
+            # logger.error(
+            #     f"\n[AudioTrack/{self._session_id}] "
+            #     f"frame={frame_num} | queue empty — will pad with silence | "
+            #     f"buf={len(self._buf)}B\n"
+            # )
+            pass
+ 
         target = self._samples_per_frame * 2  # 1920 bytes
 
         if len(self._buf) >= target:
             out_pcm = bytes(self._buf[:target])
             del self._buf[:target]
-            logger.info(
-                f"\n[AudioTrack/{self._session_id}] "
-                f"frame={frame_num} | SLICE {target}B | "
-                f"buf remaining={len(self._buf)}B\n"
-            )
         else:
             available = len(self._buf)
             out_pcm = bytes(self._buf) + b"\x00\x00" * ((target - available) // 2)
             self._buf.clear()
             if available > 0:
-                logger.info(
-                    f"\n[AudioTrack/{self._session_id}] "
-                    f"frame={frame_num} | PARTIAL+PAD | "
-                    f"real={available}B silence={target - available}B\n"
-                )
+                # logger.debug(
+                #     f"\n[AudioTrack/{self._session_id}] "
+                #     f"frame={frame_num} | PARTIAL+PAD | "
+                #     f"real={available}B silence={target - available}B\n"
+                # )
+                pass
             else:
-                logger.info(
-                    f"\n[AudioTrack/{self._session_id}] "
-                    f"frame={frame_num} | FULL SILENCE\n"
-                )
+                # logger.debug(
+                #     f"\n[AudioTrack/{self._session_id}] "
+                #     f"frame={frame_num} | FULL SILENCE\n"
+                # )
+                pass
 
-        # SECTION 5: FRAME BUILD 
         frame = av.AudioFrame(
             format="s16", layout="mono", samples=self._samples_per_frame
         )

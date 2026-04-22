@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import random
 import uuid
 from datetime import datetime, timezone
 from typing import Any, AsyncIterator, Callable, Coroutine, Optional
@@ -211,7 +212,6 @@ class LiveInterviewAgent:
             tools=INTERVIEW_TOOLS,
         ) as session:
             logger.info(f"[Agent] Session opened for interview {context.interview_id}")
-            logger.debug(f"\n[Agent] Injecting context: {context}\n")
             await self._inject_context(session, context)
 
             # _send_audio_loop can now proceed, but AudioBridge still gates mic
@@ -274,7 +274,6 @@ class LiveInterviewAgent:
             },
             indent=2,
         )
-
         await session.send_client_content(
             text=(
                 f"Interview session is starting now.\n"
@@ -320,8 +319,16 @@ class LiveInterviewAgent:
         async for chunk in self._audio_input:
             if self._session_complete.is_set():
                 break
-            if chunk:  # only send non-empty chunks
+            if chunk:
                 await session.send_audio(chunk)
+                await asyncio.sleep(0.001)
+                if random.random() < 0.01:  # log 1% of chunks
+                    logger.info(f"""
+                    \n[LiveAgent SEND AUDIO LOOP]
+                    size={len(chunk)}
+                    mod2={len(chunk) % 2}
+                    first10={chunk[:10]}
+                    \n""")
 
     # ─────────────────────────────────────────────────
     # RESPONSE RECEIVE LOOP (Gemini -> everything else)

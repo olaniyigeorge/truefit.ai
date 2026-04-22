@@ -55,6 +55,7 @@ USAGE PATTERN (how LiveInterviewAgent uses this)
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any, AsyncGenerator, Optional
 
 from google import genai
@@ -108,7 +109,9 @@ class GeminiLiveAdapter(LiveSessionPort):
         self._session: Optional[Any] = (
             None  # Set to the live session inside open_session()
         )
-
+        self._send_lock = asyncio.Lock()  # Lock to prevent concurrent audio sends
+        self._activity_ended = False
+ 
     # ─────────────────────────
     # LiveSessionPort interface
     # ─────────────────────────
@@ -135,22 +138,23 @@ class GeminiLiveAdapter(LiveSessionPort):
         zero-length bytes as a keepalive and we don't want to waste API calls.
         """
         _require_session(self._session)
-        if not pcm_bytes:
+        if not pcm_bytes or self._activity_ended:
             return
         await self._session.send_realtime_input(
-            audio=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
+            media=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
         )
 
     async def send_audio_stream_end(self) -> None:
         """
-        Signals to Gemini that the microphone stream has paused.
-        This flushes Gemini's audio buffer and tells it to process what it has.
-
-        Currently not called in the main path - Gemini's automatic activity
-        detection (VAD) handles this. Kept here for future manual VAD mode.
+        NOTE: Do NOT call this when automatic_activity_detection is disabled.
+        Per the Vertex AI Live API reference: "An AudioStreamEnd isn't sent in
+        this configuration. Instead, any interruption of the stream is marked
+        by an ActivityEnd message."
+        This method is retained for potential future use with auto-VAD mode only.
         """
         _require_session(self._session)
-        await self._session.send_realtime_input(audio_stream_end=True)
+        async with self._send_lock:
+            await self._session.send_realtime_input(audio_stream_end=True)
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """
@@ -255,7 +259,7 @@ class GeminiLiveAdapter(LiveSessionPort):
 
                 # Audio (highest priority - forward immediately) 
                 # response.data contains the raw 24kHz PCM audio bytes.
-                # We yield this immediately without any buffering.
+                # Yield this immediately without any buffering.
                 if response.data:
                     logger.debug(f"[GeminiLive] Received audio chunk: {len(response.data)} bytes")
                     yield ("audio", response.data)
@@ -379,6 +383,29 @@ class GeminiLiveAdapter(LiveSessionPort):
             system_prompt=system_prompt,
             tools=tools or [],
         )
+    
+    # ----------------------
+    # EXPLICIT ACTIVITY SIGNALS FOR TURN MANAGEMENT (optional - we rely on Gemini's VAD by default)
+    # ----------------------
+
+    async def send_activity_start(self) -> None:
+        """Tell Gemini the candidate has started speaking."""
+        if self._session:
+            self._activity_ended = False  # Re-open audio flow for new turn
+            async with self._send_lock:
+                await self._session.send_realtime_input(
+                    activity_start=types.ActivityStart()
+                )
+
+
+    async def send_activity_end(self) -> None:
+        """Tell Gemini the candidate has finished speaking. Triggers model response."""
+        if self._session:
+            self._activity_ended = True  # Block further audio immediately
+            async with self._send_lock:
+                await self._session.send_realtime_input(
+                    activity_end=types.ActivityEnd()
+                )
 
 
 # ──────────────────────────────────────
@@ -453,9 +480,9 @@ class _LiveSessionContext:
             ),
             realtime_input_config=types.RealtimeInputConfig(
                 automatic_activity_detection=types.AutomaticActivityDetection(
-                    disabled=False,
-                    silence_duration_ms=4000,  # Wait 4s of silence before processing
-                    prefix_padding_ms=20,  # 20ms buffer before VAD triggers
+                    disabled=True,
+                    # silence_duration_ms=800,  # Wait 4s of silence before processing
+                    # prefix_padding_ms=20,  # 20ms buffer before VAD triggers
                 )
             ),
             thinking_config=types.ThinkingConfig(

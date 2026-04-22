@@ -349,7 +349,9 @@ class InterviewConnection:
             #    Also close the mic immediately - it stays closed until the
             #    agent's opening turn finishes (see _on_turn_complete).
             if self._webrtc:
-                self._webrtc.audio_bridge.close_mic()  # explicitly start closed
+                self._webrtc.audio_bridge.close_mic() # explicitly start closed
+                self._webrtc.audio_bridge._on_activity_start = self._on_candidate_activity_start
+                self._webrtc.audio_bridge._on_activity_end = self._on_candidate_activity_end
                 self._webrtc.data_channel.on_inbound_event = self._on_datachannel_event
 
             # ⑦ Build the agent - it receives audio from the WebRTC AudioBridge
@@ -459,13 +461,23 @@ class InterviewConnection:
         # while not bridge.outbound_queue.empty() or (track and track.has_buffered_audio):
         #     await asyncio.sleep(0.02)
 
-        # (recv() is consuming from _buf — let it finish the current turn's audio)
-        while track and track.has_buffered_audio:
-            await asyncio.sleep(0.02)
+        # Wait a bounded time for audio to drain — NOT an infinite loop.
+        # Gemini's turn_complete fires before all audio arrives, so we give
+        # it a fixed window to finish playing out rather than polling _buf.
+        # 800ms covers most responses; adjust based on observed latency.
+        drain_timeout = 0.8
+        elapsed = 0.0
+        while elapsed < drain_timeout:
+            if bridge.outbound_queue.empty() and not (track and track.has_buffered_audio):
+                break
+            await asyncio.sleep(0.05)
+            elapsed += 0.05
 
         # Give the WebRTC stack time to clock out the last frames to the browser
-        await asyncio.sleep(0.3)
-   
+        await asyncio.sleep(0.2)
+
+
+    
         # NOW drain the queue — any chunks that arrived during the turn
         # completion window are stale and must be discarded BEFORE clear_buf()
         # is called, otherwise clear_buf() resets the resampler while the
@@ -475,6 +487,41 @@ class InterviewConnection:
         # Open mic for candidate response
         bridge.open_mic()
         bridge.set_agent_speaking(False)
+        bridge.on_agent_responded()  # ← UNLOCK VAD
+
+    # ──────────────────────
+    # CANDIDATE ACTIVITY RECEIVE LOOP
+    # ──────────────────────
+
+    async def _on_candidate_activity_start(self) -> None:
+        logger.info("[Connection] Candidate activity START")
+        await self._live_adapter.send_activity_start()
+
+    async def _on_candidate_activity_end(self) -> None:
+        logger.info("[Connection] Candidate activity END — Gemini will now respond")
+        
+        # Step 1: Stop new audio from entering the queue
+        if self._webrtc:
+            self._webrtc.audio_bridge.close_mic()
+        
+        # Step 2: Drain whatever's already queued so nothing flows to Gemini
+        # after the ActivityEnd signal
+        if self._webrtc:
+            q = self._webrtc.audio_bridge.inbound_queue
+            drained = 0
+            while not q.empty():
+                try:
+                    q.get_nowait()
+                    drained += 1
+                except asyncio.QueueEmpty:
+                    break
+            if drained:
+                logger.debug(f"[Connection] Drained {drained} stale inbound chunks before ActivityEnd")
+        
+        # Step 3: send ActivityEnd — this IS the complete turn boundary in manual VAD mode.
+        # Do NOT call send_audio_stream_end() here — that's only for auto-VAD mode.
+        await self._live_adapter.send_activity_end()
+
 
     # ──────────────────────
     # WEBSOCKET RECEIVE LOOP
@@ -662,6 +709,7 @@ class InterviewConnection:
         if self._suppress_audio:
             return
         if self._webrtc:
+            self._webrtc.audio_bridge.set_agent_speaking(True)
             await self._webrtc.audio_bridge.push_audio(audio_bytes)
 
     async def _on_text_output(self, text: str) -> None:

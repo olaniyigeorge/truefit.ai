@@ -32,9 +32,9 @@ VM_USER=$(whoami)
 NGINX_CONF="/etc/nginx/sites-available/truefit"
 SERVICE_NAME="truefit-api"
 
-# =============================================================================
-# ── STEP 1: System Dependencies ─────
-# =============================================================================
+# ===========================
+# STEP 1: System Dependencies 
+# ===========================
 log "Installing system dependencies..."
 
 export DEBIAN_FRONTEND=noninteractive
@@ -67,9 +67,9 @@ fi
 
 success "System dependencies ready  (node $(node -v), python $(python3 --version))"
 
-# =============================================================================
-# ── STEP 2: Clone or Update Repo ────
-# =============================================================================
+# ============================
+# STEP 2: Clone or Update Repo 
+# ============================
 if [ -d "$APP_DIR/.git" ]; then
     log "Repo exists - pulling latest changes..."
     git -C "$APP_DIR" pull origin main
@@ -80,9 +80,9 @@ fi
 
 success "Repo up to date"
 
-# =============================================================================
-# ── STEP 3: Backend - Python venv + dependencies ──
-# =============================================================================
+# ============================================
+# STEP 3: Backend - Python venv + dependencies 
+# ============================================
 log "Setting up Python virtual environment..."
 
 cd "$BACKEND_DIR"
@@ -108,9 +108,9 @@ pip install uvicorn -q
 deactivate
 success "Backend dependencies installed"
 
-# =============================================================================
-# ── STEP 4: Backend - .env file ─────
-# =============================================================================
+# ===========================
+# STEP 4: Backend - .env file
+# ===========================
 if [ ! -f "$BACKEND_DIR/.env" ]; then
     if [ -f "$BACKEND_DIR/.env.example" ]; then
         warn ".env not found - copying from .env.example. Fill in real values!"
@@ -122,9 +122,9 @@ else
     success ".env file found"
 fi
 
-# =============================================================================
-# ── STEP 5: Backend - systemd service ─
-# =============================================================================
+# =================================
+# STEP 5: Backend - systemd service
+# =================================
 log "Configuring systemd service for FastAPI..."
 
 sudo tee /etc/systemd/system/${SERVICE_NAME}.service > /dev/null <<EOF
@@ -156,9 +156,9 @@ else
     error "FastAPI service failed to start. Run: sudo journalctl -u $SERVICE_NAME -n 50"
 fi
 
-# =============================================================================
-# ── STEP 6: Frontend - install + build 
-# =============================================================================
+# ==================================
+# STEP 6: Frontend - install + build 
+# ==================================
 log "Building React frontend..."
 
 cd "$FRONTEND_DIR"
@@ -175,9 +175,9 @@ fi
 
 success "Frontend built -> $FRONTEND_BUILD"
 
-# =============================================================================
-# ── STEP 7: Nginx - serve frontend + proxy API ────
-# =============================================================================
+# ==========================================
+# STEP 7: Nginx - serve frontend + proxy API 
+# ==========================================
 log "Configuring Nginx..."
 
 EXTERNAL_IP=$(curl -s ifconfig.me)
@@ -221,9 +221,9 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl restart nginx
 success "Nginx configured and restarted"
 
-# =============================================================================
-# ── STEP 8: Health Checks ─────
-# =============================================================================
+# =====================
+# STEP 8: Health Checks
+# =====================
 log "Running health checks..."
 sleep 2
 
@@ -245,9 +245,9 @@ else
     warn "Nginx check failed - check: sudo nginx -t"
 fi
 
-# =============================================================================
-# ── Done 
-# =============================================================================
+# ====
+# Done 
+# ====
 echo ""
 echo -e "${GREEN}============================================${NC}"
 echo -e "${GREEN}  TrueFit deployed successfully!${NC}"
