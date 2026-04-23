@@ -71,6 +71,7 @@ app = FastAPI(
     title=AppConfig.PROJECT_NAME, 
     docs_url="/api/docs", 
     openapi_url="/api/openapi.json",
+    swagger_ui_parameters={"url": "/api/openapi.json"},
     lifespan=lifespan
 )
 
