@@ -67,7 +67,12 @@ async def lifespan(app: FastAPI):
         logger.info("Application shutdown complete")
 
 
-app = FastAPI(title=AppConfig.PROJECT_NAME, docs_url="/api/docs", lifespan=lifespan)
+app = FastAPI(
+    title=AppConfig.PROJECT_NAME, 
+    root_path="/api",
+    docs_url="/api/docs", 
+    lifespan=lifespan
+)
 
 
 # Middleware
@@ -84,6 +89,7 @@ app.add_middleware(
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:5174",
+        "http://136.112.82.200",
     ],
     allow_credentials=True,
     allow_methods=["*"],
