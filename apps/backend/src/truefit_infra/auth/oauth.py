@@ -115,9 +115,9 @@ class FirebaseOAuthProvider(OAuthProvider):
             )
             return claims
 
-        except jwt.ExpiredSignatureError:
-            raise ValueError("Firebase token has expired")
-        except jwt.InvalidTokenError as e:
+        except Exception as e:
+            if "expired" in str(e).lower():
+                raise ValueError("Firebase token has expired")
             raise ValueError(f"Invalid Firebase token: {e}")
         except Exception as e:
             logger.error(f"Firebase token verification failed: {e}")
