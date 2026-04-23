@@ -1,10 +1,10 @@
 #!/bin/bash
-# =============================================================================
+# =============================================================
 # setup-gcp.sh - TrueFit GCP Infrastructure Provisioning Script
-# Runs on your LOCAL machine
+# Runs on LOCAL machine
 # Usage: bash setup-gcp.sh
 # Requires: gcloud CLI installed and authenticated
-# =============================================================================
+# =============================================================
 
 set -euo pipefail
 
@@ -19,10 +19,10 @@ success(){ echo -e "${GREEN}[OK]${NC}    $1"; }
 warn()   { echo -e "${YELLOW}[WARN]${NC}  $1"; }
 error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
-# =============================================================================
-# ── CONFIGURATION - edit before running ─────
-# =============================================================================
-PROJECT_ID="truefit-490409"        # <-- change this
+# =============
+# CONFIGURATION
+# =============
+PROJECT_ID="truefit-490409"  
 VM_NAME="truefit-engine"
 ZONE="us-central1-b"
 MACHINE_TYPE="e2-medium"
@@ -31,9 +31,9 @@ IMAGE_FAMILY="ubuntu-2204-lts"
 IMAGE_PROJECT="ubuntu-os-cloud"
 REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git" 
 
-# =============================================================================
-# ── STEP 1: Verify gcloud is set up ─
-# =============================================================================
+# ===============================
+# STEP 1: Verify gcloud is set up
+# ===============================
 log "Checking gcloud setup..."
 
 if ! command -v gcloud &>/dev/null; then
@@ -43,17 +43,17 @@ fi
 gcloud config set project "$PROJECT_ID"
 success "Using project: $PROJECT_ID"
 
-# =============================================================================
-# ── STEP 2: Enable required GCP APIs 
-# =============================================================================
+# =================================
+# STEP 2: Enable required GCP APIs 
+# =================================
 log "Enabling required GCP APIs..."
 
 gcloud services enable compute.googleapis.com --quiet
 success "Compute Engine API enabled"
 
-# =============================================================================
-# ── STEP 3: Create Firewall Rules ───
-# =============================================================================
+# =============================
+# STEP 3: Create Firewall Rules
+# =============================
 log "Creating firewall rules..."
 
 # Allow HTTP (port 80)
@@ -92,9 +92,9 @@ else
     warn "Firewall rule allow-truefit-api already exists - skipping"
 fi
 
-# =============================================================================
-# ── STEP 4: Create the VM ─────
-# =============================================================================
+# ======================
+# STEP 4: Create the VM 
+# ======================
 log "Creating VM instance: $VM_NAME..."
 
 if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --quiet &>/dev/null; then
@@ -115,9 +115,9 @@ else
     success "VM $VM_NAME created in $ZONE"
 fi
 
-# =============================================================================
-# ── STEP 5: Reserve a Static External IP ────
-# =============================================================================
+# ====================================
+# STEP 5: Reserve a Static External IP
+# ====================================
 log "Reserving static external IP..."
 
 STATIC_IP_NAME="truefit-static-ip"
@@ -149,9 +149,9 @@ gcloud compute instances add-access-config "$VM_NAME" \
 
 success "Static IP $STATIC_IP assigned to $VM_NAME"
 
-# =============================================================================
-# ── STEP 6: Copy deploy.sh to VM and run it ─
-# =============================================================================
+# =======================================
+# STEP 6: Copy deploy.sh to VM and run it
+# =======================================
 log "Waiting for VM to be ready..."
 sleep 15
 
@@ -171,9 +171,9 @@ gcloud compute ssh "$VM_NAME" \
     --command="chmod +x ~/deploy.sh && bash ~/deploy.sh" \
     --quiet
 
-# =============================================================================
-# ── Done 
-# =============================================================================
+# ====
+# Done 
+# ====
 echo ""
 echo -e "${GREEN}============================================${NC}"
 echo -e "${GREEN}  TrueFit GCP setup complete!${NC}"
