@@ -316,7 +316,7 @@ export function useInterviewSession({
 
     const base = (wsBaseUrl ?? config.wsUrl ?? "ws://localhost:8000")
       .replace(/\/$/, "")
-    const url = `${base}/api/api/v1/ws/interview/${jobId}/${candidateId}`
+    const url = `${base}/api/v1/ws/interview/${jobId}/${candidateId}`
 
     console.log("Connecting to WebSocket at", url)
 
