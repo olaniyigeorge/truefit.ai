@@ -206,7 +206,7 @@ server {
     }
 
     location /ws/ {
-        proxy_pass http://127.0.0.1:${BACKEND_PORT}/ws/;
+        proxy_pass http://127.0.0.1:${BACKEND_PORT}/api/v1/ws/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
