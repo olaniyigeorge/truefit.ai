@@ -8,7 +8,7 @@ import httpx
 from google.auth.transport.requests import Request
 from google.oauth2 import id_token
 
-import jwt as pyjwt
+import jwt
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
 
@@ -95,7 +95,7 @@ class FirebaseOAuthProvider(OAuthProvider):
                 r = await client.get(self.CERTS_URL)
                 certs = r.json()
 
-            header = pyjwt.get_unverified_header(token)
+            header = jwt.get_unverified_header(token)
             kid = header.get("kid")
 
             if kid not in certs:
@@ -106,7 +106,7 @@ class FirebaseOAuthProvider(OAuthProvider):
             cert = load_pem_x509_certificate(cert_bytes, default_backend())
             public_key = cert.public_key()
 
-            claims = pyjwt.decode(
+            claims = jwt.decode(
                 token,
                 public_key,
                 algorithms=["RS256"],
@@ -115,9 +115,9 @@ class FirebaseOAuthProvider(OAuthProvider):
             )
             return claims
 
-        except pyjwt.ExpiredSignatureError:
+        except jwt.ExpiredSignatureError:
             raise ValueError("Firebase token has expired")
-        except pyjwt.InvalidTokenError as e:
+        except jwt.InvalidTokenError as e:
             raise ValueError(f"Invalid Firebase token: {e}")
         except Exception as e:
             logger.error(f"Firebase token verification failed: {e}")
