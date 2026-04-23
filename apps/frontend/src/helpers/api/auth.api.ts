@@ -8,6 +8,7 @@ export type SessionResult = {
 
 export const createSession = async (firebaseUser: User): Promise<SessionResult> => {
     const idToken = await firebaseUser.getIdToken()
+    console.log("\nCreating session with Firebase ID token:", idToken, "\n")
     const response =  await API.post('/api/v1/auth/oauth/token',{
         token: idToken,
         provider: 'firebase'
