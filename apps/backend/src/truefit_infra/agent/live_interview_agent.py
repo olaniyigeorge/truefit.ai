@@ -418,7 +418,7 @@ class LiveInterviewAgent:
 
                 case "turn_complete":
                     # Agent finished its response - hand control back to candidate
-                    logger.debug("[Agent] Turn complete")
+                    logger.info("[Agent] Turn complete")
                     if self._on_turn_complete:
                         await self._on_turn_complete()
 

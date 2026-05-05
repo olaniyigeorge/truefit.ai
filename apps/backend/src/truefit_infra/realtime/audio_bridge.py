@@ -257,6 +257,8 @@ class AudioBridge:
         SILENCE_THRESHOLD = 200   # Peak amplitude to count as silence
         SILENCE_DURATION = 0.8    # Seconds of silence before ActivityEnd
         silence_samples = int(_SAMPLE_RATE * SILENCE_DURATION)
+        _TIMEOUT_SILENCE_INCREMENT = int(_SAMPLE_RATE * 1.0)  # 1s timeout → credit 1s of silence samples
+        
 
             
         try:
