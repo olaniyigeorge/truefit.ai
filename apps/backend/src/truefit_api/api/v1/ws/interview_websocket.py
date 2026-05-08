@@ -14,6 +14,7 @@ from src.truefit_core.application.ports import (
     CachePort,
     CandidateRepository,
     JobRepository,
+    LiveSessionPort,
     QueuePort,
 )
 from src.truefit_core.common.utils import logger
@@ -34,6 +35,7 @@ from src.truefit_infra.agent.live_interview_agent import (
     LiveInterviewAgent,
 )
 from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
+from src.truefit_infra.llm.factory import create_live_adapter
 
 # ────────────────────
 # DEPENDENCY FACTORIES
@@ -93,14 +95,28 @@ def get_queue() -> RedisQueueAdapter:
     return RedisQueueAdapter()
 
 
-def get_gemini_live() -> GeminiLiveAdapter:
+
+def get_live_adapter() -> LiveSessionPort:
     """
-    Returns a fresh GeminiLiveAdapter instance.
-    This is the only place in this module that touches the Gemini SDK -
-    through this adapter. It wraps a Gemini Live session and exposes
-    a clean interface for sending/receiving audio and events.
+    Returns the configured live LLM adapter for this session.
+ 
+    Which concrete adapter (or combination) is returned is determined entirely
+    by two environment variables read inside create_live_adapter():
+ 
+      LLM_PRIMARY_PROVIDER  = "gemini" | "openai"   (default: "gemini")
+      LLM_FALLBACK_PROVIDER = "gemini" | "openai" | "none"  (default: "none")
+ 
+    Possible return values:
+      GeminiLiveAdapter                          — primary=gemini, fallback=none
+      OpenAIRealtimeAdapter                      — primary=openai, fallback=none
+      FallbackLiveAdapter(Gemini → OpenAI)       — primary=gemini, fallback=openai
+      FallbackLiveAdapter(OpenAI → Gemini)       — primary=openai, fallback=gemini
+ 
+    Nothing else in this file needs to know which one it got. They all
+    implement LiveSessionPort identically from the caller's perspective.
     """
-    return GeminiLiveAdapter()
+    return create_live_adapter()
+ 
 
 
 def get_orchestration() -> InterviewOrchestrationService:
@@ -118,7 +134,7 @@ def get_orchestration() -> InterviewOrchestrationService:
     interview_repo = get_interview_repo()
     job_repo = get_job_repo()
     candidate_repo = get_candidate_repo()
-    llm_adapter = get_gemini_live()
+    llm_adapter = get_live_adapter()
     queue = get_queue()
     cache = get_cache()
 
@@ -157,7 +173,7 @@ async def interview_websocket(
     candidate_repo: CandidateRepository = Depends(get_candidate_repo),
     queue: QueuePort = Depends(get_queue),
     cache: CachePort = Depends(get_cache),
-    live_adapter: GeminiLiveAdapter = Depends(get_gemini_live),
+    live_adapter: LiveSessionPort  = Depends(get_live_adapter),
 ) -> None:
     """
     THE main WebSocket endpoint for a live AI interview session.
@@ -253,7 +269,7 @@ class InterviewConnection:
         self._candidate_repo = candidate_repo  # Fetch candidate details for context
         self._queue = queue  # Publish domain events (interview.completed etc.)
         self._cache = cache  # Read/write interrupt signals
-        self._live_adapter = live_adapter  # Gemini Live API wrapper
+        self._live_adapter = live_adapter  # Gemini or OpenAI Live API wrapper
 
         # Per-session state
         self._interview_id: Optional[uuid.UUID] = None  # Set after start_interview()
