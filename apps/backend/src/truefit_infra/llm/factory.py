@@ -59,9 +59,9 @@ def _make_adapter(provider: str) -> LiveSessionPort:
                 f"Valid values are 'openai', 'gemini', or 'none' (fallback only)."
             )
 
-# ──────────────────
-# PUBLIC FACTORY FN
-# ──────────────────
+# ─────────────────────
+# PUBLIC FACTORY METHOD
+# ─────────────────────
 
 def create_live_adapter() -> LiveSessionPort:
     """
