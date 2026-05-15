@@ -2,7 +2,7 @@
 
 TrueFit.ai is a Gemini-powered live AI agent that automates hiring by conducting real-time voice interviews, evaluating candidates on structured criteria, and generating actionable recommendations. Companies create job listings, and candidates start instant AI interview sessions with adaptive questioning and structured evaluation reports.
 
-**Stack:** FastAPI · WebRTC · Gemini Live API · React · PostgreSQL · Redis
+**Stack:** FastAPI · WebRTC · Gemini Live API · OpenAI Realtime · React · PostgreSQL · Redis
 
 ---
 
@@ -143,7 +143,7 @@ Interactive API docs are available at `http://localhost:8000/api/docs` when the 
 
 ## Contributing
 
-This is an open source project. Contributions are welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
+This is an open source project. Contributions are welcome - see [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
 
 ---
 
