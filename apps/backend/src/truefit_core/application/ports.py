@@ -498,3 +498,20 @@ class LiveSessionPort(ABC):
     async def is_healthy(self) -> bool:
         """Return True if there is an active open session."""
         ...
+
+
+@dataclass
+class ResumeEvaluationRequest:
+    resume_text: str
+    job_title: str
+    job_description: str
+    required_skills: list[str]
+    experience_level: str
+
+@dataclass  
+class ResumeEvaluationResult:
+    match_score: int         
+    recommendation: str      
+    summary: str           
+    strengths: list[str]
+    gaps: list[str]
