@@ -22,6 +22,8 @@ from src.truefit_core.domain.job import Job
 from src.truefit_infra.db.models import Application, User
 from src.truefit_core.domain.org import Org
 
+
+
 # Repository ports
 
 
@@ -236,13 +238,19 @@ class LLMPort(ABC):
         """
         ...
 
+
+    @abstractmethod
+    async def evaluate_resume(
+        self, request: ResumeEvaluationRequest
+    ) -> ResumeEvaluationResult:
+        """Analyse a resume against a job description before the interview starts."""
+        ...
+
+
     @abstractmethod
     async def is_healthy(self) -> bool:
         """Lightweight connectivity / availability check for health endpoints."""
         ...
-
-
-# Queue / event bus port
 
 
 @dataclass

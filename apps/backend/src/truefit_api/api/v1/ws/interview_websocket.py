@@ -37,7 +37,6 @@ from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
 from src.truefit_core.application.services.resume_evaluation_service import (
     ResumeEvaluationService,
 )
-from src.truefit_infra.llm.gemini_llm import GeminiLLMAdapter
 
 # ────────────────────
 # DEPENDENCY FACTORIES
@@ -145,6 +144,7 @@ def get_resume_evaluation_service() -> ResumeEvaluationService:
     )
 
 
+
 # ──────
 # ROUTER
 # ──────
@@ -215,6 +215,7 @@ async def interview_websocket(
         cache=cache,
         live_adapter=live_adapter,
         resume_eval_service=get_resume_evaluation_service(), 
+        
     )
     await connection.run()
 

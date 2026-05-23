@@ -20,7 +20,7 @@ from src.truefit_core.application.ports import (
 from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 
-_MODEL = "gemini-2.0-flash-001"
+_MODEL = "gemini-2.5-flash"
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -43,9 +43,9 @@ class GeminiLLMAdapter(LLMPort):
     """
 
     def __init__(self, api_key: str | None = None) -> None:
-        key = api_key or AppConfig.GOOGLE_API_KEY
+        key = api_key or AppConfig.GEMINI_API_KEY
         if not key:
-            raise RuntimeError("GOOGLE_API_KEY is not configured.")
+            raise RuntimeError("GEMINI_API_KEY is not configured.")
         self._client = genai.Client(api_key=key)
 
     async def generate(self, prompt: str, *, temperature: float = 0.7) -> str:
@@ -133,3 +133,9 @@ class GeminiLLMAdapter(LLMPort):
                 strengths=result.strengths,
                 gaps=result.gaps,
             )
+  
+    async def generate_question(self, context):
+        raise NotImplementedError
+
+    async def evaluate_interview(self, request):
+        raise NotImplementedError
