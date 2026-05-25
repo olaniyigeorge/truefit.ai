@@ -29,7 +29,7 @@ from src.truefit_infra.db.repositories.job_repository import SQLAlchemyJobReposi
 from src.truefit_infra.db.repositories.candidate_repository import (
     SQLAlchemyCandidateRepository,
 )
-from src.truefit_infra.agent.live_interview_agent import (
+from truefit_core.agents.interviewer.live_interview_agent import (
     InterviewContext,
     LiveInterviewAgent,
 )
