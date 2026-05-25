@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import FastAPI
 import sqlalchemy
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 
 load_dotenv()
+
 from src.truefit_infra.config import AppConfig
 from src.truefit_infra.db.database import db_manager
 from src.truefit_api.middlewares import (
@@ -21,21 +23,34 @@ from src.truefit_api.api.v1.http.candidates import router as candidates_router
 from src.truefit_api.api.v1.http.interviews import router as interviews_router
 from src.truefit_api.api.v1.http.orgs import router as orgs_router
 from src.truefit_api.api.v1.http.users import router as users_router
-from src.truefit_api.api.v1.ws.interview_websocket import interview_ws_router
+from src.truefit_api.api.v1.ws.interview_websocket import (
+    get_orchestration,
+    interview_ws_router,
+)
 from src.truefit_api.api.v1.http.applications import router as applications_router
 from src.truefit_api.api.v1.http.turn import router as turn_router
+from src.truefit_core.application.services.interview_sweeper import InterviewSweeper
+from src.truefit_infra.db.repositories.interview_repository import (
+    SQLAlchemyInterviewRepository,
+)
+
+_sweeper_task: asyncio.Task | None = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Manages the lifespan of the Truefit API. It
-    initializes the initializes the database manager which
-    manages data on server wake up and cleanly closes it on
-    shutdown
+    Manages the lifespan of the Truefit API.
+    Initializes the database on startup and closes it on shutdown.
+    Also starts and stops the interview sweeper background task.
     """
+    global _sweeper_task
+
+    # Declared before try so finally can always reference it safely
+    sweeper: InterviewSweeper | None = None
+
     try:
-        # Initialize database
+        # Database init 
         engine_kwargs = {}
         if "sqlite" in AppConfig.DATABASE_URL:
             engine_kwargs.update(
@@ -52,35 +67,53 @@ async def lifespan(app: FastAPI):
             )
 
         db_manager.initialize(AppConfig.DATABASE_URL, **engine_kwargs)
-
-        # # Create tables
         await db_manager.create_tables()
-
         logger.info("Application startup complete")
+
+        # Sweeper
+        # TODO: replace get_orchestration() with a proper DI container
+        # (truefit_infra/container.py) to avoid building a throwaway
+        # object graph on every startup or spagettifying the codebase.
+        sweeper = InterviewSweeper(
+            interviews=SQLAlchemyInterviewRepository(db_manager),
+            orchestration=get_orchestration(),
+        )
+        _sweeper_task = asyncio.create_task(sweeper.start(), name="interview-sweeper")
+
         yield
+
     except Exception as e:
         logger.error(f"Startup failed: {e}")
         raise
+
     finally:
         # Shutdown
+        if sweeper:
+            sweeper.stop()          # set exit flag
+
+        if _sweeper_task:
+            _sweeper_task.cancel()  # interrupt sleep immediately
+            try:
+                await _sweeper_task
+            except asyncio.CancelledError:
+                pass
+
         await db_manager.close()
         logger.info("Application shutdown complete")
 
 
 app = FastAPI(
-    title=AppConfig.PROJECT_NAME, 
-    docs_url="/api/docs", 
+    title=AppConfig.PROJECT_NAME,
+    docs_url="/api/docs",
     openapi_url="/api/openapi.json",
     swagger_ui_parameters={"url": "/api/openapi.json"},
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
-
-# Middleware
+# Middleware 
 app.add_middleware(BaseHTTPMiddleware, dispatch=req_res_time_log_middleware)
 register_error_handler(app)
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -94,11 +127,10 @@ app.add_middleware(
     ],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=[
-        "*"
-    ],  # TODO : Update request headers coming from all whitelisted clients
+    allow_headers=["*"],  # TODO: restrict to headers required by whitelisted clients
 )
 
+# Routers 
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
