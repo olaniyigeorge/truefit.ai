@@ -34,6 +34,9 @@ from truefit_core.agents.interviewer.live_interview_agent import (
     LiveInterviewAgent,
 )
 from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
+from src.truefit_core.application.services.resume_evaluation_service import (
+    ResumeEvaluationService,
+)
 
 # ────────────────────
 # DEPENDENCY FACTORIES
@@ -132,6 +135,16 @@ def get_orchestration() -> InterviewOrchestrationService:
     )
 
 
+def get_resume_evaluation_service() -> ResumeEvaluationService:
+    return ResumeEvaluationService(
+        candidate_repo=get_candidate_repo(),
+        job_repo=get_job_repo(),
+        llm=GeminiLLMAdapter(),
+        storage=None,
+    )
+
+
+
 # ──────
 # ROUTER
 # ──────
@@ -141,6 +154,8 @@ def get_orchestration() -> InterviewOrchestrationService:
 
 
 interview_ws_router = APIRouter(tags=["interview-ws"], prefix="/api/v1")
+
+resume_eval_service: ResumeEvaluationService = Depends(get_resume_evaluation_service),
 
 # How often (seconds) we poll Redis for interrupt signals during an active session.
 # 50ms gives us near-real-time interrupt propagation without hammering Redis.
@@ -199,6 +214,8 @@ async def interview_websocket(
         queue=queue,
         cache=cache,
         live_adapter=live_adapter,
+        resume_eval_service=get_resume_evaluation_service(), 
+        
     )
     await connection.run()
 
@@ -232,18 +249,19 @@ class InterviewConnection:
     """
 
     def __init__(
-        self,
-        *,
-        websocket,
-        job_id,
-        candidate_id,
-        orchestration,
-        job_repo,
-        candidate_repo,
-        queue,
-        cache,
-        live_adapter,
-    ) -> None:
+            self,
+            *,
+            websocket,
+            job_id,
+            candidate_id,
+            orchestration,
+            job_repo,
+            candidate_repo,
+            queue,
+            cache,
+            live_adapter,
+            resume_eval_service,        # ← add this
+        ) -> None:
         # Infrastructure references
         self._ws: WebSocket = websocket  # The raw FastAPI WebSocket connection
         self._job_id = job_id  # UUID of the job being interviewed for
@@ -253,7 +271,8 @@ class InterviewConnection:
         self._candidate_repo = candidate_repo  # Fetch candidate details for context
         self._queue = queue  # Publish domain events (interview.completed etc.)
         self._cache = cache  # Read/write interrupt signals
-        self._live_adapter = live_adapter  # Gemini Live API wrapper
+        self._live_adapter = live_adapter# Gemini Live API wrapper
+        self._resume_eval = resume_eval_service # resume evaluation service for pre-interview context
 
         # Per-session state
         self._interview_id: Optional[uuid.UUID] = None  # Set after start_interview()
@@ -272,6 +291,26 @@ class InterviewConnection:
         # waits before starting the agent). Once the offer is processed and the
         # WebRTC peer connection is up, _handle_webrtc_offer() sets this.
         self._webrtc_ready = asyncio.Event()
+
+        async def _get_resume_summary(self) -> Optional[str]:
+            """
+            Evaluate the candidate's resume against the job before the interview starts.
+            Returns a summary string for the agent, or None if no resume is uploaded.
+            Non-fatal - a missing resume just means the agent interviews without context.
+            """
+            try:
+                result = await self._resume_eval.evaluate(
+                    candidate_id=self._candidate_id,
+                    job_id=self._job_id,
+                )
+                return result.summary
+            except ValueError as e:
+                # Candidate has no resume - interview continues without personalisation
+                logger.info(f"Resume evaluation skipped: {e}")
+                return None
+            except Exception as e:
+                logger.error(f"Resume evaluation failed: {e}", exc_info=True)
+                return None
 
     # ───────────
     # ENTRY POINT
@@ -855,7 +894,7 @@ class InterviewConnection:
             topics=job.interview_config.topics,
             custom_instructions=job.interview_config.custom_instructions,
             candidate_name=candidate.full_name,
-            candidate_resume_text=None,  # TODO: wire up resume parsing
+            candidate_resume_text=await self._get_resume_summary(),  #TODO: wire up resume parsing
         )
 
     async def _handle_disconnect(self, reason: str) -> None:

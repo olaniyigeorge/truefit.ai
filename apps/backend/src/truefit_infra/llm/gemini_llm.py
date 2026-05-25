@@ -10,15 +10,30 @@ import json
 
 from google import genai
 from google.genai import types
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from src.truefit_core.application.ports import LLMPort
+from src.truefit_core.application.ports import (
+    LLMPort,
+    ResumeEvaluationRequest,
+    ResumeEvaluationResult,
+)
 from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 
-_MODEL = "gemini-2.0-flash-001"
+_MODEL = "gemini-2.5-flash"
 
 T = TypeVar("T", bound=BaseModel)
+
+
+
+class _ResumeEvalSchema(BaseModel):
+    match_score: int = Field(ge=0, le=100)
+    recommendation: str       
+    summary: str               
+    strengths: list[str]
+    gaps: list[str]
+
+
 
 
 class GeminiLLMAdapter(LLMPort):
@@ -28,9 +43,9 @@ class GeminiLLMAdapter(LLMPort):
     """
 
     def __init__(self, api_key: str | None = None) -> None:
-        key = api_key or AppConfig.GOOGLE_API_KEY
+        key = api_key or AppConfig.GEMINI_API_KEY
         if not key:
-            raise RuntimeError("GOOGLE_API_KEY is not configured.")
+            raise RuntimeError("GEMINI_API_KEY is not configured.")
         self._client = genai.Client(api_key=key)
 
     async def generate(self, prompt: str, *, temperature: float = 0.7) -> str:
@@ -81,3 +96,46 @@ class GeminiLLMAdapter(LLMPort):
             return True
         except Exception:
             return False
+
+
+    async def evaluate_resume(
+            self, request: ResumeEvaluationRequest
+        ) -> ResumeEvaluationResult:
+            prompt = f"""
+        You are a technical recruiter evaluating a candidate resume against a job description.
+
+        JOB TITLE: {request.job_title}
+        EXPERIENCE LEVEL: {request.experience_level}
+        REQUIRED SKILLS: {', '.join(request.required_skills)}
+        JOB DESCRIPTION:
+        {request.job_description}
+
+        CANDIDATE RESUME:
+        {request.resume_text}
+
+        Evaluate how well this candidate fits the role.
+
+        Rules:
+        - match_score: 0–100 integer (75–100 = strong, 35–70 = partial, 0–30 = weak)
+        - recommendation: exactly one of "strong", "maybe", or "no"
+        - summary: 2–3 sentences the AI interviewer will use to personalise the session.
+        Write it in second person as if briefing the interviewer, e.g.
+        "The candidate has 5 years of Python experience..."
+        - strengths: list of specific matching skills/experiences found in the resume
+        - gaps: list of required skills/experience missing from the resume
+        """
+            result = await self.generate_structured(prompt, _ResumeEvalSchema)
+
+            return ResumeEvaluationResult(
+                match_score=result.match_score,
+                recommendation=result.recommendation,
+                summary=result.summary,
+                strengths=result.strengths,
+                gaps=result.gaps,
+            )
+  
+    async def generate_question(self, context):
+        raise NotImplementedError
+
+    async def evaluate_interview(self, request):
+        raise NotImplementedError

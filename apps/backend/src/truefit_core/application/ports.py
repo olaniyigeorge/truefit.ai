@@ -22,6 +22,8 @@ from src.truefit_core.domain.job import Job
 from src.truefit_infra.db.models import Application, User
 from src.truefit_core.domain.org import Org
 
+
+
 # Repository ports
 
 
@@ -236,13 +238,19 @@ class LLMPort(ABC):
         """
         ...
 
+
+    @abstractmethod
+    async def evaluate_resume(
+        self, request: ResumeEvaluationRequest
+    ) -> ResumeEvaluationResult:
+        """Analyse a resume against a job description before the interview starts."""
+        ...
+
+
     @abstractmethod
     async def is_healthy(self) -> bool:
         """Lightweight connectivity / availability check for health endpoints."""
         ...
-
-
-# Queue / event bus port
 
 
 @dataclass
@@ -498,3 +506,20 @@ class LiveSessionPort(ABC):
     async def is_healthy(self) -> bool:
         """Return True if there is an active open session."""
         ...
+
+
+@dataclass
+class ResumeEvaluationRequest:
+    resume_text: str
+    job_title: str
+    job_description: str
+    required_skills: list[str]
+    experience_level: str
+
+@dataclass  
+class ResumeEvaluationResult:
+    match_score: int         
+    recommendation: str      
+    summary: str           
+    strengths: list[str]
+    gaps: list[str]
