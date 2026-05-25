@@ -115,6 +115,11 @@ class InterviewRepository(ABC):
     ) -> list[Interview]: ...
 
     @abstractmethod
+    async def list_by_status(
+        self, status: str, *, limit: int = 50, offset: int = 0
+    ) -> list[Interview]: ...
+
+    @abstractmethod
     async def get_active_for_job_and_candidate(
         self,
         *,
