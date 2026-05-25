@@ -29,7 +29,7 @@ from src.truefit_infra.db.repositories.job_repository import SQLAlchemyJobReposi
 from src.truefit_infra.db.repositories.candidate_repository import (
     SQLAlchemyCandidateRepository,
 )
-from truefit_core.agents.interviewer.live_interview_agent import (
+from src.truefit_core.agents.interviewer.live_interview_agent import (
     InterviewContext,
     LiveInterviewAgent,
 )
@@ -330,8 +330,8 @@ class InterviewConnection:
             # ④ Start the WS receive loop NOW (before waiting for WebRTC ready)
             #    so it can immediately process the webrtc_offer the frontend sends.
             #    The interrupt monitor also starts here.
-            ws_task = asyncio.create_task(self._ws_receive_loop())
-            interrupt_task = asyncio.create_task(self._interrupt_monitor_loop())
+            ws_task = asyncio.create_task(self._ws_receive_loop(), name="ws-receive")
+            interrupt_task = asyncio.create_task(self._interrupt_monitor_loop(), name="interrupt-monitor")
 
             # ⑤ Block until the WebRTC peer connection is established.
             #    _handle_webrtc_offer() sets _webrtc_ready once the answer is sent.
