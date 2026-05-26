@@ -35,6 +35,9 @@ class GlobalConfig(BaseSettings):
     TURN_SERVER_URL: str
     TURN_USERNAME: str
     TURN_CREDENTIAL: str
+    LLM_PRIMARY_PROVIDER: str = "gemini"   # "gemini" | "openai"
+    LLM_FALLBACK_PROVIDER: str = "openai"  # "openai" | "gemini" | "none"
+    OPENAI_API_KEY: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
