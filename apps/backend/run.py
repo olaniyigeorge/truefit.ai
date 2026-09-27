@@ -5,10 +5,12 @@ import os
 import sys
 import subprocess
 
-# Add the backend directory to Python path
+# Add the backend directory and src/ to Python path (mirrors tests/pytest.ini's `pythonpath = . src`)
 backend_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(backend_dir, 'src')
 sys.path.insert(0, backend_dir)
-os.environ['PYTHONPATH'] = backend_dir
+sys.path.insert(0, src_dir)
+os.environ['PYTHONPATH'] = os.pathsep.join([backend_dir, src_dir])
 
 # Run uvicorn
 subprocess.run([
