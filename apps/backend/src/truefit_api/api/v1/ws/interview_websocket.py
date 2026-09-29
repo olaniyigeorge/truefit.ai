@@ -35,7 +35,6 @@ from src.truefit_core.agents.interviewer.live_interview_agent import (
     InterviewContext,
     LiveInterviewAgent,
 )
-from src.truefit_infra.llm.gemini_live import GeminiLiveAdapter
 from src.truefit_infra.llm.factory import create_live_adapter
 
 # ────────────────────
@@ -235,7 +234,7 @@ async def interview_websocket(
 #     3. agent_task            - the LiveInterviewAgent (audio send + receive)
 #
 #   Audio data never flows through the WebSocket. It flows via WebRTC:
-#     Browser mic -> WebRTC AudioBridge -> Gemini (via agent._send_audio_loop)
+#     Browser mic -> WebRTC AudioBridge -> Gemini (via runtime._send_audio_loop)
 #     Gemini response -> AudioBridge -> WebRTC track -> Browser speaker
 
 
@@ -701,7 +700,7 @@ class InterviewConnection:
         Async generator that yields raw PCM chunks from the browser's microphone.
 
         These chunks come from the WebRTC AudioBridge's inbound queue, which is
-        fed by the aiortc audio track. The agent's _send_audio_loop() iterates
+        fed by the aiortc audio track. The runtime's _send_audio_loop() iterates
         over this generator and forwards each chunk to Gemini.
 
         Raises RuntimeError if called before WebRTC is set up (which shouldn't
@@ -790,7 +789,7 @@ class InterviewConnection:
         """
         Polls Redis every 50ms for interrupt signals published by the agent.
 
-        The agent (LiveInterviewAgent._tool_flag_interrupt) writes interrupt
+        The agent (InterviewToolHandlers.flag_interrupt) writes interrupt
         data to Redis under the key "interrupt:{interview_id}". This loop
         reads that key and, when it finds something:
 

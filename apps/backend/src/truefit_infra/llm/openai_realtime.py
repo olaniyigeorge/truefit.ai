@@ -244,7 +244,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         """
         Injects a structured text message into the conversation before audio begins.
 
-        Used once at session start by LiveInterviewAgent._inject_context() to
+        Used once at session start by VoiceAgentRuntime (opening message) to
         pre-load job details, candidate info, and interview instructions.
 
         OpenAI equivalent:

@@ -396,7 +396,7 @@ class AudioBridge:
         """
         Async generator that the agent iterates to get microphone audio chunks.
 
-        Used by LiveInterviewAgent._send_audio_loop() which passes it to
+        Used by VoiceAgentRuntime._send_audio_loop() which passes it to
         GeminiLiveAdapter.send_audio() in a tight loop.
 
         Waits up to 30 seconds for the WebRTC inbound track to be attached

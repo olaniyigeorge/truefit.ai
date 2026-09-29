@@ -132,7 +132,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         Forwards a chunk of microphone audio from the browser to Gemini.
 
         Input format: 16kHz mono s16 PCM (resampled by AudioBridge from 48kHz Opus)
-        This is called in a tight loop by LiveInterviewAgent._send_audio_loop().
+        This is called in a tight loop by VoiceAgentRuntime._send_audio_loop().
 
         We silently skip empty chunks - the AudioBridge occasionally sends
         zero-length bytes as a keepalive and we don't want to waste API calls.
@@ -177,7 +177,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         """
         Injects a structured text message into the session before audio begins.
 
-        Used once at session start by LiveInterviewAgent._inject_context() to
+        Used once at session start by VoiceAgentRuntime (opening message) to
         pre-load the job details, candidate info, and interview instructions
         into Gemini's context window. This is separate from the system prompt -
         it's a user-turn message that gives Gemini the specific data it needs
@@ -224,7 +224,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         (event_type, data) tuples for every significant event in the session.
 
         This runs continuously for the life of the session (called from
-        LiveInterviewAgent._receive_loop()). It never returns normally -
+        VoiceAgentRuntime._receive_loop()). It never returns normally -
         it runs until the session closes or an exception occurs.
 
         TEXT BUFFERING 

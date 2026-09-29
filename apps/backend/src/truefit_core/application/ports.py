@@ -19,7 +19,8 @@ from src.truefit_core.domain.candidate import Candidate
 from src.truefit_core.domain.evaluation import Evaluation
 from src.truefit_core.domain.interview import Interview
 from src.truefit_core.domain.job import Job
-from src.truefit_infra.db.models import Application, User
+from src.truefit_core.domain.application import Application
+from src.truefit_core.domain.user import User
 from src.truefit_core.domain.org import Org
 
 # Repository ports
@@ -387,6 +388,7 @@ class ApplicationRepository(ABC):
 
     @abstractmethod
     async def delete(self, application_id: uuid.UUID) -> None: ...
+
 
 
 class LiveSessionPort(ABC):
