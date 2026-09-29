@@ -2,7 +2,7 @@
 
 **Status:** Assessment — informs the pivot decided 2026-09-28
 **Date:** 2026-09-29
-**Scope:** What it would actually take to turn TrueFit.ai from an AI-interview product into reusable, model-agnostic infrastructure for voice agents (interviews, meetings, note-taking, and other applications built on top).
+**Scope:** What it would actually take to turn TrueFit.ai from an AI-interview product into reusable, model-agnostic infrastructure for voice agents (interviews, meetings, conversational, note-taking, and other applications built on top).
 
 > This review is based on reading the code on `main`, not the README (which is partly aspirational). File references link to the real source.
 
@@ -37,6 +37,29 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 **Audio contract** (relied on across layers): inbound 16kHz mono s16 PCM, outbound 24kHz mono s16 PCM, with the WebRTC `AudioBridge` resampling to/from 48kHz Opus at the browser edge.
 
 ---
+
+## Progress (updated 2026-09-29)
+
+| Item | Status |
+|---|---|
+| Step 1: recover multi-provider code, factory in WS layer | Done (merged from `dev`; fallback default fixed to `none`, blank env values handled) |
+| Gap 1: `VoiceAgentRuntime` extraction | Done: `truefit_core/agents/runtime/` (see below) |
+| Step 2 remainder: tighten the port (Gap 2) | Not started |
+| Step 3: second use case (meeting copilot) | Not started |
+| Step 4: `ComposedLiveAdapter` (Gap 3) | Not started |
+| Step 6: eval pipeline | Not started |
+
+Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers never passed the asset id), `JobService.create_job()` / `CreateJobCommand` (out of sync with the `Job` aggregate, now take `created_by` and `requirements`), and a test helper that turned `skills=[]` into default skills. Unit suite: 188 passing.
+
+**What Gap 1 delivered**
+
+- `VoiceAgentRuntime` (`agents/runtime/runtime.py`) depends only on `LiveSessionPort`. Prompt, tools, opening message, I/O callbacks and an `on_error` hook are inputs. Ending a session is a generic `SessionComplete` exception or `runtime.stop()`.
+- `ToolRegistry` (`agents/runtime/tools.py`) holds declaration and handler together and rejects mismatches at construction.
+- `LiveInterviewAgent` is now a thin consumer. Its tool handlers moved to `agents/interviewer/handlers.py`. It is typed against `LiveSessionPort` and imports nothing from `truefit_infra`.
+- Behaviour change: when either loop ends (model closes the stream, mic closes, `go_away`), the other is cancelled. Before, `gather()` could leave the mic loop hanging.
+- Isolation is tested: the runtime is exercised with a non-interview tool set, and a test fails if the runtime imports infra, services, domain or interviewer code.
+
+Still open around Gap 1: `application/ports.py` imports `truefit_infra.db.models` (unrelated to the agents, but the same kind of leak), and the tool declaration shape is still Gemini-style `function_declarations` (Gap 2).
 
 ## The gaps
 
@@ -77,6 +100,13 @@ The good news: the port is abstract enough that a `ComposedLiveAdapter` can hide
 3. **Prove reusability with a second use case** *(days).* A meeting note-taker that reuses the runtime with different tools and prompt. This is what makes it *infrastructure* — and it satisfies the 3-month milestone's "first non-interview use case."
 4. **Build `ComposedLiveAdapter` for the free/open path** *(weeks — the actual bet).* VAD + STT + open LLM + TTS behind `LiveSessionPort`. This is what makes "free models first-class" true rather than aspirational.
 5. **Decide the product surface** *(unresolved; changes everything above).* SDK vs hosted API vs self-host. Determines auth, multi-tenancy, and whether the DB/domain layer ships at all.
+6. **Build an eval pipeline** *(should start alongside step 2, not after).* Model-agnostic only means something if we can measure it. Without evals, swapping Gemini for OpenAI or an open-model composed pipeline is a guess, and regressions from prompt, tool or adapter changes go unnoticed. Scope to design:
+   - **Per-provider comparison:** run the same scripted scenarios through each `LiveSessionPort` adapter and compare results.
+   - **Voice metrics:** time to first audio, turn latency, barge-in / interruption handling, and STT word error rate on fixed audio fixtures.
+   - **Agent behaviour:** tool-call correctness (right tool, right args, right order), for example that the interviewer never advances before `persist_answer`.
+   - **Use-case scorecards:** one per consumer (interview, meeting copilot), with LLM-as-judge or rubric scoring for conversation quality.
+   - **Regression gating:** a fixed scenario set that runs in CI on adapter, prompt and runtime changes, plus a cost-per-session figure so the free/open path can be compared against paid providers.
+   - **Open questions:** scripted or simulated caller (TTS-driven audio in, text-only shortcut for cheap runs), where fixtures live, and what pass thresholds are.
 
 ---
 
