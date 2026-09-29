@@ -78,8 +78,10 @@ def create_live_adapter() -> LiveSessionPort:
       ValueError  - if a provider name is unrecognised or primary == fallback
       RuntimeError - if a required API key is missing (raised inside the adapter)
     """
-    primary_name: str = getattr(AppConfig, "LLM_PRIMARY_PROVIDER", "openai")
-    fallback_name: str = getattr(AppConfig, "LLM_FALLBACK_PROVIDER", "none")
+    # `or` (not getattr default) so blank env values like "LLM_PRIMARY_PROVIDER="
+    # fall back to the defaults instead of raising "Unknown provider ''".
+    primary_name: str = getattr(AppConfig, "LLM_PRIMARY_PROVIDER", None) or "gemini"
+    fallback_name: str = getattr(AppConfig, "LLM_FALLBACK_PROVIDER", None) or _PROVIDER_NONE
 
     primary_name = primary_name.strip().lower()
     fallback_name = fallback_name.strip().lower()
