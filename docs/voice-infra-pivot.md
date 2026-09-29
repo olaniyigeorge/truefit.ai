@@ -44,12 +44,12 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 |---|---|
 | Step 1: recover multi-provider code, factory in WS layer | Done (merged from `dev`; fallback default fixed to `none`, blank env values handled) |
 | Gap 1: `VoiceAgentRuntime` extraction | Done: `truefit_core/agents/runtime/` (see below) |
-| Step 2 remainder: tighten the port (Gap 2) | Not started |
+| Step 2 remainder: tighten the port (Gap 2) | Done (see below) |
 | Step 3: second use case (meeting copilot) | Not started |
 | Step 4: `ComposedLiveAdapter` (Gap 3) | Not started |
 | Step 6: eval pipeline | Not started |
 
-Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers never passed the asset id), `JobService.create_job()` / `CreateJobCommand` (out of sync with the `Job` aggregate, now take `created_by` and `requirements`), and a test helper that turned `skills=[]` into default skills. Unit suite: 188 passing.
+Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers never passed the asset id), `JobService.create_job()` / `CreateJobCommand` (out of sync with the `Job` aggregate, now take `created_by` and `requirements`), and a test helper that turned `skills=[]` into default skills. Unit suite: 241 passing.
 
 **What Gap 1 delivered**
 
@@ -59,7 +59,31 @@ Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers 
 - Behaviour change: when either loop ends (model closes the stream, mic closes, `go_away`), the other is cancelled. Before, `gather()` could leave the mic loop hanging.
 - Isolation is tested: the runtime is exercised with a non-interview tool set, and a test fails if the runtime imports infra, services, domain or interviewer code.
 
-Still open around Gap 1: `application/ports.py` imports `truefit_infra.db.models` (unrelated to the agents, but the same kind of leak), and the tool declaration shape is still Gemini-style `function_declarations` (Gap 2).
+`application/ports.py` used to import the ORM models from `truefit_infra`. It now uses the domain `User` and `Application`, and a test fails if anything under `truefit_core` imports infra, api or workers.
+
+**What Gap 2 delivered**
+
+- `AdapterCapabilities` on the port: `input_sample_rate`, `output_sample_rate`, `supports_images`, `native_vad`. Gemini and OpenAI declare 16kHz in, 24kHz out. The audio bridge, WebRTC client and signaling now take the output rate from the adapter instead of assuming 24kHz, and the WebSocket layer refuses an adapter whose input rate the bridge cannot deliver.
+- `ToolSpec` (`application/tools.py`): a provider-neutral tool description. `ToolRegistry` and the runtime use it, and each adapter translates it (`_to_gemini_tools`, `_to_openai_tools`). `normalize_tools` still accepts the legacy Gemini group shape, so `INTERVIEW_TOOLS` works unchanged.
+- `send_image` is an optional capability. The default raises `CapabilityNotSupported`, so a frame is never silently dropped.
+- `go_away` became the neutral `session_ending` event with a reason payload. The valid event set is `LIVE_EVENT_TYPES`.
+- Manual turn signalling (`send_activity_start`, `send_activity_end`, `send_audio_stream_end`) is now on the port as optional methods.
+- `FallbackLiveAdapter` merges its two adapters' capabilities and refuses at construction if their sample rates or `native_vad` disagree.
+- A shared contract suite (`tests/unit/llm/test_adapter_contract.py`) runs against the fake, the fallback wrapper and both real adapters. A composed adapter should be added to it when it exists.
+
+Real bugs found and fixed on the way:
+
+- The OpenAI adapter received the interview tools in Gemini's group shape and passed them through untouched, so it would never have registered a usable tool. This matches the caveat already noted in `docs/doc.md`.
+- The WebSocket layer called `send_activity_start()` and `send_activity_end()` on the adapter, but `FallbackLiveAdapter` had neither, so any fallback configuration would have raised `AttributeError` at the first turn boundary.
+
+- The OpenAI adapter still spoke the retired Realtime beta protocol, and OpenAI now answers `beta_api_shape_disabled`. It is migrated to GA (no beta header, `session.type: realtime`, `output_modalities`, nested `audio.input` / `audio.output`, renamed transcript events), verified against the field definitions in OpenAI's official Python SDK. GA only accepts 24kHz PCM, so the adapter now upsamples the bridge's 16kHz itself. The old code labelled 16kHz audio as `pcm16` (24kHz), so OpenAI would have heard the candidate 1.5x too fast.
+- `response.done` with status `incomplete` (token limit, content filter) produced no event, which would have left the agent waiting forever. It now ends the turn.
+- The fallback did not engage when the primary opened and then failed on its first event, which is exactly what the beta shutdown looked like. It now fails over when the primary fails before producing output and replays the opening message. Failures after output has started still propagate.
+- The Gemini adapter read the SDK's `session.receive()` once, and the SDK ends that call after every model turn. The agent greeted the candidate and then never answered again, with the mic left open. The adapter now keeps reading across turns until the session closes, and the port documents that `receive()` spans the whole session. The WebSocket layer also reports an error to the UI if the agent's session ends without a deliberate completion, instead of leaving a live mic with no agent.
+- Gemini closed sessions with `1011 Internal error occurred`, once before any audio and once right after the candidate finished a long answer (the model is a preview one, and Google gives no reason). Every such close ended the interview. The Gemini adapter now enables session resumption and reconnects on transient close codes (1001, 1006, 1011, 1012, 1013). With a resume handle the conversation continues server-side. With none yet (an early failure) it restarts and replays the opening message. `go_away`, the server's periodic connection recycle, now resumes instead of ending the session, which any interview past about ten minutes needs. Context-window compression is on too, because audio sessions are otherwise capped near 15 minutes. After a reconnect the adapter emits a `session_resumed` event, and the runtime sends the consumer's `resume_message` (for interviews: apologise and ask the candidate to repeat their last answer, since the last turn may have been lost). Three failed reconnects in a row end the session. The Live model can be overridden with `GEMINI_LIVE_MODEL`.
+- `OpenAIRealtimeAdapter.is_healthy()` read `ws.open`, which `websockets` 16 removed, so it would have raised `AttributeError`.
+
+Behaviour note: OpenAI no longer accepts and drops images silently. It reports `supports_images=False` and raises if asked.
 
 ## The gaps
 
@@ -75,7 +99,7 @@ The port is clean; the layers above it are not yet reusable.
 
 ### Gap 2 — Gemini's shape leaks into the port
 
-`LiveSessionPort` assumes the provider owns the whole realtime loop, and even documents that output sample rate is not normalized ("*Gemini Live returns 24kHz*"). `send_image` and the `go_away` event are Gemini-isms. Fine for two similar realtime APIs; leaky for true model-agnosticism. Minor — worth tightening while generalizing for Gap 1.
+**Resolved** (see Progress above). `LiveSessionPort` assumed the provider owns the whole realtime loop, documented output sample rate as "Gemini Live returns 24kHz", and carried Gemini-isms (`send_image`, `go_away`, Gemini-shaped tools). It now declares capabilities and sample rates, uses neutral tools and events, and makes images and manual turn signalling optional.
 
 ### Gap 3 — Every layer assumes a single realtime *speech-to-speech* API (the big one)
 

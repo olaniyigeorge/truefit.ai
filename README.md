@@ -30,7 +30,7 @@ The code follows a hexagonal layout. The core never imports infrastructure, and 
 Browser mic/speaker
       |  WebRTC (Opus 48kHz)
       v
-AudioBridge (resamples to 16kHz in, 24kHz out)
+AudioBridge (resamples to the adapter's declared rates, 16kHz in and 24kHz out today)
       |
       v
 VoiceAgentRuntime  <---- system prompt, tools, opening message, callbacks
@@ -39,7 +39,7 @@ VoiceAgentRuntime  <---- system prompt, tools, opening message, callbacks
 GeminiLiveAdapter | OpenAIRealtimeAdapter | FallbackLiveAdapter
 ```
 
-- **`LiveSessionPort`** (`truefit_core/application/ports.py`) is the seam between agents and providers. Providers emit normalised `(event_type, data)` events: `audio`, `text`, `input_text`, `tool_call`, `turn_complete`, `interrupted`, `go_away`.
+- **`LiveSessionPort`** (`truefit_core/application/ports.py`) is the seam between agents and providers. Providers emit normalised `(event_type, data)` events: `audio`, `text`, `input_text`, `tool_call`, `turn_complete`, `interrupted`, `session_ending`. Each adapter also declares `capabilities` (sample rates, image support, whether it has native turn detection) and takes provider-neutral `ToolSpec` tools.
 - **`VoiceAgentRuntime`** (`truefit_core/agents/runtime/`) owns the send loop, the receive loop, tool dispatch and lifecycle. It depends only on the port.
 - **`ToolRegistry`** keeps each tool's declaration and handler together, so a mismatch fails at startup instead of mid-call.
 - **`LiveAdapterFactory`** (`truefit_infra/llm/factory.py`) picks the provider from config and wraps it in a fallback if one is set.
@@ -68,10 +68,12 @@ Set these in `apps/backend/.env`:
 LLM_PRIMARY_PROVIDER=gemini      # gemini | openai
 LLM_FALLBACK_PROVIDER=none       # gemini | openai | none
 GEMINI_API_KEY=...
+GEMINI_LIVE_MODEL=...            # optional, overrides the Gemini Live model
 OPENAI_API_KEY=...               # only needed if OpenAI is primary or fallback
+OPENAI_REALTIME_MODEL=...        # optional, defaults to gpt-realtime-mini-2025-12-15
 ```
 
-Fallback happens when the primary fails to open a session (network, auth, timeout). A session that dies mid-call is not recovered yet.
+Fallback happens when the primary fails to open a session (network, auth, timeout) or fails before it has produced any output, in which case the opening message is replayed on the fallback. A session that dies after the conversation has started is not recovered by the wrapper, but the Gemini adapter reconnects and resumes its own session on transient errors.
 
 ## Project structure
 
