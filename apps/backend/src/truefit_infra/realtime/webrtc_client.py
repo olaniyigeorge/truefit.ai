@@ -83,6 +83,7 @@ class WebRTCClient:
         frame_interval_camera: float = 5.0,
         frame_interval_screen: float = 2.0,
         on_ice_candidate=None,
+        output_sample_rate: int = 24_000,
     ) -> None:
         """
         pc:
@@ -109,6 +110,10 @@ class WebRTCClient:
             (code, documents) changes more meaningfully and Gemini needs to
             read it to give relevant feedback.
 
+        output_sample_rate:
+            Sample rate of the agent PCM pushed into the audio bridge (the live
+            adapter's capabilities.output_sample_rate).
+
         on_ice_candidate:
             Async callback called each time the server-side ICE agent discovers
             a new network candidate. In production this is set by
@@ -129,7 +134,9 @@ class WebRTCClient:
         # corresponding track/channel arrives via aiortc events in setup_handlers().
 
         # Handles all audio I/O: browser mic -> Gemini, Gemini response -> browser
-        self.audio_bridge = AudioBridge(context=self.context)
+        self.audio_bridge = AudioBridge(
+            context=self.context, output_sample_rate=output_sample_rate
+        )
 
         # Samples video frames from camera and screen share at configured intervals
         self.frame_sampler = FrameSampler(

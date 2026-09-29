@@ -35,6 +35,16 @@ from src.truefit_core.application.services.interview_orchestration import (
 from src.truefit_core.common.utils import logger
 
 
+# Sent when the provider connection dropped and was restored. The conversation
+# survives but the candidate's most recent answer may not have reached the model.
+RESUME_MESSAGE = (
+    "The connection dropped briefly and has been restored. If the candidate may have "
+    "been in the middle of an answer, apologise in one short sentence and ask them to "
+    "repeat their last answer. Do not start over and do not re-ask questions that were "
+    "already answered."
+)
+
+
 class LiveInterviewAgent:
     def __init__(
         self,
@@ -93,6 +103,7 @@ class LiveInterviewAgent:
             audio_input_stream=self._audio_input,
             callbacks=self._callbacks,
             opening_message=self._opening_message(context),
+            resume_message=RESUME_MESSAGE,
             on_error=lambda exc: self._orchestration.abandon_interview(
                 context.interview_id, reason="agent_error"
             ),

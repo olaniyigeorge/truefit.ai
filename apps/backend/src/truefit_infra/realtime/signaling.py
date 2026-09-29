@@ -25,7 +25,10 @@ class WebRTCSignaling:
     No HTTP, no routers - pure async methods.
     """
 
-    def __init__(self, *, session_id: str, job_id, candidate_id) -> None:
+    def __init__(
+        self, *, session_id: str, job_id, candidate_id, output_sample_rate: int = 24_000
+    ) -> None:
+        self._output_sample_rate = output_sample_rate
         self._session_id = session_id
         self._job_id = job_id
         self._candidate_id = candidate_id
@@ -66,6 +69,7 @@ class WebRTCSignaling:
             candidate_id=self._candidate_id,
             frame_interval_camera=frame_interval_camera,
             frame_interval_screen=frame_interval_screen,
+            output_sample_rate=self._output_sample_rate,
         )
 
         logger.info(f"[{self._session_id}] Calling setup_handlers")

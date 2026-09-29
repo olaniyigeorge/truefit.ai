@@ -23,11 +23,17 @@ primary's open_session() context manager, including:
   - Model-not-found errors
   - asyncio.TimeoutError if the session takes > _SESSION_OPEN_TIMEOUT seconds
 
-We do NOT attempt mid-session recovery. If the primary session dies mid-interview
-(connection drop, quota exceeded, server error), the exception propagates normally
-up through the agent's run() and is treated as an interview error. Transparent
-recovery mid-session would require replaying conversation state which is out of
-scope here.
+Early failure is also recovered. If the primary opens but fails before it has
+produced any event (bad request shape, auth or quota error reported on the first
+receive, an immediate disconnect), the wrapper closes it, opens the fallback,
+and replays the client content (the opening message) so the fallback starts the
+conversation from the same point. Audio sent in that window is dropped.
+
+We do NOT attempt recovery once the primary has produced output. If the session
+dies mid-interview (connection drop, quota exceeded, server error), the exception
+propagates normally up through the agent's run() and is treated as an interview
+error. Recovering there would mean replaying the whole conversation, which is out
+of scope.
 
 ─────────────────────
 HEALTH CHECK
@@ -43,7 +49,8 @@ from __future__ import annotations
 import asyncio
 from typing import Any, AsyncGenerator, Optional
 
-from src.truefit_core.application.ports import LiveSessionPort
+from src.truefit_core.application.ports import AdapterCapabilities, LiveSessionPort
+from src.truefit_core.application.tools import ToolSpec
 from src.truefit_core.common.utils import logger
 
 
@@ -63,6 +70,41 @@ def _require_active(active: Optional[LiveSessionPort]) -> None:
             "FallbackLiveAdapter: no active session. "
             "All calls must be made inside an open_session() context manager."
         )
+
+
+def _merge_capabilities(
+    primary: LiveSessionPort, fallback: Optional[LiveSessionPort]
+) -> AdapterCapabilities:
+    """
+    Common denominator of the two adapters. Audio sample rates must match:
+    the audio path is sized before a session opens, so a fallback that speaks
+    a different rate would corrupt audio. Fail at construction instead.
+    """
+    p = primary.capabilities
+    if fallback is None:
+        return p
+    f = fallback.capabilities
+    if (p.input_sample_rate, p.output_sample_rate) != (
+        f.input_sample_rate,
+        f.output_sample_rate,
+    ):
+        raise ValueError(
+            "Primary and fallback adapters use different audio sample rates "
+            f"(primary in/out {p.input_sample_rate}/{p.output_sample_rate}, "
+            f"fallback {f.input_sample_rate}/{f.output_sample_rate}). "
+            "Pick providers with matching rates or resample inside one adapter."
+        )
+    if p.native_vad != f.native_vad:
+        raise ValueError(
+            "Primary and fallback adapters disagree on native_vad, so callers "
+            "cannot know whether to signal turn boundaries."
+        )
+    return AdapterCapabilities(
+        input_sample_rate=p.input_sample_rate,
+        output_sample_rate=p.output_sample_rate,
+        supports_images=p.supports_images and f.supports_images,
+        native_vad=p.native_vad,
+    )
 
 
 # ───────────────────────
@@ -92,12 +134,13 @@ class _FallbackSessionContext:
         *,
         owner: "FallbackLiveAdapter",
         system_prompt: str,
-        tools: list,
+        tools: list[ToolSpec],
     ) -> None:
         self._owner = owner
         self._system_prompt = system_prompt
         self._tools = tools
         self._active_cm = None  # the CM we entered, kept for __aexit__
+        self._failed_over = False
 
     async def __aenter__(self) -> "FallbackLiveAdapter":
         primary_cm = self._owner._primary.open_session(
@@ -109,6 +152,8 @@ class _FallbackSessionContext:
             await asyncio.wait_for(primary_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT)
             self._active_cm = primary_cm
             self._owner._active = self._owner._primary
+            self._owner._session_ctx = self
+            self._owner._sent_content = []
             logger.info(
                 f"[FallbackAdapter] Primary ({type(self._owner._primary).__name__}) session opened"
             )
@@ -138,6 +183,9 @@ class _FallbackSessionContext:
             await asyncio.wait_for(fallback_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT)
             self._active_cm = fallback_cm
             self._owner._active = self._owner._fallback
+            self._owner._session_ctx = self
+            self._owner._sent_content = []
+            self._failed_over = True  # opened on the fallback already; nothing left to fail over to
             logger.warning(
                 f"[FallbackAdapter] Using fallback "
                 f"({type(self._owner._fallback).__name__}) — primary unavailable"
@@ -154,6 +202,53 @@ class _FallbackSessionContext:
                 f"  Primary ({type(self._owner._primary).__name__}): {primary_exc}\n"
                 f"  Fallback ({type(self._owner._fallback).__name__}): {fallback_exc}"
             ) from fallback_exc
+
+    @property
+    def can_fail_over(self) -> bool:
+        return self._owner._fallback is not None and not self._failed_over
+
+    async def fail_over(self) -> None:
+        """
+        Swap a session that failed early onto the fallback adapter: close the
+        primary, open the fallback, replay the client content. Callers that send
+        while this runs wait on owner._switching instead of hitting a dead session.
+        """
+        owner = self._owner
+        if not self.can_fail_over:
+            raise RuntimeError("FallbackLiveAdapter: no fallback available to fail over to")
+        self._failed_over = True
+        owner._switching.clear()
+        try:
+            failed = type(owner._active).__name__ if owner._active else "primary"
+            if self._active_cm is not None:
+                try:
+                    await self._active_cm.__aexit__(None, None, None)
+                except Exception as teardown_exc:
+                    logger.warning(
+                        f"[FallbackAdapter] Error closing failed primary: {teardown_exc}"
+                    )
+            fallback_cm = owner._fallback.open_session(self._system_prompt, self._tools)
+            try:
+                await asyncio.wait_for(
+                    fallback_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT
+                )
+            except Exception as exc:
+                self._active_cm = None
+                owner._active = None
+                raise RuntimeError(
+                    f"Primary ({failed}) failed early and fallback "
+                    f"({type(owner._fallback).__name__}) could not open: {exc}"
+                ) from exc
+            self._active_cm = fallback_cm
+            owner._active = owner._fallback
+            logger.warning(
+                f"[FallbackAdapter] {failed} failed before producing output, "
+                f"continuing on {type(owner._fallback).__name__}"
+            )
+            for text in owner._sent_content:
+                await owner._fallback.send_client_content(text)
+        finally:
+            owner._switching.set()
 
     async def __aexit__(self, *exc_info: Any) -> None:
         self._owner._active = None
@@ -203,9 +298,31 @@ class FallbackLiveAdapter(LiveSessionPort):
         """
         self._primary = primary
         self._fallback = fallback
+        self._capabilities = _merge_capabilities(primary, fallback)
         # Set during open_session().__aenter__, cleared on __aexit__.
         # None outside of an active session - guards all delegating methods.
         self._active: Optional[LiveSessionPort] = None
+        # Client content sent this session, replayed onto the fallback on early failover.
+        self._sent_content: list[str] = []
+        self._session_ctx: Optional[_FallbackSessionContext] = None
+        # Cleared while an early failover swaps providers; senders wait on it.
+        self._switching = asyncio.Event()
+        self._switching.set()
+
+    async def _current(self) -> LiveSessionPort:
+        """The active adapter, waiting first if an early failover is swapping providers."""
+        await self._switching.wait()
+        _require_active(self._active)
+        return self._active
+
+    @property
+    def capabilities(self) -> AdapterCapabilities:
+        """
+        Capabilities that hold whichever provider ends up active. Callers read
+        this before a session opens (for example to size the audio path), so it
+        is the common denominator of primary and fallback.
+        """
+        return self._capabilities
 
     # ─────────────────────────────
     # LiveSessionPort: session open
@@ -214,7 +331,7 @@ class FallbackLiveAdapter(LiveSessionPort):
     def open_session(
         self,
         system_prompt: str,
-        tools: list | None = None,
+        tools: list[ToolSpec] | None = None,
     ) -> "_FallbackSessionContext":
         """
         Returns an async context manager that opens a session on the
@@ -241,23 +358,34 @@ class FallbackLiveAdapter(LiveSessionPort):
 
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """Forward 16kHz mono s16 PCM to whichever provider is active."""
-        _require_active(self._active)
-        await self._active.send_audio(pcm_bytes)
+        active = await self._current()
+        await active.send_audio(pcm_bytes)
+
+    async def send_activity_start(self) -> None:
+        """Manual turn signalling: forward to whichever provider is active."""
+        active = await self._current()
+        await active.send_activity_start()
+
+    async def send_activity_end(self) -> None:
+        """Manual turn signalling: forward to whichever provider is active."""
+        active = await self._current()
+        await active.send_activity_end()
 
     async def send_audio_stream_end(self) -> None:
         """Signal end of audio stream (manual VAD mode)."""
-        _require_active(self._active)
-        await self._active.send_audio_stream_end()
+        active = await self._current()
+        await active.send_audio_stream_end()
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """Forward a camera or screen-share JPEG frame."""
-        _require_active(self._active)
-        await self._active.send_image(jpeg_bytes, source)
+        active = await self._current()
+        await active.send_image(jpeg_bytes, source)
 
     async def send_client_content(self, text: str) -> None:
         """Inject structured text context as a user turn (used for context injection at session start)."""
-        _require_active(self._active)
-        await self._active.send_client_content(text)
+        active = await self._current()
+        self._sent_content.append(text)
+        await active.send_client_content(text)
 
     async def send_tool_response(
         self, *, call_id: str, name: str, result: dict
@@ -267,8 +395,8 @@ class FallbackLiveAdapter(LiveSessionPort):
         Provider-specific wire format differences are handled inside each
         concrete adapter - the caller just passes the normalized args.
         """
-        _require_active(self._active)
-        await self._active.send_tool_response(call_id=call_id, name=name, result=result)
+        active = await self._current()
+        await active.send_tool_response(call_id=call_id, name=name, result=result)
 
     # ──────────────────────────────
     # LiveSessionPort: receive stream
@@ -280,9 +408,25 @@ class FallbackLiveAdapter(LiveSessionPort):
         is active. Event types are identical regardless of provider:
           ("audio", bytes), ("text", str), ("input_text", str),
           ("tool_call", dict), ("turn_complete", None),
-          ("interrupted", None), ("go_away", None)
+          ("interrupted", None), ("session_ending", dict | None)
         """
-        _require_active(self._active)
+        active = await self._current()
+        yielded = False
+        try:
+            async for event in active.receive():
+                yielded = True
+                yield event
+            return
+        except Exception as exc:
+            ctx = self._session_ctx
+            if yielded or ctx is None or not ctx.can_fail_over:
+                raise
+            logger.warning(
+                f"[FallbackAdapter] {type(active).__name__} failed before producing "
+                f"any output: {exc!r}"
+            )
+        # Early failure: move the session to the fallback and keep streaming.
+        await ctx.fail_over()
         async for event in self._active.receive():
             yield event
 

@@ -58,12 +58,17 @@ class VoiceAgentRuntime:
         audio_input_stream: AsyncIterator[bytes],
         callbacks: RuntimeCallbacks,
         opening_message: Optional[str] = None,
+        resume_message: Optional[str] = None,
         on_error: Optional[Callable[[Exception], Awaitable[None]]] = None,
     ) -> None:
         """
         opening_message: sent as the first user turn once the session is open.
             Typically carries per-session context and triggers the greeting.
             None means the model waits for the user to speak first.
+        resume_message: sent as a user turn when the adapter reports it reconnected
+            ("session_resumed"). The provider keeps the conversation but the user's
+            last turn may have been lost, so this is where the agent is told to
+            recover. None means resumption is silent.
         on_error: awaited with the exception when the session dies unexpectedly
             (not on SessionComplete), before the exception is re-raised. Use it
             for cleanup such as marking a record abandoned.
@@ -74,6 +79,7 @@ class VoiceAgentRuntime:
         self._audio_input = audio_input_stream
         self._cb = callbacks
         self._opening_message = opening_message
+        self._resume_message = resume_message
         self._on_error = on_error
 
         self._complete = asyncio.Event()
@@ -97,7 +103,7 @@ class VoiceAgentRuntime:
     async def run(self) -> None:
         async with self._adapter.open_session(
             system_prompt=self._system_prompt,
-            tools=self._tools.declarations,
+            tools=self._tools.specs,
         ) as session:
             try:
                 if self._opening_message is not None:
@@ -174,8 +180,12 @@ class VoiceAgentRuntime:
                     await session.send_tool_response(
                         call_id=data["id"], name=data["name"], result=result
                     )
-                case "go_away":
-                    logger.warning("[Runtime] Server closing connection")
+                case "session_resumed":
+                    logger.warning(f"[Runtime] Provider session resumed: {data}")
+                    if self._resume_message is not None:
+                        await session.send_client_content(text=self._resume_message)
+                case "session_ending":
+                    logger.warning(f"[Runtime] Provider is ending the session: {data}")
                     break
 
     async def _handle_tool_call(

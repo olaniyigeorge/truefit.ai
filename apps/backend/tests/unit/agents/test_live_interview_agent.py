@@ -115,9 +115,9 @@ async def test_missing_optional_callbacks_do_not_crash():
     await agent.run(_context())
 
 
-async def test_go_away_stops_processing_further_events():
+async def test_session_ending_stops_processing_further_events():
     on_audio = AsyncMock()
-    adapter = FakeLiveAdapter(events=[("go_away", None), ("audio", b"late")])
+    adapter = FakeLiveAdapter(events=[("session_ending", {"reason": "provider_go_away"}), ("audio", b"late")])
     agent, _ = _agent(adapter, on_audio_output=on_audio)
     await agent.run(_context())
     on_audio.assert_not_awaited()
@@ -274,3 +274,13 @@ async def test_unexpected_receive_error_abandons_interview_and_reraises():
         await agent.run(ctx)
 
     orch.abandon_interview.assert_awaited_once_with(ctx.interview_id, reason="agent_error")
+
+
+async def test_interview_agent_recovers_a_dropped_connection_by_asking_for_the_last_answer():
+    from src.truefit_core.agents.interviewer.live_interview_agent import RESUME_MESSAGE
+
+    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "connection_error"})])
+    agent, _ = _agent(adapter)
+    await agent.run(_context())
+    assert adapter.content[-1] == RESUME_MESSAGE
+    assert "repeat their last answer" in RESUME_MESSAGE

@@ -23,9 +23,9 @@ AUDIO FORMAT CONTRACT (mirrors GeminiLiveAdapter exactly)
     - Browser sends 48kHz Opus -> AudioBridge resamples to 16kHz PCM -> us
     - We yield 24kHz PCM -> AudioBridge resamples to 48kHz -> browser
 
-  We configure the OpenAI session with:
-    input_audio_format  = "pcm16"  @ 16kHz  (matches inbound contract)
-    output_audio_format = "pcm16"  @ 24kHz  (matches outbound contract)
+  The GA Realtime API only accepts audio/pcm at 24kHz in both directions, so
+  send_audio() upsamples the bridge's 16kHz to 24kHz before sending. Output is
+  already 24kHz and is passed through untouched.
 
 
 EVENT TYPES YIELDED BY receive()  (identical contract to GeminiLiveAdapter)
@@ -36,21 +36,21 @@ EVENT TYPES YIELDED BY receive()  (identical contract to GeminiLiveAdapter)
   ("tool_call",     dict)   - {"id", "name", "args"} - agent wants to call a tool
   ("turn_complete", None)   - agent finished speaking its turn
   ("interrupted",   None)   - agent was interrupted mid-speech by candidate
-  ("go_away",       None)   - not a native OpenAI concept; never yielded
+  ("session_ending", dict)  - not a native OpenAI concept; never yielded
                                (included for interface parity; see note below)
 
 
 EVENT MAPPING  (OpenAI server event -> our normalised event)
 
   response.output_audio.delta              -> ("audio", decoded_bytes)
-  response.audio_transcript.done           -> buffers agent transcript
+  response.output_audio_transcript.done           -> buffers agent transcript
   conversation.item.input_audio_transcription.completed -> buffers input transcript
   input_audio_buffer.speech_started        -> ("interrupted", None) if response active
   response.done  [status=completed]        -> flush transcripts + ("turn_complete", None)
   response.done  [status=cancelled]        -> flush transcripts + ("interrupted", None)
   response.output_item.done [function_call] -> ("tool_call", {...})
 
-NOTE ON go_away
+NOTE ON session_ending
   OpenAI has no equivalent of Gemini's go_away signal. The server simply closes
   the WebSocket. We handle the resulting ConnectionClosed exception in receive()
   and let it propagate so the agent can clean up normally.
@@ -71,20 +71,15 @@ TURN DETECTION / VAD
 
 TOOL FORMAT TRANSLATION
 
-  GeminiLiveAdapter receives tools as google.genai.types.FunctionDeclaration objects.
-  This adapter receives the same list but expects them in OpenAI Realtime format:
+  open_session() takes provider-neutral ToolSpec objects (legacy declaration
+  dicts such as INTERVIEW_TOOLS are normalised by normalize_tools first) and
+  translates each one into OpenAI's function tool shape:
     {
       "type": "function",
       "name": "<name>",
       "description": "<description>",
       "parameters": { <JSON Schema> }
     }
-
-  The factory (LiveAdapterFactory) passes INTERVIEW_TOOLS through unchanged, so
-  the tools must already be in OpenAI format when this adapter is selected.
-  See src/truefit_core/application/interview_tools.py for the tool definitions -
-  ensure they export an OPENAI_INTERVIEW_TOOLS list alongside GEMINI_INTERVIEW_TOOLS,
-  or define a single format-agnostic list that both adapters can consume.
 
 
 USAGE PATTERN  (identical to GeminiLiveAdapter)
@@ -108,24 +103,29 @@ from typing import Any, AsyncGenerator, Optional
 
 import websockets
 from websockets.exceptions import ConnectionClosed
+from websockets.protocol import State
 
-from src.truefit_core.application.ports import LiveSessionPort
+from src.truefit_core.application.ports import AdapterCapabilities, LiveSessionPort
+from src.truefit_core.application.tools import ToolSpec, normalize_tools
 from src.truefit_infra.config import AppConfig
+from src.truefit_infra.llm.pcm_resampler import PcmResampler
 from src.truefit_core.common.utils import logger
 
 # ────────────────────────────
 # MODEL & CONNECTION CONSTANTS
 # ────────────────────────────
 
-_MODEL = "gpt-realtime-mini-2025-12-15"
+# GA Realtime API (the beta protocol was switched off by OpenAI). Override the
+# model with OPENAI_REALTIME_MODEL, e.g. gpt-realtime-2.1-mini.
+_DEFAULT_MODEL = "gpt-realtime-mini-2025-12-15"
 _WS_BASE_URL = "wss://api.openai.com/v1/realtime"
-_WS_URL = f"{_WS_BASE_URL}?model={_MODEL}"
 
-# Audio format constants - must match AudioBridge contract
-_INPUT_AUDIO_FORMAT = "pcm16"   # 16kHz mono s16 PCM from browser (via AudioBridge)
-_OUTPUT_AUDIO_FORMAT = "pcm16"  # 24kHz mono s16 PCM to browser (via AudioBridge)
-_INPUT_SAMPLE_RATE = 16_000
-_OUTPUT_SAMPLE_RATE = 24_000
+# Audio formats. On the wire GA only supports 24kHz PCM in both directions.
+# The audio path delivers 16kHz, so send_audio() upsamples 16k -> 24k itself.
+_WIRE_AUDIO_FORMAT = {"type": "audio/pcm", "rate": 24_000}
+_WIRE_SAMPLE_RATE = 24_000
+_INPUT_SAMPLE_RATE = 16_000  # what send_audio() accepts
+_OUTPUT_SAMPLE_RATE = 24_000  # what "audio" events carry
 
 # Voice for the AI interviewer. Options: alloy, ash, ballad, coral, echo,
 # sage, shimmer, verse. "alloy" is clear and professional
@@ -173,10 +173,21 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         if not key:
             raise RuntimeError("OPENAI_API_KEY is not configured.")
         self._api_key = key
+        self._model: str = getattr(AppConfig, "OPENAI_REALTIME_MODEL", None) or _DEFAULT_MODEL
+        self._input_resampler = PcmResampler(_INPUT_SAMPLE_RATE, _WIRE_SAMPLE_RATE)
         self._ws: Optional[Any] = None        # websockets connection, set in open_session
         self._send_lock = asyncio.Lock()       # serialises all ws.send() calls
         self._activity_ended = False           # blocks send_audio() after activity end
         self._active_response_id: str | None = None  # tracks if a response is in flight
+
+    @property
+    def capabilities(self) -> AdapterCapabilities:
+        return AdapterCapabilities(
+            input_sample_rate=_INPUT_SAMPLE_RATE,
+            output_sample_rate=_OUTPUT_SAMPLE_RATE,
+            supports_images=False,
+            native_vad=_TURN_DETECTION_CONFIG is not None,
+        )
 
     # ─────────────────────────
     # LiveSessionPort interface
@@ -196,7 +207,8 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         """
         Forwards a PCM audio chunk from the browser to OpenAI's input buffer.
 
-        Input format: 16kHz mono s16 PCM (resampled by AudioBridge from 48kHz Opus)
+        Input format: 16kHz mono s16 PCM (resampled by AudioBridge from 48kHz Opus).
+        The GA API only accepts 24kHz PCM, so the chunk is upsampled here first.
         OpenAI expects base64-encoded audio in the input_audio_buffer.append event.
 
         Silently skips empty chunks and chunks sent after activity_end() - the
@@ -206,7 +218,10 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         _require_ws(self._ws)
         if not pcm_bytes or self._activity_ended:
             return
-        encoded = base64.b64encode(pcm_bytes).decode("ascii")
+        wire_pcm = self._input_resampler.process(pcm_bytes)
+        if not wire_pcm:
+            return
+        encoded = base64.b64encode(wire_pcm).decode("ascii")
         await self._send({
             "type": "input_audio_buffer.append",
             "audio": encoded,
@@ -228,17 +243,10 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         async with self._send_lock:
             await self._ws.send(json.dumps({"type": "input_audio_buffer.commit"}))
 
-    async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
-        """
-        OpenAI Realtime API does not currently support image/video input in the
-        same session as audio. This method is a no-op stub to satisfy the port
-        interface. If OpenAI adds vision support to the Realtime API, implement
-        it here by creating a conversation item with image content.
-        """
-        logger.debug(
-            "[OpenAIRealtime] send_image() called but OpenAI Realtime does not "
-            "support vision input; frame dropped."
-        )
+    # send_image() is intentionally not overridden: OpenAI Realtime has no image
+    # input, so the port default raises CapabilityNotSupported and
+    # capabilities.supports_images is False. If OpenAI adds vision, implement it
+    # here with an image conversation item and flip the capability.
 
     async def send_client_content(self, text: str) -> None:
         """
@@ -308,7 +316,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
 
         TRANSCRIPT BUFFERING
         OpenAI streams transcripts incrementally:
-          - Agent output: response.audio_transcript.delta (per word/phrase)
+          - Agent output: response.output_audio_transcript.delta (per word/phrase)
             Flushed to ("text", str) on response.done or response cancelled.
           - Candidate input: conversation.item.input_audio_transcription.completed
             Arrives as a complete transcript after the candidate's turn; yielded
@@ -331,8 +339,8 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
 
         EVENT MAPPING SUMMARY
           response.output_audio.delta                          -> ("audio", bytes)
-          response.audio_transcript.delta                      -> buffer agent text
-          response.audio_transcript.done                       -> flush agent text
+          response.output_audio_transcript.delta                      -> buffer agent text
+          response.output_audio_transcript.done                       -> flush agent text
           conversation.item.input_audio_transcription.completed -> ("input_text", str)
           input_audio_buffer.speech_started [if response active] -> ("interrupted", None)
           response.done [completed]                            -> ("turn_complete", None)
@@ -361,14 +369,14 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
 
                 # ── Agent transcript (incremental) 
                 # Accumulate per-delta into buffer. Flush at response.done.
-                elif event_type == "response.audio_transcript.delta":
+                elif event_type == "response.output_audio_transcript.delta":
                     _text_buffer += event.get("delta", "")
 
                 # ── Agent transcript done (alternative flush point) 
-                # response.audio_transcript.done carries the full text of the current
+                # response.output_audio_transcript.done carries the full text of the current
                 # content part. We overwrite the buffer with the authoritative version
                 # to avoid any drift from partial deltas.
-                elif event_type == "response.audio_transcript.done":
+                elif event_type == "response.output_audio_transcript.done":
                     transcript = event.get("transcript", "").strip()
                     if transcript:
                         _text_buffer = transcript  # authoritative; replaces buffer
@@ -466,7 +474,20 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                             yield ("input_text", flushed_input)
                         yield ("turn_complete", None)
 
-                    elif status in ("cancelled", "failed"):
+                    elif status == "incomplete" and (
+                        response_obj.get("status_details", {}).get("reason")
+                        not in ("turn_detected", "client_cancelled")
+                    ):
+                        # Ran out of tokens or was filtered: the turn is over, and
+                        # without turn_complete the agent would wait forever.
+                        logger.info("[OpenAIRealtime] response incomplete, ending turn")
+                        if flushed_text:
+                            yield ("text", flushed_text)
+                        if flushed_input:
+                            yield ("input_text", flushed_input)
+                        yield ("turn_complete", None)
+
+                    elif status in ("cancelled", "failed", "incomplete"):
                         logger.info(
                             f"[OpenAIRealtime] response {status} "
                             f"(interrupted or errored)"
@@ -528,7 +549,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         Returns True if a WebSocket session is currently open.
         Used for health checks - False means no active connection.
         """
-        return self._ws is not None and self._ws.open
+        return self._ws is not None and self._ws.state is State.OPEN
 
     # ───────────────────────
     # SESSION CONTEXT MANAGER
@@ -537,7 +558,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
     def open_session(
         self,
         system_prompt: str,
-        tools: list | None = None,
+        tools: list[ToolSpec] | None = None,
     ) -> "_OpenAISessionContext":
         """
         The ONLY supported way to start an OpenAI Realtime session.
@@ -550,7 +571,8 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         On __aexit__, it clears self._ws and closes the WebSocket gracefully.
 
         system_prompt becomes the "instructions" field in session.update.
-        tools is the list of OpenAI-format function declarations.
+        tools are provider-neutral ToolSpec objects (legacy declaration dicts
+        are also accepted) and are translated to OpenAI function tools here.
 
         Usage:
             async with adapter.open_session(prompt, tools=TOOLS) as session:
@@ -561,7 +583,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         return _OpenAISessionContext(
             adapter=self,
             system_prompt=system_prompt,
-            tools=tools or [],
+            tools=normalize_tools(tools),
         )
 
     # ─────────────────────────────────────
@@ -614,7 +636,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
             await self._ws.send(json.dumps(payload))
 
     async def _configure_session(
-        self, system_prompt: str, tools: list
+        self, system_prompt: str, tools: list[ToolSpec]
     ) -> None:
         """
         Sends the initial session.update event to configure the live session.
@@ -622,8 +644,8 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         Called once by _OpenAISessionContext.__aenter__() immediately after
         the WebSocket connection is established. Sets:
           - instructions (system prompt)
-          - modalities (audio only, matching Gemini's AUDIO response mode)
-          - audio input/output formats (pcm16 @ 16kHz in / 24kHz out)
+          - output_modalities (audio only, matching Gemini's AUDIO response mode)
+          - audio input/output formats (audio/pcm @ 24kHz on the wire)
           - voice persona
           - turn_detection (None = manual mode, matching GeminiLiveAdapter)
           - input_audio_transcription (whisper-1 for candidate speech captions)
@@ -633,42 +655,26 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         confirmation explicitly - subsequent events will queue behind it on the
         WebSocket and arrive in order.
         """
-        # Build the tool list in OpenAI Realtime format.
-        # Each tool must have: type="function", name, description, parameters.
-        openai_tools = []
-        for tool in tools:
-            if isinstance(tool, dict):
-                # Already in OpenAI format - pass through directly
-                openai_tools.append(tool)
-            else:
-                # Attempt duck-typed conversion from Gemini FunctionDeclaration
-                # (has .name, .description, .parameters attributes).
-                # This is a best-effort fallback; prefer native OpenAI format.
-                try:
-                    openai_tools.append({
-                        "type": "function",
-                        "name": tool.name,
-                        "description": getattr(tool, "description", ""),
-                        "parameters": _convert_schema(
-                            getattr(tool, "parameters", None)
-                        ),
-                    })
-                except AttributeError:
-                    logger.warning(
-                        f"[OpenAIRealtime] Could not convert tool {tool!r} to "
-                        f"OpenAI format; skipping."
-                    )
+        # Translate the neutral ToolSpecs into OpenAI Realtime function tools.
+        openai_tools = _to_openai_tools(tools)
 
         session_config: dict = {
-            "modalities": ["audio", "text"],   # audio output + text for transcripts
+            "type": "realtime",
+            # GA cannot return audio and text together; transcripts of the
+            # agent's speech still arrive as response.output_audio_transcript.*
+            "output_modalities": ["audio"],
             "instructions": system_prompt,
-            "voice": _VOICE,
-            "input_audio_format": _INPUT_AUDIO_FORMAT,
-            "output_audio_format": _OUTPUT_AUDIO_FORMAT,
-            "input_audio_transcription": {
-                "model": "whisper-1",           # enables candidate speech transcripts
+            "audio": {
+                "input": {
+                    "format": _WIRE_AUDIO_FORMAT,
+                    "transcription": {"model": "whisper-1"},  # candidate captions
+                    "turn_detection": _TURN_DETECTION_CONFIG,  # None = manual VAD
+                },
+                "output": {
+                    "format": _WIRE_AUDIO_FORMAT,
+                    "voice": _VOICE,
+                },
             },
-            "turn_detection": _TURN_DETECTION_CONFIG,  # None = manual VAD
             "tool_choice": "auto",
         }
         if openai_tools:
@@ -711,7 +717,7 @@ class _OpenAISessionContext:
         *,
         adapter: OpenAIRealtimeAdapter,
         system_prompt: str,
-        tools: list,
+        tools: list[ToolSpec],
     ) -> None:
         self._adapter = adapter
         self._system_prompt = system_prompt
@@ -722,15 +728,13 @@ class _OpenAISessionContext:
         """
         Opens the WebSocket connection and configures the session.
 
-        WebSocket headers per OpenAI docs:
-          Authorization: Bearer <api_key>
-          OpenAI-Beta: realtime=v1
+        WebSocket headers (GA): Authorization: Bearer <api_key>. Nothing else.
         """
-        headers = {
-            "Authorization": f"Bearer {self._adapter._api_key}",
-            "OpenAI-Beta": "realtime=v1",
-        }
-        self._ws_cm = websockets.connect(_WS_URL, additional_headers=headers)
+        # GA: no OpenAI-Beta header (sending it selects the retired beta protocol).
+        headers = {"Authorization": f"Bearer {self._adapter._api_key}"}
+        url = f"{_WS_BASE_URL}?model={self._adapter._model}"
+        self._adapter._input_resampler.reset()  # no audio history across sessions
+        self._ws_cm = websockets.connect(url, additional_headers=headers)
         ws = await self._ws_cm.__aenter__()
         self._adapter._ws = ws
         logger.info("[OpenAIRealtime] WebSocket connected")
@@ -765,6 +769,19 @@ class _OpenAISessionContext:
 # ───────
 
 
+def _to_openai_tools(specs: list[ToolSpec]) -> list[dict]:
+    """ToolSpec -> OpenAI Realtime function tools."""
+    return [
+        {
+            "type": "function",
+            "name": s.name,
+            "description": s.description,
+            "parameters": s.parameters,
+        }
+        for s in specs
+    ]
+
+
 def _require_ws(ws: Any) -> None:
     """
     Guard function called at the top of every method that requires an active
@@ -778,36 +795,3 @@ def _require_ws(ws: Any) -> None:
             "OpenAIRealtimeAdapter: no active session. "
             "All calls must be made inside an open_session() context manager."
         )
-
-
-def _convert_schema(parameters: Any) -> dict:
-    """
-    Best-effort conversion of a Gemini Schema object to a JSON Schema dict
-    compatible with the OpenAI Realtime API's function parameters format.
-
-    This handles the common case where tools are defined with Gemini's
-    types.Schema and need to be used with the OpenAI adapter.
-
-    If parameters is already a dict, it's returned as-is.
-    If it has a .model_dump() method (Pydantic), that's used.
-    If it has a to_json_dict() or similar, that's tried.
-    Falls back to an empty object schema to avoid crashing.
-
-    For production use, define tools natively in OpenAI format and pass them
-    directly - this conversion is a convenience bridge, not a guarantee.
-    """
-    if parameters is None:
-        return {"type": "object", "properties": {}}
-    if isinstance(parameters, dict):
-        return parameters
-    # Pydantic model (Gemini SDK often uses these)
-    if hasattr(parameters, "model_dump"):
-        return parameters.model_dump(exclude_none=True)
-    # Generic object with __dict__
-    if hasattr(parameters, "__dict__"):
-        return {k: v for k, v in parameters.__dict__.items() if v is not None}
-    logger.warning(
-        f"[OpenAIRealtime] Could not convert schema {type(parameters).__name__}; "
-        f"falling back to empty object schema."
-    )
-    return {"type": "object", "properties": {}}

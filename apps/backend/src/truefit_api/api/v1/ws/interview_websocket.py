@@ -19,6 +19,7 @@ from src.truefit_core.application.ports import (
     QueuePort,
 )
 from src.truefit_core.common.utils import logger
+from src.truefit_infra.realtime.audio_bridge import INPUT_SAMPLE_RATE
 from src.truefit_infra.realtime.signaling import WebRTCSignaling
 from src.truefit_infra.realtime.webrtc_client import WebRTCClient
 from src.truefit_infra.cache.redis_cache import RedisCacheAdapter, redis_client
@@ -337,10 +338,19 @@ class InterviewConnection:
 
             # ③ Create the signaling handler - it will process the SDP offer/answer
             #    exchange and ICE candidates when they arrive over the WebSocket
+            #    The audio path is sized from the adapter's declared formats, not
+            #    from Gemini's numbers.
+            caps = self._live_adapter.capabilities
+            if caps.input_sample_rate != INPUT_SAMPLE_RATE:
+                raise RuntimeError(
+                    f"Live adapter needs {caps.input_sample_rate}Hz input but the "
+                    f"audio bridge delivers {INPUT_SAMPLE_RATE}Hz"
+                )
             self._signaling = WebRTCSignaling(
                 session_id=self._session_id,
                 job_id=self._job_id,
                 candidate_id=self._candidate_id,
+                output_sample_rate=caps.output_sample_rate,
             )
 
             # ④ Start the WS receive loop NOW (before waiting for WebRTC ready)
@@ -391,7 +401,15 @@ class InterviewConnection:
             #    - The candidate sends end_session (early exit)
             #    - The candidate disconnects (WebSocketDisconnect)
             #    - An unhandled exception occurs
-            agent_task = asyncio.create_task(agent.run(context))
+            async def _run_agent() -> None:
+                await agent.run(context)
+                # A deliberate finish (complete_interview, last answer) sets an
+                # end reason. Returning without one means the provider stream ended
+                # on its own, so say so instead of leaving a live mic with no agent.
+                if agent.runtime is not None and agent.runtime.end_reason is None:
+                    raise RuntimeError("The AI interviewer's session ended unexpectedly")
+
+            agent_task = asyncio.create_task(_run_agent())
 
             await asyncio.gather(agent_task, ws_task, interrupt_task)
 

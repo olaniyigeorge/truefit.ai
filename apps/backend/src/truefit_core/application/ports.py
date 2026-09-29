@@ -22,6 +22,8 @@ from src.truefit_core.domain.job import Job
 from src.truefit_core.domain.application import Application
 from src.truefit_core.domain.user import User
 from src.truefit_core.domain.org import Org
+from src.truefit_core.application.tools import ToolSpec
+from src.truefit_core.common.exceptions import CapabilityNotSupported
 
 # Repository ports
 
@@ -391,44 +393,90 @@ class ApplicationRepository(ABC):
 
 
 
+# Event types every LiveSessionPort adapter may yield from receive().
+LIVE_EVENT_TYPES = frozenset(
+    {
+        "audio",  # bytes: PCM at capabilities.output_sample_rate
+        "text",  # str: agent output transcript
+        "input_text",  # str: user speech transcript
+        "tool_call",  # dict: {"id", "name", "args"}
+        "turn_complete",  # None: agent finished its turn
+        "interrupted",  # None: agent was cut off mid-speech
+        "session_ending",  # dict | None: provider is closing, {"reason", ...}
+        "session_resumed",  # dict: adapter reconnected mid-session, {"reason"}
+    }
+)
+
+
+@dataclass(frozen=True)
+class AdapterCapabilities:
+    """
+    What a provider adapter can do and the audio formats it speaks. Consumers
+    read this instead of assuming Gemini's numbers.
+
+    input_sample_rate / output_sample_rate: mono s16 PCM rates for send_audio()
+        and for "audio" events.
+    supports_images: send_image() works. When False it raises CapabilityNotSupported.
+    native_vad: True means the provider (or the adapter) finds turn boundaries
+        itself and callers must not signal them. False means the caller marks
+        the boundaries with send_activity_start() / send_activity_end().
+    """
+
+    input_sample_rate: int = 16_000
+    output_sample_rate: int = 24_000
+    supports_images: bool = False
+    native_vad: bool = True
+
+
 class LiveSessionPort(ABC):
     """
     Abstraction over a real-time multimodal AI session.
 
-    Implementations wrap a live AI API (e.g. Gemini Live) and expose a
-    uniform interface for the agent layer. The agent never imports any
-    AI SDK directly - all SDK types are confined to the adapter.
+    Implementations wrap a live AI API (Gemini Live, OpenAI Realtime, a composed
+    STT -> LLM -> TTS pipeline, ...) and expose a uniform interface for the agent
+    layer. The agent never imports any AI SDK directly. All SDK types are
+    confined to the adapter.
 
     Lifecycle
-    ───
+    ---------
     All methods except open_session() require an active session.
     Sessions are opened and closed via the open_session() context manager:
 
-        async with adapter.open_session(system_prompt, tools=tools) as session:
+        async with adapter.open_session(system_prompt, tools=specs) as session:
             await session.send_client_content(text="...")
             await session.send_audio(pcm_bytes)
             async for event_type, data in session.receive():
                 ...
 
     Audio format contract
-    ─
-    Implementations must accept 16kHz mono s16 PCM for send_audio().
-    Callers must not assume a specific output sample rate - check the
-    concrete adapter's docstring (Gemini Live returns 24kHz).
+    ---------------------
+    send_audio() takes mono s16 PCM at capabilities.input_sample_rate, and
+    "audio" events carry mono s16 PCM at capabilities.output_sample_rate.
+    Both default to 16kHz in and 24kHz out. Adapters that differ must say so
+    in `capabilities`, and callers must read it rather than hard-code rates.
     """
 
-    # ── Session lifecycle
+    @property
+    def capabilities(self) -> AdapterCapabilities:
+        """Static description of this adapter. Override when it differs from the defaults."""
+        return AdapterCapabilities()
+
+    # -- Session lifecycle
 
     @abstractmethod
     def open_session(
         self,
         system_prompt: str,
-        tools: list | None = None,
+        tools: list[ToolSpec] | None = None,
     ) -> Any:
         """
         Return an async context manager that opens and closes the session.
         Must be used as: async with adapter.open_session(...) as session.
         The yielded value is the adapter itself with an active session.
+
+        tools: provider-neutral ToolSpec objects. Adapters translate them to
+        their wire format (legacy declaration dicts are also accepted, see
+        application.tools.normalize_tools).
         """
         ...
 
@@ -437,23 +485,48 @@ class LiveSessionPort(ABC):
         """Tear down the active session. Called automatically by open_session()."""
         ...
 
-    # ── Sending
+    # -- Sending
 
     @abstractmethod
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """
-        Stream a raw PCM audio chunk into the session.
-        Expected format: 16kHz mono s16 (320 bytes per 20ms chunk).
+        Stream a raw PCM audio chunk into the session at
+        capabilities.input_sample_rate (16kHz mono s16 by default, 20ms is 640 bytes).
         """
         ...
 
-    @abstractmethod
+    async def send_activity_start(self) -> None:
+        """
+        Manual turn signalling: the user started speaking. Only meaningful when
+        capabilities.native_vad is False. Optional: the default does nothing.
+        """
+        return None
+
+    async def send_activity_end(self) -> None:
+        """
+        Manual turn signalling: the user stopped speaking, so the model should
+        respond. Only meaningful when capabilities.native_vad is False.
+        Optional: the default does nothing.
+        """
+        return None
+
+    async def send_audio_stream_end(self) -> None:
+        """
+        Tell the provider the audio stream itself has ended (auto-VAD modes).
+        Optional: the default does nothing.
+        """
+        return None
+
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """
-        Send a JPEG frame into the session for visual context.
-        source: "camera" | "screen" - used for logging/context only.
+        Send a JPEG frame for visual context. Optional capability: check
+        capabilities.supports_images first. The default raises
+        CapabilityNotSupported so a missing capability is never silently dropped.
+        source: "camera" | "screen", informational only.
         """
-        ...
+        raise CapabilityNotSupported(
+            f"{type(self).__name__} does not support image input"
+        )
 
     @abstractmethod
     async def send_client_content(self, text: str) -> None:
@@ -479,27 +552,34 @@ class LiveSessionPort(ABC):
         """
         ...
 
-    # ── Receiving
+    # -- Receiving
 
     @abstractmethod
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
         """
-        Async generator yielding normalised events from the model.
+        Async generator yielding normalised (event_type, data) tuples. See
+        LIVE_EVENT_TYPES for the full set:
 
-        Event types:
-          ("audio",         bytes)  - PCM audio to play to the candidate
-          ("text",          str)    - agent output transcript
-          ("input_text",    str)    - candidate speech transcript
-          ("tool_call",     dict)   - {"id": str, "name": str, "args": dict}
-          ("turn_complete", None)   - agent finished its speaking turn
-          ("interrupted",   None)   - agent was interrupted mid-speech
-          ("go_away",       None)   - server is closing the connection
+          ("audio",          bytes)        PCM at capabilities.output_sample_rate
+          ("text",           str)          agent output transcript
+          ("input_text",     str)          user speech transcript
+          ("tool_call",      dict)         {"id": str, "name": str, "args": dict}
+          ("turn_complete",  None)         agent finished its speaking turn
+          ("interrupted",    None)         agent was interrupted mid-speech
+          ("session_ending", dict | None)  provider is closing the session,
+                                           e.g. {"reason": "provider_go_away", ...}
+          ("session_resumed", dict)        the adapter reconnected after a dropped or
+                                           recycled connection, {"reason": ...}. The
+                                           user's last turn may have been lost.
 
-        Implementations must not raise on end-of-stream - simply stop yielding.
+        The stream covers the whole session: it keeps yielding across turns and
+        only ends when the session closes. (Provider SDKs that expose one turn
+        per call must be re-entered by the adapter.) Implementations must not
+        raise on end-of-stream - simply stop yielding.
         """
         ...
 
-    # ── Health
+    # -- Health
 
     @abstractmethod
     async def is_healthy(self) -> bool:

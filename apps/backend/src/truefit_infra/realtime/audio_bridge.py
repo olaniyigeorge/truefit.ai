@@ -65,7 +65,8 @@ _SAMPLE_RATE = 16_000  # Gemini expects 16kHz inbound
 _CHANNELS = 1  # mono - both Gemini and the bridge use mono
 _SAMPLE_WIDTH = 2  # 16-bit PCM = 2 bytes per sample (s16)
 _CHUNK_DURATION = 0.02  # 20ms chunks - standard WebRTC frame size
-_OUTPUT_SAMPLE_RATE = 24_000  # Gemini outputs at 24kHz
+_OUTPUT_SAMPLE_RATE = 24_000  # default agent output rate; the real rate comes from the adapter capabilities
+INPUT_SAMPLE_RATE = _SAMPLE_RATE  # rate the bridge delivers mic audio at; adapters must accept it
 SILENCE_CHUNK = b"\x00\x00" * 160  # (overwritten below - see note)
 _WEBRTC_SAMPLE_RATE = 48_000  # aiortc/Opus expects 48kHz
 _CHUNK_SAMPLES = int(
@@ -89,8 +90,16 @@ class AudioBridge:
       outbound_queue: raw 24kHz PCM bytes flowing FROM Gemini TO the browser
     """
 
-    def __init__(self, *, context: SessionContext) -> None:
+    def __init__(
+        self,
+        *,
+        context: SessionContext,
+        output_sample_rate: int = _OUTPUT_SAMPLE_RATE,
+    ) -> None:
+        """output_sample_rate: rate of the agent PCM that arrives on outbound_queue
+        (the adapter's capabilities.output_sample_rate)."""
         self._ctx = context
+        self._output_sample_rate = output_sample_rate
         # inbound_queue: browser mic audio -> agent -> Gemini
         # maxsize=100 -> about 2 seconds of audio buffering at 20ms chunks
         self.inbound_queue: asyncio.Queue[Optional[bytes]] = asyncio.Queue(maxsize=100)
@@ -446,6 +455,7 @@ class AudioBridge:
         self._outbound_track = _AgentAudioTrack(
             queue=self.outbound_queue,
             session_id=self._ctx.session_id,
+            input_sample_rate=self._output_sample_rate,
         )
         return self._outbound_track
 
@@ -557,10 +567,17 @@ class _AgentAudioTrack(AudioStreamTrack):
     queue faster than real-time and causing the audio loop.
     """
 
-    def __init__(self, *, queue: asyncio.Queue, session_id: str) -> None:
+    def __init__(
+        self,
+        *,
+        queue: asyncio.Queue,
+        session_id: str,
+        input_sample_rate: int = _OUTPUT_SAMPLE_RATE,
+    ) -> None:
         super().__init__()
         self._queue = queue
         self._session_id = session_id
+        self._input_sample_rate = input_sample_rate  # rate of PCM arriving on the queue
         self._sample_rate = _WEBRTC_SAMPLE_RATE        # 48000Hz output to WebRTC
         self._samples_per_frame = int(
             _WEBRTC_SAMPLE_RATE * _CHUNK_DURATION      # 960 samples = 20ms at 48kHz
@@ -748,8 +765,8 @@ class _AgentAudioTrack(AudioStreamTrack):
                 format="s16", layout="mono", samples=n_samples_in
             )
             in_frame.planes[0].update(pcm_24k)
-            in_frame.sample_rate = _OUTPUT_SAMPLE_RATE
-            in_frame.time_base = fractions.Fraction(1, _OUTPUT_SAMPLE_RATE)
+            in_frame.sample_rate = self._input_sample_rate
+            in_frame.time_base = fractions.Fraction(1, self._input_sample_rate)
             in_frame.pts = self._input_pts
             self._input_pts += n_samples_in
 

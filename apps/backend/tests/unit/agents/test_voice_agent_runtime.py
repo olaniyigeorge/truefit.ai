@@ -9,6 +9,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from src.truefit_core.application.tools import ToolSpec
 from src.truefit_core.agents.runtime import (
     RuntimeCallbacks,
     SessionComplete,
@@ -43,14 +44,19 @@ def _runtime(adapter, tools=None, *, mic=(), opening=None, on_error=None, **cb):
 # ── ToolRegistry
 
 
-def test_registry_declarations_use_adapter_format():
+def test_registry_exposes_neutral_specs():
     reg = ToolRegistry().register(NOTE_DECL, AsyncMock())
-    assert reg.declarations == [{"function_declarations": [NOTE_DECL]}]
+    assert reg.specs == [ToolSpec(name="add_note", description="Save a note", parameters=NOTE_DECL["parameters"])]
     assert "add_note" in reg
 
 
+def test_registry_accepts_toolspec_directly():
+    spec = ToolSpec(name="lookup", description="Find a fact")
+    assert ToolRegistry().register(spec, AsyncMock()).specs == [spec]
+
+
 def test_empty_registry_declares_no_tools():
-    assert ToolRegistry().declarations == []
+    assert ToolRegistry().specs == []
 
 
 def test_duplicate_registration_rejected():
@@ -77,11 +83,11 @@ async def test_dispatch_unknown_tool_returns_error():
 # ── Runtime
 
 
-async def test_run_passes_prompt_and_declarations_and_sends_opening_message():
+async def test_run_passes_prompt_and_specs_and_sends_opening_message():
     adapter = FakeLiveAdapter()
     reg = ToolRegistry().register(NOTE_DECL, AsyncMock())
     await _runtime(adapter, reg, opening="hello").run()
-    assert adapter.open_args == ("you are a note taker", reg.declarations)
+    assert adapter.open_args == ("you are a note taker", reg.specs)
     assert adapter.content == ["hello"]
     assert adapter.closed_count == 1
 
@@ -181,7 +187,7 @@ async def test_ending_one_loop_cancels_the_other():
             cancelled.set()
 
     rt = VoiceAgentRuntime(
-        adapter=FakeLiveAdapter(events=[("go_away", None)]),
+        adapter=FakeLiveAdapter(events=[("session_ending", {"reason": "test"})]),
         system_prompt="p",
         tools=ToolRegistry(),
         audio_input_stream=endless_mic(),
@@ -231,3 +237,29 @@ def test_runtime_imports_only_the_port_never_infra_or_interview_code():
             if "truefit_infra" in m or "interviewer" in m or "services" in m or "domain" in m
         ]
         assert forbidden == []
+
+
+# ── Reconnect recovery
+
+async def test_session_resumed_sends_the_resume_message():
+    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "connection_error"}), ("audio", b"x")])
+    on_audio = AsyncMock()
+    rt = VoiceAgentRuntime(
+        adapter=adapter,
+        system_prompt="p",
+        tools=ToolRegistry(),
+        audio_input_stream=_mic(),
+        callbacks=RuntimeCallbacks(on_audio_output=on_audio),
+        resume_message="Sorry, the line dropped. Please repeat your last answer.",
+    )
+    await rt.run()
+    assert adapter.content == ["Sorry, the line dropped. Please repeat your last answer."]
+    on_audio.assert_awaited_once_with(b"x")  # the stream carries on afterwards
+
+
+async def test_session_resumed_is_silent_without_a_resume_message():
+    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "go_away"}), ("audio", b"x")])
+    on_audio = AsyncMock()
+    await _runtime(adapter, on_audio_output=on_audio).run()
+    assert adapter.content == []
+    on_audio.assert_awaited_once()

@@ -38,7 +38,7 @@ EVENT TYPES YIELDED BY receive()
   ("tool_call",     dict)   - {"id", "name", "args"} - agent wants to call a tool
   ("turn_complete", None)   - agent finished speaking its turn
   ("interrupted",   None)   - agent was interrupted mid-speech by candidate
-  ("go_away",       None)   - server is about to close the connection
+  ("session_ending", dict)  - server is about to close the connection ({"reason", "time_left"})
 
 
 USAGE PATTERN (how LiveInterviewAgent uses this)
@@ -59,9 +59,12 @@ import asyncio
 from typing import Any, AsyncGenerator, Optional
 
 from google import genai
+from google.genai import errors as genai_errors
 from google.genai import types
+from websockets.exceptions import ConnectionClosed
 
-from src.truefit_core.application.ports import LiveSessionPort
+from src.truefit_core.application.ports import AdapterCapabilities, LiveSessionPort
+from src.truefit_core.application.tools import ToolSpec, normalize_tools
 from src.truefit_infra.config import AppConfig
 from src.truefit_core.common.utils import logger
 
@@ -74,7 +77,16 @@ from src.truefit_core.common.utils import logger
 # separately; this model does it natively and sounds more natural.
 
 
-_MODEL =  "gemini-2.5-flash-native-audio-preview-12-2025" # "gemini-2.5-flash-native-audio-preview-12-2025" # "gemini-live-2.5-flash-native-audio" - 
+# Override with GEMINI_LIVE_MODEL. This is a preview model; opaque 1011 "Internal
+# error" closes are common on preview Live models, which is why sessions resume.
+_DEFAULT_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"
+
+# Close codes that mean "the connection or server hiccuped, try again", as
+# opposed to a bad request that would fail the same way on every retry.
+_TRANSIENT_CLOSE_CODES = {1001, 1006, 1011, 1012, 1013}
+# Reconnects allowed in a row without a single message arriving in between.
+_MAX_CONSECUTIVE_RECONNECTS = 3
+
 _INPUT_SAMPLE_RATE = 16_000  # Gemini expects 16kHz inbound
 _OUTPUT_SAMPLE_RATE = 24_000  # Gemini outputs at 24kHz
 _INPUT_MIME = f"audio/pcm;rate={_INPUT_SAMPLE_RATE}"  # MIME type for sending audio
@@ -111,6 +123,25 @@ class GeminiLiveAdapter(LiveSessionPort):
         )
         self._send_lock = asyncio.Lock()  # Lock to prevent concurrent audio sends
         self._activity_ended = False
+        self._model: str = getattr(AppConfig, "GEMINI_LIVE_MODEL", None) or _DEFAULT_MODEL
+        # Reconnect state (see _try_reconnect). The handle is Gemini's server-side
+        # session-resumption token; with it a new connection continues the same
+        # conversation. Without one we can only start over and replay.
+        self._ctx: Optional["_LiveSessionContext"] = None
+        self._resume_handle: Optional[str] = None
+        self._sent_content: list[str] = []
+        self._consecutive_reconnects = 0
+        self._session_ready = asyncio.Event()  # cleared while a reconnect is in flight
+        self._session_ready.set()
+
+    @property
+    def capabilities(self) -> AdapterCapabilities:
+        return AdapterCapabilities(
+            input_sample_rate=_INPUT_SAMPLE_RATE,
+            output_sample_rate=_OUTPUT_SAMPLE_RATE,
+            supports_images=True,
+            native_vad=False,  # we run with automatic_activity_detection disabled and signal activity explicitly
+        )
  
     # ─────────────────────────
     # LiveSessionPort interface
@@ -137,10 +168,10 @@ class GeminiLiveAdapter(LiveSessionPort):
         We silently skip empty chunks - the AudioBridge occasionally sends
         zero-length bytes as a keepalive and we don't want to waste API calls.
         """
-        _require_session(self._session)
+        session = await self._live()
         if not pcm_bytes or self._activity_ended:
             return
-        await self._session.send_realtime_input(
+        await session.send_realtime_input(
             media=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
         )
 
@@ -152,9 +183,9 @@ class GeminiLiveAdapter(LiveSessionPort):
         by an ActivityEnd message."
         This method is retained for potential future use with auto-VAD mode only.
         """
-        _require_session(self._session)
+        session = await self._live()
         async with self._send_lock:
-            await self._session.send_realtime_input(audio_stream_end=True)
+            await session.send_realtime_input(audio_stream_end=True)
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
         """
@@ -168,8 +199,8 @@ class GeminiLiveAdapter(LiveSessionPort):
         This enables the interviewer to see what the candidate is doing -
         useful for coding interviews where the candidate shares their screen.
         """
-        _require_session(self._session)
-        await self._session.send_realtime_input(
+        session = await self._live()
+        await session.send_realtime_input(
             video=types.Blob(data=jpeg_bytes, mime_type="image/jpeg")
         )
 
@@ -186,8 +217,9 @@ class GeminiLiveAdapter(LiveSessionPort):
         turn_complete=True tells Gemini to process this as a complete turn and
         respond - it will generate the opening greeting immediately after.
         """
-        _require_session(self._session)
-        await self._session.send_client_content(
+        session = await self._live()
+        self._sent_content.append(text)  # replayed if the session must restart from scratch
+        await session.send_client_content(
             turns=types.Content(
                 role="user",
                 parts=[types.Part(text=text)],
@@ -209,14 +241,113 @@ class GeminiLiveAdapter(LiveSessionPort):
         call_id must match the id from the tool_call event exactly.
         result is whatever dict the tool handler returned.
         """
-        _require_session(self._session)
-        await self._session.send_tool_response(
+        session = await self._live()
+        await session.send_tool_response(
             function_responses=types.FunctionResponse(
                 name=name,
                 response=result,
                 id=call_id,
             )
         )
+
+    async def _live(self) -> Any:
+        """The live SDK session, waiting first if a reconnect is in flight."""
+        await self._session_ready.wait()
+        _require_session(self._session)
+        return self._session
+
+    async def _try_reconnect(self, reason: str) -> bool:
+        """
+        Replace a dead or expiring SDK session and report whether it worked.
+
+        With a resumption handle the new connection continues the same
+        conversation server-side. With no handle yet (the failure came very early)
+        we start over and replay the client content, which restores the opening
+        message. Senders wait on _session_ready meanwhile. Gives up after a few
+        reconnects in a row with nothing received in between, so a request that
+        can never work fails instead of looping.
+        """
+        ctx = self._ctx
+        if ctx is None or self._consecutive_reconnects >= _MAX_CONSECUTIVE_RECONNECTS:
+            return False
+        self._consecutive_reconnects += 1
+        self._session_ready.clear()
+        try:
+            await asyncio.sleep(0.25 * (self._consecutive_reconnects - 1))  # brief backoff
+            handle = self._resume_handle
+            await ctx.reopen(handle)
+            self._activity_ended = True  # audio waits for the next activity_start
+            if handle is None:
+                for text in list(self._sent_content):
+                    await self._session.send_client_content(
+                        turns=types.Content(role="user", parts=[types.Part(text=text)]),
+                        turn_complete=True,
+                    )
+            logger.warning(
+                f"[GeminiLive] reconnected after {reason} "
+                f"({'resumed' if handle else 'restarted, opening message replayed'})"
+            )
+            return True
+        except Exception as exc:
+            logger.error(f"[GeminiLive] reconnect after {reason} failed: {exc!r}")
+            return False
+        finally:
+            self._session_ready.set()
+
+    @staticmethod
+    def _is_transient(exc: BaseException) -> bool:
+        if isinstance(exc, ConnectionClosed):
+            return True
+        if isinstance(exc, genai_errors.APIError):
+            return exc.code in _TRANSIENT_CLOSE_CODES
+        return False
+
+    async def _messages(self) -> AsyncGenerator[Any, None]:
+        """
+        Every message from the Gemini session, across turns and reconnects.
+
+        The SDK's session.receive() covers ONE model turn: it stops right after
+        turn_complete. Reading it once (as this adapter used to) meant the agent
+        answered the greeting and then never again, while the mic stayed open.
+        So keep re-entering it until the session closes.
+
+        Two kinds of trouble are absorbed here rather than ending the interview:
+        a transient close (1011 "Internal error" and friends) and Gemini's go_away
+        notice that the connection is about to be recycled. Either way we
+        reconnect and yield a _Resumed marker so the agent can re-orient.
+        """
+        empty_passes = 0
+        while self._session is not None:
+            got_any = False
+            try:
+                async for response in self._session.receive():
+                    got_any = True
+                    self._consecutive_reconnects = 0  # the connection is delivering
+                    update = getattr(response, "session_resumption_update", None)
+                    if update is not None and update.new_handle and update.resumable:
+                        self._resume_handle = update.new_handle
+                    if response.go_away and self._resume_handle:
+                        logger.info(
+                            f"[GeminiLive] go_away (time_left={response.go_away.time_left}), resuming"
+                        )
+                        if await self._try_reconnect("go_away"):
+                            yield _Resumed("go_away")
+                            break  # continue on the new session
+                    yield response
+            except Exception as exc:
+                if not self._is_transient(exc):
+                    raise
+                logger.warning(f"[GeminiLive] transient session failure: {exc!r}")
+                if await self._try_reconnect(f"{type(exc).__name__} {getattr(exc, 'code', '')}".strip()):
+                    yield _Resumed("connection_error")
+                    continue
+                raise
+            empty_passes = 0 if got_any else empty_passes + 1
+            if empty_passes >= 3:
+                logger.warning("[GeminiLive] receive() returned nothing 3 times, stopping")
+                return
+            if not got_any:
+                await asyncio.sleep(0.05)
 
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
         """
@@ -246,7 +377,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         ("tool_call",     dict)   - {"id", "name", "args"}, one per function call
         ("turn_complete", None)   - agent finished its response turn
         ("interrupted",   None)   - candidate interrupted the agent mid-speech
-        ("go_away",       None)   - Gemini server is closing the connection
+        ("session_ending", dict)  - Gemini server is closing the connection
         """
         _require_session(self._session)
         _text_buffer = ""  # Accumulates agent speech transcript across streaming chunks
@@ -255,7 +386,10 @@ class GeminiLiveAdapter(LiveSessionPort):
         )
 
         try:
-            async for response in self._session.receive():
+            async for response in self._messages():
+                if isinstance(response, _Resumed):
+                    yield ("session_resumed", {"reason": response.reason})
+                    continue
 
                 # Audio (highest priority - forward immediately) 
                 # response.data contains the raw 24kHz PCM audio bytes.
@@ -327,7 +461,13 @@ class GeminiLiveAdapter(LiveSessionPort):
                     logger.warning(
                         f"[GeminiLive] go_away: time_left={response.go_away.time_left}"
                     )
-                    yield ("go_away", None)
+                    yield (
+                        "session_ending",
+                        {
+                            "reason": "provider_go_away",
+                            "time_left": str(response.go_away.time_left),
+                        },
+                    )
 
         except Exception as e:
             logger.error(f"[GeminiLive] receive() error: {type(e).__name__}: {e}")
@@ -355,7 +495,7 @@ class GeminiLiveAdapter(LiveSessionPort):
     def open_session(
         self,
         system_prompt: str,
-        tools: list | None = None,
+        tools: list[ToolSpec] | None = None,
     ) -> "_LiveSessionContext":
         """
         The ONLY supported way to start a Gemini Live session.
@@ -368,8 +508,8 @@ class GeminiLiveAdapter(LiveSessionPort):
         model's persona, behaviour rules, and interview format for the session.
         Built by build_system_prompt(context) in the agent's prompts module.
 
-        tools is the list of function declarations (INTERVIEW_TOOLS) that tell
-        Gemini what functions it can call during the interview.
+        tools are provider-neutral ToolSpec objects (legacy declaration dicts
+        are also accepted) that tell Gemini what functions it can call.
 
         Usage:
             async with adapter.open_session(prompt, tools=TOOLS) as session:
@@ -381,7 +521,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         return _LiveSessionContext(
             adapter=self,
             system_prompt=system_prompt,
-            tools=tools or [],
+            tools=normalize_tools(tools),
         )
     
     # ----------------------
@@ -390,6 +530,7 @@ class GeminiLiveAdapter(LiveSessionPort):
 
     async def send_activity_start(self) -> None:
         """Tell Gemini the candidate has started speaking."""
+        await self._session_ready.wait()
         if self._session:
             self._activity_ended = False  # Re-open audio flow for new turn
             async with self._send_lock:
@@ -400,6 +541,7 @@ class GeminiLiveAdapter(LiveSessionPort):
 
     async def send_activity_end(self) -> None:
         """Tell Gemini the candidate has finished speaking. Triggers model response."""
+        await self._session_ready.wait()
         if self._session:
             self._activity_ended = True  # Block further audio immediately
             async with self._send_lock:
@@ -437,7 +579,7 @@ class _LiveSessionContext:
         *,
         adapter: GeminiLiveAdapter,
         system_prompt: str,
-        tools: list,
+        tools: list[ToolSpec],
     ) -> None:
         self._adapter = adapter
         self._system_prompt = system_prompt
@@ -468,6 +610,15 @@ class _LiveSessionContext:
             The INTERVIEW_TOOLS function declarations. Gemini uses these to
             record questions, persist answers, flag interrupts, etc.
         """
+        self._adapter._ctx = self
+        self._adapter._resume_handle = None
+        self._adapter._sent_content = []
+        self._adapter._consecutive_reconnects = 0
+        await self._connect(None)
+        logger.info("[LiveSessionContext] Session opened")
+        return self._adapter  # Return adapter so `as session` gives the adapter
+
+    def _build_config(self, handle: Optional[str]) -> "types.LiveConnectConfig":
         config = types.LiveConnectConfig(
             response_modalities=["AUDIO"],
             system_instruction=self._system_prompt,
@@ -490,15 +641,36 @@ class _LiveSessionContext:
                     include_thoughts=False,
             ),
             # TODO: thinking_budget, no enable_affective_dialog - these need v1alpha
-            tools=self._tools or None,
+            tools=_to_gemini_tools(self._tools),
+            # Lets a dropped or recycled connection continue the same conversation.
+            session_resumption=types.SessionResumptionConfig(handle=handle),
+            # Audio sessions are otherwise capped at about 15 minutes; interviews run longer.
+            context_window_compression=types.ContextWindowCompressionConfig(
+                sliding_window=types.SlidingWindow()
+            ),
         )
 
-        # Open the SDK session - this is where the actual WebSocket to Gemini is established
-        self._cm = self._adapter._client.aio.live.connect(model=_MODEL, config=config)
-        session = await self._cm.__aenter__()
+        return config
+
+    async def _connect(self, handle: Optional[str]) -> None:
+        """Open the SDK session (resuming from `handle` when given)."""
+        cm = self._adapter._client.aio.live.connect(
+            model=self._adapter._model, config=self._build_config(handle)
+        )
+        session = await cm.__aenter__()
+        self._cm = cm
         self._adapter._session = session  # Now all send/receive methods will work
-        logger.info("[LiveSessionContext] Session opened")
-        return self._adapter  # Return adapter so `as session` gives the adapter
+
+    async def reopen(self, handle: Optional[str]) -> None:
+        """Close the current SDK session (best effort) and open a fresh one."""
+        old, self._cm = self._cm, None
+        self._adapter._session = None
+        if old is not None:
+            try:
+                await old.__aexit__(None, None, None)
+            except Exception as exc:
+                logger.debug(f"[LiveSessionContext] closing old session: {exc!r}")
+        await self._connect(handle)
 
     async def __aexit__(self, *args) -> None:
         """
@@ -507,14 +679,36 @@ class _LiveSessionContext:
         rather than operating on a half-closed session.
         """
         self._adapter._session = None
+        self._adapter._ctx = None
         if self._cm:
             await self._cm.__aexit__(*args)
         logger.info("[GeminiLive] Session closed")
 
 
+class _Resumed:
+    """Internal marker: the adapter reconnected; becomes a "session_resumed" event."""
+
+    def __init__(self, reason: str) -> None:
+        self.reason = reason
+
+
 # ───────
 # HELPERS
 # ───────
+
+
+def _to_gemini_tools(specs: list[ToolSpec]) -> Optional[list[dict]]:
+    """ToolSpec -> Gemini's [{"function_declarations": [...]}] shape (None when empty)."""
+    if not specs:
+        return None
+    return [
+        {
+            "function_declarations": [
+                {"name": s.name, "description": s.description, "parameters": s.parameters}
+                for s in specs
+            ]
+        }
+    ]
 
 
 def _require_session(session: Any) -> None:

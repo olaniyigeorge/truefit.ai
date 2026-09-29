@@ -59,7 +59,7 @@ def test_same_primary_and_fallback_rejected(monkeypatch, providers):
 
 
 def test_unknown_provider_rejected(monkeypatch, providers):
-    _configure(monkeypatch, "claude", "none")
+    _configure(monkeypatch, "not-a-provider", "none")
     with pytest.raises(ValueError, match="Unknown LLM provider"):
         factory.create_live_adapter()
 

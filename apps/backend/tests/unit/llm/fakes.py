@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any, AsyncGenerator
 
-from src.truefit_core.application.ports import LiveSessionPort
+from src.truefit_core.application.ports import AdapterCapabilities, LiveSessionPort
 
 
 class _Ctx:
@@ -29,9 +29,12 @@ class FakeLiveAdapter(LiveSessionPort):
         events=(),
         fail_open: Exception | None = None,
         hold_open_until_audio: int = 0,
+        capabilities: AdapterCapabilities | None = None,
     ) -> None:
         """hold_open_until_audio: keep receive() open until that many audio chunks were sent."""
         self.events = list(events)
+        self._capabilities = capabilities or AdapterCapabilities()
+        self.activity: list[str] = []
         self.hold_open_until_audio = hold_open_until_audio
         self.fail_open = fail_open
         self.opened = False
@@ -40,6 +43,16 @@ class FakeLiveAdapter(LiveSessionPort):
         self.content: list[str] = []
         self.tool_responses: list[dict] = []
         self.open_args: tuple | None = None
+
+    @property
+    def capabilities(self) -> AdapterCapabilities:
+        return self._capabilities
+
+    async def send_activity_start(self) -> None:
+        self.activity.append("start")
+
+    async def send_activity_end(self) -> None:
+        self.activity.append("end")
 
     def open_session(self, system_prompt: str, tools: list | None = None):
         self.open_args = (system_prompt, tools)
@@ -52,7 +65,8 @@ class FakeLiveAdapter(LiveSessionPort):
         self.audio.append(pcm_bytes)
 
     async def send_image(self, jpeg_bytes: bytes, source: str = "camera") -> None:
-        pass
+        if not self._capabilities.supports_images:
+            await super().send_image(jpeg_bytes, source)
 
     async def send_client_content(self, text: str) -> None:
         self.content.append(text)
@@ -62,6 +76,8 @@ class FakeLiveAdapter(LiveSessionPort):
 
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:
         for event in self.events:
+            if isinstance(event, Exception):  # lets a test fail the stream at a chosen point
+                raise event
             yield event
         while len(self.audio) < self.hold_open_until_audio:
             await asyncio.sleep(0.005)
