@@ -16,6 +16,7 @@ from src.truefit_core.domain.job import (
     Job,
     ExperienceLevel,
     InterviewConfig,
+    JobRequirements,
     SkillRequirement,
 )
 from src.truefit_core.application.ports import (
@@ -48,17 +49,19 @@ class JobService:
         self,
         *,
         org_id: uuid.UUID,
+        created_by: uuid.UUID,
         title: str,
         description: str,
-        experience_level: ExperienceLevel,
+        requirements: JobRequirements,
         skills: list[SkillRequirement],
         interview_config: InterviewConfig | None = None,
     ) -> Job:
         job = Job(
             org_id=org_id,
+            created_by=created_by,
             title=title,
             description=description,
-            experience_level=experience_level,
+            requirements=requirements,
             skills=skills,
             interview_config=interview_config,
         )

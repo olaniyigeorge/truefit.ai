@@ -50,8 +50,11 @@ def make_job(
         title=title,
         description=description,
         requirements=make_requirements(),
-        skills=skills
-        or [make_skill("Python"), make_skill("PostgreSQL", required=False)],
+        skills=(
+            skills
+            if skills is not None
+            else [make_skill("Python"), make_skill("PostgreSQL", required=False)]
+        ),
         status=status,
     )
 

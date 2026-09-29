@@ -19,6 +19,7 @@ from src.truefit_core.application.ports import JobRepository
 from src.truefit_core.domain.job import (
     ExperienceLevel,
     InterviewConfig,
+    JobRequirements,
     Job,
     SkillRequirement,
 )
@@ -44,6 +45,7 @@ class InterviewConfigInput:
 @dataclass(frozen=True)
 class CreateJobCommand:
     org_id: uuid.UUID
+    created_by: uuid.UUID
     title: str
     description: str
     experience_level: str
@@ -139,9 +141,10 @@ async def handle_create_job(
 
     job = await job_service.create_job(
         org_id=cmd.org_id,
+        created_by=cmd.created_by,
         title=cmd.title,
         description=cmd.description,
-        experience_level=experience_level,
+        requirements=JobRequirements(experience_level=experience_level),
         skills=skills,
         interview_config=interview_config,
     )

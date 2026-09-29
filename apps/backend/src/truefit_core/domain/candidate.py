@@ -200,7 +200,9 @@ class Candidate:
             self._skills = list(skills)
         self._touch()
 
-    def attach_resume(self, resume: ResumeRef, resume_asset_id: uuid.UUID) -> None:
+    def attach_resume(
+        self, resume: ResumeRef, resume_asset_id: Optional[uuid.UUID] = None
+    ) -> None:
         self._assert_active()
         self._resume = resume
         self._resume_asset_id = resume_asset_id

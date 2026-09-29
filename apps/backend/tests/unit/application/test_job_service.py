@@ -105,7 +105,8 @@ class TestCreateJob:
             org_id=uuid.uuid4(),
             title="ML Engineer",
             description="Train models.",
-            experience_level=ExperienceLevel.SENIOR,
+            created_by=uuid.uuid4(),
+            requirements=JobRequirements(experience_level=ExperienceLevel.SENIOR),
             skills=[_make_skill("Python"), _make_skill("PyTorch")],
         )
         assert job.title == "ML Engineer"
@@ -118,7 +119,8 @@ class TestCreateJob:
             org_id=uuid.uuid4(),
             title="Analyst",
             description="Analyse things.",
-            experience_level=ExperienceLevel.JUNIOR,
+            created_by=uuid.uuid4(),
+            requirements=JobRequirements(experience_level=ExperienceLevel.JUNIOR),
             skills=[_make_skill()],
             interview_config=cfg,
         )
@@ -129,7 +131,8 @@ class TestCreateJob:
             org_id=uuid.uuid4(),
             title="DevOps",
             description="CI/CD pipelines.",
-            experience_level=ExperienceLevel.MID,
+            created_by=uuid.uuid4(),
+            requirements=_make_requirements(),
             skills=[_make_skill("Kubernetes")],
         )
         assert isinstance(job, Job)
@@ -139,7 +142,8 @@ class TestCreateJob:
             org_id=uuid.uuid4(),
             title="QA Engineer",
             description="Quality gates.",
-            experience_level=ExperienceLevel.MID,
+            created_by=uuid.uuid4(),
+            requirements=_make_requirements(),
             skills=[_make_skill("Selenium")],
         )
         assert job.status == JobStatus.DRAFT
