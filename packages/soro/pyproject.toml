@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "soro"
+version = "0.1.0"
+description = "Model-agnostic realtime voice agent infrastructure."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+# Install only the providers you use, e.g. pip install "soro[gemini]".
+gemini = ["google-genai>=1.65", "websockets>=13"]
+openai = ["websockets>=13", "av>=12"]
+all = ["soro[gemini,openai]"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "soro[all]"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/soro"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["unit: no network, no provider"]
