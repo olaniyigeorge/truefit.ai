@@ -18,7 +18,7 @@ We will respond within 48 hours and work with you to resolve the issue responsib
 
 Real credentials for this project are managed as follows:
 
-- **Environment variables** written directly to the GCP Compute Engine VM — never committed to git
+- **Environment variables** written directly to the GCP Compute Engine VM, never committed to git
 - **Firebase credentials** managed via the Firebase Console
 - **Planned:** migration to [GCP Secret Manager](https://cloud.google.com/secret-manager) for all production secrets
 
@@ -32,7 +32,7 @@ This repository may trigger automated credential scanners on documentation files
 
 | File | Finding | Status |
 |------|---------|--------|
-| `docs/auth.md` | `curl-auth-header`, `generic-api-key` | False positive — placeholder/example values only |
+| `docs/api.md` | `curl-auth-header`, `generic-api-key` | False positive, placeholder/example values only |
 
 All flagged values are documentation placeholders (e.g. `$TOKEN`, `eyJhbGc...`). This has been verified by inspecting flagged file contents and reviewing full git history.
 

@@ -247,19 +247,20 @@ class TestSQLAlchemyCandidateRepository:
         self.repo = SQLAlchemyCandidateRepository(db_manager)
         self.user = candidate_user
 
-    def _make_candidate_for_user(self) -> Candidate:
-        """Create a Candidate whose id matches the pre-seeded candidate_user.id."""
+    def _make_candidate_for_user(self, **overrides) -> Candidate:
+        """A Candidate profile linked to the pre-seeded candidate_user."""
         return Candidate(
-            candidate_id=self.user.id,
+            user_id=self.user.id,
             full_name=self.user.display_name,
             contact=ContactInfo(email=self.user.email),
+            **overrides,
         )
 
-    # ── create_for_user / get_by_id ──
+    # ── save / get_by_id ──
 
-    async def test_create_for_user_and_retrieve(self):
+    async def test_save_and_retrieve(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
         fetched = await self.repo.get_by_id(candidate.id)
         assert fetched is not None
@@ -267,59 +268,86 @@ class TestSQLAlchemyCandidateRepository:
 
     async def test_get_by_id_returns_correct_email(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
         fetched = await self.repo.get_by_id(candidate.id)
         assert fetched.contact.email == self.user.email
 
     async def test_get_by_id_returns_none_for_unknown(self):
-        result = await self.repo.get_by_id(uuid.uuid4())
-        assert result is None
+        assert await self.repo.get_by_id(uuid.uuid4()) is None
 
     async def test_get_by_id_reconstructs_full_name(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
         fetched = await self.repo.get_by_id(candidate.id)
         assert fetched.full_name == self.user.display_name
+
+    async def test_save_persists_profile_fields(self):
+        candidate = self._make_candidate_for_user(
+            headline="Backend engineer",
+            bio="Ten years of Python",
+            location="Lagos",
+            years_experience=10,
+            skills=["python", "fastapi"],
+        )
+        await self.repo.save(candidate)
+
+        fetched = await self.repo.get_by_id(candidate.id)
+        assert fetched.headline == "Backend engineer"
+        assert fetched.location == "Lagos"
+        assert fetched.years_experience == 10
+        assert list(fetched.skills) == ["python", "fastapi"]
+
+    async def test_save_twice_updates_instead_of_duplicating(self):
+        candidate = self._make_candidate_for_user(headline="First")
+        await self.repo.save(candidate)
+        await self.repo.save(
+            self._make_candidate_for_user(candidate_id=candidate.id, headline="Second")
+        )
+
+        assert await self.repo.count() == 1
+        fetched = await self.repo.get_by_id(candidate.id)
+        assert fetched.headline == "Second"
 
     # ── get_by_email ──
 
     async def test_get_by_email_finds_candidate(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
         fetched = await self.repo.get_by_email(self.user.email)
         assert fetched is not None
         assert fetched.id == candidate.id
 
     async def test_get_by_email_returns_none_for_unknown(self):
-        result = await self.repo.get_by_email("nobody@example.com")
-        assert result is None
+        assert await self.repo.get_by_email("nobody@example.com") is None
 
-    async def test_get_by_email_case_sensitive(self):
+    async def test_get_by_email_ignores_case_and_whitespace(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
-        # emails are stored exactly as given; uppercase should NOT match
-        result = await self.repo.get_by_email(self.user.email.upper())
-        assert result is None
+        fetched = await self.repo.get_by_email(f"  {self.user.email.upper()} ")
+        assert fetched is not None
+        assert fetched.id == candidate.id
 
-    # ── create_for_user idempotency ──
+    # ── list_all / count / delete ──
 
-    async def test_create_for_user_is_idempotent(self):
+    async def test_list_all_returns_saved_candidates(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
-        await self.repo.create_for_user(self.user.id, candidate)  # second call = no-op
+        await self.repo.save(candidate)
 
-        fetched = await self.repo.get_by_id(candidate.id)
-        assert fetched is not None  # still exists, no duplicate
+        listed = await self.repo.list_all()
+        assert [c.id for c in listed] == [candidate.id]
 
-    # ── delete ──
+    async def test_count_reflects_saved_profiles(self):
+        assert await self.repo.count() == 0
+        await self.repo.save(self._make_candidate_for_user())
+        assert await self.repo.count() == 1
 
     async def test_delete_removes_candidate_profile(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
         await self.repo.delete(candidate.id)
 
         assert await self.repo.get_by_id(candidate.id) is None
@@ -327,39 +355,18 @@ class TestSQLAlchemyCandidateRepository:
     async def test_delete_nonexistent_is_safe(self):
         await self.repo.delete(uuid.uuid4())  # should not raise
 
-    # ── exists / count ──
+    # ── derived fields ──
 
-    async def test_exists_returns_true_after_create(self):
+    async def test_new_candidate_has_no_active_interviews(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
-        assert await self.repo.exists(candidate.id) is True
-
-    async def test_exists_returns_false_for_unknown(self):
-        assert await self.repo.exists(uuid.uuid4()) is False
-
-    async def test_count_reflects_created_profile(self):
-        candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
-
-        count = await self.repo.count()
-        assert count >= 1
-
-    # ── active_interview_job_ids ──
-
-    async def test_get_by_id_without_loading_interviews_returns_empty_set(self):
-        candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
-
-        fetched = await self.repo.get_by_id(candidate.id, load_active_interviews=False)
-        # When load_active_interviews=False the set should be empty
+        fetched = await self.repo.get_by_id(candidate.id)
         assert not fetched.has_active_interview_for(uuid.uuid4())
-
-    # ── status mapping ──
 
     async def test_active_user_maps_to_active_candidate_status(self):
         candidate = self._make_candidate_for_user()
-        await self.repo.create_for_user(self.user.id, candidate)
+        await self.repo.save(candidate)
 
         fetched = await self.repo.get_by_id(candidate.id)
         assert fetched.status == CandidateStatus.ACTIVE

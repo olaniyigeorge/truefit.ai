@@ -80,7 +80,7 @@ Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers 
 
 Real bugs found and fixed on the way:
 
-- The OpenAI adapter received the interview tools in Gemini's group shape and passed them through untouched, so it would never have registered a usable tool. This matches the caveat already noted in `docs/doc.md`.
+- The OpenAI adapter received the interview tools in Gemini's group shape and passed them through untouched, so it would never have registered a usable tool. The old docs had already noted that caveat.
 - The WebSocket layer called `send_activity_start()` and `send_activity_end()` on the adapter, but `FallbackLiveAdapter` had neither, so any fallback configuration would have raised `AttributeError` at the first turn boundary.
 
 - The OpenAI adapter still spoke the retired Realtime beta protocol, and OpenAI now answers `beta_api_shape_disabled`. It is migrated to GA (no beta header, `session.type: realtime`, `output_modalities`, nested `audio.input` / `audio.output`, renamed transcript events), verified against the field definitions in OpenAI's official Python SDK. GA only accepts 24kHz PCM, so the adapter now upsamples the bridge's 16kHz itself. The old code labelled 16kHz audio as `pcm16` (24kHz), so OpenAI would have heard the candidate 1.5x too fast.

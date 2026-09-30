@@ -86,7 +86,6 @@ firebase-adminsdk*.json
 *-service-account.json
 
 # IDE 
-.vscode/settings.json
 .idea/
 .cursorignore
 .cursorindexingignore

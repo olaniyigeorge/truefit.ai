@@ -26,6 +26,29 @@ from src.truefit_infra.db.models import Base, Org, User, UserRole
 SQLITE_URL = "sqlite+aiosqlite:///:memory:"
 
 
+def _adapt_metadata_for_sqlite() -> None:
+    """
+    The models use Postgres-only column types (ARRAY, JSONB) and server defaults
+    such as '{}'::text[]. SQLite can render neither, so for the test process only
+    swap those columns to JSON and drop the Postgres-specific defaults.
+    """
+    from sqlalchemy import JSON
+    from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+
+    for table in Base.metadata.tables.values():
+        for column in table.columns:
+            if isinstance(column.type, (ARRAY, JSONB)):
+                column.type = JSON()
+                column.server_default = None
+            elif column.server_default is not None and "::" in str(
+                getattr(column.server_default.arg, "text", column.server_default.arg)
+            ):
+                column.server_default = None
+
+
+_adapt_metadata_for_sqlite()
+
+
 @pytest_asyncio.fixture(scope="function")
 async def async_engine():
     """Creates a fresh in-memory SQLite engine for each test function."""
@@ -80,12 +103,23 @@ async def db_manager(async_engine) -> DatabaseManager:
 
 
 async def _create_org(session: AsyncSession, name: str = "Acme Corp") -> Org:
-    org = Org(
+    """Orgs need a creator (orgs.created_by is NOT NULL), so make a founder user first."""
+    slug = name.lower().replace(" ", "-")
+    founder = User(
         id=uuid.uuid4(),
-        name=name,
-        slug=name.lower().replace(" ", "-"),
+        email=f"founder@{slug}.test",
+        display_name=f"{name} Founder",
+        role=UserRole.recruiter.value,
+        auth_provider="firebase",
+        provider_subject=f"firebase|{uuid.uuid4().hex}",
+        is_active=True,
     )
+    session.add(founder)
+    await session.flush()
+    org = Org(id=uuid.uuid4(), created_by=founder.id, name=name, slug=slug)
     session.add(org)
+    await session.flush()
+    founder.org_id = org.id
     await session.commit()
     await session.refresh(org)
     return org

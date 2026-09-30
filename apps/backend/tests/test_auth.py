@@ -94,7 +94,9 @@ async def test_oauth_service():
     print("\n✓ Test 1: Firebase OAuth Provider instantiation...")
     provider = FirebaseOAuthProvider("truefit-ai")
     print(f"  Provider created with project: truefit-ai")
-    print(f"  Certificate URL: {provider.certs_url}")
+    print(f"  Certificate URL: {provider.CERTS_URL}")
+    assert provider.project_id == "truefit-ai"
+    assert provider.CERTS_URL.endswith("securetoken@system.gserviceaccount.com")
     print("  ✅ PASSED")
     
     print("\n✓ Test 2: OAuth Service instantiation...")

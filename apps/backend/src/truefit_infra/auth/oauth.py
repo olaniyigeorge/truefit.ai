@@ -5,16 +5,10 @@ Handles Firebase token verification and extraction of user identity information.
 
 from typing import Optional, Dict, Any
 import httpx
-from google.auth.transport.requests import Request
-from google.oauth2 import id_token
 
 import jwt
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
-
-
-import firebase_admin
-from firebase_admin import auth as firebase_auth, credentials
 
 
 from src.truefit_core.common.utils import logger
@@ -37,49 +31,6 @@ class OAuthProvider:
             ValueError: If token is invalid or verification fails
         """
         raise NotImplementedError
-
-
-# class FirebaseOAuthProvider(OAuthProvider):
-#     """OAuth provider for Firebase authentication."""
-
-#     def __init__(self, project_id: str):
-#         self.project_id = project_id
-#         # Firebase public certificate URL (Google manages these)
-#         self.certs_url = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-#         self.issuer_template = "https://securetoken.google.com/{}"
-
-#     async def verify_token(self, token: str) -> Dict[str, Any]:
-#         """
-#         Verify Firebase ID token.
-
-#         Args:
-#             token: Firebase ID token from frontend
-
-#         Returns:
-#             Claims dictionary with user information
-
-#         Raises:
-#             ValueError: If token is invalid or verification fails
-#         """
-#         try:
-#             # Use Google's library to verify Firebase tokens
-#             # This validates signature, expiration, and audience
-#             claims = id_token.verify_oauth2_token(
-#                 token,
-#                 Request(),
-#                 self.project_id
-#             )
-
-#             # Verify the token is from Firebase (issuer check)
-#             expected_issuer = self.issuer_template.format(self.project_id)
-#             if claims.get("iss") != expected_issuer:
-#                 raise ValueError(f"Unexpected issuer: {claims.get('iss')}")
-
-#             logger.debug(f"Firebase token verified for user {claims.get('sub')}")
-#             return claims
-#         except Exception as e:
-#             logger.error(f"Firebase token verification failed: {e}")
-#             raise ValueError(f"Invalid Firebase token: {str(e)}")
 
 
 class FirebaseOAuthProvider(OAuthProvider):
@@ -116,12 +67,10 @@ class FirebaseOAuthProvider(OAuthProvider):
             return claims
 
         except Exception as e:
-            if "expired" in str(e).lower():
-                raise ValueError("Firebase token has expired")
-            raise ValueError(f"Invalid Firebase token: {e}")
-        except Exception as e:
             logger.error(f"Firebase token verification failed: {e}")
-            raise ValueError(f"Invalid Firebase token: {str(e)}")
+            if "expired" in str(e).lower():
+                raise ValueError("Firebase token has expired") from e
+            raise ValueError(f"Invalid Firebase token: {e}") from e
 
     async def extract_identity(self, claims: Dict[str, Any]) -> Dict[str, Any]:
         return {

@@ -1,6 +1,10 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}\\apps\\backend\\venv\\Scripts\\python.exe",
+  "python.defaultInterpreterPath": "${workspaceFolder}/apps/backend/.venv/bin/python",
   "python.analysis.extraPaths": [
-    "${workspaceFolder}\\apps\\backend\\src"
-  ]
+    "${workspaceFolder}/apps/backend",
+    "${workspaceFolder}/apps/backend/src",
+    "${workspaceFolder}/packages/soro/src"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["apps/backend/tests", "packages/soro/tests"]
 }

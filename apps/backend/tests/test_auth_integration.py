@@ -9,8 +9,6 @@ from unittest.mock import Mock, AsyncMock, MagicMock, patch
 from datetime import datetime, timezone
 import uuid
 
-sys.path.insert(0, 'c:\\Users\\USER\\Desktop\\truefit.ai\\apps\\backend')
-
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from fastapi import Depends

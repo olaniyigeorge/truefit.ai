@@ -81,8 +81,9 @@ Fallback happens when the primary fails to open a session (network, auth, timeou
 truefit.ai/
   packages/
     soro/                     The SDK: port, runtime, adapters, tools. Depends on no app.
-      src/soro/  ports, tools, runtime/, adapters/, audio/, testing
-      tests/                  Unit and contract tests (no interview code)
+      src/soro/  ports, tools, runtime/, adapters/, audio/ (turn detection),
+                 transport/ (WebRTC bridge), testing
+      tests/  examples/  scripts/   Tests, runnable examples, release smoke test
   apps/                       The interview app, a reference consumer of Soro
     frontend/                 Vite, React, TypeScript
       src/  components, pages, hooks, helpers, context, providers, lib
@@ -100,12 +101,12 @@ truefit.ai/
             evaluator/
         truefit_infra/        Adapters
           llm/                factory (feeds app config to Soro), gemini_llm
-          realtime/           WebRTC client, audio bridge, signaling
+          realtime/           WebRTC client and signaling (the audio bridge lives in Soro)
           db/  auth/  cache/  queue/  config.py
         truefit_workers/      Evaluation and report workers
       tests/                  unit, integration, e2e
       alembic/                Database migrations
-  docs/                       Architecture, API, auth, WebRTC, pivot review
+  docs/                       Architecture, API and auth, pivot review
   scripts/                    dev.sh, deploy.sh, setup-gcp.sh
   Makefile  CONTRIBUTING.md  SECURITY.md  LICENSE
 ```
@@ -130,21 +131,21 @@ Or run each side on its own with `make dev-backend` and `make dev-frontend`. Int
 ## Testing
 
 ```bash
-cd apps/backend
-.venv/bin/python -m pytest tests/unit
+make soro-test                  # the SDK
+cd apps/backend && .venv/bin/python -m pytest tests   # the app: unit and integration
 ```
 
-The unit suite uses fake providers, so it needs no API keys, database or Redis. It covers the runtime, the fallback adapter, the factory, the interview agent and tools, the domain, and the layer boundary between core and infrastructure.
+The suites use fake providers and in-memory SQLite, so they need no API keys, database or Redis. They cover the runtime, the fallback adapter, the factory, the interview agent and tools, the domain, and the layer boundary between core and infrastructure.
 
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
 | [docs/voice-infra-pivot.md](./docs/voice-infra-pivot.md) | Pivot assessment, gaps, progress and plan |
-| [docs/architecture.md](./docs/architecture.md) | System design, components, data flow |
-| [docs/api.md](./docs/api.md) | REST endpoints, WebSocket events, data models |
-| [docs/auth.md](./docs/auth.md) | Firebase OAuth and JWT |
-| [docs/webrtc.md](./docs/webrtc.md) | WebRTC and WebSocket real-time architecture |
+| [docs/architecture.md](./docs/architecture.md) | System design, components, real-time audio path, data model |
+| [docs/api.md](./docs/api.md) | Authentication, REST endpoints, WebSocket events, configuration |
+| [docs/about.md](./docs/about.md) | Project story |
+| [packages/soro/README.md](./packages/soro/README.md) | The Soro SDK |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Local setup, conventions, how to contribute |
 | [SECURITY.md](./SECURITY.md) | Vulnerability reporting, secrets management |
 
