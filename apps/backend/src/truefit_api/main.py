@@ -1,5 +1,5 @@
 import asyncio
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 import sqlalchemy
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 load_dotenv()
 
+from src.truefit_infra.auth.middleware import get_current_user
 from src.truefit_infra.config import AppConfig
 from src.truefit_infra.db.database import db_manager
 from src.truefit_api.middlewares import (
@@ -131,14 +132,19 @@ app.add_middleware(
 )
 
 # Routers 
+# Public: health, and the sign-in exchange inside auth_router (its other routes
+# require a JWT individually). Every other router requires a valid JWT; what a
+# user may do with it is decided per endpoint (truefit_infra/auth/authorization.py).
+_authenticated = [Depends(get_current_user)]
+
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
-app.include_router(users_router, prefix="/api/v1")
-app.include_router(orgs_router, prefix="/api/v1")
-app.include_router(candidates_router, prefix="/api/v1")
-app.include_router(jobs_router, prefix="/api/v1")
-app.include_router(interviews_router, prefix="/api/v1")
-app.include_router(applications_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1", dependencies=_authenticated)
+app.include_router(orgs_router, prefix="/api/v1", dependencies=_authenticated)
+app.include_router(candidates_router, prefix="/api/v1", dependencies=_authenticated)
+app.include_router(jobs_router, prefix="/api/v1", dependencies=_authenticated)
+app.include_router(interviews_router, prefix="/api/v1", dependencies=_authenticated)
+app.include_router(applications_router, prefix="/api/v1", dependencies=_authenticated)
 app.include_router(interview_ws_router)
 app.include_router(turn_router, prefix="/api/v1")
 

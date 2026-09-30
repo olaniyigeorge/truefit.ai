@@ -20,6 +20,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
 
 from src.truefit_core.domain.job import ExperienceLevel, JobStatus
+from src.truefit_infra.auth.authorization import (
+    ensure_org_member,
+    require_roles,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import DatabaseManager, db_manager
 from src.truefit_infra.db.repositories.job_repository import SQLAlchemyJobRepository
 from src.truefit_core.application.services.job_service import JobService
@@ -192,7 +197,10 @@ class JobOut(BaseModel):
 async def create_job(
     body: CreateJobRequest,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(require_roles("recruiter")),
 ):
+    # Recruiters may only create jobs in their own org; admins may use any org.
+    ensure_org_member(user, body.org_id)
     requirements = JobRequirements(
         experience_level=ExperienceLevel(body.requirements.experience_level),
         min_total_years=body.requirements.min_total_years,
@@ -221,7 +229,7 @@ async def create_job(
 
     job = Job(
         org_id=body.org_id,
-        created_by=body.created_by,
+        created_by=uuid.UUID(str(user.user_id)),
         title=body.title,
         description=body.description,
         requirements=requirements,
@@ -292,10 +300,12 @@ async def update_job(
     job_id: uuid.UUID,
     body: UpdateJobRequest,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     job = await repo.get_by_id(job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {job_id} not found")
+    ensure_org_member(user, job.org_id)
 
     try:
         if body.description:
@@ -346,10 +356,12 @@ async def update_job(
 async def activate_job(
     job_id: uuid.UUID,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     job = await repo.get_by_id(job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {job_id} not found")
+    ensure_org_member(user, job.org_id)
     try:
         job.activate()
     except ValueError as e:
@@ -362,10 +374,12 @@ async def activate_job(
 async def pause_job(
     job_id: uuid.UUID,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     job = await repo.get_by_id(job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {job_id} not found")
+    ensure_org_member(user, job.org_id)
     try:
         job.pause()
     except ValueError as e:
@@ -378,10 +392,12 @@ async def pause_job(
 async def close_job(
     job_id: uuid.UUID,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     job = await repo.get_by_id(job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {job_id} not found")
+    ensure_org_member(user, job.org_id)
     try:
         job.close()
     except ValueError as e:
@@ -394,10 +410,12 @@ async def close_job(
 async def delete_job(
     job_id: uuid.UUID,
     repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     job = await repo.get_by_id(job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {job_id} not found")
+    ensure_org_member(user, job.org_id)
     if job.status != JobStatus.DRAFT:
         raise HTTPException(400, detail="Only DRAFT jobs can be hard deleted")
     await repo.delete(job_id)

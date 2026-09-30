@@ -54,6 +54,11 @@ export type ListCandidateParams = {
 
 
 export const candidatesApi = {
+    uploadResume: async (candidateId: string, formData: FormData): Promise<Candidate> => {
+        const res = await API.post(`/api/v1/candidates/${candidateId}/resume`, formData)
+        return res.data
+    },
+
     register: async (payload: RegisterCandidatePayload): Promise<Candidate> => {
         const res = await API.post(`/api/v1/candidates`, payload)
         return res.data

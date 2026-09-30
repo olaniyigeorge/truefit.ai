@@ -316,15 +316,19 @@ export function useInterviewSession({
 
     const base = (wsBaseUrl ?? config.wsUrl ?? "ws://localhost:8000")
       .replace(/\/$/, "")
-    const url = `${base}/ws/interview/${jobId}/${candidateId}`
+    // Browsers cannot set headers on a WebSocket, so the JWT goes in the query string.
+    const jwt = document.cookie.match(/(?:^|;\s*)jwt=([^;]*)/)?.[1]
+    const token = jwt ? `?token=${jwt}` : ""
+    const displayUrl = `${base}/ws/interview/${jobId}/${candidateId}`
+    const url = `${displayUrl}${token}`
 
-    console.log("Connecting to WebSocket at", url)
+    console.log("Connecting to WebSocket at", displayUrl)
 
 
     updatePhase("ws_connecting")
-    addEntry("system", `Connecting to ${url}`)
+    addEntry("system", `Connecting to ${displayUrl}`)
 
-    console.log("Creating WebSocket:", url)
+    console.log("Creating WebSocket:", displayUrl)
 
     const ws = new WebSocket(url)
     wsRef.current = ws

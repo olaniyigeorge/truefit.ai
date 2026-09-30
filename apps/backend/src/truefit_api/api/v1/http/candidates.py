@@ -21,6 +21,16 @@ from src.truefit_core.domain.candidate import (
     ContactInfo,
     ResumeRef,
 )
+from src.truefit_infra.auth.authorization import (
+    CANDIDATE,
+    RECRUITER,
+    _forbidden,
+    _same,
+    ensure_self,
+    is_admin,
+    require_roles,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import db_manager
 from src.truefit_infra.db.repositories.candidate_repository import (
     SQLAlchemyCandidateRepository,
@@ -36,6 +46,18 @@ def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
 
 
+def _ensure_owner_or_admin(user: TokenPayload, candidate: Candidate) -> None:
+    """Owner of the profile (candidate.user_id) or an admin."""
+    ensure_self(user, candidate.user_id)
+
+
+def _ensure_owner_recruiter_or_admin(user: TokenPayload, candidate: Candidate) -> None:
+    """Owner of the profile, any recruiter, or an admin."""
+    if user.role == RECRUITER:
+        return
+    ensure_self(user, candidate.user_id)
+
+
 # ── Request schemas
 
 
@@ -44,6 +66,8 @@ class RegisterCandidateRequest(BaseModel):
     email: EmailStr
     phone: Optional[str] = Field(None, max_length=30)
     linkedin_url: Optional[str] = Field(None, max_length=255)
+    # Optional. Candidates may only create a profile for themselves.
+    user_id: Optional[uuid.UUID] = None
 
 
 class UpdateCandidateRequest(BaseModel):
@@ -120,7 +144,22 @@ class CandidateOut(BaseModel):
 async def register_candidate(
     body: RegisterCandidateRequest,
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    owner_id: Optional[uuid.UUID] = body.user_id
+    if is_admin(user):
+        if owner_id is None:
+            raise HTTPException(400, detail="user_id is required")
+    else:
+        # Candidates may only create a profile for their own account.
+        if user.role != CANDIDATE:
+            raise _forbidden()
+        if body.user_id is not None and not _same(body.user_id, user.user_id):
+            raise _forbidden()
+        if (user.email or "").strip().lower() != body.email.strip().lower():
+            raise _forbidden()
+        owner_id = uuid.UUID(str(user.user_id))
+
     existing = await repo.get_by_email(body.email)
     if existing:
         raise HTTPException(
@@ -132,7 +171,9 @@ async def register_candidate(
         phone=body.phone,
         linkedin_url=body.linkedin_url,
     )
-    candidate = Candidate(full_name=body.full_name, contact=contact)
+    candidate = Candidate(
+        full_name=body.full_name, contact=contact, user_id=owner_id
+    )
     await repo.save(candidate)
     return CandidateOut.from_domain(candidate)
 
@@ -141,10 +182,12 @@ async def register_candidate(
 async def get_candidate(
     candidate_id: uuid.UUID,
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
+    _ensure_owner_recruiter_or_admin(user, candidate)
 
     return CandidateOut.from_domain(candidate)
 
@@ -154,6 +197,7 @@ async def list_candidates(
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    _user: TokenPayload = Depends(require_roles(RECRUITER)),
 ):
     candidates = await repo.list_all(limit=limit, offset=offset)
     return [CandidateOut.from_domain(c) for c in candidates]
@@ -164,10 +208,12 @@ async def update_candidate(
     candidate_id: uuid.UUID,
     body: UpdateCandidateRequest,
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
+    _ensure_owner_or_admin(user, candidate)
 
     if all(v is None for v in (body.full_name, body.phone, body.linkedin_url)):
         raise HTTPException(400, detail="At least one field must be provided")
@@ -197,10 +243,12 @@ async def upload_resume(
     candidate_id: uuid.UUID,
     file: UploadFile = File(...),
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
+    _ensure_owner_or_admin(user, candidate)
 
     content_type = file.content_type or "application/octet-stream"
     if content_type not in (
@@ -234,10 +282,12 @@ async def upload_resume(
 async def delete_resume(
     candidate_id: uuid.UUID,
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
+    _ensure_owner_or_admin(user, candidate)
     if not candidate.resume:
         raise HTTPException(404, detail="No resume attached")
 
@@ -249,10 +299,12 @@ async def delete_resume(
 async def get_resume_url(
     candidate_id: uuid.UUID,
     repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     candidate = await repo.get_by_id(candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {candidate_id} not found")
+    _ensure_owner_recruiter_or_admin(user, candidate)
     if not candidate.resume:
         raise HTTPException(404, detail="No resume attached")
 

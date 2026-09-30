@@ -1,1115 +1,345 @@
-# TrueFit.AI - API Reference & Developer Guide
+# TrueFit API Reference
 
-## Table of Contents
+Reference for the FastAPI backend in `apps/backend`: authentication, REST endpoints, the interview WebSocket, error format and environment variables. Everything here was checked against the code under `apps/backend/src`.
 
-1. [API Overview](#api-overview)
-2. [Authentication](#authentication)
-3. [REST Endpoints](#rest-endpoints)
-4. [WebSocket Events](#websocket-events)
-5. [Error Responses](#error-responses)
-6. [Data Models](#data-models)
-7. [Development Workflow](#development-workflow)
-8. [Code Examples](#code-examples)
+For system design see [architecture.md](architecture.md). For where the project is heading (the `soro` voice SDK) see [voice-infra-pivot.md](voice-infra-pivot.md).
 
----
+## Overview
 
-## API Overview
+| Item | Value |
+|------|-------|
+| Local base URL | `http://localhost:8000` |
+| REST prefix | `/api/v1` (every router is mounted with this prefix) |
+| WebSocket | `ws://localhost:8000/api/v1/ws/interview/{job_id}/{candidate_id}` |
+| Swagger UI | `/api/docs` |
+| OpenAPI schema | `/api/openapi.json` |
+| Body format | JSON (except the resume upload, which is `multipart/form-data`) |
 
-### Base URL
+Run locally from `apps/backend` (the app reads `.env`, see [Environment variables](#environment-variables)):
 
-```
-Development:  http://localhost:8000
-Production:   https://api.truefit.ai
-API Version:  v1
+```bash
+python run.py        # or: uvicorn src.truefit_api.main:app --reload --port 8000
 ```
 
-### API Structure
-
-```
-/api/v1/
-├── /auth                 # Authentication endpoints
-├── /users               # User management
-├── /orgs                # Organization management
-├── /jobs                # Job listings
-├── /candidates          # Candidate profiles
-├── /applications        # Job applications
-├── /interviews          # Interview sessions
-├── /evaluations         # Interview evaluations
-├── /health              # Health check
-└── /ws/interview/{id}   # WebSocket endpoint
-```
-
----
+CORS is an allow-list hardcoded in `src/truefit_api/main.py` (localhost ports 3000, 5173, 5174, plus one production IP). The `CORS_ORIGINS` setting is not read.
 
 ## Authentication
 
-### JWT Token Flow
+### Flow
 
+1. The frontend signs the user in with Firebase and gets a Firebase ID token.
+2. It calls `POST /api/v1/auth/oauth/token` with that token.
+3. The backend verifies the token against Firebase (public certs, checked against `FIREBASE_PROJECT_ID`), gets or creates the user, and returns a backend-signed JWT.
+4. The frontend sends `Authorization: Bearer <jwt>` on later requests. The frontend stores the JWT in a `jwt` cookie (`apps/frontend/src/helpers/api.interceptors.ts`) and, on any 401, clears the cookie, signs out of Firebase and redirects to `/auth`.
+
+### Exchange a token
+
+`POST /api/v1/auth/oauth/token` (public)
+
+```bash
+curl -X POST http://localhost:8000/api/v1/auth/oauth/token \
+  -H "Content-Type: application/json" \
+  -d '{"token": "<FIREBASE_ID_TOKEN>", "provider": "firebase"}'
 ```
-1. User logs in → Firebase OAuth
-2. Firebase returns ID token
-3. Frontend sends token to backend
-4. Backend verifies and issues JWT
-5. Frontend stores JWT in localStorage
-6. All requests include Authorization header
-```
 
-### Login Endpoint
+| Field | Type | Notes |
+|-------|------|-------|
+| `token` | string | Required, at least 10 characters |
+| `provider` | string | `firebase` (default) or `google` |
 
-**POST** `/api/v1/auth/login`
+Response (HTTP 200):
 
-```typescript
-// Request
+```json
 {
-  "provider": "firebase",
-  "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE..."
-}
-
-// Response
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "access_token": "eyJhbGciOi...",
   "token_type": "bearer",
-  "expires_in": 1800,
+  "expires_in": 3600,
+  "is_new_user": false,
   "user": {
     "id": "550e8400-e29b-41d4-a716-446655440000",
-    "email": "john@example.com",
-    "role": "recruiter",
-    "name": "John Doe"
+    "email": "user@example.com",
+    "display_name": "Jane Doe",
+    "role": "candidate",
+    "org_id": null,
+    "is_active": true
   }
 }
-
-// Error
-{
-  "detail": "Invalid token"
-}
 ```
 
-### Refresh Token
+Notes:
 
-**POST** `/api/v1/auth/refresh`
+- `expires_in` is `ACCESS_TOKEN_EXPIRE_MINUTES * 60` seconds, matching the token's `exp` claim.
+- `provider: "google"` needs `GOOGLE_CLIENT_ID` to be set. Without it the endpoint returns `400` "Google sign-in is not configured on this server". The frontend uses `firebase`.
+- `is_new_user` is true when the call created the user.
+- An inactive user gets 403 "User account is inactive".
 
-```typescript
-// Request
-{ }
+### The backend JWT
 
-// Response
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expires_in": 1800
-}
+Signed with `APP_SECRET_KEY` using `ALGORITHM` (HS256 in `env.example`). Claims:
+
+| Claim | Meaning |
+|-------|---------|
+| `sub` | User ID (UUID string) |
+| `email` | User email |
+| `role` | `admin`, `recruiter` or `candidate` |
+| `org_id` | Organization ID, or null |
+| `iat`, `exp` | Issued at and expiry |
+| `type` | Always `access`; any other value is rejected |
+
+There are no refresh tokens. `POST /auth/refresh` re-issues a fresh JWT for a caller who still holds a valid one, using current data from the database.
+
+### Auth endpoints
+
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/auth/oauth/token` | none | Exchange a Firebase token for a backend JWT |
+| GET | `/auth/me` | JWT | Current user from the database (adds `created_at`, `updated_at`) |
+| POST | `/auth/refresh` | JWT | Issue a new JWT with fresh user data |
+| POST | `/auth/logout` | JWT | Logs the event and returns `{"detail": "Successfully logged out"}`. Tokens are stateless, so there is no server-side revocation; the client must discard the token |
+
+### How endpoints are guarded
+
+Protection is opt-in per route. A route is protected only if it declares the `get_current_user` dependency (`src/truefit_infra/auth/middleware.py`), which:
+
+1. Reads the `Authorization` header (401 "Missing authorization header" if absent).
+2. Requires the form `Bearer <token>` (401 "Invalid authorization header format...").
+3. Verifies signature, expiry and `type` (401 "Token has expired" or "Invalid authentication token").
+4. Returns a `TokenPayload` with `user_id`, `email`, `role`, `org_id`.
+
+```python
+@router.get("/me")
+async def me(current_user: TokenPayload = Depends(get_current_user)):
+    ...
 ```
 
-### Get Current User
+### Access rules
 
-**GET** `/api/v1/auth/me`
+Every route except `GET /health`, `GET /` and `POST /auth/oauth/token` requires a valid JWT. A test (`tests/unit/auth/test_routes_require_auth.py`) fails if a new route is added without one. Beyond being signed in, each route checks the caller's `role` and ownership (`src/truefit_infra/auth/authorization.py`). A denied request gets `403`.
 
-```typescript
-// Headers
-Authorization: Bearer {access_token}
+| Term | Meaning |
+|------|---------|
+| admin | `role` is `admin`. Passes every check |
+| self | The `user_id` in the JWT is the user in the path |
+| owner / owning candidate | The candidate profile's `user_id` is the caller |
+| org recruiter | `role` is `recruiter` and the JWT `org_id` is the org that owns the resource (for applications and interviews, the org of the job) |
+| same-org recruiter | A recruiter in the same org as the target user |
+| founder | The user who created the org (`orgs.created_by`) |
 
-// Response
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "email": "john@example.com",
-  "role": "recruiter",
-  "name": "John Doe",
-  "org_id": "660e8400-e29b-41d4-a716-446655440000",
-  "created_at": "2024-01-15T10:30:00Z"
-}
-```
+Notes:
 
-### Common Headers
+- Lists are filtered by role. A candidate only ever sees their own applications and interviews, a recruiter only those for jobs in their org, and asking for another org's job is a `403`.
+- `PATCH /users/{user_id}`: a non-admin may set their own `role` to `candidate` or `recruiter` (onboarding), and may set `org_id` only to an org they founded. `is_active` is admin only. Nobody can grant `admin` through the API.
+- `POST /orgs` ignores any `created_by` the client sends and records the caller.
+- `POST /candidates` by a candidate must be for their own account (body `email` and optional `user_id` must match the JWT). An admin must pass `user_id`.
+- Joining an org you did not found is admin-only until an invite flow exists.
+- The `role` and `org_id` claims are fixed when the token is issued. After a role or org change, call `POST /auth/refresh` to get a token that reflects it.
 
-```
-Authorization: Bearer {jwt_token}
-Content-Type: application/json
-X-Request-ID: {unique_request_id}  # Optional, for tracing
-```
+## REST endpoints
 
----
+Paths below are relative to `/api/v1`. "Auth" is who may call the route. `none` means public, `JWT` any signed-in user, and the roles are explained under [Access rules](#access-rules). List endpoints take `limit` (1 to 100) and `offset` (default 0) unless noted, and return bare JSON arrays with no pagination envelope.
 
-## REST Endpoints
+### Health
+
+| Method | Path | Auth | Notes |
+|--------|------|------|-------|
+| GET | `/health` | none | Checks database and Redis (LLM, queue and storage checks are stubbed as `skipped`). Returns `status` of `ok`, `degraded` or `down` with per-check detail. Always HTTP 200 in practice: 503 is only returned when every check is down, which cannot happen while three checks are stubbed. Hidden from Swagger |
+| GET | `/` | none | Returns `{"status": "ok"}`. Hidden from Swagger |
 
 ### Users
 
-#### List Users in Organization
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/users` | admin | Create a user (201). Body: `email`, `provider_subject` (required), `display_name`, `auth_provider` (default `seed`), `account_type` (default `candidate`), optional `candidate_profile` or `org`. Returns `{user, org, candidate_profile}` |
+| GET | `/users/{user_id}` | self, admin, same-org recruiter | Get by ID |
+| GET | `/users/by-email/{email}` | self, admin, same-org recruiter | Get by email |
+| PATCH | `/users/{user_id}` | self, admin (see note) | Update `display_name`, `is_active`, `role` (`candidate` or `recruiter` only), `org_id` |
+| POST | `/users/{user_id}/join-org` | admin, or the founder of the org | Body: `{"org_id": "<uuid>"}` |
 
-**GET** `/api/v1/users`
-
-```typescript
-// Query Parameters
-?page=0&size=10&role=recruiter
-
-// Response
-{
-  "items": [
-    {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "email": "recruiter1@company.com",
-      "role": "recruiter",
-      "name": "Alice Smith",
-      "created_at": "2024-01-10T08:00:00Z"
-    }
-  ],
-  "total": 25,
-  "page": 0,
-  "size": 10
-}
-```
-
-#### Create User
-
-**POST** `/api/v1/users`
-
-```typescript
-// Request
-{
-  "email": "newuser@company.com",
-  "name": "Bob Johnson",
-  "role": "recruiter"
-}
-
-// Response (201 Created)
-{
-  "id": "770e8400-e29b-41d4-a716-446655440000",
-  "email": "newuser@company.com",
-  "name": "Bob Johnson",
-  "role": "recruiter",
-  "created_at": "2024-03-16T14:30:00Z"
-}
-```
+User fields: `id`, `email`, `display_name`, `role`, `org_id`, `is_active`, `created_at`, `updated_at`. Sign-in via `/auth/oauth/token` is the normal way users are created.
 
 ### Organizations
 
-#### Create Organization
-
-**POST** `/api/v1/orgs`
-
-```typescript
-// Request
-{
-  "name": "TechCorp Inc",
-  "slug": "techcorp",
-  "industry": "Software",
-  "headcount": "100-500",
-  "contact": {
-    "website": "https://techcorp.com",
-    "phone": "+1-555-0123"
-  }
-}
-
-// Response
-{
-  "id": "660e8400-e29b-41d4-a716-446655440000",
-  "name": "TechCorp Inc",
-  "slug": "techcorp",
-  "status": "active",
-  "created_at": "2024-03-16T14:35:00Z"
-}
-```
-
-#### Get Organization
-
-**GET** `/api/v1/orgs/{org_id}`
-
-```typescript
-// Response
-{
-  "id": "660e8400-e29b-41d4-a716-446655440000",
-  "name": "TechCorp Inc",
-  "slug": "techcorp",
-  "contact": {...},
-  "members_count": 5,
-  "created_at": "2024-03-16T14:35:00Z"
-}
-```
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/orgs` | recruiter, admin | Create (201). Body: `name`, `created_by`, `contact` (`email` required, `phone`, `website`), optional `slug`, `description`, `logo_url`, `industry`, `headcount`, `billing`. 409 on slug conflict |
+| GET | `/orgs` | JWT | List. Query: `status` (`active`, `suspended`, `deactivated`) |
+| GET | `/orgs/{org_id}` | JWT | Get by ID |
+| GET | `/orgs/slug/{slug}` | JWT | Get by slug |
+| PATCH | `/orgs/{org_id}` | org recruiter, admin | Update profile fields. 400 if no field is given |
+| PATCH | `/orgs/{org_id}/billing` | org recruiter, admin | Body: `plan` (default `free`), `max_active_jobs`, `max_interviews_per_month` |
+| POST | `/orgs/{org_id}/suspend` | org recruiter, admin | Status transition |
+| POST | `/orgs/{org_id}/reactivate` | org recruiter, admin | Status transition |
+| POST | `/orgs/{org_id}/deactivate` | org recruiter, admin | Status transition (permanent) |
+| DELETE | `/orgs/{org_id}` | org recruiter, admin | 204 |
 
 ### Jobs
 
-#### Create Job
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/jobs` | org recruiter, admin | Create (201). Body: `org_id`, `created_by`, `title`, `description` (min 10 chars), `requirements` (`experience_level` required), `skills` (at least one), optional `interview_config` |
+| GET | `/jobs` | JWT | List for an org. Query: `org_id` (required), `status`, `experience_level`. Default `limit` 20 |
+| GET | `/jobs/active` | JWT | Active jobs across orgs. Default `limit` 50 |
+| GET | `/jobs/{job_id}` | JWT | Get by ID |
+| PATCH | `/jobs/{job_id}` | org recruiter, admin | Update `description`, `requirements`, `interview_config`, `skills_add`, `skills_remove` (skill names) |
+| POST | `/jobs/{job_id}/activate` | org recruiter, admin | Status transition |
+| POST | `/jobs/{job_id}/pause` | org recruiter, admin | Status transition |
+| POST | `/jobs/{job_id}/close` | org recruiter, admin | Status transition |
+| DELETE | `/jobs/{job_id}` | org recruiter, admin | 204. Only `draft` jobs; otherwise 400 |
 
-**POST** `/api/v1/jobs`
-
-```typescript
-// Request
-{
-  "title": "Senior Python Engineer",
-  "description": "Looking for experienced Python developer...",
-  "experience_level": "senior",
-  "skills": [
-    {"name": "Python", "required": true, "weight": 1.0, "min_years": 3},
-    {"name": "FastAPI", "required": true, "weight": 0.8, "min_years": 2},
-    {"name": "PostgreSQL", "required": false, "weight": 0.6, "min_years": 2}
-  ],
-  "requirements": {
-    "location": "Remote",
-    "min_salary": 120000,
-    "max_salary": 180000,
-    "equity": "0.1-0.2%"
-  },
-  "interview_config": {
-    "rounds": 2,
-    "round_type": "ai_interview",
-    "duration_minutes": 45,
-    "questions_count": 5
-  }
-}
-
-// Response (201 Created)
-{
-  "id": "880e8400-e29b-41d4-a716-446655440000",
-  "org_id": "660e8400-e29b-41d4-a716-446655440000",
-  "title": "Senior Python Engineer",
-  "status": "draft",
-  "created_by": "550e8400-e29b-41d4-a716-446655440000",
-  "created_at": "2024-03-16T14:40:00Z"
-}
-```
-
-#### List Jobs
-
-**GET** `/api/v1/jobs`
-
-```typescript
-// Query Parameters
-?page=0&size=20&status=open&org_id=660e8400-e29b-41d4-a716-446655440000
-
-// Response
-{
-  "items": [...],
-  "total": 45,
-  "page": 0,
-  "size": 20
-}
-```
-
-#### Update Job
-
-**PUT** `/api/v1/jobs/{job_id}`
-
-```typescript
-// Request (partial update)
-{
-  "status": "open",
-  "interview_config": {
-    "rounds": 3
-  }
-}
-
-// Response
-{
-  "id": "880e8400-e29b-41d4-a716-446655440000",
-  "title": "Senior Python Engineer",
-  "status": "open",
-  ...
-}
-```
-
-#### Delete Job
-
-**DELETE** `/api/v1/jobs/{job_id}`
-
-```typescript
-// Response (204 No Content)
-```
+Job `status`: `draft`, `active`, `paused`, `closed`. `experience_level`: `intern`, `junior`, `mid`, `senior`, `staff`, `principal`. Each skill has `name`, `required` (default true), `weight` (0 to 1), `min_years`. `interview_config` defaults: `max_questions` 10 (1 to 50), `max_duration_minutes` 30 (5 to 120), plus `topics` and `custom_instructions`.
 
 ### Candidates
 
-#### Create Candidate Profile
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/candidates` | the candidate themself, admin | Register (201). Body: `full_name`, `email`, optional `phone`, `linkedin_url` |
+| GET | `/candidates` | recruiter, admin | List. Default `limit` 50 |
+| GET | `/candidates/{candidate_id}` | owner, recruiter, admin | Get by ID |
+| PATCH | `/candidates/{candidate_id}` | owner, admin | Update `full_name`, `phone`, `linkedin_url`. 400 if empty |
+| POST | `/candidates/{candidate_id}/resume` | owner, admin | Upload `file` (multipart). PDF or Word only (400 otherwise), max 10 MB (413) |
+| GET | `/candidates/{candidate_id}/resume` | owner, recruiter, admin | Returns a dict with the resume URL. 404 if none |
+| DELETE | `/candidates/{candidate_id}/resume` | owner, admin | 204. 404 if none |
 
-**POST** `/api/v1/candidates`
-
-```typescript
-// Request
-{
-  "first_name": "Jane",
-  "last_name": "Doe",
-  "email": "jane@example.com",
-  "phone": "+1-555-0456",
-  "resume_url": "https://storage.example.com/resume.pdf",
-  "skills": ["Python", "JavaScript", "React"],
-  "experience_years": 5
-}
-
-// Response
-{
-  "id": "990e8400-e29b-41d4-a716-446655440000",
-  "user_id": "550e8400-e29b-41d4-a716-446655440001",
-  "first_name": "Jane",
-  "last_name": "Doe",
-  "created_at": "2024-03-16T14:45:00Z"
-}
-```
-
-#### List Candidates
-
-**GET** `/api/v1/candidates`
-
-```typescript
-// Query Parameters
-?page=0&size=20&search=python
-
-// Response
-{
-  "items": [...],
-  "total": 156,
-  "page": 0,
-  "size": 20
-}
-```
+Candidate fields: `id`, `user_id`, `full_name`, `headline`, `bio`, `location`, `skills`, `contact` (`email`, `phone`, `linkedin_url`), `status` (`active`, `banned`, `withdrawn`), `resume` (`storage_key`, `filename`, `content_type`, `uploaded_at`), timestamps.
 
 ### Applications
 
-#### Create Application
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/applications` | owning candidate, admin | Create (201). Body: `job_id`, `candidate_id`, optional `source` (`applied` default, or `invited`), `meta`. 409 on conflict |
+| GET | `/applications` | JWT, filtered by role | List. Query: `job_id` or `candidate_id` (one is required, else 400), optional `status` |
+| GET | `/applications/{application_id}` | owner, org recruiter, admin | Get by ID |
+| PATCH | `/applications/{application_id}/status` | org recruiter, admin | Body: `status`, optional `meta_updates` |
+| DELETE | `/applications/{application_id}` | owner, org recruiter, admin | Withdraw (204) |
 
-**POST** `/api/v1/applications`
-
-```typescript
-// Request
-{
-  "job_id": "880e8400-e29b-41d4-a716-446655440000",
-  "candidate_id": "990e8400-e29b-41d4-a716-446655440000",
-  "source": "applied"  // or "invited"
-}
-
-// Response
-{
-  "id": "aa0e8400-e29b-41d4-a716-446655440000",
-  "job_id": "880e8400-e29b-41d4-a716-446655440000",
-  "candidate_id": "990e8400-e29b-41d4-a716-446655440000",
-  "status": "new",
-  "created_at": "2024-03-16T14:50:00Z"
-}
-```
-
-#### List Applications
-
-**GET** `/api/v1/applications`
-
-```typescript
-// Query Parameters
-?page=0&size=20&job_id=880e8400&status=interviewing
-
-// Response
-{
-  "items": [...],
-  "total": 89,
-  "page": 0,
-  "size": 20
-}
-```
-
-#### Update Application Status
-
-**PUT** `/api/v1/applications/{application_id}`
-
-```typescript
-// Request
-{
-  "status": "interviewing"
-}
-
-// Response
-{
-  "id": "aa0e8400-e29b-41d4-a716-446655440000",
-  "status": "interviewing",
-  ...
-}
-```
+Application `status`: `new`, `interviewing`, `shortlisted`, `rejected`, `hired`.
 
 ### Interviews
 
-#### Start Interview Session
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| POST | `/interviews` | owning candidate, admin | Create and start an interview (201). Body: `job_id`, `candidate_id`. 404 if either is missing, 400 if the job is not open or the candidate is ineligible or already interviewing |
+| GET | `/interviews` | JWT, filtered by role | List. Query: `candidate_id` or `job_id` (one is required, else 400). Default `limit` 20 |
+| GET | `/interviews/{interview_id}` | owner, org recruiter, admin | Get by ID |
+| POST | `/interviews/{interview_id}/abandon` | owning candidate, admin | Body (optional fields): `reason` (default `manual`), `initiated_by` (default `candidate`). 400 if already finished. Releases the candidate's active-interview lock |
+| GET | `/interviews/{interview_id}/transcript` | owner, org recruiter, admin | `{interview_id, status, turns[]}`, each turn with `question_id`, `question_text`, `topic`, `answer_text`, `duration_seconds`, `asked_at`, `answered_at` |
 
-**POST** `/api/v1/interviews`
+Interview fields: `id`, `job_id`, `candidate_id`, `company_id`, `status`, `question_count`, `answered_count`, `max_questions`, `max_duration_minutes`, `elapsed_minutes`, `started_at`, `ended_at`, `created_at`. `status` is one of `scheduled`, `active`, `completed`, `abandoned`, `evaluated`.
 
-```typescript
-// Request
-{
-  "application_id": "aa0e8400-e29b-41d4-a716-446655440000",
-  "job_id": "880e8400-e29b-41d4-a716-446655440000",
-  "candidate_id": "990e8400-e29b-41d4-a716-446655440000",
-  "round": 1
-}
+Note that the WebSocket (below) also creates an interview when it connects. The browser flow uses the WebSocket, not `POST /interviews`.
 
-// Response
-{
-  "id": "bb0e8400-e29b-41d4-a716-446655440000",
-  "application_id": "aa0e8400-e29b-41d4-a716-446655440000",
-  "status": "created",
-  "round": 1,
-  "created_at": "2024-03-16T14:55:00Z"
-}
-```
+### TURN credentials
 
-#### Get Interview Session
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| GET | `/turn/credentials` | JWT | Returns `{"ice_servers": [...]}`: a Google STUN server, plus a TURN entry (`urls`, `username`, `credential`) when `TURN_SERVER_URL` is set |
 
-**GET** `/api/v1/interviews/{session_id}`
+## Interview WebSocket
 
-```typescript
-// Response
-{
-  "id": "bb0e8400-e29b-41d4-a716-446655440000",
-  "application_id": "aa0e8400-e29b-41d4-a716-446655440000",
-  "status": "active",
-  "started_at": "2024-03-16T14:55:30Z",
-  "participants": [
-    {
-      "id": "cc0e8400-e29b-41d4-a716-446655440000",
-      "participant_type": "candidate",
-      "joined_at": "2024-03-16T14:55:35Z"
-    },
-    {
-      "id": "dd0e8400-e29b-41d4-a716-446655440000",
-      "participant_type": "recruiter",
-      "joined_at": "2024-03-16T14:55:40Z"
-    }
-  ]
-}
-```
+`/api/v1/ws/interview/{job_id}/{candidate_id}` (source: `src/truefit_api/api/v1/ws/interview_websocket.py`). Both path parameters are UUIDs. The connection is authenticated with the backend JWT in a `token` query parameter (browsers cannot set headers on a WebSocket): `ws://localhost:8000/api/v1/ws/interview/{job_id}/{candidate_id}?token=<jwt>`. The handshake is rejected with close code `4401` for a missing, invalid or expired token, and `4403` when the caller is not the interviewed candidate (and not an admin). The token ends up in the URL, so keep it short-lived and avoid logging query strings at your proxy.
 
-#### Get Interview Transcript
+The socket is a control and signaling channel only. Audio and video travel over a WebRTC peer connection negotiated through it, plus a WebRTC data channel for in-call events.
 
-**GET** `/api/v1/interviews/{session_id}/turns`
+### Session sequence
 
-```typescript
-// Query Parameters
-?page=0&size=50
+1. Client connects. The server creates the interview, loads the job and candidate, and sends `session_started`.
+2. Client sends `webrtc_offer`. The server replies with `webrtc_answer`. Both sides trickle `ice_candidate` messages.
+3. If the offer is not received within 30 seconds, the server sends an `error` ("WebRTC setup timed out") and ends the session.
+4. The live AI interviewer starts. Transcripts and interrupts stream back over the socket.
+5. The session ends when the agent finishes, the client sends `end_session`, or the client disconnects. Disconnects and errors mark the interview `abandoned`.
 
-// Response
-{
-  "items": [
-    {
-      "seq": 1,
-      "speaker": "agent",
-      "turn_text": "Hello! Thank you for joining the interview...",
-      "modality": "text",
-      "started_at": "2024-03-16T14:55:40Z"
-    },
-    {
-      "seq": 2,
-      "speaker": "candidate",
-      "turn_text": "Hi! Thanks for having me.",
-      "modality": "text",
-      "started_at": "2024-03-16T14:56:00Z"
-    }
-  ],
-  "total": 24
-}
-```
+The live model is chosen by `LLM_PRIMARY_PROVIDER` and `LLM_FALLBACK_PROVIDER` (Gemini Live or OpenAI Realtime, with optional fallback).
 
-#### Get Evaluation
+### Client to server
 
-**GET** `/api/v1/interviews/{session_id}/evaluation`
+| `type` | Fields | Purpose |
+|--------|--------|---------|
+| `webrtc_offer` | `sdp`, `sdp_type` (default `offer`), `frame_interval_camera` (default 5.0), `frame_interval_screen` (default 2.0) | Start WebRTC negotiation |
+| `ice_candidate` | `candidate`, `sdpMid`, `sdpMLineIndex` | Trickle ICE |
+| `end_session` | `reason` (default `candidate_ended`) | Abandon the interview. Server replies `session_ended` and stops reading |
+| `ping` | none | Keepalive, server replies `pong` |
 
-```typescript
-// Response
-{
-  "id": "ee0e8400-e29b-41d4-a716-446655440000",
-  "session_id": "bb0e8400-e29b-41d4-a716-446655440000",
-  "overall_score": 8.2,
-  "recommendation": "yes",
-  "summary": "Strong technical knowledge with good communication skills...",
-  "strengths": [
-    "Excellent problem-solving approach",
-    "Clear explanation of solutions",
-    "Good follow-up questions"
-  ],
-  "concerns": [
-    "Slightly nervous at the start",
-    "Could improve on edge cases"
-  ],
-  "scores": [
-    {
-      "criterion": "technical_knowledge",
-      "score": 9,
-      "weight": 1.0
-    },
-    {
-      "criterion": "communication",
-      "score": 8,
-      "weight": 0.8
-    },
-    {
-      "criterion": "problem_solving",
-      "score": 8.5,
-      "weight": 1.0
-    }
-  ],
-  "created_at": "2024-03-16T15:20:00Z"
-}
-```
+Malformed JSON is logged and ignored.
 
-### Health Check
+### Server to client
 
-**GET** `/api/v1/health`
+| `type` | Fields | When |
+|--------|--------|------|
+| `session_started` | `interview_id`, `session_id`, `max_questions`, `max_duration_minutes` | Right after connect |
+| `webrtc_answer` | `sdp`, `sdp_type` (`answer`) | Reply to `webrtc_offer` |
+| `ice_candidate` | `candidate`, `sdpMid`, `sdpMLineIndex` | Server-side ICE candidates |
+| `transcript` | `speaker` (`agent` or `candidate`), `text` | Live captions |
+| `interrupt` | `interrupt_id`, `directive`, `type_detail` | The agent flagged a candidate interruption. `directive` defaults to `stop_and_listen` |
+| `session_ended` | `status` (`abandoned`), `reason` | Reply to `end_session` only |
+| `error` | `message` | Setup timeout or an unhandled error |
+| `pong` | none | Reply to `ping` |
 
-```typescript
-// Response
-{
-  "status": "healthy",
-  "database": "connected",
-  "redis": "connected",
-  "timestamp": "2024-03-16T15:00:00Z"
-}
-```
+`session_ended` is only sent in response to `end_session`. When the interview completes on its own, or the agent session fails, the client should rely on the socket closing and on `GET /interviews/{id}` for the final status.
 
----
+### Data channel
 
-## WebSocket Events
+A WebRTC data channel carries JSON events shaped `{"type": ..., ...}`. The server handles `ping` (replies `pong`) and acts on or logs `screen_share_start`, `screen_share_stop` and `clarification_request` (the last is currently ignored).
 
-### Client → Server Events
+### Background sweeper
 
-#### Join Session
+On startup the app launches an `InterviewSweeper` task that runs every 60 seconds and abandons active interviews that exceeded their maximum duration or went stale (45 minute threshold). It is cancelled on shutdown. See [architecture.md](architecture.md).
+
+## Error responses
+
+`HTTPException` and unhandled exceptions are both returned in one envelope (`src/truefit_api/middlewares.py`):
 
 ```json
 {
-  "event": "join",
-  "data": {
-    "user_id": "550e8400-e29b-41d4-a716-446655440000",
-    "participant_type": "recruiter"
-  }
+  "status": false,
+  "error": "Job 3f2a... not found",
+  "path": "http://localhost:8000/api/v1/jobs/3f2a..."
 }
 ```
 
-#### WebRTC Offer
-
-```json
-{
-  "event": "webrtc_offer",
-  "data": {
-    "type": "offer",
-    "sdp": "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\n..."
-  }
-}
-```
-
-#### WebRTC Answer
-
-```json
-{
-  "event": "webrtc_answer",
-  "data": {
-    "type": "answer",
-    "sdp": "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\n..."
-  }
-}
-```
-
-#### ICE Candidate
-
-```json
-{
-  "event": "webrtc_ice_candidate",
-  "data": {
-    "candidate": "candidate:842163049 1 udp 1686052607 192.168.1.100 54321 typ srflx raddr 192.168.1.100 rport 54321 generation 0 ufrag L+N9 network-cost 999",
-    "sdpMLineIndex": 0,
-    "sdpMid": "0"
-  }
-}
-```
-
-#### Participant Muted
-
-```json
-{
-  "event": "participant_muted",
-  "data": {
-    "muted": true,
-    "audio": true,
-    "video": false
-  }
-}
-```
-
-#### Request Interrupt
-
-```json
-{
-  "event": "request_interrupt",
-  "data": {
-    "reason": "candidate_needs_clarification"
-  }
-}
-```
-
-### Server → Client Events
-
-#### Participant Joined
-
-```json
-{
-  "event": "participant_joined",
-  "data": {
-    "participant_id": "550e8400-e29b-41d4-a716-446655440000",
-    "participant_type": "recruiter",
-    "joined_at": "2024-03-16T14:55:40Z"
-  }
-}
-```
-
-#### Participant Left
-
-```json
-{
-  "event": "participant_left",
-  "data": {
-    "participant_id": "550e8400-e29b-41d4-a716-446655440000"
-  }
-}
-```
-
-#### Interview Status
-
-```json
-{
-  "event": "interview_status",
-  "data": {
-    "status": "active",
-    "round": 1,
-    "elapsed_seconds": 125
-  }
-}
-```
-
-#### Transcript
-
-```json
-{
-  "event": "transcript",
-  "data": {
-    "text": "What is your experience with database design?",
-    "speaker": "agent",
-    "language": "en",
-    "confidence": 0.98,
-    "timestamp": 1710662400000
-  }
-}
-```
-
-#### Agent Response
-
-```json
-{
-  "event": "agent_response",
-  "data": {
-    "text": "Thank you for that answer...",
-    "thinking": "The candidate showed good understanding of normalization...",
-    "timestamp": 1710662410000
-  }
-}
-```
-
-#### Evaluation Ready
-
-```json
-{
-  "event": "evaluation_ready",
-  "data": {
-    "evaluation_id": "ee0e8400-e29b-41d4-a716-446655440000",
-    "overall_score": 8.2,
-    "recommendation": "yes"
-  }
-}
-```
-
-#### Error
-
-```json
-{
-  "event": "error",
-  "data": {
-    "code": 1000,
-    "message": "Internal server error",
-    "details": "Failed to process audio stream"
-  }
-}
-```
-
----
-
-## Error Responses
-
-### Error Format
-
-```json
-{
-  "detail": "Error message or list of validation errors",
-  "status_code": 400
-}
-```
-
-### Common Status Codes
-
-| Code | Description |
-|------|-------------|
-| 200 | OK |
-| 201 | Created |
-| 204 | No Content |
-| 400 | Bad Request (Validation error) |
-| 401 | Unauthorized (Missing/invalid token) |
-| 403 | Forbidden (No permission) |
-| 404 | Not Found |
-| 409 | Conflict (Duplicate, state error) |
-| 422 | Unprocessable Entity (Invalid data) |
-| 429 | Too Many Requests |
-| 500 | Internal Server Error |
-| 503 | Service Unavailable |
-
-### Validation Error Example
-
-```json
-{
-  "detail": [
-    {
-      "loc": ["body", "title"],
-      "msg": "field required",
-      "type": "value_error.missing"
-    },
-    {
-      "loc": ["body", "experience_level"],
-      "msg": "value is not a valid enumeration member; permitted: 'junior', 'mid', 'senior'",
-      "type": "type_error.enum"
-    }
-  ]
-}
-```
-
----
-
-## Data Models
-
-### User
-
-```typescript
-interface User {
-  id: string;                    // UUID
-  email: string;
-  name: string;
-  role: "admin" | "recruiter" | "candidate";
-  org_id?: string;              // nullable for candidates
-  firebase_id?: string;
-  profile_picture_url?: string;
-  created_at: string;           // ISO 8601
-  updated_at: string;
-}
-```
-
-### Job Listing
-
-```typescript
-interface JobListing {
-  id: string;                   // UUID
-  org_id: string;
-  created_by: string;           // user_id
-  title: string;
-  description: string;
-  experience_level: "junior" | "mid" | "senior";
-  skills: Skill[];
-  requirements: {
-    location?: string;
-    min_salary?: number;
-    max_salary?: number;
-    education?: string;
-  };
-  interview_config: {
-    rounds: number;
-    duration_minutes: number;
-    questions_count: number;
-  };
-  status: "draft" | "open" | "closed";
-  created_at: string;
-  updated_at: string;
-}
-
-interface Skill {
-  name: string;
-  required: boolean;
-  weight: number;               // 0.0-1.0
-  min_years: number;
-}
-```
-
-### Interview Session
-
-```typescript
-interface InterviewSession {
-  id: string;
-  application_id: string;
-  status: "created" | "active" | "ended" | "cancelled" | "failed";
-  round: number;
-  started_at?: string;
-  ended_at?: string;
-  agent_version?: string;
-  context_snapshot: Record<string, any>;
-  realtime: Record<string, any>;
-  participants: InterviewParticipant[];
-  turns?: InterviewTurn[];
-  evaluation?: Evaluation;
-  created_at: string;
-  updated_at: string;
-}
-```
-
-### Evaluation
-
-```typescript
-interface Evaluation {
-  id: string;
-  session_id: string;
-  overall_score: number;        // 0-10
-  recommendation: "strong_yes" | "yes" | "maybe" | "no" | "strong_no";
-  summary: string;
-  strengths: string[];
-  concerns: string[];
-  evidence: Record<string, any>;
-  scores: EvaluationScore[];
-  created_at: string;
-  updated_at: string;
-}
-
-interface EvaluationScore {
-  criterion: string;
-  score: number;
-  weight: number;
-  notes?: string;
-}
-```
-
----
-
-## Development Workflow
-
-### 1. Local Development
-
-```bash
-# Backend
-cd apps/backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python run.py
-
-# Frontend (new terminal)
-cd apps/frontend
-npm install
-npm run dev
-```
-
-### 2. Testing
-
-```bash
-# Backend unit tests
-pytest tests/unit/
-
-# Backend integration tests
-pytest tests/integration/
-
-# Backend e2e tests
-pytest tests/e2e/
-
-# Frontend tests
-npm run test
-```
-
-### 3. Debugging
-
-**Backend (VSCode)**:
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "FastAPI",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/apps/backend/run.py",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    }
-  ]
-}
-```
-
-**Frontend (Browser DevTools)**:
-- Open Chrome DevTools (F12)
-- Sources → Set breakpoints
-- Console → Inspect network/WS
-
-### 4. Code Quality
-
-```bash
-# Lint backend
-flake8 src/
-
-# Format backend
-black src/
-
-# Type check
-mypy src/
-
-# Lint frontend
-npm run lint
-
-# Format frontend
-npm run format
-```
-
----
-
-## Code Examples
-
-### Backend Example: Create Custom Service
-
-```python
-# src/truefit_core/application/services/custom_service.py
-
-from typing import List
-from uuid import UUID
-from src.truefit_core.domain.job import Job
-from src.truefit_core.application.ports import JobRepository
-from src.truefit_core.common.utils import logger
-
-
-class CustomJobService:
-    """Custom business logic for jobs"""
-    
-    def __init__(self, job_repo: JobRepository):
-        self.job_repo = job_repo
-    
-    async def get_jobs_by_skill(self, org_id: UUID, skill: str) -> List[Job]:
-        """Get all jobs requiring a specific skill"""
-        all_jobs = await self.job_repo.find_by_org(org_id)
-        
-        # Filter jobs that require the skill
-        matching_jobs = [
-            job for job in all_jobs
-            if any(s['name'] == skill for s in job.skills)
-        ]
-        
-        logger.info(f"Found {len(matching_jobs)} jobs requiring {skill}")
-        return matching_jobs
-```
-
-### Frontend Example: WebSocket Hook
-
-```typescript
-// src/hooks/useInterview.ts
-
-import { useEffect, useState, useCallback } from 'react';
-import { InterviewWebSocket } from '@/helpers/websocket';
-
-export const useInterview = (sessionId: string) => {
-  const [connected, setConnected] = useState(false);
-  const [transcript, setTranscript] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  const ws = new InterviewWebSocket();
-
-  useEffect(() => {
-    const connect = async () => {
-      try {
-        await ws.connect(sessionId);
-        setConnected(true);
-
-        // Set up event handlers
-        ws.on('transcript', (data) => {
-          setTranscript(prev => [...prev, data.text]);
-        });
-
-        ws.on('error', (data) => {
-          setError(data.message);
-        });
-
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Connection failed');
-      }
-    };
-
-    connect();
-
-    return () => {
-      ws.close();
-    };
-  }, [sessionId]);
-
-  return { connected, transcript, error, ws };
-};
-```
-
-### Frontend Example: Interview Component
-
-```typescript
-// src/components/InterviewRoom.tsx
-
-import React, { useEffect, useRef } from 'react';
-import { useInterview } from '@/hooks/useInterview';
-
-interface InterviewRoomProps {
-  sessionId: string;
-}
-
-export const InterviewRoom: React.FC<InterviewRoomProps> = ({ sessionId }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const { connected, transcript, error, ws } = useInterview(sessionId);
-
-  useEffect(() => {
-    if (connected) {
-      // Start WebRTC
-      setupWebRTC();
-    }
-  }, [connected]);
-
-  const setupWebRTC = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true
-    });
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-    }
-
-    // Create peer connection and send offer
-    const pc = new RTCPeerConnection();
-    stream.getTracks().forEach(track => {
-      pc.addTrack(track, stream);
-    });
-
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    ws.send('webrtc_offer', {
-      type: 'offer',
-      sdp: pc.localDescription?.sdp
-    });
-  };
-
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
-
-  return (
-    <div className="space-y-4">
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        className="w-full rounded-lg"
-      />
-      
-      <div className="bg-gray-100 rounded-lg p-4 max-h-64 overflow-y-auto">
-        <h3 className="font-bold mb-2">Transcript</h3>
-        {transcript.map((line, i) => (
-          <p key={i} className="text-sm mb-2">{line}</p>
-        ))}
-      </div>
-    </div>
-  );
-};
-```
-
----
-
-**Last Updated**: March 16, 2026
-**Version**: 1.0
+| Code | Meaning in this API |
+|------|---------------------|
+| 400 | Domain rule violation, missing required query filter, empty update body, invalid enum filter |
+| 401 | Missing, malformed, expired or invalid JWT; failed provider token verification |
+| 403 | Inactive user account (token exchange) |
+| 404 | Entity not found |
+| 409 | Conflict (duplicate org slug, duplicate application, duplicate user) |
+| 413 | Resume larger than 10 MB |
+| 422 | Request body or parameter validation failed (FastAPI's default validation body, not the envelope above) |
+| 500 | Unhandled error. The `error` field contains the raw exception message |
+
+Auth failures also carry a `WWW-Authenticate: Bearer` header.
+
+## Environment variables
+
+Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.env`). Copy `apps/backend/env.example` to `.env`. Startup fails if a variable without a default is missing.
+
+`env.example` lists every variable the settings class requires, including `FIREBASE_PROJECT_ID`. The `TURN_*` variables and `GOOGLE_CLIENT_ID` are optional. `ENV` accepts `dev`, `test` or `prod`.
+
+### Used by the running code
+
+| Variable | Purpose |
+|----------|---------|
+| `ENV` | `dev`, `prod` or `test`. Selects the config class |
+| `PROJECT_NAME` | FastAPI app title |
+| `APP_SECRET_KEY` | JWT signing secret. Change it in every non-local environment |
+| `ALGORITHM` | JWT algorithm (`HS256`) |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | JWT lifetime. The `JWTService` fallback is 30, `env.example` sets 60 |
+| `FIREBASE_PROJECT_ID` | Project ID used to verify Firebase ID tokens |
+| `DATABASE_URL` | SQLAlchemy URL, for example `postgresql+asyncpg://user:pass@host:5432/db` (SQLite URLs are also handled). Tables are created on startup |
+| `REDIS_URL` | Redis for cache and queue (interrupt signals and domain events) |
+| `GEMINI_API_KEY` | Gemini key, required when Gemini is primary or fallback |
+| `GEMINI_LIVE_MODEL` | Optional Live model override |
+| `OPENAI_API_KEY` | Required when OpenAI is primary or fallback |
+| `OPENAI_REALTIME_MODEL` | Optional Realtime model override |
+| `LLM_PRIMARY_PROVIDER` | `gemini` (default) or `openai` |
+| `LLM_FALLBACK_PROVIDER` | `gemini`, `openai` or `none` (default) |
+| `TURN_SERVER_URL`, `TURN_USERNAME`, `TURN_CREDENTIAL` | Optional TURN relay. Used for both `/turn/credentials` and the server's own peer connection. STUN only when empty |
+| `GOOGLE_CLIENT_ID` | Optional. Enables `provider: "google"` sign-in |
+
+### Required by the settings class but not read by any code
+
+These must be set for startup to succeed but currently have no effect: `API_VERSION`, `LOG_LEVEL`, `CLIENT_DOMAIN`, `BACKEND_DOMAIN`, `CORS_ORIGINS`, `AUTH_MODE`, `DB_ECHO`, `REDIS_PREFIX`, `GEMINI_MODEL`, `GEMINI_LIVE_ENABLED`, `STORAGE_PROVIDER`, `LOCAL_STORAGE_DIR`, `GCS_BUCKET`, `GOOGLE_APPLICATION_CREDENTIALS`, `REALTIME_ENABLED`, `WEBRTC_TOKEN_SECRET`, `WORKERS_ENABLED`, `SENTRY_DSN`.
+
+### Frontend (`apps/frontend`)
+
+`VITE_PUBLIC_API_URL`, `VITE_PUBLIC_WS_URL`, and the Firebase web config: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`.

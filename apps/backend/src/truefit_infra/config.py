@@ -32,9 +32,10 @@ class GlobalConfig(BaseSettings):
     WORKERS_ENABLED: str
     SENTRY_DSN: str
     FIREBASE_PROJECT_ID: str
-    TURN_SERVER_URL: str
-    TURN_USERNAME: str
-    TURN_CREDENTIAL: str
+    GOOGLE_CLIENT_ID: str | None = None  # only needed for provider="google" sign-in
+    TURN_SERVER_URL: str = ""  # optional TURN relay; STUN only when empty
+    TURN_USERNAME: str = ""
+    TURN_CREDENTIAL: str = ""
     LLM_PRIMARY_PROVIDER: str = "gemini"   # "gemini" | "openai"
     LLM_FALLBACK_PROVIDER: str = "none"    # "openai" | "gemini" | "none"
     OPENAI_API_KEY: str | None = None
@@ -60,7 +61,9 @@ def get_config():
     env_state = GlobalConfig().ENV.lower()
     configs = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
     if env_state not in configs:
-        raise ValueError(f"Invalid ENVT_STATE: {env_state}")
+        raise ValueError(
+            f"Invalid ENV {env_state!r}. Valid values: {', '.join(configs)}"
+        )
     logger.info(f"\nUsing {env_state.capitalize()} config...\n")
     return configs[env_state]()
 

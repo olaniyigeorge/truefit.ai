@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {ResumeCard} from "@/components/ProfileResumeCard"
 import {EditForm} from "@/components/ProfileEditForm"
-import config from "@/config"
 import {
     Mail, Phone, Linkedin, MapPin,
     Pencil, AlertCircle
@@ -133,13 +132,8 @@ export default function ProfilePage() {
         try {
             const formData = new FormData()
             formData.append("file", file)
-            // Resume upload is multipart - use fetch directly
-            const res = await fetch(
-                `${config.publicApiUrl ?? "http://localhost:8000"}/api/v1/candidates/${candidate.id}/resume`,
-                { method: "POST", body: formData }
-            )
-            if (!res.ok) throw new Error()
-            const updated = await res.json()
+            // Goes through the shared axios client so the Authorization header is attached
+            const updated = await candidatesApi.uploadResume(candidate.id, formData)
             setCandidate(updated)
         } catch {
             setError("Failed to upload resume")

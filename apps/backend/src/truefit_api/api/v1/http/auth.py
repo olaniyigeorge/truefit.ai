@@ -70,8 +70,15 @@ async def oauth_authenticate(
     """
     try:
         # Step 1: Get OAuth service for the specified provider
+        if request.provider == "google" and not AppConfig.GOOGLE_CLIENT_ID:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Google sign-in is not configured on this server",
+            )
         oauth_svc = get_oauth_service(
-            provider_type=request.provider, project_id=AppConfig.FIREBASE_PROJECT_ID
+            provider_type=request.provider,
+            project_id=AppConfig.FIREBASE_PROJECT_ID,
+            client_id=AppConfig.GOOGLE_CLIENT_ID,
         )
 
         # Step 2: Verify OAuth token with provider
@@ -115,6 +122,7 @@ async def oauth_authenticate(
         # Step 6: Return response
         return AuthTokenResponse(
             access_token=access_token,
+            expires_in=jwt_svc.access_token_expire_minutes * 60,
             is_new_user=is_new_user,
             user=UserAuthResponse(
                 id=user.id,
@@ -217,6 +225,7 @@ async def refresh_token(
 
     return AuthTokenResponse(
         access_token=access_token,
+        expires_in=jwt_svc.access_token_expire_minutes * 60,
         is_new_user=False,
         user=UserAuthResponse(
             id=user.id,

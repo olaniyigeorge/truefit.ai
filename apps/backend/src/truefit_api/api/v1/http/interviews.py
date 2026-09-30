@@ -15,6 +15,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 
 from src.truefit_core.domain.interview import Interview, InterviewStatus
+from src.truefit_infra.auth.authorization import (
+    CANDIDATE,
+    RECRUITER,
+    _forbidden,
+    _same,
+    can_view_as_org_member,
+    is_admin,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import db_manager
 from src.truefit_infra.db.repositories.interview_repository import (
     SQLAlchemyInterviewRepository,
@@ -40,6 +49,45 @@ def get_job_repo() -> SQLAlchemyJobRepository:
 
 def get_candidate_repo() -> SQLAlchemyCandidateRepository:
     return SQLAlchemyCandidateRepository(db_manager)
+
+
+# ── Authorization helpers
+
+
+async def _owns_candidate(
+    user: TokenPayload, candidate_id: uuid.UUID, candidate_repo
+) -> bool:
+    candidate = await candidate_repo.get_by_id(candidate_id)
+    return candidate is not None and _same(candidate.user_id, user.user_id)
+
+
+async def _ensure_owner_or_admin(
+    user: TokenPayload, interview: Interview, candidate_repo
+) -> None:
+    if is_admin(user):
+        return
+    if user.role == CANDIDATE and await _owns_candidate(
+        user, interview.candidate_id, candidate_repo
+    ):
+        return
+    raise _forbidden()
+
+
+async def _ensure_can_view(
+    user: TokenPayload, interview: Interview, candidate_repo, job_repo
+) -> None:
+    """Admin, the owning candidate, or a recruiter in the interview's job org."""
+    if is_admin(user):
+        return
+    if user.role == CANDIDATE:
+        if await _owns_candidate(user, interview.candidate_id, candidate_repo):
+            return
+        raise _forbidden()
+    if user.role == RECRUITER:
+        job = await job_repo.get_by_id(interview.job_id)
+        if job is not None and can_view_as_org_member(user, job.org_id):
+            return
+    raise _forbidden()
 
 
 # ── Request schemas
@@ -89,7 +137,7 @@ class InterviewOut(BaseModel):
             id=i.id,
             job_id=i.job_id,
             candidate_id=i.candidate_id,
-            company_id=i.company_id,
+            company_id=i.org_id,
             status=i.status.value,
             question_count=i.question_count,
             answered_count=i.answered_count,
@@ -117,7 +165,11 @@ async def start_interview(
     interview_repo: SQLAlchemyInterviewRepository = Depends(get_interview_repo),
     job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
     candidate_repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    if not is_admin(user) and user.role != CANDIDATE:
+        raise _forbidden()
+
     job = await job_repo.get_by_id(body.job_id)
     if not job:
         raise HTTPException(404, detail=f"Job {body.job_id} not found")
@@ -125,6 +177,9 @@ async def start_interview(
     candidate = await candidate_repo.get_by_id(body.candidate_id)
     if not candidate:
         raise HTTPException(404, detail=f"Candidate {body.candidate_id} not found")
+
+    if not is_admin(user) and not _same(candidate.user_id, user.user_id):
+        raise _forbidden()
 
     try:
         job.assert_open_for_interviews()
@@ -136,7 +191,7 @@ async def start_interview(
     interview = Interview(
         job_id=body.job_id,
         candidate_id=body.candidate_id,
-        company_id=job.org_id,
+        org_id=job.org_id,
         max_questions=job.interview_config.max_questions,
         max_duration_minutes=job.interview_config.max_duration_minutes,
     )
@@ -152,10 +207,14 @@ async def start_interview(
 async def get_interview(
     interview_id: uuid.UUID,
     repo: SQLAlchemyInterviewRepository = Depends(get_interview_repo),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    candidate_repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     interview = await repo.get_by_id(interview_id)
     if not interview:
         raise HTTPException(404, detail=f"Interview {interview_id} not found")
+    await _ensure_can_view(user, interview, candidate_repo, job_repo)
     return InterviewOut.from_domain(interview)
 
 
@@ -166,9 +225,24 @@ async def list_interviews(
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     repo: SQLAlchemyInterviewRepository = Depends(get_interview_repo),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    candidate_repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     if not candidate_id and not job_id:
         raise HTTPException(400, detail="Provide candidate_id or job_id")
+
+    if not is_admin(user) and user.role not in (CANDIDATE, RECRUITER):
+        raise _forbidden()
+
+    if user.role == CANDIDATE and not is_admin(user):
+        # A candidate may only list their own interviews.
+        if candidate_id and not await _owns_candidate(user, candidate_id, candidate_repo):
+            raise _forbidden()
+    elif user.role == RECRUITER and not is_admin(user) and job_id and not candidate_id:
+        job = await job_repo.get_by_id(job_id)
+        if job is None or not can_view_as_org_member(user, job.org_id):
+            raise _forbidden()
 
     if candidate_id:
         interviews = await repo.list_by_candidate(
@@ -176,6 +250,25 @@ async def list_interviews(
         )
     else:
         interviews = await repo.list_by_job(job_id, limit=limit, offset=offset)
+
+    if not is_admin(user):
+        if user.role == CANDIDATE:
+            # Only reachable with job_id alone: keep rows owned by the caller.
+            owned: dict[uuid.UUID, bool] = {}
+            visible = []
+            for i in interviews:
+                if i.candidate_id not in owned:
+                    owned[i.candidate_id] = await _owns_candidate(
+                        user, i.candidate_id, candidate_repo
+                    )
+                if owned[i.candidate_id]:
+                    visible.append(i)
+            interviews = visible
+        else:
+            # Recruiter: only interviews for jobs in their org.
+            interviews = [
+                i for i in interviews if can_view_as_org_member(user, i.org_id)
+            ]
 
     return [InterviewOut.from_domain(i) for i in interviews]
 
@@ -186,10 +279,12 @@ async def abandon_interview(
     body: AbandonRequest,
     interview_repo: SQLAlchemyInterviewRepository = Depends(get_interview_repo),
     candidate_repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     interview = await interview_repo.get_by_id(interview_id)
     if not interview:
         raise HTTPException(404, detail=f"Interview {interview_id} not found")
+    await _ensure_owner_or_admin(user, interview, candidate_repo)
 
     if interview.is_finished:
         raise HTTPException(
@@ -212,10 +307,14 @@ async def abandon_interview(
 async def get_transcript(
     interview_id: uuid.UUID,
     repo: SQLAlchemyInterviewRepository = Depends(get_interview_repo),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    candidate_repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
     interview = await repo.get_by_id(interview_id)
     if not interview:
         raise HTTPException(404, detail=f"Interview {interview_id} not found")
+    await _ensure_can_view(user, interview, candidate_repo, job_repo)
 
     turns = [
         TurnOut(

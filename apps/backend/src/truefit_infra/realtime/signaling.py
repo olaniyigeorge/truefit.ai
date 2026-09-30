@@ -14,6 +14,7 @@ from aiortc import (
 )
 from aiortc.sdp import candidate_from_sdp
 
+from .ice import build_ice_servers
 from .webrtc_client import WebRTCClient, WebRTCClientRegistry
 from src.truefit_core.common.utils import logger
 
@@ -45,19 +46,7 @@ class WebRTCSignaling:
     ) -> str:
         logger.info(f"[{self._session_id}] Creating RTCPeerConnection")
         configuration = RTCConfiguration(
-            iceServers=[
-                RTCIceServer(urls=["stun:stun.l.google.com:19302"]),
-                RTCIceServer(
-                    urls=["turn:openrelay.metered.ca:80"],
-                    username="openrelayproject",
-                    credential="openrelayproject",
-                ),
-                RTCIceServer(
-                    urls=["turn:openrelay.metered.ca:443"],
-                    username="openrelayproject",
-                    credential="openrelayproject",
-                ),
-            ]
+            iceServers=[RTCIceServer(**server) for server in build_ice_servers()]
         )
         pc = RTCPeerConnection(configuration=configuration)
 

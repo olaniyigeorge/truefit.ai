@@ -15,6 +15,16 @@ from src.truefit_infra.db.repositories.candidate_profile_repository import (
     SQLAlchemyCandidateProfileRepository,
 )
 
+from src.truefit_infra.auth.authorization import (
+    can_view_as_org_member,
+    ensure_self,
+    is_admin,
+    require_roles,
+    _forbidden,
+    _same,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
+
 from src.truefit_core.application.services.user_service import (
     UserService,
     OrgCreateInput,
@@ -30,6 +40,17 @@ def get_user_service() -> UserService:
         org_repo=SQLAlchemyOrgRepository(db_manager),
         candidate_profile_repo=SQLAlchemyCandidateProfileRepository(db_manager),
     )
+
+
+def get_org_repo() -> SQLAlchemyOrgRepository:
+    return SQLAlchemyOrgRepository(db_manager)
+
+
+def _ensure_can_view_user(actor: TokenPayload, target) -> None:
+    """Self, admin, or a recruiter in the target user's org."""
+    if _same(actor.user_id, target.id) or can_view_as_org_member(actor, target.org_id):
+        return
+    raise _forbidden()
 
 
 # ── Request schemas ──
@@ -132,6 +153,7 @@ class CreateUserResponse(BaseModel):
 async def create_user(
     body: CreateUserRequest,
     svc: UserService = Depends(get_user_service),
+    _admin: TokenPayload = Depends(require_roles()),
 ):
     try:
         result = await svc.create_user(
@@ -166,10 +188,12 @@ async def create_user(
 async def get_user(
     user_id: uuid.UUID,
     svc: UserService = Depends(get_user_service),
+    actor: TokenPayload = Depends(get_current_user),
 ):
     user = await svc.get_user(user_id)
     if not user:
         raise HTTPException(404, detail=f"User {user_id} not found")
+    _ensure_can_view_user(actor, user)
     return _user_out(user)
 
 
@@ -177,10 +201,12 @@ async def get_user(
 async def get_user_by_email(
     email: str,
     svc: UserService = Depends(get_user_service),
+    actor: TokenPayload = Depends(get_current_user),
 ):
     user = await svc.get_user_by_email(email)
     if not user:
         raise HTTPException(404, detail=f"User with email '{email}' not found")
+    _ensure_can_view_user(actor, user)
     return _user_out(user)
 
 
@@ -189,7 +215,24 @@ async def update_user(
     user_id: uuid.UUID,
     body: UpdateUserRequest,
     svc: UserService = Depends(get_user_service),
+    org_repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    actor: TokenPayload = Depends(get_current_user),
 ):
+    ensure_self(actor, user_id)
+    if not is_admin(actor):
+        # Onboarding lets a user pick candidate or recruiter for themself, and attach
+        # themself to an org they founded. Nothing else privileged is self-service.
+        if body.is_active is not None:
+            raise _forbidden("Only an admin may change is_active")
+        if body.role is not None and str(getattr(body.role, "value", body.role)) not in (
+            "candidate",
+            "recruiter",
+        ):
+            raise _forbidden("Only an admin may grant this role")
+        if body.org_id is not None:
+            org = await org_repo.get_by_id(body.org_id)
+            if org is None or not _same(org.created_by, actor.user_id):
+                raise _forbidden("You can only join an organisation you founded")
     try:
         user = await svc.update_user(
             user_id=user_id,
@@ -211,7 +254,16 @@ async def join_org(
     user_id: uuid.UUID,
     body: JoinOrgRequest,
     svc: UserService = Depends(get_user_service),
+    org_repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    actor: TokenPayload = Depends(get_current_user),
 ):
+    if not is_admin(actor):
+        # Non-admins may only attach themselves to an org they founded.
+        if not _same(actor.user_id, user_id):
+            raise _forbidden()
+        org = await org_repo.get_by_id(body.org_id)
+        if org is None or not _same(org.created_by, actor.user_id):
+            raise _forbidden()
     try:
         user = await svc.join_org(user_id=user_id, org_id=body.org_id)
         return _user_out(user)

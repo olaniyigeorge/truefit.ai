@@ -26,6 +26,12 @@ from src.truefit_core.domain.org import (
     OrgPlan,
     OrgStatus,
 )
+from src.truefit_infra.auth.authorization import (
+    RECRUITER,
+    ensure_org_member,
+    require_roles,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import db_manager
 from src.truefit_infra.db.repositories.org_repository import SQLAlchemyOrgRepository
 
@@ -71,7 +77,9 @@ class CreateOrgRequest(BaseModel):
         max_length=100,
         description="URL-safe identifier. Auto-generated from name if omitted.",
     )
-    created_by: uuid.UUID
+    created_by: Optional[uuid.UUID] = Field(
+        None, description="Ignored. The authenticated user is always the creator."
+    )
     contact: OrgContactIn
     description: Optional[str] = Field(None, max_length=2000)
     logo_url: Optional[str] = Field(None, max_length=512)
@@ -167,6 +175,7 @@ class OrgOut(BaseModel):
 async def create_org(
     body: CreateOrgRequest,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(require_roles(RECRUITER)),
 ):
     # Auto-generate slug from name if not provided
     slug = body.slug or Org.generate_slug(body.name)
@@ -179,7 +188,7 @@ async def create_org(
         )
 
     print(
-        f"\n\nCreating org with name={body.name} slug={slug} created_by={body.created_by}\n\n"
+        f"\n\nCreating org with name={body.name} slug={slug} created_by={user.user_id}\n\n"
     )
     contact = OrgContact(
         email=body.contact.email,
@@ -199,7 +208,7 @@ async def create_org(
         org = Org(
             name=body.name,
             slug=slug,
-            created_by=body.created_by,
+            created_by=uuid.UUID(str(user.user_id)),
             contact=contact,
             billing=billing,
             logo_url=body.logo_url,
@@ -263,7 +272,9 @@ async def update_org(
     org_id: uuid.UUID,
     body: UpdateOrgRequest,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")
@@ -299,7 +310,9 @@ async def update_billing(
     org_id: uuid.UUID,
     body: OrgBillingIn,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")
@@ -323,7 +336,9 @@ async def update_billing(
 async def suspend_org(
     org_id: uuid.UUID,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")
@@ -339,7 +354,9 @@ async def suspend_org(
 async def reactivate_org(
     org_id: uuid.UUID,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")
@@ -355,7 +372,9 @@ async def reactivate_org(
 async def deactivate_org(
     org_id: uuid.UUID,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")
@@ -371,7 +390,9 @@ async def deactivate_org(
 async def delete_org(
     org_id: uuid.UUID,
     repo: SQLAlchemyOrgRepository = Depends(get_org_repo),
+    user: TokenPayload = Depends(get_current_user),
 ):
+    ensure_org_member(user, org_id)
     org = await repo.get_by_id(org_id)
     if not org:
         raise HTTPException(404, detail=f"Org {org_id} not found")

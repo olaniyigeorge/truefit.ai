@@ -30,8 +30,8 @@ class AuthTokenResponse(BaseModel):
     token_type: str = Field(default="bearer", description="Token type")
     user: "UserAuthResponse" = Field(..., description="Authenticated user info")
     expires_in: int = Field(
-        default=1800,
-        description="Token expiration time in seconds",
+        ...,
+        description="Token lifetime in seconds (ACCESS_TOKEN_EXPIRE_MINUTES * 60)",
     )
     is_new_user: bool = Field(
         default=False, description="True if this is the user's first sign-in"

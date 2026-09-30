@@ -100,6 +100,8 @@ const Onboarding = () => {
         try {
             // First update role to recruiter
             await usersApi.update(backendUser.id, { role: "recruiter" })
+            // The JWT carries the role, so refresh it before calls that need "recruiter".
+            await refreshSession()
  
             if (orgAction === "create") {
                 if (!orgName.trim() || !orgEmail.trim()) {
@@ -124,7 +126,16 @@ const Onboarding = () => {
                     return
                 }
                 const org = await orgsApi.getBySlug(joinSlug.trim())
-                await usersApi.joinOrg(backendUser.id, org.id)
+                try {
+                    await usersApi.joinOrg(backendUser.id, org.id)
+                } catch (e: any) {
+                    if (e?.response?.status === 403) {
+                        setError("Joining an existing organisation needs an invite from its owner, which is not available yet. Create your own organisation, or ask the owner to add you.")
+                        setLoading(false)
+                        return
+                    }
+                    throw e
+                }
             }
 
             await new Promise(resolve => setTimeout(resolve, 100))

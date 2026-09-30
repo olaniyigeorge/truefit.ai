@@ -13,16 +13,28 @@ from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
+from sqlalchemy import select
 
 from src.truefit_core.domain.application import (
     Application,
     ApplicationSource,
     ApplicationStatus,
 )
+from src.truefit_infra.auth.authorization import (
+    CANDIDATE,
+    _forbidden,
+    _same,
+    can_view_as_org_member,
+    ensure_org_member,
+    is_admin,
+)
+from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import db_manager
+from src.truefit_infra.db.models import CandidateProfile as CandidateProfileModel
 from src.truefit_infra.db.repositories.application_repository import (
     SQLAlchemyApplicationRepository,
 )
+from src.truefit_infra.db.repositories.job_repository import SQLAlchemyJobRepository
 
 router = APIRouter(prefix="/applications", tags=["applications"])
 
@@ -32,6 +44,53 @@ router = APIRouter(prefix="/applications", tags=["applications"])
 
 def get_application_repo() -> SQLAlchemyApplicationRepository:
     return SQLAlchemyApplicationRepository(db_manager)
+
+
+class CandidateOwnership:
+    """Maps candidate profiles to their owning users (candidate_profiles.user_id)."""
+
+    async def owner_user_id(self, candidate_id: uuid.UUID) -> Optional[uuid.UUID]:
+        stmt = select(CandidateProfileModel.user_id).where(
+            CandidateProfileModel.id == candidate_id
+        )
+        async with db_manager.get_session() as session:
+            return (await session.execute(stmt)).scalar_one_or_none()
+
+    async def profile_id_for_user(self, user_id: uuid.UUID) -> Optional[uuid.UUID]:
+        stmt = select(CandidateProfileModel.id).where(
+            CandidateProfileModel.user_id == user_id
+        )
+        async with db_manager.get_session() as session:
+            return (await session.execute(stmt)).scalars().first()
+
+
+def get_candidate_ownership() -> CandidateOwnership:
+    return CandidateOwnership()
+
+
+def get_job_repo() -> SQLAlchemyJobRepository:
+    return SQLAlchemyJobRepository(db_manager)
+
+
+async def _job_org_id(job_repo, job_id: uuid.UUID) -> Optional[uuid.UUID]:
+    job = await job_repo.get_by_id(job_id)
+    return job.org_id if job else None
+
+
+async def _ensure_owner_or_job_org(
+    user: TokenPayload, application: Application, ownership, job_repo
+) -> None:
+    """Admin, the owning candidate, or a recruiter of the application's job org."""
+    if is_admin(user):
+        return
+    owner = await ownership.owner_user_id(application.candidate_id)
+    if _same(user.user_id, owner):
+        return
+    ensure_org_member(user, await _job_org_id(job_repo, application.job_id))
+
+
+async def _ensure_job_org(user: TokenPayload, application: Application, job_repo) -> None:
+    ensure_org_member(user, await _job_org_id(job_repo, application.job_id))
 
 
 # Schemas
@@ -80,7 +139,15 @@ class ApplicationOut(BaseModel):
 async def create_application(
     body: CreateApplicationRequest,
     repo: SQLAlchemyApplicationRepository = Depends(get_application_repo),
+    ownership: CandidateOwnership = Depends(get_candidate_ownership),
+    user: TokenPayload = Depends(get_current_user),
 ) -> ApplicationOut:
+    # Only admins, or the candidate who owns the profile, may apply on its behalf.
+    if not is_admin(user):
+        owner = await ownership.owner_user_id(body.candidate_id)
+        if user.role != CANDIDATE or not _same(user.user_id, owner):
+            raise _forbidden()
+
     # Enforce unique constraint at domain layer before hitting DB
     existing = await repo.get_by_job_and_candidate(body.job_id, body.candidate_id)
     if existing:
@@ -103,11 +170,44 @@ async def create_application(
 async def get_application(
     application_id: uuid.UUID,
     repo: SQLAlchemyApplicationRepository = Depends(get_application_repo),
+    ownership: CandidateOwnership = Depends(get_candidate_ownership),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ) -> ApplicationOut:
     application = await repo.get_by_id(application_id)
     if not application:
         raise HTTPException(404, detail=f"Application {application_id} not found")
+    await _ensure_owner_or_job_org(user, application, ownership, job_repo)
     return ApplicationOut.from_domain(application)
+
+
+async def _list_for_candidate(
+    user: TokenPayload,
+    job_id: Optional[uuid.UUID],
+    candidate_id: Optional[uuid.UUID],
+    status_filter: Optional[ApplicationStatus],
+    limit: int,
+    offset: int,
+    repo,
+    ownership,
+) -> list[ApplicationOut]:
+    """Candidates only ever see their own applications."""
+    own_profile = await ownership.profile_id_for_user(uuid.UUID(str(user.user_id)))
+    if candidate_id and not (
+        _same(candidate_id, own_profile) or _same(candidate_id, user.user_id)
+    ):
+        raise _forbidden()
+    if own_profile is None:
+        return []
+    applications = await repo.list_by_candidate(
+        own_profile, limit=limit, offset=offset
+    )
+    return [
+        ApplicationOut.from_domain(a)
+        for a in applications
+        if (not job_id or a.job_id == job_id)
+        and (not status_filter or a.status == status_filter)
+    ]
 
 
 @router.get("", response_model=list[ApplicationOut])
@@ -118,7 +218,33 @@ async def list_applications(
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     repo: SQLAlchemyApplicationRepository = Depends(get_application_repo),
+    ownership: CandidateOwnership = Depends(get_candidate_ownership),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ) -> list[ApplicationOut]:
+    if not is_admin(user):
+        if user.role == CANDIDATE:
+            return await _list_for_candidate(
+                user, job_id, candidate_id, status, limit, offset, repo, ownership
+            )
+        # Recruiters: only applications for jobs in their own org.
+        if not job_id and not candidate_id:
+            raise HTTPException(400, detail="Provide job_id or candidate_id")
+        if job_id:
+            ensure_org_member(user, await _job_org_id(job_repo, job_id))
+        else:
+            applications = await repo.list_by_candidate(
+                candidate_id, limit=limit, offset=offset
+            )
+            orgs: dict[uuid.UUID, Optional[uuid.UUID]] = {}
+            visible = []
+            for a in applications:
+                if a.job_id not in orgs:
+                    orgs[a.job_id] = await _job_org_id(job_repo, a.job_id)
+                if can_view_as_org_member(user, orgs[a.job_id]):
+                    visible.append(a)
+            return [ApplicationOut.from_domain(a) for a in visible]
+
     if not job_id and not candidate_id:
         raise HTTPException(400, detail="Provide job_id or candidate_id")
 
@@ -142,10 +268,13 @@ async def update_status(
     application_id: uuid.UUID,
     body: UpdateStatusRequest,
     repo: SQLAlchemyApplicationRepository = Depends(get_application_repo),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ) -> ApplicationOut:
     application = await repo.get_by_id(application_id)
     if not application:
         raise HTTPException(404, detail=f"Application {application_id} not found")
+    await _ensure_job_org(user, application, job_repo)
 
     try:
         match body.status:
@@ -176,10 +305,14 @@ async def update_status(
 async def withdraw_application(
     application_id: uuid.UUID,
     repo: SQLAlchemyApplicationRepository = Depends(get_application_repo),
+    ownership: CandidateOwnership = Depends(get_candidate_ownership),
+    job_repo: SQLAlchemyJobRepository = Depends(get_job_repo),
+    user: TokenPayload = Depends(get_current_user),
 ) -> None:
     application = await repo.get_by_id(application_id)
     if not application:
         raise HTTPException(404, detail=f"Application {application_id} not found")
+    await _ensure_owner_or_job_org(user, application, ownership, job_repo)
 
     try:
         application.withdraw()

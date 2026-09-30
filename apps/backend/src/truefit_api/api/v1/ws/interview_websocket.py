@@ -37,6 +37,8 @@ from src.truefit_core.agents.interviewer.live_interview_agent import (
     LiveInterviewAgent,
 )
 from src.truefit_infra.llm.factory import create_live_adapter
+from src.truefit_infra.auth.jwt import JWTService, get_jwt_service
+from src.truefit_api.api.v1.ws.auth import authenticate_interview_socket
 
 # ────────────────────
 # DEPENDENCY FACTORIES
@@ -175,11 +177,17 @@ async def interview_websocket(
     queue: QueuePort = Depends(get_queue),
     cache: CachePort = Depends(get_cache),
     live_adapter: LiveSessionPort  = Depends(get_live_adapter),
+    jwt_service: JWTService = Depends(get_jwt_service),
 ) -> None:
     """
     THE main WebSocket endpoint for a live AI interview session.
 
-    URL: /api/v1/ws/interview/{job_id}/{candidate_id}
+    URL: /api/v1/ws/interview/{job_id}/{candidate_id}?token=<jwt>
+
+    Authentication: the backend JWT goes in the `token` query parameter (browsers
+    cannot set headers on a WebSocket). The handshake is rejected with close code
+    4401 (missing or invalid token) or 4403 (not the interviewed candidate, and
+    not an admin). See api/v1/ws/auth.py.
 
     This function is intentionally thin - it accepts the connection, builds
     the InterviewConnection object that holds all the session state, and
@@ -204,6 +212,15 @@ async def interview_websocket(
       { type: "error",            message }
       { type: "pong" }
     """
+    user = await authenticate_interview_socket(
+        websocket,
+        candidate_id=candidate_id,
+        candidate_repo=candidate_repo,
+        jwt_service=jwt_service,
+    )
+    if user is None:
+        return
+
     await websocket.accept()
 
     connection = InterviewConnection(
