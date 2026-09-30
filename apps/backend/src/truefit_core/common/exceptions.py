@@ -24,9 +24,3 @@ class PermissionDeniedError(DomainError):
     """Raised when user lacks required permissions."""
 
     pass
-
-
-class CapabilityNotSupported(DomainError):
-    """Raised when a provider adapter is asked for something it cannot do (for example images)."""
-
-    pass

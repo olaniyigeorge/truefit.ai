@@ -14,7 +14,7 @@ This project is mid-pivot from a single AI interview product to reusable voice i
 |------|-------|
 | Interview product (jobs, candidates, live interviews, evaluations) | Working |
 | Gemini Live and OpenAI Realtime adapters, env-driven selection, open-time fallback | Working |
-| `VoiceAgentRuntime`, the domain-neutral agent engine | Working, interviews are its first consumer |
+| `soro`, the extracted SDK (port, runtime, adapters) | Working, the interview app imports it |
 | Second use case: meeting copilot that guides you from your personal knowledge base | Planned |
 | Composed pipeline for free and open models (streaming STT, open LLM, TTS) | Planned |
 | Eval pipeline (per-provider comparison, latency, tool-call correctness) | Planned |
@@ -39,10 +39,10 @@ VoiceAgentRuntime  <---- system prompt, tools, opening message, callbacks
 GeminiLiveAdapter | OpenAIRealtimeAdapter | FallbackLiveAdapter
 ```
 
-- **`LiveSessionPort`** (`truefit_core/application/ports.py`) is the seam between agents and providers. Providers emit normalised `(event_type, data)` events: `audio`, `text`, `input_text`, `tool_call`, `turn_complete`, `interrupted`, `session_ending`. Each adapter also declares `capabilities` (sample rates, image support, whether it has native turn detection) and takes provider-neutral `ToolSpec` tools.
-- **`VoiceAgentRuntime`** (`truefit_core/agents/runtime/`) owns the send loop, the receive loop, tool dispatch and lifecycle. It depends only on the port.
+- **`LiveSessionPort`** (`packages/soro/src/soro/ports.py`) is the seam between agents and providers. Providers emit normalised `(event_type, data)` events: `audio`, `text`, `input_text`, `tool_call`, `turn_complete`, `interrupted`, `session_ending`. Each adapter also declares `capabilities` (sample rates, image support, whether it has native turn detection) and takes provider-neutral `ToolSpec` tools.
+- **`VoiceAgentRuntime`** (`soro.runtime`) owns the send loop, the receive loop, tool dispatch and lifecycle. It depends only on the port.
 - **`ToolRegistry`** keeps each tool's declaration and handler together, so a mismatch fails at startup instead of mid-call.
-- **`LiveAdapterFactory`** (`truefit_infra/llm/factory.py`) picks the provider from config and wraps it in a fallback if one is set.
+- **`create_live_adapter`** (`soro.adapters.factory`) picks the provider from arguments you pass in and wraps it in a fallback if one is set. The app's `truefit_infra/llm/factory.py` just feeds it the app config.
 
 A new use case supplies four things and reuses everything else:
 
@@ -79,7 +79,11 @@ Fallback happens when the primary fails to open a session (network, auth, timeou
 
 ```
 truefit.ai/
-  apps/
+  packages/
+    soro/                     The SDK: port, runtime, adapters, tools. Depends on no app.
+      src/soro/  ports, tools, runtime/, adapters/, audio/, testing
+      tests/                  Unit and contract tests (no interview code)
+  apps/                       The interview app, a reference consumer of Soro
     frontend/                 Vite, React, TypeScript
       src/  components, pages, hooks, helpers, context, providers, lib
     backend/
@@ -92,11 +96,10 @@ truefit.ai/
           domain/             job, candidate, interview, evaluation, ...
           application/        ports, commands, query, services
           agents/
-            runtime/          VoiceAgentRuntime, ToolRegistry
             interviewer/      Interview prompt, tools, handlers, agent
             evaluator/
         truefit_infra/        Adapters
-          llm/                gemini_live, openai_realtime, fallback_adapter, factory
+          llm/                factory (feeds app config to Soro), gemini_llm
           realtime/           WebRTC client, audio bridge, signaling
           db/  auth/  cache/  queue/  config.py
         truefit_workers/      Evaluation and report workers

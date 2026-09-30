@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Callable, Optional
 
-from src.truefit_core.agents.runtime import SessionComplete
+from soro import SessionComplete
 from src.truefit_core.application.ports import CachePort, DomainEvent, QueuePort
 from src.truefit_core.application.services.interview_orchestration import (
     InterviewOrchestrationService,

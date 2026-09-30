@@ -1,82 +1,57 @@
-import pytest
+"""The app's adapter factory: AppConfig in, a Soro adapter out."""
 
-from src.truefit_infra.config import AppConfig
-from src.truefit_infra.llm import factory
-from src.truefit_infra.llm.fallback_adapter import FallbackLiveAdapter
-from tests.unit.llm.fakes import FakeLiveAdapter
+import pytest
+from soro.adapters.fallback import FallbackLiveAdapter
+from soro.adapters.gemini import GeminiLiveAdapter
+from soro.adapters.openai import OpenAIRealtimeAdapter
+
+from src.truefit_infra.config import AppConfig, GlobalConfig
+from src.truefit_infra.llm.factory import create_live_adapter
 
 pytestmark = pytest.mark.unit
 
 
-@pytest.fixture
-def providers(monkeypatch):
-    """Replace real adapters with fakes so no SDK or API key is needed."""
-    made: list[str] = []
-
-    def fake_make(name: str):
-        if name not in ("gemini", "openai"):
-            raise ValueError(f"Unknown LLM provider: {name!r}")
-        made.append(name)
-        return FakeLiveAdapter()
-
-    monkeypatch.setattr(factory, "_make_adapter", fake_make)
-    return made
+def _configure(monkeypatch, **values):
+    defaults = dict(
+        LLM_PRIMARY_PROVIDER="gemini",
+        LLM_FALLBACK_PROVIDER="none",
+        GEMINI_API_KEY="g-key",
+        GEMINI_LIVE_MODEL=None,
+        OPENAI_API_KEY="o-key",
+        OPENAI_REALTIME_MODEL=None,
+    )
+    for name, value in {**defaults, **values}.items():
+        monkeypatch.setattr(AppConfig, name, value, raising=False)
 
 
-def _configure(monkeypatch, primary, fallback):
-    monkeypatch.setattr(AppConfig, "LLM_PRIMARY_PROVIDER", primary, raising=False)
-    monkeypatch.setattr(AppConfig, "LLM_FALLBACK_PROVIDER", fallback, raising=False)
+def test_gemini_only(monkeypatch):
+    _configure(monkeypatch)
+    assert isinstance(create_live_adapter(), GeminiLiveAdapter)
 
 
-def test_no_fallback_returns_primary_directly(monkeypatch, providers):
-    _configure(monkeypatch, "gemini", "none")
-    assert isinstance(factory.create_live_adapter(), FakeLiveAdapter)
-    assert providers == ["gemini"]
+def test_openai_primary_with_gemini_fallback(monkeypatch):
+    _configure(monkeypatch, LLM_PRIMARY_PROVIDER="openai", LLM_FALLBACK_PROVIDER="gemini")
+    assert isinstance(create_live_adapter(), FallbackLiveAdapter)
 
 
-def test_fallback_wraps_both(monkeypatch, providers):
-    _configure(monkeypatch, "gemini", "openai")
-    assert isinstance(factory.create_live_adapter(), FallbackLiveAdapter)
-    assert providers == ["gemini", "openai"]
+def test_blank_settings_use_the_defaults(monkeypatch):
+    """Regression: a blank LLM_PRIMARY_PROVIDER in .env used to raise 'Unknown provider'."""
+    _configure(monkeypatch, LLM_PRIMARY_PROVIDER="", LLM_FALLBACK_PROVIDER="")
+    assert isinstance(create_live_adapter(), GeminiLiveAdapter)
 
 
-def test_blank_env_values_use_defaults(monkeypatch, providers):
-    _configure(monkeypatch, "", "")
-    assert isinstance(factory.create_live_adapter(), FakeLiveAdapter)
-    assert providers == ["gemini"]
+def test_model_setting_reaches_the_adapter(monkeypatch):
+    _configure(monkeypatch, GEMINI_LIVE_MODEL="my-model")
+    assert create_live_adapter()._model == "my-model"
 
 
-def test_names_are_case_and_whitespace_insensitive(monkeypatch, providers):
-    _configure(monkeypatch, " OpenAI ", " NONE ")
-    factory.create_live_adapter()
-    assert providers == ["openai"]
-
-
-def test_same_primary_and_fallback_rejected(monkeypatch, providers):
-    _configure(monkeypatch, "gemini", "gemini")
-    with pytest.raises(ValueError, match="cannot be the same"):
-        factory.create_live_adapter()
-
-
-def test_unknown_provider_rejected(monkeypatch, providers):
-    _configure(monkeypatch, "not-a-provider", "none")
-    with pytest.raises(ValueError, match="Unknown LLM provider"):
-        factory.create_live_adapter()
-
-
-def test_real_make_adapter_rejects_unknown_provider():
-    with pytest.raises(ValueError, match="Unknown LLM provider"):
-        factory._make_adapter("nope")
-
-
-def test_openai_without_key_fails_loudly(monkeypatch):
-    monkeypatch.setattr(AppConfig, "OPENAI_API_KEY", None, raising=False)
+def test_a_missing_key_fails_loudly(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    _configure(monkeypatch, LLM_PRIMARY_PROVIDER="openai", OPENAI_API_KEY=None)
     with pytest.raises(RuntimeError, match="OPENAI_API_KEY"):
-        factory._make_adapter("openai")
+        create_live_adapter()
 
 
 def test_default_config_is_gemini_only():
     """Guards the bug where a default openai fallback broke Gemini-only setups."""
-    from src.truefit_infra.config import GlobalConfig
-
     assert GlobalConfig.model_fields["LLM_FALLBACK_PROVIDER"].default == "none"

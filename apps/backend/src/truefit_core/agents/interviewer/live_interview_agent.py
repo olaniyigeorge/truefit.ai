@@ -2,7 +2,7 @@
 LiveInterviewAgent - the interview consumer of VoiceAgentRuntime.
 
 All the generic machinery (send/receive loops, event routing, tool dispatch,
-lifecycle) lives in truefit_core.agents.runtime. This class only supplies what
+lifecycle) lives in the Soro SDK (soro.runtime). This class only supplies what
 is interview-specific: the system prompt, the interview tools and their
 handlers, the opening message that carries the interview context, and the
 "abandon the interview if the session dies" policy.
@@ -23,7 +23,7 @@ from src.truefit_core.agents.interviewer.handlers import (
 )
 from src.truefit_core.agents.interviewer.prompts import build_system_prompt
 from src.truefit_core.agents.interviewer.tools import INTERVIEW_TOOLS
-from src.truefit_core.agents.runtime import (
+from soro import (
     RuntimeCallbacks,
     ToolRegistry,
     VoiceAgentRuntime,

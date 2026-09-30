@@ -10,10 +10,12 @@ BACKEND_DIR="$ROOT_DIR/apps/backend"
 FRONTEND_DIR="$ROOT_DIR/apps/frontend"
 VENV_DIR="$BACKEND_DIR/.venv"
 
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+# Real escape characters ($'...'), not the text \033. The backend and frontend lines
+# are prefixed through sed, which would read \0 as "the matched text" and print "33[0;32m".
+GREEN=$'\033[0;32m'
+CYAN=$'\033[0;36m'
+YELLOW=$'\033[1;33m'
+NC=$'\033[0m'
 
 log() { echo -e "${YELLOW}[dev]${NC} $1"; }
 
@@ -22,7 +24,8 @@ if [ ! -d "$VENV_DIR" ]; then
   log "No backend venv found, creating one..."
   python3 -m venv "$VENV_DIR"
   "$VENV_DIR/bin/pip" install --upgrade pip -q
-  "$VENV_DIR/bin/pip" install -r "$BACKEND_DIR/requirements.txt"
+  # run from the backend dir: requirements.txt has a relative path to packages/soro
+  (cd "$BACKEND_DIR" && "$VENV_DIR/bin/pip" install -r requirements.txt)
 fi
 
 if [ ! -f "$BACKEND_DIR/.env" ]; then

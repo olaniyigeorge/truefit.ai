@@ -12,7 +12,7 @@ from src.truefit_core.agents.interviewer.context import InterviewContext
 from src.truefit_core.agents.interviewer.live_interview_agent import (
     LiveInterviewAgent,
 )
-from tests.unit.llm.fakes import FakeLiveAdapter
+from soro.testing import FakeLiveAdapter
 
 pytestmark = pytest.mark.unit
 

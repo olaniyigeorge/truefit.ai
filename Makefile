@@ -6,7 +6,7 @@ dev:
 
 ## Run only the backend (bootstraps venv if missing)
 dev-backend:
-	@[ -d apps/backend/.venv ] || (python3 -m venv apps/backend/.venv && apps/backend/.venv/bin/pip install -r apps/backend/requirements.txt)
+	@[ -d apps/backend/.venv ] || (python3 -m venv apps/backend/.venv && cd apps/backend && .venv/bin/pip install -r requirements.txt)
 	@[ -f apps/backend/.env ] || cp apps/backend/env.example apps/backend/.env
 	@cd apps/backend && .venv/bin/python run.py
 
@@ -20,7 +20,7 @@ dev-frontend:
 setup:
 	@python3 -m venv apps/backend/.venv
 	@apps/backend/.venv/bin/pip install --upgrade pip -q
-	@apps/backend/.venv/bin/pip install -r apps/backend/requirements.txt
+	@cd apps/backend && .venv/bin/pip install -r requirements.txt
 	@[ -f apps/backend/.env ] || cp apps/backend/env.example apps/backend/.env
 	@cd apps/frontend && pnpm install
 	@[ -f apps/frontend/.env ] || cp apps/frontend/env.example apps/frontend/.env

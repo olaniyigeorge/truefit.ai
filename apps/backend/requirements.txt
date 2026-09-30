@@ -94,3 +94,5 @@ packaging==26.3
 pluggy==1.6.0
 pytest==9.1.1
 pytest-asyncio==1.4.0
+# the Soro voice SDK (packages/soro). Paths in this file resolve from apps/backend.
+-e ../../packages/soro[all]
