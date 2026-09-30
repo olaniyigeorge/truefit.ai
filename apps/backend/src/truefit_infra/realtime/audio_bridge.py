@@ -55,6 +55,7 @@ import av
 from aiortc import MediaStreamTrack
 from aiortc.mediastreams import AudioStreamTrack
 
+from soro.audio import EnergyTurnDetector, TurnDetector
 from src.truefit_infra.realtime.session_context import SessionContext
 from src.truefit_core.common.utils import logger
 
@@ -95,10 +96,14 @@ class AudioBridge:
         *,
         context: SessionContext,
         output_sample_rate: int = _OUTPUT_SAMPLE_RATE,
+        turn_detector: Optional[TurnDetector] = None,
     ) -> None:
         """output_sample_rate: rate of the agent PCM that arrives on outbound_queue
-        (the adapter's capabilities.output_sample_rate)."""
+        (the adapter's capabilities.output_sample_rate).
+        turn_detector: decides when the candidate starts and stops a turn from the
+        16kHz inbound audio. Defaults to an adaptive EnergyTurnDetector."""
         self._ctx = context
+        self._turn_detector: TurnDetector = turn_detector or EnergyTurnDetector()
         self._output_sample_rate = output_sample_rate
         # inbound_queue: browser mic audio -> agent -> Gemini
         # maxsize=100 -> about 2 seconds of audio buffering at 20ms chunks
@@ -127,7 +132,6 @@ class AudioBridge:
 
 
         self._vad_is_speaking = False
-        self._vad_consecutive_silent = 0
         self._vad_waiting_for_response = False  # KEY: locked after ActivityEnd
         self._vad_response_timeout_task: Optional[asyncio.Task] = None
         self._last_activity_start: float = 0.0
@@ -261,15 +265,6 @@ class AudioBridge:
             rate=_SAMPLE_RATE,  # 16kHz target
         )
 
-        # Silence detection state
-        SPEECH_THRESHOLD = 400    # Peak amplitude to trigger START (tune upward if noisy)
-        SILENCE_THRESHOLD = 200   # Peak amplitude to count as silence
-        SILENCE_DURATION = 0.8    # Seconds of silence before ActivityEnd
-        silence_samples = int(_SAMPLE_RATE * SILENCE_DURATION)
-        _TIMEOUT_SILENCE_INCREMENT = int(_SAMPLE_RATE * 1.0)  # 1s timeout → credit 1s of silence samples
-        
-
-            
         try:
             while not self._closed:
                 try:
@@ -279,19 +274,9 @@ class AudioBridge:
                     # Treat as silence for VAD — this fires ActivityEnd when the
                     # candidate has stopped and the WebRTC track goes quiet.
                     if self._vad_is_speaking and self._mic_open.is_set():
-                        self._vad_consecutive_silent += _TIMEOUT_SILENCE_INCREMENT
-                        if self._vad_consecutive_silent >= silence_samples:
-                            now = time.monotonic()
-                            if now - self._last_activity_end > 0.5:
-                                self._vad_is_speaking = False
-                                self._vad_consecutive_silent = 0
-                                self._vad_waiting_for_response = True
-                                self._last_activity_end = now
-                                logger.info("[Bridge] VAD: speech END (track quiet) — waiting for Gemini")
-                                if self._on_activity_end:
-                                    asyncio.create_task(
-                                        self._safe_callback(self._on_activity_end)
-                                    )
+                        self._handle_turn_event(
+                            self._turn_detector.advance_silence(1.0), "track quiet"
+                        )
                     continue
                 except Exception as e:
                     logger.warning(f"[{self._ctx.session_id}] Inbound track error: {e}")
@@ -303,7 +288,7 @@ class AudioBridge:
                     # Mic closed — reset speaking state so we start fresh next turn
                     if self._vad_is_speaking:
                         self._vad_is_speaking = False
-                        self._vad_consecutive_silent = 0
+                        self._turn_detector.reset()
                     continue  # discard frame entirely, don't even resample
 
                 resampled_frames = resampler.resample(frame)
@@ -323,45 +308,9 @@ class AudioBridge:
                         if time.monotonic() < self._speaking_cooldown_until:
                             continue
 
-                        # Fast peak detection — sample every 8th s16 value
-                        # Much faster than full RMS, good enough for VAD
-                        peak = max(
-                            abs(int.from_bytes(chunk[j:j+2], 'little', signed=True))
-                            for j in range(0, min(len(chunk), 64), 2)
+                        self._handle_turn_event(
+                            self._turn_detector.process(chunk), "audio"
                         )
-
-                        if peak > SPEECH_THRESHOLD:
-                            self._vad_consecutive_silent = 0
-                            # Only fire ActivityStart if:
-                            # - not already speaking
-                            # - NOT waiting for Gemini to respond (key lock!)
-                            # - debounce ok
-                            if (not self._vad_is_speaking
-                                    and not self._vad_waiting_for_response):
-                                now = time.monotonic()
-                                if now - self._last_activity_start > 0.5:
-                                    self._vad_is_speaking = True
-                                    self._last_activity_start = now
-                                    logger.info("[Bridge] VAD: speech START")
-                                    if self._on_activity_start:
-                                        asyncio.create_task(
-                                            self._safe_callback(self._on_activity_start)
-                                        )
-                        else:
-                            if self._vad_is_speaking:
-                                self._vad_consecutive_silent += chunk_size // _SAMPLE_WIDTH
-                                if self._vad_consecutive_silent >= silence_samples:
-                                    now = time.monotonic()
-                                    if now - self._last_activity_end > 0.5:
-                                        self._vad_is_speaking = False
-                                        self._vad_consecutive_silent = 0
-                                        self._vad_waiting_for_response = True  # LOCK
-                                        self._last_activity_end = now
-                                        logger.info("[Bridge] VAD: speech END — waiting for Gemini")
-                                        if self._on_activity_end:
-                                            asyncio.create_task(
-                                                self._safe_callback(self._on_activity_end)
-                                            )
 
                         # Enqueue chunk regardless     
                         try:
@@ -376,8 +325,36 @@ class AudioBridge:
         except asyncio.CancelledError:
             pass
         finally:
-            # Sentinel: tells audio_input_stream() the bridge is done
-            await self.inbound_queue.put(None)
+            # Sentinel: tells audio_input_stream() the bridge is done. Never block
+            # here: with a full queue and no consumer, teardown would hang.
+            if self.inbound_queue.full():
+                self.inbound_queue.get_nowait()
+            self.inbound_queue.put_nowait(None)
+
+    def _handle_turn_event(self, event, source: str) -> None:
+        """Turn a detector event into the bridge's ActivityStart / ActivityEnd callbacks."""
+        if event is None:
+            return
+        now = time.monotonic()
+        if event.kind == "start":
+            # Ignore speech while a response is pending (the lock), or too soon after the last start.
+            if self._vad_waiting_for_response or now - self._last_activity_start <= 0.5:
+                self._turn_detector.reset()
+                return
+            self._vad_is_speaking = True
+            self._last_activity_start = now
+            logger.info("[Bridge] VAD: speech START")
+            callback = self._on_activity_start
+        else:
+            if not self._vad_is_speaking:
+                return
+            self._vad_is_speaking = False
+            self._vad_waiting_for_response = True  # LOCK until the agent responds
+            self._last_activity_end = now
+            logger.info(f"[Bridge] VAD: speech END ({source}) - waiting for the agent")
+            callback = self._on_activity_end
+        if callback:
+            asyncio.create_task(self._safe_callback(callback))
 
     async def _safe_callback(self, cb) -> None:
         """Fire a VAD callback, silently swallow closed-session errors."""
@@ -394,7 +371,7 @@ class AudioBridge:
         logger.info("[Bridge] VAD unlocked — Gemini responded, mic ready for candidate")
         self._vad_waiting_for_response = False
         self._vad_is_speaking = False
-        self._vad_consecutive_silent = 0
+        self._turn_detector.reset()
 
 
     # ────────────────────────────

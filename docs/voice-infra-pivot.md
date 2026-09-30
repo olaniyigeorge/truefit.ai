@@ -48,7 +48,7 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 | Gap 1: `VoiceAgentRuntime` extraction | Done |
 | Gap 2: tighten the port (capabilities, neutral tools and events) | Done |
 | Extract the SDK into `packages/soro` (step 5, first half) | Done (app imports it, both suites green) |
-| Pluggable turn detection (fixes the fan-noise bug) | Not started |
+| Pluggable turn detection (fixes the fan-noise bug) | Done (`soro.audio.EnergyTurnDetector`, `AudioBridge` uses it; neural detector and a noisy-room eval scenario still open) |
 | Connector layer (turn an existing system into tools) | Not started |
 | Non-blocking tools and a response policy (listen-only, addressed) | Not started |
 | Eval harness (one pipeline, both approaches) | Not started |
@@ -122,7 +122,7 @@ Testing has three levels, none of which needs the interview app: automated unit 
 | Models: one port over Gemini Live, OpenAI Realtime, later a composed pipeline | Built |
 | Runtime: loops, tool dispatch, lifecycle, reconnect recovery | Built |
 | Connectors: turn an existing system into tools (functions, OpenAPI, MCP) | Missing |
-| Turn detection | Weak, see below |
+| Turn detection | Pluggable energy detector with adaptive noise floor; neural option open |
 | Transport: WebRTC and WebSocket, client SDKs | Inside the interview app |
 | Hosted API: sessions, keys, tenants | Not started |
 | Evals | Not started |

@@ -91,3 +91,7 @@ Adapters take their settings as constructor arguments and fall back to the provi
 pip install -e ".[dev]"
 pytest
 ```
+
+## Turn detection
+
+`soro.audio` has a `TurnDetector` protocol and an `EnergyTurnDetector`. Feed it 16-bit mono PCM chunks and it returns a `TurnEvent("start" | "end")` at turn boundaries. It learns a noise floor, so steady noise such as a fan does not hold a turn open, and it uses separate start and end thresholds so a level near the edge does not flap. Providers with their own detection do not need one (`capabilities.native_vad`).
