@@ -9,12 +9,14 @@ Write an agent once (a prompt, some tools, audio in and out) and run it on any r
 ## Install
 
 ```bash
-pip install "soro[gemini]"       # Gemini Live
-pip install "soro[openai]"       # OpenAI Realtime
-pip install "soro[all]"          # both
+pip install soro                 # core only: port, runtime, tools, turn detection, test doubles
+pip install "soro[gemini]"       # + Gemini Live
+pip install "soro[openai]"       # + OpenAI Realtime
+pip install "soro[webrtc]"       # + WebRTC audio transport (aiortc)
+pip install "soro[all]"          # everything
 ```
 
-Each provider's SDK is imported lazily, so you only need the extras you use.
+Each provider's SDK is imported lazily, so you only need the extras you use. If you ask for a provider whose extra is missing, Soro tells you which one to install.
 
 ## A minimal agent
 
@@ -71,6 +73,36 @@ asyncio.run(main())
 
 The Gemini adapter uses session resumption: a dropped connection, a transient server error, or Gemini's periodic connection recycle continues the same conversation. After a reconnect the adapter emits `session_resumed`, and the runtime sends your `resume_message` because the user's last turn may have been lost.
 
+## Turn detection
+
+Providers with their own voice activity detection (`capabilities.native_vad`) need nothing here. When you run the detection yourself, `soro.audio` has a `TurnDetector` protocol and an `EnergyTurnDetector`:
+
+```python
+from soro.audio import EnergyTurnDetector
+
+detector = EnergyTurnDetector()
+for chunk in mic_chunks:                # 16-bit mono PCM, any chunk size
+    event = detector.process(chunk)
+    if event:
+        print(event.kind)               # "start" or "end"
+```
+
+It learns a noise floor, so steady noise such as a fan raises the floor instead of holding a turn open. It uses separate start and end thresholds so a level near the edge does not flap, and it tolerates the short gaps between syllables. Time is measured in audio, not wall clock, so it is deterministic. Tune it with `EnergyTurnConfig` (for example `end_ms`). Anything that implements the protocol can replace it, such as a neural detector.
+
+## WebRTC transport
+
+`soro.transport.webrtc.AudioBridge` connects a WebRTC peer connection (aiortc) to a voice agent. It resamples browser audio to 16kHz for the agent, paces the agent's audio back out as a WebRTC track, gates the mic while the agent speaks, suppresses echo, and uses a turn detector to call your `_on_activity_start` and `_on_activity_end` callbacks. Install it with `pip install "soro[webrtc]"`.
+
+```python
+from soro.transport.webrtc import AudioBridge
+
+bridge = AudioBridge(session_id="abc", output_sample_rate=adapter.capabilities.output_sample_rate)
+peer_connection.addTrack(bridge.create_outbound_track())
+await bridge.attach_inbound_track(browser_audio_track)
+bridge.open_mic()
+# pass bridge.audio_input_stream() to VoiceAgentRuntime, and push_audio() the model's audio back
+```
+
 ## Testing your agent
 
 ```python
@@ -79,7 +111,18 @@ from soro.testing import FakeLiveAdapter
 adapter = FakeLiveAdapter(events=[("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}})])
 ```
 
-`FakeLiveAdapter` needs no network or API key and records everything your agent sends.
+`FakeLiveAdapter` needs no network or API key and records everything your agent sends. See `examples/offline_note_taker.py` for a complete run.
+
+## Examples
+
+| File | Shows |
+|---|---|
+| `examples/offline_note_taker.py` | An agent with tools, run end to end with no network or key |
+| `examples/turn_detection.py` | The detector ignoring a fan and finding speech over it |
+
+## Resilience
+
+The Gemini adapter uses session resumption: a dropped connection, a transient server error, or Gemini's periodic connection recycle continues the same conversation. After a reconnect the adapter emits `session_resumed`, and the runtime sends your `resume_message` because the user's last turn may have been lost. `FallbackLiveAdapter` (what `create_live_adapter` returns when you pass a `fallback`) continues on the second provider if the first fails to open or fails before it produces any output.
 
 ## Configuration
 
@@ -92,6 +135,12 @@ pip install -e ".[dev]"
 pytest
 ```
 
-## Turn detection
+Before a release, check the built package the way a user gets it:
 
-`soro.audio` has a `TurnDetector` protocol and an `EnergyTurnDetector`. Feed it 16-bit mono PCM chunks and it returns a `TurnEvent("start" | "end")` at turn boundaries. It learns a noise floor, so steady noise such as a fan does not hold a turn open, and it uses separate start and end thresholds so a level near the edge does not flap. Providers with their own detection do not need one (`capabilities.native_vad`).
+```bash
+EXTRAS=gemini,openai,webrtc scripts/test_from_testpypi.sh local              # build, twine check, clean venv, smoke test
+twine upload -r testpypi dist/*                                               # then:
+EXTRAS=gemini,openai,webrtc scripts/test_from_testpypi.sh testpypi 0.1.0     # install from TestPyPI and smoke test
+```
+
+`scripts/smoke_test.py` runs against the installed package and needs no key. Set `GEMINI_API_KEY` or `OPENAI_API_KEY` and it also opens a real session.

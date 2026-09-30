@@ -33,7 +33,7 @@ HOW IT FITS IN THE OVERALL FLOW
     -> WebRTCSignaling.handle_offer()
       -> creates WebRTCClient
         -> sets up RTCPeerConnection handlers (this file)
-          -> AudioBridge    (audio_bridge.py)
+          -> AudioBridge    (soro.transport.webrtc)
           -> FrameSampler   (frame_sampler.py)
           -> DataChannelManager (data_channel.py)
     -> stores client reference as self._webrtc
@@ -50,7 +50,7 @@ from aiortc.mediastreams import AudioStreamTrack
 
 from src.truefit_infra.realtime.session_context import SessionContext
 
-from .audio_bridge import AudioBridge
+from soro.transport.webrtc import AudioBridge
 from .frame_sampler import FrameSampler
 from .data_channel import DataChannelManager
 from src.truefit_core.common.utils import logger
@@ -135,7 +135,7 @@ class WebRTCClient:
 
         # Handles all audio I/O: browser mic -> Gemini, Gemini response -> browser
         self.audio_bridge = AudioBridge(
-            context=self.context, output_sample_rate=output_sample_rate
+            session_id=self.context.session_id, output_sample_rate=output_sample_rate
         )
 
         # Samples video frames from camera and screen share at configured intervals
@@ -287,7 +287,7 @@ class WebRTCClient:
         The track must be added before createAnswer() so it's included in
         the SDP - if added after, the browser won't know to expect it.
 
-        The track is _AgentAudioTrack from AudioBridge - it pulls from
+        The track is AgentAudioTrack from AudioBridge - it pulls from
         outbound_queue, resamples 24kHz -> 48kHz, and delivers 20ms frames
         at the correct pace for the browser's audio renderer.
         """

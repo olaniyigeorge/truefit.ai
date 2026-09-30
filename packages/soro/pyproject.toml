@@ -15,7 +15,8 @@ dependencies = []
 # Install only the providers you use, e.g. pip install "soro[gemini]".
 gemini = ["google-genai>=1.65", "websockets>=13"]
 openai = ["websockets>=13", "av>=12"]
-all = ["soro[gemini,openai]"]
+webrtc = ["aiortc>=1.9", "av>=12"]
+all = ["soro[gemini,openai,webrtc]"]
 dev = ["pytest>=8", "pytest-asyncio>=0.24", "soro[all]"]
 
 [tool.hatch.build.targets.wheel]

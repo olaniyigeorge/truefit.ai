@@ -22,6 +22,10 @@ PROVIDERS = ("gemini", "openai")
 _NONE = "none"
 
 
+def _missing_extra(extra: str, exc: ImportError) -> str:
+    return f"The {extra} provider needs its dependencies ({exc}). Install them with: pip install \"soro[{extra}]\""
+
+
 def _make_adapter(
     provider: str,
     *,
@@ -35,12 +39,18 @@ def _make_adapter(
     """Provider libraries are imported here, so a provider you do not use need not be installed."""
     match provider.strip().lower():
         case "gemini":
-            from soro.adapters.gemini import GeminiLiveAdapter
+            try:
+                from soro.adapters.gemini import GeminiLiveAdapter
+            except ImportError as exc:
+                raise ImportError(_missing_extra("gemini", exc)) from exc
 
             kwargs = {"voice": gemini_voice} if gemini_voice else {}
             return GeminiLiveAdapter(api_key=gemini_api_key, model=gemini_model, **kwargs)
         case "openai":
-            from soro.adapters.openai import OpenAIRealtimeAdapter
+            try:
+                from soro.adapters.openai import OpenAIRealtimeAdapter
+            except ImportError as exc:
+                raise ImportError(_missing_extra("openai", exc)) from exc
 
             kwargs = {"voice": openai_voice} if openai_voice else {}
             return OpenAIRealtimeAdapter(api_key=openai_api_key, model=openai_model, **kwargs)

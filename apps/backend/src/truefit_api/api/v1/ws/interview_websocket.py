@@ -19,7 +19,7 @@ from src.truefit_core.application.ports import (
     QueuePort,
 )
 from src.truefit_core.common.utils import logger
-from src.truefit_infra.realtime.audio_bridge import INPUT_SAMPLE_RATE
+from soro.transport.webrtc import INPUT_SAMPLE_RATE
 from src.truefit_infra.realtime.signaling import WebRTCSignaling
 from src.truefit_infra.realtime.webrtc_client import WebRTCClient
 from src.truefit_infra.cache.redis_cache import RedisCacheAdapter, redis_client

@@ -1,4 +1,4 @@
-.PHONY: dev dev-backend dev-frontend setup
+.PHONY: dev dev-backend dev-frontend setup soro-test soro-smoke soro-testpypi
 
 ## Run backend + frontend together in dev mode
 dev:
@@ -24,3 +24,16 @@ setup:
 	@[ -f apps/backend/.env ] || cp apps/backend/env.example apps/backend/.env
 	@cd apps/frontend && pnpm install
 	@[ -f apps/frontend/.env ] || cp apps/frontend/env.example apps/frontend/.env
+
+## Run the Soro SDK unit tests
+soro-test:
+	@cd packages/soro && ../../apps/backend/.venv/bin/python -m pytest tests -q
+
+## Build Soro, install the wheel into a clean venv and smoke test it (no upload, no keys)
+soro-smoke:
+	@cd packages/soro && EXTRAS=$${EXTRAS:-gemini,openai,webrtc} scripts/test_from_testpypi.sh local
+
+## Install a version already uploaded to TestPyPI and smoke test it: make soro-testpypi VERSION=0.1.0
+soro-testpypi:
+	@[ -n "$(VERSION)" ] || (echo "usage: make soro-testpypi VERSION=0.1.0"; exit 1)
+	@cd packages/soro && EXTRAS=$${EXTRAS:-gemini,openai,webrtc} scripts/test_from_testpypi.sh testpypi $(VERSION)

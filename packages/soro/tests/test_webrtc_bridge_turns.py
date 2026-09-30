@@ -1,23 +1,19 @@
 import asyncio
 import math
 import random
-import uuid
 from array import array
 
 import av
 import pytest
 
-from src.truefit_infra.realtime.audio_bridge import AudioBridge
-from src.truefit_infra.realtime.session_context import SessionContext
+pytest.importorskip("aiortc")
+
+from soro.transport.webrtc import AudioBridge
 
 pytestmark = pytest.mark.unit
 
 RATE = 48_000
 FRAME = 960  # 20ms at 48kHz
-
-
-def _ctx() -> SessionContext:
-    return SessionContext(session_id="s1", job_id=uuid.uuid4(), candidate_id=uuid.uuid4())
 
 
 def _frame(rms: float, rng: random.Random) -> av.AudioFrame:
@@ -52,7 +48,7 @@ def _speech(seconds, rng):
 
 
 async def _run(frames):
-    bridge = AudioBridge(context=_ctx())
+    bridge = AudioBridge(session_id="s1")
     events = []
 
     async def start():
