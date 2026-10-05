@@ -10,7 +10,8 @@ behind the same port the runtime already uses:
             -> sentences -> TextToSpeech -> "audio" / "text" -> "turn_complete"
 
 It owns turn-taking (native_vad=True): the detector decides when the user has
-finished, and speech that starts while the agent is replying is a barge-in, which
+finished (a caller that detects turns itself can also send send_activity_start /
+send_activity_end, which are taken as hints), and speech that starts while the agent is replying is a barge-in, which
 cancels the reply mid-sentence and emits "interrupted".
 
 Known limit, by design: the LLM only sees text, so tone, hesitation and timing
@@ -175,6 +176,24 @@ class ComposedLiveAdapter(LiveSessionPort):
         elif event is not None and event.kind == "end":
             self._user_finished()
         elif self._utterance is not None and len(self._utterance) >= self._max_utterance_bytes:
+            self.detector.reset()
+            self._user_finished()
+
+    async def send_activity_start(self) -> None:
+        """
+        A caller that detects turns itself (such as an app's audio bridge) may say
+        so. Taken as a hint: start the utterance now, with the preroll, if the
+        detector has not already.
+        """
+        if self._open and self._utterance is None:
+            await self._user_started()
+
+    async def send_activity_end(self) -> None:
+        """
+        The caller's end-of-turn hint: answer now instead of waiting out this
+        adapter's own silence hangover, which would add a second delay per turn.
+        """
+        if self._open and self._utterance is not None:
             self.detector.reset()
             self._user_finished()
 

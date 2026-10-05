@@ -65,13 +65,16 @@ await runtime.run()
 Set these in `examples/truefit/backend/.env`:
 
 ```
-LLM_PRIMARY_PROVIDER=gemini      # gemini | openai
-LLM_FALLBACK_PROVIDER=none       # gemini | openai | none
+LLM_PRIMARY_PROVIDER=gemini      # gemini | openai | composed (free, local)
+LLM_FALLBACK_PROVIDER=none       # gemini | openai | composed | none
 GEMINI_API_KEY=...
 GEMINI_LIVE_MODEL=...            # optional, overrides the Gemini Live model
 OPENAI_API_KEY=...               # only needed if OpenAI is primary or fallback
 OPENAI_REALTIME_MODEL=...        # optional, defaults to gpt-realtime-mini-2025-12-15
 VOICE_TURN_DETECTOR=silero       # silero | energy, decides when the candidate stops talking
+COMPOSED_LLM_BASE_URL=...        # composed only: a local OpenAI-compatible server (llama.cpp, Ollama)
+COMPOSED_LLM_MODEL=...           # composed only: a tool-calling model, 7B class for interviews
+COMPOSED_TTS_VOICE=...           # composed only: path to a Piper voice .onnx
 ```
 
 Fallback happens when the primary fails to open a session (network, auth, timeout) or fails before it has produced any output, in which case the opening message is replayed on the fallback. A session that dies after the conversation has started is not recovered by the wrapper, but the Gemini adapter reconnects and resumes its own session on transient errors.

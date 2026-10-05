@@ -99,9 +99,13 @@ with automatic activity detection off and expects the caller to signal turn
 boundaries). `FallbackLiveAdapter` refuses at construction if its two adapters
 disagree on sample rates or `native_vad`.
 
-Provider selection comes from app config: `LLM_PRIMARY_PROVIDER` (`gemini` or
-`openai`, blank means gemini) and `LLM_FALLBACK_PROVIDER` (`gemini`, `openai` or
-`none`). Model overrides: `GEMINI_LIVE_MODEL`, `OPENAI_REALTIME_MODEL`. The
+Provider selection comes from app config: `LLM_PRIMARY_PROVIDER` (`gemini`,
+`openai` or `composed`, blank means gemini) and `LLM_FALLBACK_PROVIDER`
+(`gemini`, `openai`, `composed` or `none`). Model overrides: `GEMINI_LIVE_MODEL`,
+`OPENAI_REALTIME_MODEL`; the composed pipeline reads `COMPOSED_LLM_BASE_URL`,
+`COMPOSED_LLM_MODEL`, `COMPOSED_STT_MODEL` and `COMPOSED_TTS_VOICE`. With
+composed, the audio bridge's end-of-turn signal is passed on as a hint, so the
+adapter answers without waiting out a second silence hangover. The
 fallback engages if the primary fails to open or fails before producing any
 output; failures after output has started propagate.
 

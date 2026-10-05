@@ -248,7 +248,7 @@ The socket is a control and signaling channel only. Audio and video travel over 
 4. The live AI interviewer starts. Transcripts and interrupts stream back over the socket.
 5. The session ends when the agent finishes, the client sends `end_session`, or the client disconnects. Disconnects and errors mark the interview `abandoned`.
 
-The live model is chosen by `LLM_PRIMARY_PROVIDER` and `LLM_FALLBACK_PROVIDER` (Gemini Live or OpenAI Realtime, with optional fallback).
+The live model is chosen by `LLM_PRIMARY_PROVIDER` and `LLM_FALLBACK_PROVIDER` (Gemini Live, OpenAI Realtime or the free local composed pipeline, with optional fallback).
 
 ### Client to server
 
@@ -331,8 +331,9 @@ Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.
 | `GEMINI_LIVE_MODEL` | Optional Live model override |
 | `OPENAI_API_KEY` | Required when OpenAI is primary or fallback |
 | `OPENAI_REALTIME_MODEL` | Optional Realtime model override |
-| `LLM_PRIMARY_PROVIDER` | `gemini` (default) or `openai` |
-| `LLM_FALLBACK_PROVIDER` | `gemini`, `openai` or `none` (default) |
+| `LLM_PRIMARY_PROVIDER` | `gemini` (default), `openai` or `composed` (the free local pipeline) |
+| `LLM_FALLBACK_PROVIDER` | `gemini`, `openai`, `composed` or `none` (default) |
+| `COMPOSED_LLM_BASE_URL`, `COMPOSED_LLM_MODEL`, `COMPOSED_STT_MODEL`, `COMPOSED_TTS_VOICE` | The composed pipeline: an OpenAI-compatible LLM server, a Whisper size (default `base.en`) and a Piper voice path. Only read when `composed` is selected |
 | `VOICE_TURN_DETECTOR` | `silero` (default) or `energy`. Decides when the candidate's turn ends. Falls back to `energy` with a warning if `soro[vad]` is missing |
 | `TURN_SERVER_URL`, `TURN_USERNAME`, `TURN_CREDENTIAL` | Optional TURN relay. Used for both `/turn/credentials` and the server's own peer connection. STUN only when empty |
 | `GOOGLE_CLIENT_ID` | Optional. Enables `provider: "google"` sign-in |

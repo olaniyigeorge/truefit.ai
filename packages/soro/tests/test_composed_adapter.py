@@ -306,3 +306,27 @@ async def test_opening_a_session_warms_up_the_speech_models(caplog):
         await asyncio.sleep(0)  # let the TTS warm-up run and fail
         assert await adapter.is_healthy()  # a failed warm-up does not end the session
     assert "Warm-up of BrokenWarmTTS failed" in caplog.text
+
+
+async def test_activity_hints_from_the_caller_end_the_turn_without_the_hangover():
+    """An app's audio bridge that detects turns itself can say so; no second wait."""
+    llm = FakeLanguageModel([["Got it."]])
+    stt = FakeSpeechToText(["hello"])
+    adapter = _adapter(llm, stt=stt)  # ScriptedDetector: never sees START or END here
+    async with adapter.open_session("p", []) as session:
+        await session.send_activity_start()
+        for _ in range(3):
+            await session.send_audio(VOICE)
+        await session.send_activity_end()
+        events = await _collect(session, "turn_complete")
+    assert events[0] == ("input_text", "hello")
+    assert stt.heard == [FRAME * 3]
+
+
+async def test_activity_end_without_a_turn_does_nothing():
+    llm = FakeLanguageModel([])
+    adapter = _adapter(llm)
+    async with adapter.open_session("p", []) as session:
+        await session.send_activity_end()
+        await asyncio.sleep(0.05)
+        assert llm.seen == []

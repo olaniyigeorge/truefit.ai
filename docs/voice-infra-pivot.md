@@ -53,6 +53,7 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 | Non-blocking tools and a response policy (listen-only, addressed) | Partly done (background tools and confirm-before-execute; listen-only mode open) |
 | Eval harness (one pipeline, both approaches) | Done (`soro.evals`, `python -m soro.evals`; scripted baseline in CI, live providers opt-in) |
 | Step 4: `ComposedLiveAdapter` (Gap 3) | Built, and validated live on 2026-10-05 against llama.cpp, Whisper and Piper on a laptop CPU (results in the Soro README). Small models handle single-tool assistants; multi-step flows need a 7B-class model |
+| Interview app on the free path (`LLM_PRIMARY_PROVIDER=composed`) | Done 2026-10-05 (settings and wiring; a full interview needs a 7B-class tool-calling model) |
 | Hosted HTTP API and client SDKs | Not started |
 | Step 3: use cases under `examples/` (interview, personal OS, meeting copilot) | Interview moved to `examples/truefit/`; the rest not started |
 

@@ -85,12 +85,14 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 FIREBASE_PROJECT_ID=your-firebase-project-id
 
-# Voice provider (gemini or openai, optional fallback)
+# Voice provider (gemini, openai or composed, optional fallback)
 LLM_PRIMARY_PROVIDER=gemini
 LLM_FALLBACK_PROVIDER=none
 GEMINI_API_KEY=your-gemini-api-key
 OPENAI_API_KEY=                     # only if OpenAI is primary or fallback
 ```
+
+To run interviews for free on your own machine, set `LLM_PRIMARY_PROVIDER=composed` and point `COMPOSED_LLM_BASE_URL`, `COMPOSED_LLM_MODEL` and `COMPOSED_TTS_VOICE` at a local LLM server and a Piper voice. The interview's ordered tool calls need a 7B-class tool-calling model; smaller ones skip or invent steps. See "Local, free: the composed adapter" in `packages/soro/README.md`.
 
 `examples/truefit/backend/env.example` lists every setting with comments. The unit and integration tests need none of these.
 
