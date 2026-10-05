@@ -4,7 +4,7 @@ Model-agnostic realtime voice agent infrastructure.
 
 Write an agent once (a prompt, some tools, audio in and out) and run it on any realtime model. Soro gives you one small interface, `LiveSessionPort`, and adapters that implement it for each provider. Your agent never touches a provider SDK, so switching from Gemini Live to OpenAI Realtime, or failing over between them, is a configuration change.
 
-> **Status: 0.1, alpha.** The interface may still change while the second (composed, non-native-audio) approach is built and validated against it. Pin the exact version.
+> **Status: 0.1, alpha.** The composed (non-native-audio) adapter now runs behind the same interface on fake components; it has not yet been validated live against downloaded models. The interface may still change until it has. Pin the exact version.
 
 ## Install
 
@@ -13,12 +13,48 @@ pip install soro                 # core only: port, runtime, tools, turn detecti
 pip install "soro[gemini]"       # + Gemini Live
 pip install "soro[openai]"       # + OpenAI Realtime
 pip install "soro[webrtc]"       # + WebRTC audio transport (aiortc)
+pip install "soro[vad]"          # + Silero neural turn detection (onnxruntime, no torch)
+pip install "soro[openapi]"      # + OpenAPI connector (httpx, pyyaml)
+pip install "soro[mcp]"          # + MCP connector
+pip install "soro[composed]"     # + local STT -> LLM -> TTS adapter (faster-whisper, Piper)
 pip install "soro[all]"          # everything
 ```
 
 Each provider's SDK is imported lazily, so you only need the extras you use. If you ask for a provider whose extra is missing, Soro tells you which one to install.
 
-## A minimal agent
+## An agent in a few lines
+
+`Agent` is the quickest start: a prompt, tools from connectors, and a voice policy.
+
+```python
+import soro
+
+@soro.tool
+def save_note(text: str) -> None:
+    """Save a note for the user.
+
+    Args:
+        text: What to write down.
+    """
+    ...
+
+agent = soro.Agent(
+    prompt="You are my assistant. You can manage my notes and calendar.",
+    tools=[save_note],                                         # plain functions
+    connectors=[soro.connectors.openapi("https://my-os.example/openapi.json"),
+                soro.connectors.mcp("python calendar_server.py")],
+    confirm=["delete_*", "schedule_*"],                        # ask aloud before running
+    background=["search_*"],                                   # slow: acknowledge now, report later
+    provider="gemini", gemini_api_key="...",
+)
+await agent.run(audio_input_stream=mic(), on_audio_output=play)
+```
+
+- **Connectors** turn an existing system into tools. `functions(...)` reads the signature and docstring, so the schema cannot drift from the code. `openapi(spec)` makes one tool per operation and calls the API (allowlist with `operations=` or `tags=`, auth with `headers=`). `mcp(command_or_url)` proxies an MCP server's tools over stdio or HTTP. Anything with async `tools()` and `aclose()` is a connector.
+- **Confirm before execute.** Matching tools gain a `confirmed` argument and refuse to run without it, and the prompt tells the model to read the action back first. This is model-mediated: it stops calls the model did not confirm, but it cannot hear the user say yes.
+- **Background tools.** A matching tool returns "started" at once so the model keeps talking, and its result is sent into the session as a `[tool result]` message when it finishes.
+
+## A minimal agent, without the facade
 
 ```python
 import asyncio
@@ -87,7 +123,17 @@ for chunk in mic_chunks:                # 16-bit mono PCM, any chunk size
         print(event.kind)               # "start" or "end"
 ```
 
-It learns a noise floor, so steady noise such as a fan raises the floor instead of holding a turn open. It uses separate start and end thresholds so a level near the edge does not flap, and it tolerates the short gaps between syllables. Time is measured in audio, not wall clock, so it is deterministic. Tune it with `EnergyTurnConfig` (for example `end_ms`). Anything that implements the protocol can replace it, such as a neural detector.
+It learns a noise floor, so steady noise such as a fan raises the floor instead of holding a turn open. It uses separate start and end thresholds so a level near the edge does not flap, and it tolerates the short gaps between syllables. Time is measured in audio, not wall clock, so it is deterministic. Tune it with `EnergyTurnConfig` (for example `end_ms`).
+
+For noisy rooms use the neural detector, a drop-in with the same protocol. It runs the bundled Silero VAD model on onnxruntime (no torch) and classifies the sound of speech instead of its loudness, so noise that would fool an energy threshold does not start a turn:
+
+```python
+from soro.audio import create_turn_detector
+
+detector = create_turn_detector("silero")   # pip install "soro[vad]"
+```
+
+`python -m soro.evals turns` compares the detectors on the same noisy-room audio. On the built-in cases the energy detector false-triggers when a fan switches on mid-call and Silero does not.
 
 ## WebRTC transport
 
@@ -102,6 +148,34 @@ await bridge.attach_inbound_track(browser_audio_track)
 bridge.open_mic()
 # pass bridge.audio_input_stream() to VoiceAgentRuntime, and push_audio() the model's audio back
 ```
+
+## Local, free: the composed adapter
+
+`ComposedLiveAdapter` builds the same `LiveSessionPort` from parts: a turn detector, speech to text, an LLM and text to speech. The defaults are local and need no API key: faster-whisper, any OpenAI-compatible server (Ollama, llama.cpp, vLLM) and a Piper voice.
+
+```python
+adapter = soro.create_live_adapter(
+    "composed",
+    composed_llm_base_url="http://localhost:11434/v1",   # Ollama
+    composed_llm_model="qwen2.5",                         # pick a model trained for tool calls
+    composed_tts_voice="voices/en_US-amy-medium.onnx",    # .onnx.json beside it
+)
+```
+
+The adapter owns turn-taking (`native_vad=True`). Speech during a reply is a barge-in: the reply stops mid-sentence and `interrupted` is emitted. Replies are spoken sentence by sentence, so the first audio comes after the first sentence, not the whole reply. Any piece can be swapped by passing your own `SpeechToText`, `LanguageModel` or `TextToSpeech`; in-memory fakes of all three are in `soro.adapters.composed`. The LLM only sees text, so tone and hesitation are lost: that is the trade for running free and local.
+
+## Evals
+
+`soro.evals` measures a provider instead of guessing. A scenario is a scripted caller, the tools on offer, and what a good agent does (tool calls in order, with matching arguments, ordering rules, transcript patterns). The runner plays the caller against a real `VoiceAgentRuntime` on any adapter, records a timestamped trace, and scores time to first audio, turn latency, barge-in, tool-call correctness and reconnect recovery.
+
+```bash
+python -m soro.evals turns                           # noisy-room turn detection, energy vs silero
+python -m soro.evals scenarios                       # the scripted baseline, no key needed
+python -m soro.evals scenarios -p scripted,gemini    # add a real provider (reads GEMINI_API_KEY)
+python -m soro.evals scenarios --list
+```
+
+`scenarios` exits non-zero when a run fails, so it can gate CI. Scenarios that need synthetic caller audio (barge-in, spoken turns, reconnects) run only on the scripted baseline; text scenarios run on every provider.
 
 ## Testing your agent
 
@@ -118,6 +192,7 @@ adapter = FakeLiveAdapter(events=[("tool_call", {"id": "1", "name": "save_note",
 | File | Shows |
 |---|---|
 | `examples/offline_note_taker.py` | An agent with tools, run end to end with no network or key |
+| `examples/connected_agent.py` | `Agent` with function and OpenAPI tools, confirm and background policy, no network or key |
 | `examples/turn_detection.py` | The detector ignoring a fan and finding speech over it |
 
 ## Resilience
@@ -126,7 +201,7 @@ The Gemini adapter uses session resumption: a dropped connection, a transient se
 
 ## Configuration
 
-Adapters take their settings as constructor arguments and fall back to the provider's usual environment variables (`GEMINI_API_KEY`, `GEMINI_LIVE_MODEL`, `OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL`). Soro reads no other global configuration.
+Adapters take their settings as constructor arguments and fall back to the provider's usual environment variables (`GEMINI_API_KEY`, `GEMINI_LIVE_MODEL`, `OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL`; for the composed adapter `SORO_LLM_BASE_URL`, `SORO_LLM_MODEL`, `SORO_LLM_API_KEY`, `SORO_STT_MODEL`, `SORO_PIPER_VOICE`). Soro reads no other global configuration.
 
 ## Develop
 

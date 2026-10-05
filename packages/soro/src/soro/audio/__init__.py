@@ -1,5 +1,6 @@
 """Audio helpers."""
 
+from soro.audio.silero import SileroTurnConfig, SileroTurnDetector
 from soro.audio.turn import (
     EnergyTurnConfig,
     EnergyTurnDetector,
@@ -11,6 +12,8 @@ from soro.audio.turn import (
 __all__ = [
     "EnergyTurnConfig",
     "EnergyTurnDetector",
+    "SileroTurnConfig",
+    "SileroTurnDetector",
     "TurnDetector",
     "TurnEvent",
     "create_turn_detector",

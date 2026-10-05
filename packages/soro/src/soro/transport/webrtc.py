@@ -26,13 +26,13 @@ KEY DESIGN DECISIONS
 
 1. MIC GATING: The mic starts CLOSED. It only opens after the agent's first
    turn completes (called by your app when the agent's turn completes). This
-   prevents the candidate's audio from reaching Gemini before it's ready to
+   prevents the candidate's audio from reaching your model provider before it's ready to
    listen. open_mic() / close_mic() control this gate.
 
 2. ECHO SUPPRESSION: A cooldown timer (_speaking_cooldown_until) suppresses
    inbound audio for 600ms after the agent stops speaking. This prevents the
    agent's own voice (coming back through the WebRTC echo path) from being
-   sent to Gemini as candidate speech.
+   sent to your model provider(Gemini or OpenAI etc) as candidate speech.
 
 3. NON-BLOCKING QUEUES: Both queues use put_nowait(). If full, inbound drops
    the oldest chunk (LRU - freshness matters more than completeness). Outbound

@@ -18,7 +18,7 @@ from soro.ports import LiveSessionPort
 
 logger = logging.getLogger("soro.factory")
 
-PROVIDERS = ("gemini", "openai")
+PROVIDERS = ("gemini", "openai", "composed")
 _NONE = "none"
 
 
@@ -35,6 +35,10 @@ def _make_adapter(
     openai_api_key: str | None,
     openai_model: str | None,
     openai_voice: str | None,
+    composed_llm_base_url: str | None = None,
+    composed_llm_model: str | None = None,
+    composed_stt_model: str | None = None,
+    composed_tts_voice: str | None = None,
 ) -> LiveSessionPort:
     """Provider libraries are imported here, so a provider you do not use need not be installed."""
     match provider.strip().lower():
@@ -54,6 +58,17 @@ def _make_adapter(
 
             kwargs = {"voice": openai_voice} if openai_voice else {}
             return OpenAIRealtimeAdapter(api_key=openai_api_key, model=openai_model, **kwargs)
+        case "composed":
+            # Local STT -> LLM -> TTS. create_composed_adapter checks its own
+            # extras and raises the "install soro[composed]" hint itself.
+            from soro.adapters.composed import create_composed_adapter
+
+            return create_composed_adapter(
+                llm_base_url=composed_llm_base_url,
+                llm_model=composed_llm_model,
+                stt_model=composed_stt_model,
+                tts_voice=composed_tts_voice,
+            )
         case _:
             raise ValueError(
                 f"Unknown provider: {provider!r}. Valid values are {', '.join(PROVIDERS)} "
@@ -71,9 +86,15 @@ def create_live_adapter(
     openai_api_key: str | None = None,
     openai_model: str | None = None,
     openai_voice: str | None = None,
+    composed_llm_base_url: str | None = None,
+    composed_llm_model: str | None = None,
+    composed_stt_model: str | None = None,
+    composed_tts_voice: str | None = None,
 ) -> LiveSessionPort:
     """
-    primary / fallback: "gemini" or "openai"; fallback may also be "none".
+    primary / fallback: "gemini", "openai" or "composed"; fallback may also be "none".
+    composed_*: the local pipeline's LLM server, models and Piper voice (see
+    soro.adapters.composed.create_composed_adapter for defaults).
     Blank or None values mean the defaults ("gemini" and "none").
 
     With a fallback the result is a FallbackLiveAdapter: it opens the primary and,
@@ -97,6 +118,10 @@ def create_live_adapter(
         openai_api_key=openai_api_key,
         openai_model=openai_model,
         openai_voice=openai_voice,
+        composed_llm_base_url=composed_llm_base_url,
+        composed_llm_model=composed_llm_model,
+        composed_stt_model=composed_stt_model,
+        composed_tts_voice=composed_tts_voice,
     )
     logger.info("primary=%r fallback=%r", primary_name, fallback_name)
     main = _make_adapter(primary_name, **opts)

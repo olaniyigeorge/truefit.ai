@@ -194,7 +194,18 @@ class EnergyTurnDetector:
 
 
 def create_turn_detector(kind: str = "energy", **options) -> TurnDetector:
-    """Build a detector by name. Only "energy" ships today."""
+    """
+    Build a detector by name.
+
+    "energy": the pure-Python adaptive detector, always available.
+    "silero": the neural detector, which needs the extra: pip install "soro[vad]".
+    """
     if kind == "energy":
         return EnergyTurnDetector(EnergyTurnConfig(**options))
-    raise ValueError(f"Unknown turn detector {kind!r}. Available: 'energy'.")
+    if kind == "silero":
+        # Imported here so the base package never pulls onnxruntime; the
+        # "install soro[vad]" hint is raised when the model is actually built.
+        from soro.audio.silero import SileroTurnConfig, SileroTurnDetector
+
+        return SileroTurnDetector(SileroTurnConfig(**options))
+    raise ValueError(f"Unknown turn detector {kind!r}. Available: 'energy', 'silero'.")

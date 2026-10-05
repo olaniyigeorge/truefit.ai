@@ -1,7 +1,8 @@
 """
 Contract every LiveSessionPort adapter must honour. Runs against the fake, the
-fallback wrapper and the real Gemini and OpenAI adapters (no network: only
-static behaviour that works without an open session).
+fallback wrapper, the real Gemini and OpenAI adapters and the composed adapter
+on fake components (no network: only static behaviour that works without an
+open session).
 """
 
 import inspect
@@ -33,11 +34,23 @@ def _openai():
     return OpenAIRealtimeAdapter(api_key="test-key")
 
 
+def _composed():
+    from soro.adapters.composed import (
+        ComposedLiveAdapter,
+        FakeLanguageModel,
+        FakeSpeechToText,
+        FakeTextToSpeech,
+    )
+
+    return ComposedLiveAdapter(stt=FakeSpeechToText(), llm=FakeLanguageModel(), tts=FakeTextToSpeech())
+
+
 ADAPTERS = {
     "fake": lambda: FakeLiveAdapter(),
     "fallback": lambda: FallbackLiveAdapter(primary=FakeLiveAdapter(), fallback=FakeLiveAdapter()),
     "gemini": _gemini,
     "openai": _openai,
+    "composed": _composed,
 }
 
 
@@ -54,7 +67,8 @@ def test_capabilities_are_declared_and_sane(adapter):
     caps = adapter.capabilities
     assert isinstance(caps, AdapterCapabilities)
     assert caps.input_sample_rate in (8_000, 16_000, 24_000, 44_100, 48_000)
-    assert caps.output_sample_rate in (8_000, 16_000, 24_000, 44_100, 48_000)
+    # 22.05kHz is Piper's usual voice rate (composed adapter).
+    assert caps.output_sample_rate in (8_000, 16_000, 22_050, 24_000, 44_100, 48_000)
     assert isinstance(caps.supports_images, bool) and isinstance(caps.native_vad, bool)
 
 
@@ -77,7 +91,7 @@ def test_open_session_accepts_toolspecs_and_returns_context_manager(adapter):
     assert hasattr(ctx, "__aenter__") and hasattr(ctx, "__aexit__")
 
 
-@pytest.mark.parametrize("make", [_gemini, _openai], ids=["gemini", "openai"])
+@pytest.mark.parametrize("make", [_gemini, _openai, _composed], ids=["gemini", "openai", "composed"])
 def test_real_adapters_reject_duplicate_tool_names_before_connecting(make):
     with pytest.raises(ValueError, match="Duplicate"):
         make().open_session("p", tools=[ToolSpec(name="a"), ToolSpec(name="a")])
