@@ -52,7 +52,7 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 | Connector layer (turn an existing system into tools) | Done (functions, OpenAPI, MCP connectors and the `soro.Agent` facade) |
 | Non-blocking tools and a response policy (listen-only, addressed) | Partly done (background tools and confirm-before-execute; listen-only mode open) |
 | Eval harness (one pipeline, both approaches) | Done (`soro.evals`, `python -m soro.evals`; scripted baseline in CI, live providers opt-in) |
-| Step 4: `ComposedLiveAdapter` (Gap 3) | Built and in the contract suite on fake components; live validation with real models open |
+| Step 4: `ComposedLiveAdapter` (Gap 3) | Built, and validated live on 2026-10-05 against llama.cpp, Whisper and Piper on a laptop CPU (results in the Soro README). Small models handle single-tool assistants; multi-step flows need a 7B-class model |
 | Hosted HTTP API and client SDKs | Not started |
 | Step 3: use cases under `examples/` (interview, personal OS, meeting copilot) | Interview moved to `examples/truefit/`; the rest not started |
 
@@ -124,7 +124,7 @@ Testing has three levels, none of which needs the interview app: automated unit 
 
 | Layer | State |
 |---|---|
-| Models: one port over Gemini Live, OpenAI Realtime and a composed local pipeline | Built (composed path not yet run live) |
+| Models: one port over Gemini Live, OpenAI Realtime and a composed local pipeline | Built; composed path run live on local models |
 | Runtime: loops, tool dispatch, lifecycle, reconnect recovery | Built |
 | Connectors: turn an existing system into tools (functions, OpenAPI, MCP) | Built |
 | Turn detection | Pluggable: adaptive energy detector, Silero neural detector |
@@ -152,6 +152,10 @@ The port is meant to hold two approaches. The **speech-to-speech** approach (Gem
 Research on the free path (2026-09-29, unverified beyond the sources): OpenRouter's free `deepgram/flux-tts` is a whole-file HTTP call limited to 50 requests per day, with undocumented streaming, so it suits a fallback, not a live path. The live path would be Deepgram streaming STT (Flux, with end-of-turn detection) and streaming TTS, with new accounts getting $200 of credit.
 
 ## Known issues
+
+- **Silero scored real speech near zero (fixed 2026-10-05).** The first live run of the composed path found that the Silero detector never started a turn on real speech: Silero v5 expects the last 64 samples of the previous window in front of each new one, and the detector did not send them. The noisy-room eval missed it because it only checks that noise is rejected. Fixed, with a regression test; on synthesized speech Silero now starts a turn 160ms sooner than the energy detector.
+- **Whisper heard "You" in silence (fixed 2026-10-05).** Whisper hallucinates a word on silence or noise, so a noise blip the turn detector let through would have become a user turn. `FasterWhisperSTT` now drops segments Whisper itself rates as probably not speech (`no_speech_threshold`, default 0.6; speech scored 0.003, silence 0.77, noise 0.92).
+- **Small local models and multi-step tool flows.** Qwen2.5 1.5B passes a single-tool scenario but not the interview's ordered tool calls (it invents answers and writes tool calls as text). The interview on the free path needs a 7B-class tool-calling model, so on modest hardware the free tier suits simpler assistants first.
 
 - **Gemini `1011 Internal error occurred`.** The Live model `gemini-2.5-flash-native-audio-preview-12-2025` closes sessions with 1011, often 4 to 10 seconds in while generating the first response. Google documents no cause. Forum reports describe the same model failing very frequently since late May 2026, including with session resumption on, so this looks like preview-model instability, not our bug. The adapter reconnects on transient close codes and gives up after three failed reconnects in a row (a reconnect only counts as good once a turn completes). Options: set `GEMINI_LIVE_MODEL` to a newer model (Google's models page lists `gemini-3.8-live` as GA, unverified here, and the 3.x models differ in tool and turn behaviour, so the adapter config may need per-model changes), or send the first text turn with `send_realtime_input` (an untested suggestion).
 - **Fan noise keeps the mic "speaking".** `AudioBridge` ends a turn with a hand-rolled detector: any chunk whose peak exceeds 400 counts as speech and resets the 0.8 second silence timer, so steady noise never lets a turn end. `SILENCE_THRESHOLD` is defined and unused, so there is no hysteresis, and only the first 32 samples of each 20ms chunk are inspected. The fix is pluggable turn detection in the SDK (an adaptive energy detector, an optional neural detector such as Silero, or the provider's own) plus a noisy-room eval scenario. Status: the SDK now has both detectors and the scenario (`python -m soro.evals turns`); on it the energy detector still false-triggers when a fan switches on mid-call and Silero does not. `AudioBridge` takes either via `turn_detector=`, and since 2026-10-05 the interview app uses Silero by default (`VOICE_TURN_DETECTOR`, with `energy` as the fallback).

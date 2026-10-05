@@ -4,7 +4,7 @@ Model-agnostic realtime voice agent infrastructure.
 
 Write an agent once (a prompt, some tools, audio in and out) and run it on any realtime model. Soro gives you one small interface, `LiveSessionPort`, and adapters that implement it for each provider. Your agent never touches a provider SDK, so switching from Gemini Live to OpenAI Realtime, or failing over between them, is a configuration change.
 
-> **Status: 0.1, alpha.** The composed (non-native-audio) adapter now runs behind the same interface on fake components; it has not yet been validated live against downloaded models. The interface may still change until it has. Pin the exact version.
+> **Status: 0.1, alpha.** The composed (non-native-audio) adapter has run live end to end against local models (spoken audio in, a tool call, spoken audio out); see "Measured on a laptop CPU" below. The interface may still change. Pin the exact version.
 
 ## Install
 
@@ -162,7 +162,24 @@ adapter = soro.create_live_adapter(
 )
 ```
 
-The adapter owns turn-taking (`native_vad=True`). Speech during a reply is a barge-in: the reply stops mid-sentence and `interrupted` is emitted. Replies are spoken sentence by sentence, so the first audio comes after the first sentence, not the whole reply. Any piece can be swapped by passing your own `SpeechToText`, `LanguageModel` or `TextToSpeech`; in-memory fakes of all three are in `soro.adapters.composed`. The LLM only sees text, so tone and hesitation are lost: that is the trade for running free and local.
+The adapter owns turn-taking (`native_vad=True`) with the Silero detector by default (`turn_detector="energy"` for the pure-Python one). Speech during a reply is a barge-in: the reply stops mid-sentence and `interrupted` is emitted. Replies are spoken sentence by sentence, so the first audio comes after the first sentence, not the whole reply. Any piece can be swapped by passing your own `SpeechToText`, `LanguageModel` or `TextToSpeech`; in-memory fakes of all three are in `soro.adapters.composed`. The LLM only sees text, so tone and hesitation are lost: that is the trade for running free and local. When a session opens, the adapter loads the Whisper and Piper models in the background (any component may define `async warm_up()`), so the first turn does not pay for the load.
+
+### Measured on a laptop CPU
+
+Run on 2026-10-05: 4 cores, no GPU, 8GB of RAM shared with an editor, llama.cpp's `llama-server --jinja`, Whisper `base.en` (int8) and Piper `en_US-lessac-medium`. `examples/local_voice_loop.py` speaks the caller's line with Piper and feeds it through the whole pipeline.
+
+| LLM (Q4_K_M) | Spoken note, one tool call | `note_taker` (text) | `interview_order` (text, five ordered calls) |
+|---|---|---|---|
+| Qwen2.5 0.5B (470MB) | Pass. About 11s from the caller starting to the spoken confirmation | Fails: saves the note but does not greet | Fails: calls no tools |
+| Qwen2.5 1.5B (1.1GB) | Not run | Pass. 19s to first audio, 10s per turn | Fails: invents the candidate's answers and writes later tool calls as text, which would be spoken |
+
+What this means:
+
+- The pipeline itself works: turn detection, transcription, tool round trips, sentence-by-sentence speech and history all behave as on the fakes.
+- Small models are fine for simple single-tool assistants. Multi-step flows with ordering rules, such as the interview, need a larger model trained for tool calls (7B class, about 4.7GB at Q4), which in turn needs a machine with more free memory or a GPU.
+- Whisper `base.en` transcribed 3.6s of speech in about 2.6s once loaded. On a CPU, the LLM is the slowest part, and its speed drops sharply when other programs compete for the cores.
+
+To repeat the measurements: `python examples/local_voice_loop.py`, and `python -m soro.evals scenarios -p composed --turn-timeout 120 --session-timeout 300`.
 
 ## Evals
 
@@ -194,6 +211,7 @@ adapter = FakeLiveAdapter(events=[("tool_call", {"id": "1", "name": "save_note",
 | `examples/offline_note_taker.py` | An agent with tools, run end to end with no network or key |
 | `examples/connected_agent.py` | `Agent` with function and OpenAPI tools, confirm and background policy, no network or key |
 | `examples/turn_detection.py` | The detector ignoring a fan and finding speech over it |
+| `examples/local_voice_loop.py` | The free local pipeline end to end on real synthesized speech, scored by the eval harness (needs a local LLM server and a Piper voice) |
 
 ## Resilience
 
@@ -201,7 +219,7 @@ The Gemini adapter uses session resumption: a dropped connection, a transient se
 
 ## Configuration
 
-Adapters take their settings as constructor arguments and fall back to the provider's usual environment variables (`GEMINI_API_KEY`, `GEMINI_LIVE_MODEL`, `OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL`; for the composed adapter `SORO_LLM_BASE_URL`, `SORO_LLM_MODEL`, `SORO_LLM_API_KEY`, `SORO_STT_MODEL`, `SORO_PIPER_VOICE`). Soro reads no other global configuration.
+Adapters take their settings as constructor arguments and fall back to the provider's usual environment variables (`GEMINI_API_KEY`, `GEMINI_LIVE_MODEL`, `OPENAI_API_KEY`, `OPENAI_REALTIME_MODEL`; for the composed adapter `SORO_LLM_BASE_URL`, `SORO_LLM_MODEL`, `SORO_LLM_API_KEY`, `SORO_LLM_TIMEOUT`, `SORO_STT_MODEL`, `SORO_PIPER_VOICE`). Soro reads no other global configuration.
 
 ## Develop
 

@@ -33,6 +33,9 @@ from soro.audio.turn import TurnDetector, create_turn_detector
 DEFAULT_LLM_URL = "http://localhost:11434/v1"  # Ollama
 DEFAULT_LLM_MODEL = "llama3.2"
 DEFAULT_STT_MODEL = "base.en"
+# Seconds to wait for the server between streamed chunks. Generous because a
+# small model on a busy CPU can take most of a minute to read a long prompt.
+DEFAULT_LLM_TIMEOUT = 120.0
 
 
 def create_composed_adapter(
@@ -40,14 +43,18 @@ def create_composed_adapter(
     llm_base_url: Optional[str] = None,
     llm_model: Optional[str] = None,
     llm_api_key: Optional[str] = None,
+    llm_timeout: Optional[float] = None,
     stt_model: Optional[str] = None,
     tts_voice: Optional[str] = None,
-    turn_detector: str | TurnDetector = "energy",
+    turn_detector: str | TurnDetector = "silero",
 ) -> ComposedLiveAdapter:
     """
     Arguments fall back to environment variables, as the cloud adapters fall back
     to their API key variables: SORO_LLM_BASE_URL, SORO_LLM_MODEL, SORO_LLM_API_KEY,
-    SORO_STT_MODEL and SORO_PIPER_VOICE (path to the voice .onnx).
+    SORO_LLM_TIMEOUT, SORO_STT_MODEL and SORO_PIPER_VOICE (path to the voice .onnx).
+
+    turn_detector defaults to Silero, which ignores steady noise such as a fan;
+    pass "energy" for the pure-Python detector.
 
     Fails here, not mid-call, when a dependency or the voice is missing. The LLM
     server is not contacted until the first reply.
@@ -72,6 +79,7 @@ def create_composed_adapter(
             base_url=llm_base_url or os.environ.get("SORO_LLM_BASE_URL") or DEFAULT_LLM_URL,
             model=llm_model or os.environ.get("SORO_LLM_MODEL") or DEFAULT_LLM_MODEL,
             api_key=llm_api_key or os.environ.get("SORO_LLM_API_KEY"),
+            timeout=llm_timeout or float(os.environ.get("SORO_LLM_TIMEOUT") or DEFAULT_LLM_TIMEOUT),
         ),
         tts=PiperTTS(voice),
         turn_detector=detector,

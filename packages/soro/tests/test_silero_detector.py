@@ -199,3 +199,37 @@ def test_detectors_share_the_model_but_not_its_state():
     for _ in range(50):
         fresh.process(silence)
     assert quiet.last_speech_prob == pytest.approx(fresh.last_speech_prob, abs=1e-6)
+
+
+def test_v5_windows_carry_the_previous_windows_tail(monkeypatch):
+    """
+    Regression: Silero v5 needs the last 64 samples of the previous window in
+    front of each new one. Without them it scored real speech near zero and no
+    turn ever started (the noisy-room eval only checks that noise is rejected,
+    so it could not catch this).
+    """
+    np = pytest.importorskip("numpy")
+    pytest.importorskip("onnxruntime")
+    from types import SimpleNamespace
+
+    import soro.audio.silero as silero
+
+    seen = []
+
+    class FakeSession:
+        def get_inputs(self):
+            return [SimpleNamespace(name=n) for n in ("input", "state", "sr")]
+
+        def run(self, _outputs, feeds):
+            seen.append(feeds["input"].copy())
+            return [np.array([[0.0]], dtype=np.float32), feeds["state"]]
+
+    monkeypatch.setattr(silero, "_inference_session", lambda _path: FakeSession())
+    det = SileroTurnDetector()
+    first = np.arange(512, dtype="<i2")
+    second = np.arange(512, 1024, dtype="<i2")
+    det.process(first.tobytes() + second.tobytes())
+
+    assert [w.shape for w in seen] == [(1, 576), (1, 576)]
+    assert not seen[0][0, :64].any()  # nothing came before the first window
+    np.testing.assert_allclose(seen[1][0, :64], first[-64:].astype(np.float32) / 32768.0)

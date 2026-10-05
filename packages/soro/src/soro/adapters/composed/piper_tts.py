@@ -70,6 +70,10 @@ class PiperTTS:
                 self._voice = await asyncio.to_thread(PiperVoice.load, self.voice_path, self.config_path)
         return self._voice
 
+    async def warm_up(self) -> None:
+        """Load the voice now rather than on the first sentence."""
+        await self._load()
+
     async def synthesize(self, text: str) -> AsyncIterator[bytes]:
         voice = await self._load()
 

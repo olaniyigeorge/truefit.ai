@@ -91,6 +91,24 @@ async def test_llm_handles_object_arguments_broken_json_and_errors():
         await _drain(failing)
 
 
+async def test_whisper_drops_segments_it_rates_as_not_speech(monkeypatch):
+    """Whisper says "You" on silence; a high no_speech_prob segment must not become a user turn."""
+    pytest.importorskip("numpy")
+    from types import SimpleNamespace
+
+    from soro.adapters.composed.faster_whisper_stt import FasterWhisperSTT
+
+    class FakeModel:
+        def transcribe(self, _audio, **_options):
+            segments = [SimpleNamespace(text=" You", no_speech_prob=0.77),
+                        SimpleNamespace(text=" Buy milk.", no_speech_prob=0.01)]
+            return iter(segments), None
+
+    stt = FasterWhisperSTT()
+    stt._model = FakeModel()
+    assert await stt.transcribe(b"\x00\x00" * 1600, 16_000) == "Buy milk."
+
+
 def test_piper_sample_rate_is_read_from_the_voice_config(tmp_path):
     voice = tmp_path / "en_US-amy-medium.onnx"
     (tmp_path / "en_US-amy-medium.onnx.json").write_text(json.dumps({"audio": {"sample_rate": 22050}}))

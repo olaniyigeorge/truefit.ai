@@ -96,6 +96,7 @@ class ComposedLiveAdapter(LiveSessionPort):
         self._last_audio = 0.0
         self._watcher: Optional[asyncio.Task] = None
         self._reply: Optional[asyncio.Task] = None
+        self._warming: Optional[asyncio.Task] = None
         self._spoke = False
         self._queued_text: list[str] = []
         self._pending_tools: dict[str, asyncio.Future] = {}
@@ -120,15 +121,32 @@ class ComposedLiveAdapter(LiveSessionPort):
         self._open = True
         self.detector.reset()
         self._watcher = asyncio.create_task(self._watch_silence(), name="composed-silence")
+        self._warming = asyncio.create_task(self._warm_up(), name="composed-warm-up")
+
+    async def _warm_up(self) -> None:
+        """
+        Load the speech models while the session opens, so the first turn does not
+        pay for it (loading Whisper alone takes seconds on a CPU). Components opt in
+        with an async warm_up(); a failure here is only logged, since the same
+        error will surface, with context, on the first real call.
+        """
+        for part in (self.stt, self.tts):
+            warm_up = getattr(part, "warm_up", None)
+            if warm_up is None:
+                continue
+            try:
+                await warm_up()
+            except Exception as exc:
+                logger.warning(f"[Composed] Warm-up of {type(part).__name__} failed: {type(exc).__name__}: {exc}")
 
     async def close(self) -> None:
         if not self._open:
             return
         self._open = False
-        for task in (self._reply, self._watcher):
-            if task is not None:
-                task.cancel()
-        await asyncio.gather(*(t for t in (self._reply, self._watcher) if t), return_exceptions=True)
+        tasks = [t for t in (self._reply, self._watcher, self._warming) if t is not None]
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
         for future in self._pending_tools.values():
             future.cancel()
         self._pending_tools.clear()
@@ -257,7 +275,7 @@ class ComposedLiveAdapter(LiveSessionPort):
         except Exception as exc:
             # An STT/LLM/TTS failure ends this reply, not the session: the user can
             # simply speak again. turn_complete keeps the runtime's turn state sane.
-            logger.error(f"[Composed] Reply failed: {exc}")
+            logger.error(f"[Composed] Reply failed: {type(exc).__name__}: {exc}")
             if said:
                 self.history.append({"role": "assistant", "content": " ".join(said)})
             await self._queue.put(("turn_complete", None))

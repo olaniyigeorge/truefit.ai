@@ -36,6 +36,8 @@ _MODEL_FILE = "silero_vad.onnx"
 
 # Silero's supported window sizes, in samples, keyed by sample rate.
 _WINDOW_SAMPLES = {16_000: 512, 8_000: 256}
+# Samples of the previous window that Silero v5 reads before each new one.
+_CONTEXT_SAMPLES = {16_000: 64, 8_000: 32}
 
 SpeechProb = Callable[[bytes], float]
 """Maps one window of 16-bit mono PCM to a speech probability in [0, 1]."""
@@ -181,8 +183,17 @@ class SileroTurnDetector:
         else:
             rnn = {"h": np.zeros((2, 1, 64), dtype=np.float32), "c": np.zeros((2, 1, 64), dtype=np.float32)}
 
+        # v5 expects each window prefixed with the tail of the previous one (64
+        # samples at 16kHz, 32 at 8kHz), as silero-vad's own wrapper does. Without
+        # it the model scores clear speech near zero, so no turn would ever start.
+        context_len = _CONTEXT_SAMPLES[self.config.sample_rate] if uses_state else 0
+        context = {"tail": np.zeros(context_len, dtype=np.float32)}
+
         def prob(window: bytes) -> float:
-            audio = (np.frombuffer(window, dtype="<i2").astype(np.float32) / 32768.0).reshape(1, -1)
+            samples = np.frombuffer(window, dtype="<i2").astype(np.float32) / 32768.0
+            audio = np.concatenate([context["tail"], samples]).reshape(1, -1)
+            if context_len:
+                context["tail"] = samples[-context_len:]
             feeds = {audio_input: audio, **rnn}
             if has_sr:
                 feeds["sr"] = sr

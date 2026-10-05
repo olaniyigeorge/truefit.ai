@@ -230,5 +230,5 @@ Where the build departed from the plan:
 - **Packaging:** the model is listed under hatch `artifacts` (not `force-include`), with an `assets/__init__.py` so `importlib.resources` finds it. `composed` also lists `numpy`, and `all` includes `openapi` and `mcp` too. Because `dev` pulls `all`, `pip install -e ".[dev]"` now installs faster-whisper and Piper; split `dev` if that is too heavy.
 - **`python -m soro.evals turns`** is a comparison, not a gate: it exits 0 even though the energy detector fails `fan_switches_on`, because showing that is its job. `scenarios` is the CI gate.
 
-The interview app switched to Silero on 2026-10-05. Still open: live validation of the composed path (a running LLM server plus downloaded Whisper and Piper models), listen-only mode, and MCP resources.
+The interview app switched to Silero on 2026-10-05. The composed path was validated live the same day (see the Soro README). Still open: listen-only mode, and MCP resources.
 

@@ -286,3 +286,23 @@ async def test_runs_under_the_runtime_through_the_agent_facade():
     assert reason == "bye"
     assert notes == ["eggs"]
     assert played
+
+
+async def test_opening_a_session_warms_up_the_speech_models(caplog):
+    class WarmSTT(FakeSpeechToText):
+        warmed = asyncio.Event()
+
+        async def warm_up(self) -> None:
+            self.warmed.set()
+
+    class BrokenWarmTTS(FakeTextToSpeech):
+        async def warm_up(self) -> None:
+            raise RuntimeError("voice file missing")
+
+    stt = WarmSTT()
+    adapter = _adapter(FakeLanguageModel([]), stt=stt, tts=BrokenWarmTTS())
+    async with adapter.open_session("sys", []):
+        await asyncio.wait_for(stt.warmed.wait(), 1.0)
+        await asyncio.sleep(0)  # let the TTS warm-up run and fail
+        assert await adapter.is_healthy()  # a failed warm-up does not end the session
+    assert "Warm-up of BrokenWarmTTS failed" in caplog.text

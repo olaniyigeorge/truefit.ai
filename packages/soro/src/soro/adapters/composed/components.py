@@ -65,6 +65,11 @@ class TextToSpeech(Protocol):
         ...
 
 
+# Optional on any component: `async def warm_up(self) -> None`. The adapter calls
+# it in the background when a session opens, so a slow model load happens while
+# the agent greets instead of on the user's first turn.
+
+
 # ── Fakes
 
 

@@ -39,12 +39,20 @@ class FasterWhisperSTT:
         compute_type: str = "int8",
         language: Optional[str] = "en",
         beam_size: int = 1,
+        no_speech_threshold: float = 0.6,
     ) -> None:
+        """
+        no_speech_threshold: drop segments Whisper itself rates as probably not
+        speech. Whisper hallucinates words such as "You" on silence or noise; when
+        the turn detector lets a noise blip through, this keeps it from becoming a
+        phantom user turn. Real speech scores near 0, silence and noise above 0.7.
+        """
         self.model_name = model
         self.device = device
         self.compute_type = compute_type
         self.language = language
         self.beam_size = beam_size
+        self.no_speech_threshold = no_speech_threshold
         self._model: Any = None
         self._lock = asyncio.Lock()
 
@@ -56,6 +64,10 @@ class FasterWhisperSTT:
                     WhisperModel, self.model_name, device=self.device, compute_type=self.compute_type
                 )
         return self._model
+
+    async def warm_up(self) -> None:
+        """Load the model now rather than on the first utterance."""
+        await self._load()
 
     async def transcribe(self, pcm: bytes, sample_rate: int) -> str:
         if sample_rate != self.SAMPLE_RATE:
@@ -72,6 +84,8 @@ class FasterWhisperSTT:
                 audio, language=self.language, beam_size=self.beam_size,
                 condition_on_previous_text=False, vad_filter=False,
             )
-            return "".join(seg.text for seg in segments).strip()
+            return "".join(
+                seg.text for seg in segments if seg.no_speech_prob < self.no_speech_threshold
+            ).strip()
 
         return await asyncio.to_thread(run)
