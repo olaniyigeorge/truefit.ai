@@ -134,6 +134,10 @@ def check_extras(extras):
         "gemini": ["google.genai", "soro.adapters.gemini"],
         "openai": ["websockets", "soro.adapters.openai"],
         "webrtc": ["aiortc", "soro.transport.webrtc"],
+        "vad": ["onnxruntime", "soro.audio.silero"],
+        "openapi": ["httpx", "yaml", "soro.connectors.openapi"],
+        "mcp": ["mcp", "soro.connectors.mcp"],
+        "composed": ["faster_whisper", "piper", "httpx", "soro.adapters.composed.faster_whisper_stt"],
     }
     for extra in extras:
         for mod in modules[extra]:
@@ -145,6 +149,50 @@ def check_extras(extras):
         bridge = AudioBridge(session_id="smoke", output_sample_rate=24_000)
         assert bridge.create_outbound_track() is not None
         step("WebRTC AudioBridge builds an outbound track")
+    if "vad" in extras:
+        # The model is a binary asset: this fails if the wheel shipped without it.
+        from soro.audio import create_turn_detector
+
+        detector = create_turn_detector("silero")
+        assert detector.process(b"\x00\x00" * 1024) is None
+        step("Silero model is bundled in the wheel and runs")
+
+
+async def check_agent_with_function_tools():
+    # The connector layer's core path (plain functions) needs no extra.
+    import soro
+    from soro.testing import FakeLiveAdapter
+
+    saved = []
+
+    @soro.tool
+    def save_note(text: str) -> str:
+        """Save a note."""
+        saved.append(text)
+        return "saved"
+
+    async def mic():
+        yield b"\x00\x00" * 320
+
+    async def play(pcm):
+        pass
+
+    adapter = FakeLiveAdapter(
+        events=[("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}})],
+        hold_open_until_audio=1,
+    )
+    agent = soro.Agent(prompt="p", tools=[save_note], adapter=adapter)
+    await agent.run(audio_input_stream=mic(), on_audio_output=play)
+    assert saved == ["milk"], saved
+    step("Agent runs a function tool through the runtime")
+
+
+def check_evals_cli():
+    import subprocess
+
+    result = subprocess.run([sys.executable, "-m", "soro.evals", "scenarios"], capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
+    step("python -m soro.evals scenarios passes on the scripted baseline")
 
 
 async def check_live():
@@ -165,7 +213,7 @@ async def check_live():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--extras", default="", help="comma separated: gemini,openai,webrtc")
+    parser.add_argument("--extras", default="", help="comma separated: gemini,openai,webrtc,vad,openapi,mcp,composed")
     extras = [e for e in parser.parse_args().extras.split(",") if e]
     check_not_source_tree()
     check_public_api()
@@ -174,6 +222,8 @@ def main():
     check_turn_detection()
     check_factory_errors(extras)
     check_extras(extras)
+    asyncio.run(check_agent_with_function_tools())
+    check_evals_cli()
     asyncio.run(check_live())
     print("\nall smoke checks passed")
 

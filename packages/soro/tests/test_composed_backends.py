@@ -93,10 +93,13 @@ async def test_llm_handles_object_arguments_broken_json_and_errors():
 
 async def test_whisper_drops_segments_it_rates_as_not_speech(monkeypatch):
     """Whisper says "You" on silence; a high no_speech_prob segment must not become a user turn."""
-    pytest.importorskip("numpy")
+    np = pytest.importorskip("numpy")
     from types import SimpleNamespace
 
+    import soro.adapters.composed.faster_whisper_stt as whisper_module
     from soro.adapters.composed.faster_whisper_stt import FasterWhisperSTT
+
+    monkeypatch.setattr(whisper_module, "_deps", lambda: (np, None))  # no faster-whisper needed
 
     class FakeModel:
         def transcribe(self, _audio, **_options):

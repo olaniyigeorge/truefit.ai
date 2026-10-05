@@ -4,7 +4,7 @@
 #
 #   scripts/test_from_testpypi.sh local              # build + test the wheel, no upload
 #   scripts/test_from_testpypi.sh testpypi 0.1.0     # install that version from TestPyPI
-#   EXTRAS=gemini,openai,webrtc scripts/test_from_testpypi.sh testpypi 0.1.0
+#   EXTRAS=gemini,openai,webrtc,vad,openapi,mcp scripts/test_from_testpypi.sh testpypi 0.1.0
 #
 # Upload itself (needs a TestPyPI token):  twine upload -r testpypi dist/*
 set -euo pipefail
@@ -39,4 +39,8 @@ cd "$(mktemp -d)"
 "$VENV/bin/python" "$OLDPWD/scripts/smoke_test.py" ${EXTRAS:+--extras "$EXTRAS"}
 "$VENV/bin/python" "$OLDPWD/examples/offline_note_taker.py"
 "$VENV/bin/python" "$OLDPWD/examples/turn_detection.py"
+# connected_agent.py uses the OpenAPI connector, which needs the openapi extra.
+if [[ ",$EXTRAS," == *",openapi,"* ]]; then
+  "$VENV/bin/python" "$OLDPWD/examples/connected_agent.py"
+fi
 echo "venv kept at $VENV"

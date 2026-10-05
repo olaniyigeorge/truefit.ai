@@ -227,7 +227,7 @@ Where the build departed from the plan:
 - **Composed configuration** falls back to `SORO_LLM_BASE_URL`, `SORO_LLM_MODEL`, `SORO_LLM_API_KEY`, `SORO_STT_MODEL` and `SORO_PIPER_VOICE`, mirroring how the cloud adapters fall back to their key variables. The factory gained `composed_*` arguments.
 - **The contract suite** now allows a 22.05kHz output rate (Piper's usual rate).
 - **MCP SDK 2.x** renamed fields (`input_schema`, `is_error`, `structured_content`) and `FastMCP`; the connector reads both spellings, and its real stdio test runs against 2.3.
-- **Packaging:** the model is listed under hatch `artifacts` (not `force-include`), with an `assets/__init__.py` so `importlib.resources` finds it. `composed` also lists `numpy`, and `all` includes `openapi` and `mcp` too. Because `dev` pulls `all`, `pip install -e ".[dev]"` now installs faster-whisper and Piper; split `dev` if that is too heavy.
+- **Packaging:** the model is listed under hatch `artifacts` (not `force-include`), with an `assets/__init__.py` so `importlib.resources` finds it. `composed` also lists `numpy`, and `all` includes `openapi` and `mcp` too. `dev` was later split (2026-10-05): it no longer pulls `composed`, so `pip install -e ".[dev]"` skips faster-whisper and Piper; add `,composed` for their real tests.
 - **`python -m soro.evals turns`** is a comparison, not a gate: it exits 0 even though the energy detector fails `fan_switches_on`, because showing that is its job. `scenarios` is the CI gate.
 
 The interview app switched to Silero on 2026-10-05. The composed path was validated live the same day (see the Soro README). Still open: listen-only mode, and MCP resources.

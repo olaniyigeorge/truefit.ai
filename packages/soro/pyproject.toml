@@ -22,7 +22,10 @@ mcp = ["mcp>=1.0"]
 # Includes onnxruntime: the composed adapter owns turn-taking and defaults to Silero.
 composed = ["faster-whisper>=1.0", "piper-tts>=1.2", "httpx>=0.27", "numpy>=1.24", "onnxruntime>=1.17"]
 all = ["soro[gemini,openai,webrtc,vad,openapi,mcp,composed]"]
-dev = ["pytest>=8", "pytest-asyncio>=0.24", "soro[all]"]
+# Everything the test suite exercises except the composed pipeline's model
+# runtimes (faster-whisper, Piper), which are large; their tests skip without
+# them. For those: pip install -e ".[dev,composed]".
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "soro[gemini,openai,webrtc,vad,openapi,mcp]"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/soro"]

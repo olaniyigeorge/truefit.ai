@@ -224,7 +224,7 @@ Adapters take their settings as constructor arguments and fall back to the provi
 ## Develop
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev]"             # add ",composed" for the local pipeline's real model tests
 pytest
 ```
 

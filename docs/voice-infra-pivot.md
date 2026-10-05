@@ -168,7 +168,7 @@ Research on the free path (2026-09-29, unverified beyond the sources): OpenRoute
 1. Pluggable turn detection, which also fixes the fan bug.
 2. Connector layer, minimal first: decorated functions and non-blocking tools, then MCP and OpenAPI import.
 3. Eval harness inside the package: time to first audio, turn latency, barge-in, tool round trip, reconnects, noisy-room end-of-turn, run per approach.
-4. Composed adapter, validated against the port, then publish 0.1.
+4. Composed adapter, validated against the port, then publish 0.1. Status 2026-10-05: validated live; the wheel builds, passes `twine check` and the smoke test in a clean venv (`make soro-smoke`). Only the TestPyPI upload is left, which needs a token: `twine upload -r testpypi dist/*`, then `make soro-testpypi VERSION=0.1.0`.
 5. Build the personal OS assistant and meeting copilot under `examples/`, next to the interview app (moved to `examples/truefit/` on 2026-10-05).
 
 ## The gaps
