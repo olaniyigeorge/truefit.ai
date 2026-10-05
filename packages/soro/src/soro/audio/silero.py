@@ -23,6 +23,7 @@ process() buffers arbitrary chunk sizes into whole windows before inference.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 from importlib import resources
 from typing import Callable, Optional
 
@@ -163,17 +164,7 @@ class SileroTurnDetector:
                 'Install them with: pip install "soro[vad]"'
             ) from exc
 
-        if model_path is not None:
-            model = model_path
-        else:
-            model = resources.files(_MODEL_PACKAGE).joinpath(_MODEL_FILE).read_bytes()
-
-        options = ort.SessionOptions()
-        options.intra_op_num_threads = 1
-        options.inter_op_num_threads = 1
-        session = ort.InferenceSession(
-            model, sess_options=options, providers=["CPUExecutionProvider"]
-        )
+        session = _inference_session(model_path)
 
         # Silero shipped two input shapes: v5 uses a single `state` tensor, older
         # exports used separate `h`/`c`. Read the signature instead of assuming.
@@ -203,3 +194,24 @@ class SileroTurnDetector:
             return float(np.asarray(out[0]).reshape(-1)[0])
 
         return prob
+
+
+@lru_cache(maxsize=None)
+def _inference_session(model_path: str | None):
+    """
+    One ONNX session per model, shared by every detector. Building a session costs
+    about 150ms, which a server would otherwise pay on every call. Sharing is safe:
+    InferenceSession.run is thread-safe and each detector keeps its own recurrent
+    state in its prob() closure, never in the session.
+    """
+    import onnxruntime as ort
+
+    if model_path is not None:
+        model = model_path
+    else:
+        model = resources.files(_MODEL_PACKAGE).joinpath(_MODEL_FILE).read_bytes()
+
+    options = ort.SessionOptions()
+    options.intra_op_num_threads = 1
+    options.inter_op_num_threads = 1
+    return ort.InferenceSession(model, sess_options=options, providers=["CPUExecutionProvider"])

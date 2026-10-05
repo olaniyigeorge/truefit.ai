@@ -168,3 +168,34 @@ def test_real_model_reads_silence_as_non_speech():
         assert det.process(frame) is None
     assert not det.is_speaking
     assert det.last_speech_prob < 0.5
+
+
+@requires_vad
+def test_detectors_share_the_model_but_not_its_state():
+    """The ONNX session is cached; the recurrent state must stay per detector."""
+    import math
+    import struct
+
+    from soro.audio.silero import _inference_session
+
+    _inference_session.cache_clear()
+    loud = create_turn_detector("silero")
+    quiet = create_turn_detector("silero")
+    assert _inference_session.cache_info().currsize == 1
+
+    # A voiced-sounding tone with harmonics drives one detector's state.
+    tone = b"".join(
+        struct.pack(
+            "<h",
+            int(6000 * sum(math.sin(2 * math.pi * f * n / 16_000) / k for k, f in enumerate((180, 360, 540), 1))),
+        )
+        for n in range(320)
+    )
+    silence = b"\x00\x00" * 320
+    for _ in range(50):
+        loud.process(tone)
+        quiet.process(silence)
+    fresh = create_turn_detector("silero")
+    for _ in range(50):
+        fresh.process(silence)
+    assert quiet.last_speech_prob == pytest.approx(fresh.last_speech_prob, abs=1e-6)

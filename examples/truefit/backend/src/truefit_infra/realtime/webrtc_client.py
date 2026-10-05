@@ -50,9 +50,11 @@ from aiortc.mediastreams import AudioStreamTrack
 
 from src.truefit_infra.realtime.session_context import SessionContext
 
+from soro.audio import TurnDetector
 from soro.transport.webrtc import AudioBridge
 from .frame_sampler import FrameSampler
 from .data_channel import DataChannelManager
+from .turn_detection import create_turn_detector
 from src.truefit_core.common.utils import logger
 
 
@@ -84,6 +86,7 @@ class WebRTCClient:
         frame_interval_screen: float = 2.0,
         on_ice_candidate=None,
         output_sample_rate: int = 24_000,
+        turn_detector: Optional[TurnDetector] = None,
     ) -> None:
         """
         pc:
@@ -114,6 +117,10 @@ class WebRTCClient:
             Sample rate of the agent PCM pushed into the audio bridge (the live
             adapter's capabilities.output_sample_rate).
 
+        turn_detector:
+            Decides when the candidate starts and stops a turn. Defaults to the
+            one VOICE_TURN_DETECTOR selects (Silero unless configured otherwise).
+
         on_ice_candidate:
             Async callback called each time the server-side ICE agent discovers
             a new network candidate. In production this is set by
@@ -135,7 +142,9 @@ class WebRTCClient:
 
         # Handles all audio I/O: browser mic -> Gemini, Gemini response -> browser
         self.audio_bridge = AudioBridge(
-            session_id=self.context.session_id, output_sample_rate=output_sample_rate
+            session_id=self.context.session_id,
+            output_sample_rate=output_sample_rate,
+            turn_detector=turn_detector or create_turn_detector(),
         )
 
         # Samples video frames from camera and screen share at configured intervals

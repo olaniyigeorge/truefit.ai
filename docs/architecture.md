@@ -105,6 +105,10 @@ Provider selection comes from app config: `LLM_PRIMARY_PROVIDER` (`gemini` or
 fallback engages if the primary fails to open or fails before producing any
 output; failures after output has started propagate.
 
+The audio bridge's turn detector comes from `VOICE_TURN_DETECTOR` (`silero` by
+default, or `energy`), built in `truefit_infra/realtime/turn_detection.py`. If
+`soro[vad]` is missing, the app logs a warning and uses the energy detector.
+
 Gemini sessions resume on transient close codes (1001, 1006, 1011, 1012, 1013),
 up to three consecutive reconnects. With a resume handle the conversation
 continues server-side, otherwise the adapter restarts and replays the opening

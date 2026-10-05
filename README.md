@@ -71,6 +71,7 @@ GEMINI_API_KEY=...
 GEMINI_LIVE_MODEL=...            # optional, overrides the Gemini Live model
 OPENAI_API_KEY=...               # only needed if OpenAI is primary or fallback
 OPENAI_REALTIME_MODEL=...        # optional, defaults to gpt-realtime-mini-2025-12-15
+VOICE_TURN_DETECTOR=silero       # silero | energy, decides when the candidate stops talking
 ```
 
 Fallback happens when the primary fails to open a session (network, auth, timeout) or fails before it has produced any output, in which case the opening message is replayed on the fallback. A session that dies after the conversation has started is not recovered by the wrapper, but the Gemini adapter reconnects and resumes its own session on transient errors.

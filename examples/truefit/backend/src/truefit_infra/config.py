@@ -41,6 +41,7 @@ class GlobalConfig(BaseSettings):
     OPENAI_API_KEY: str | None = None
     GEMINI_LIVE_MODEL: str | None = None  # default: gemini-2.5-flash-native-audio-preview-12-2025
     OPENAI_REALTIME_MODEL: str | None = None  # default: gpt-realtime-mini-2025-12-15
+    VOICE_TURN_DETECTOR: str = "silero"  # "silero" | "energy"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

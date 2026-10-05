@@ -333,6 +333,7 @@ Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.
 | `OPENAI_REALTIME_MODEL` | Optional Realtime model override |
 | `LLM_PRIMARY_PROVIDER` | `gemini` (default) or `openai` |
 | `LLM_FALLBACK_PROVIDER` | `gemini`, `openai` or `none` (default) |
+| `VOICE_TURN_DETECTOR` | `silero` (default) or `energy`. Decides when the candidate's turn ends. Falls back to `energy` with a warning if `soro[vad]` is missing |
 | `TURN_SERVER_URL`, `TURN_USERNAME`, `TURN_CREDENTIAL` | Optional TURN relay. Used for both `/turn/credentials` and the server's own peer connection. STUN only when empty |
 | `GOOGLE_CLIENT_ID` | Optional. Enables `provider: "google"` sign-in |
 
