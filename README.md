@@ -62,7 +62,7 @@ await runtime.run()
 
 ## Choosing a model provider
 
-Set these in `apps/backend/.env`:
+Set these in `examples/truefit/backend/.env`:
 
 ```
 LLM_PRIMARY_PROVIDER=gemini      # gemini | openai
@@ -84,7 +84,7 @@ truefit.ai/
       src/soro/  ports, tools, runtime/, adapters/, audio/ (turn detection),
                  transport/ (WebRTC bridge), testing
       tests/  examples/  scripts/   Tests, runnable examples, release smoke test
-  apps/                       The interview app, a reference consumer of Soro
+  examples/truefit/           The interview app, a reference consumer of Soro
     frontend/                 Vite, React, TypeScript
       src/  components, pages, hooks, helpers, context, providers, lib
     backend/
@@ -120,9 +120,9 @@ git clone https://github.com/olaniyigeorge/truefit.ai.git
 cd truefit.ai
 
 make setup        # creates the backend venv, installs deps, copies env files
-# edit apps/backend/.env with your keys and database URL
+# edit examples/truefit/backend/.env with your keys and database URL
 
-cd apps/backend && .venv/bin/alembic upgrade head && cd ../..
+cd examples/truefit/backend && .venv/bin/alembic upgrade head && cd ../../..
 make dev          # starts backend (port 8000) and frontend together
 ```
 
@@ -132,7 +132,7 @@ Or run each side on its own with `make dev-backend` and `make dev-frontend`. Int
 
 ```bash
 make soro-test                  # the SDK
-cd apps/backend && .venv/bin/python -m pytest tests   # the app: unit and integration
+cd examples/truefit/backend && .venv/bin/python -m pytest tests   # the app: unit and integration
 ```
 
 The suites use fake providers and in-memory SQLite, so they need no API keys, database or Redis. They cover the runtime, the fallback adapter, the factory, the interview agent and tools, the domain, and the layer boundary between core and infrastructure.
@@ -142,6 +142,7 @@ The suites use fake providers and in-memory SQLite, so they need no API keys, da
 | Doc | Description |
 |-----|-------------|
 | [docs/voice-infra-pivot.md](./docs/voice-infra-pivot.md) | Pivot assessment, gaps, progress and plan |
+| [docs/build-plan.md](./docs/build-plan.md) | How the next four roadmap items get built, file by file |
 | [docs/architecture.md](./docs/architecture.md) | System design, components, real-time audio path, data model |
 | [docs/api.md](./docs/api.md) | Authentication, REST endpoints, WebSocket events, configuration |
 | [docs/about.md](./docs/about.md) | Project story |

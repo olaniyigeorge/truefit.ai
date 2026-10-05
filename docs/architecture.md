@@ -5,8 +5,8 @@ TrueFit.AI is a monorepo with three parts:
 | Path | What it is |
 |------|------------|
 | `packages/soro` | Soro, a provider-neutral realtime voice SDK (Python). Depends on no app. See [packages/soro/README.md](../packages/soro/README.md). |
-| `apps/backend` | FastAPI interview app. A reference consumer of Soro. |
-| `apps/frontend` | React/Vite client (interview room, recruiter dashboards). |
+| `examples/truefit/backend` | FastAPI interview app. A reference consumer of Soro. |
+| `examples/truefit/frontend` | React/Vite client (interview room, recruiter dashboards). |
 
 The product is an AI interviewer: a candidate joins a browser room, talks to a
 live voice model, and the backend records questions and answers. The
@@ -26,13 +26,13 @@ packages/soro/src/soro/
   audio/              PcmResampler, turn detection (EnergyTurnDetector)
   transport/webrtc.py AudioBridge, AgentAudioTrack (extra: soro[webrtc])
   testing.py          FakeLiveAdapter for consumer tests
-apps/backend/
+examples/truefit/backend/
   src/truefit_core/   domain, application (ports, services), agents
   src/truefit_infra/  db, auth, cache, queue, llm factory, realtime (WebRTC)
   src/truefit_api/    FastAPI app, HTTP routers, WebSocket endpoint
   src/truefit_workers/ placeholders, see "Known gaps"
   alembic/            migrations
-apps/frontend/src/    components, pages, hooks, providers
+examples/truefit/frontend/src/    components, pages, hooks, providers
 scripts/              dev.sh, deploy.sh, setup-gcp.sh
 ```
 
@@ -76,8 +76,8 @@ Soro owns everything that is not interview-specific:
 | Turn detection | `EnergyTurnDetector` (`soro.audio.turn`) | Receives activity callbacks, decides mic gating |
 | Domain state | none | Orchestration service, repositories, Redis, events |
 
-The backend installs Soro from `../../packages/soro` via `requirements.txt`, so
-`pip install -r requirements.txt` must run from `apps/backend` (the `Makefile`,
+The backend installs Soro from `../../../packages/soro` via `requirements.txt`, so
+`pip install -r requirements.txt` must run from `examples/truefit/backend` (the `Makefile`,
 `scripts/dev.sh` and `scripts/deploy.sh` all do).
 
 ### The port
@@ -274,7 +274,7 @@ The backend uses SQLAlchemy 2 (async). Models are in
 `truefit_infra/db/models.py`. PostgreSQL is the target (UUID keys, JSONB);
 `main.py` also configures an SQLite engine when `DATABASE_URL` contains
 `sqlite`. The app calls `create_all` on startup. Alembic is configured
-(`apps/backend/alembic`) but the three revision files in `alembic/versions` do
+(`examples/truefit/backend/alembic`) but the three revision files in `alembic/versions` do
 not form a single chain (two have no parent), so treat them as historical and
 check before relying on `alembic upgrade`.
 
@@ -323,11 +323,11 @@ Target: a single GCP Compute Engine VM, no containers.
    `prod`). It copies `scripts/deploy.sh` to the VM over SSH and runs it.
    Secrets used: `GCP_SSH_PRIVATE_KEY`, `GCP_VM_IP`, `GCP_VM_USER`.
 2. `deploy.sh` installs system packages (nginx, redis-server, Node 20, Python),
-   pulls `main`, creates a venv in `apps/backend`, and runs
+   pulls `main`, creates a venv in `examples/truefit/backend`, and runs
    `pip install -r requirements.txt` (which installs Soro from the monorepo).
 3. It writes a systemd unit `truefit-api` running
    `uvicorn src.truefit_api.main:app --port 8000 --workers 2` with
-   `apps/backend/.env` as its environment file.
+   `examples/truefit/backend/.env` as its environment file.
 4. It builds the frontend (`npm install`, `npm run build`).
 5. It writes an nginx site: static frontend at `/`, `/api/` proxied to the
    backend, and `/ws/` proxied to `/api/v1/ws/` with WebSocket upgrade headers
@@ -338,7 +338,7 @@ Target: a single GCP Compute Engine VM, no containers.
 (`scripts/dev.sh`) or `make dev-backend` and `make dev-frontend`. Soro has its
 own targets: `make soro-test` and `make soro-smoke`.
 
-Required backend settings are in `apps/backend/env.example` and
+Required backend settings are in `examples/truefit/backend/env.example` and
 `truefit_infra/config.py` (database, Redis, Gemini key and model, TURN, auth,
 plus the optional `OPENAI_*` and `LLM_*` provider settings above).
 

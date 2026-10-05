@@ -6,8 +6,8 @@ set -m # job control: each backgrounded pipeline below becomes its own process g
        # so we can kill uvicorn's/vite's child processes on shutdown, not just the shell wrapping them.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BACKEND_DIR="$ROOT_DIR/apps/backend"
-FRONTEND_DIR="$ROOT_DIR/apps/frontend"
+BACKEND_DIR="$ROOT_DIR/examples/truefit/backend"
+FRONTEND_DIR="$ROOT_DIR/examples/truefit/frontend"
 VENV_DIR="$BACKEND_DIR/.venv"
 
 # Real escape characters ($'...'), not the text \033. The backend and frontend lines
@@ -29,7 +29,7 @@ if [ ! -d "$VENV_DIR" ]; then
 fi
 
 if [ ! -f "$BACKEND_DIR/.env" ]; then
-  log "No apps/backend/.env found, copying from env.example"
+  log "No examples/truefit/backend/.env found, copying from env.example"
   cp "$BACKEND_DIR/env.example" "$BACKEND_DIR/.env"
 fi
 
@@ -40,7 +40,7 @@ if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
 fi
 
 if [ ! -f "$FRONTEND_DIR/.env" ]; then
-  log "No apps/frontend/.env found, copying from env.example"
+  log "No examples/truefit/frontend/.env found, copying from env.example"
   cp "$FRONTEND_DIR/env.example" "$FRONTEND_DIR/.env"
 fi
 

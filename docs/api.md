@@ -1,6 +1,6 @@
 # TrueFit API Reference
 
-Reference for the FastAPI backend in `apps/backend`: authentication, REST endpoints, the interview WebSocket, error format and environment variables. Everything here was checked against the code under `apps/backend/src`.
+Reference for the FastAPI backend in `examples/truefit/backend`: authentication, REST endpoints, the interview WebSocket, error format and environment variables. Everything here was checked against the code under `examples/truefit/backend/src`.
 
 For system design see [architecture.md](architecture.md). For where the project is heading (the `soro` voice SDK) see [voice-infra-pivot.md](voice-infra-pivot.md).
 
@@ -15,7 +15,7 @@ For system design see [architecture.md](architecture.md). For where the project 
 | OpenAPI schema | `/api/openapi.json` |
 | Body format | JSON (except the resume upload, which is `multipart/form-data`) |
 
-Run locally from `apps/backend` (the app reads `.env`, see [Environment variables](#environment-variables)):
+Run locally from `examples/truefit/backend` (the app reads `.env`, see [Environment variables](#environment-variables)):
 
 ```bash
 python run.py        # or: uvicorn src.truefit_api.main:app --reload --port 8000
@@ -30,7 +30,7 @@ CORS is an allow-list hardcoded in `src/truefit_api/main.py` (localhost ports 30
 1. The frontend signs the user in with Firebase and gets a Firebase ID token.
 2. It calls `POST /api/v1/auth/oauth/token` with that token.
 3. The backend verifies the token against Firebase (public certs, checked against `FIREBASE_PROJECT_ID`), gets or creates the user, and returns a backend-signed JWT.
-4. The frontend sends `Authorization: Bearer <jwt>` on later requests. The frontend stores the JWT in a `jwt` cookie (`apps/frontend/src/helpers/api.interceptors.ts`) and, on any 401, clears the cookie, signs out of Firebase and redirects to `/auth`.
+4. The frontend sends `Authorization: Bearer <jwt>` on later requests. The frontend stores the JWT in a `jwt` cookie (`examples/truefit/frontend/src/helpers/api.interceptors.ts`) and, on any 401, clears the cookie, signs out of Firebase and redirects to `/auth`.
 
 ### Exchange a token
 
@@ -311,7 +311,7 @@ Auth failures also carry a `WWW-Authenticate: Bearer` header.
 
 ## Environment variables
 
-Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.env`). Copy `apps/backend/env.example` to `.env`. Startup fails if a variable without a default is missing.
+Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.env`). Copy `examples/truefit/backend/env.example` to `.env`. Startup fails if a variable without a default is missing.
 
 `env.example` lists every variable the settings class requires, including `FIREBASE_PROJECT_ID`. The `TURN_*` variables and `GOOGLE_CLIENT_ID` are optional. `ENV` accepts `dev`, `test` or `prod`.
 
@@ -340,6 +340,6 @@ Settings are loaded by `src/truefit_infra/config.py` (pydantic-settings, from `.
 
 These must be set for startup to succeed but currently have no effect: `API_VERSION`, `LOG_LEVEL`, `CLIENT_DOMAIN`, `BACKEND_DOMAIN`, `CORS_ORIGINS`, `AUTH_MODE`, `DB_ECHO`, `REDIS_PREFIX`, `GEMINI_MODEL`, `GEMINI_LIVE_ENABLED`, `STORAGE_PROVIDER`, `LOCAL_STORAGE_DIR`, `GCS_BUCKET`, `GOOGLE_APPLICATION_CREDENTIALS`, `REALTIME_ENABLED`, `WEBRTC_TOKEN_SECRET`, `WORKERS_ENABLED`, `SENTRY_DSN`.
 
-### Frontend (`apps/frontend`)
+### Frontend (`examples/truefit/frontend`)
 
 `VITE_PUBLIC_API_URL`, `VITE_PUBLIC_WS_URL`, and the Firebase web config: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`.

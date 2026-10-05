@@ -22,7 +22,7 @@ Thanks for your interest in contributing. This guide takes you from a fresh clon
 This repository holds two things:
 
 - **Soro** (`packages/soro`), a model-agnostic realtime voice agent SDK. You write an agent once and run it on Gemini Live, OpenAI Realtime or another provider through one interface.
-- **TrueFit.ai** (`apps/`), an AI interview product built on Soro. Recruiters create jobs, candidates join a live voice interview over WebRTC, and the platform produces a structured evaluation.
+- **TrueFit.ai** (`examples/truefit/`), an AI interview product built on Soro. Recruiters create jobs, candidates join a live voice interview over WebRTC, and the platform produces a structured evaluation.
 
 **Tech stack**
 
@@ -49,7 +49,7 @@ See [docs/architecture.md](./docs/architecture.md) for how the pieces fit togeth
 | make | any | Wraps the common commands |
 | Git | any | |
 
-Optional: Docker for Postgres and Redis, and VS Code with the Python and ESLint extensions. The repo ships `.vscode/settings.json`, which points Python at `apps/backend/.venv` and enables pytest. On Windows, change the interpreter path to `apps/backend/.venv/Scripts/python.exe`.
+Optional: Docker for Postgres and Redis, and VS Code with the Python and ESLint extensions. The repo ships `.vscode/settings.json`, which points Python at `examples/truefit/backend/.venv` and enables pytest. On Windows, change the interpreter path to `examples/truefit/backend/.venv/Scripts/python.exe`.
 
 ---
 
@@ -68,11 +68,11 @@ cd truefit.ai
 make setup
 ```
 
-This creates `apps/backend/.venv`, installs the backend requirements (which include the local `packages/soro[all]` in editable mode), runs `pnpm install` for the frontend, and copies `env.example` to `.env` in both apps if they are missing.
+This creates `examples/truefit/backend/.venv`, installs the backend requirements (which include the local `packages/soro[all]` in editable mode), runs `pnpm install` for the frontend, and copies `env.example` to `.env` in both apps if they are missing.
 
 ### 3. Configure the backend
 
-Edit `apps/backend/.env`. The important values:
+Edit `examples/truefit/backend/.env`. The important values:
 
 ```env
 # Database and cache
@@ -92,7 +92,7 @@ GEMINI_API_KEY=your-gemini-api-key
 OPENAI_API_KEY=                     # only if OpenAI is primary or fallback
 ```
 
-`apps/backend/env.example` lists every setting with comments. The unit and integration tests need none of these.
+`examples/truefit/backend/env.example` lists every setting with comments. The unit and integration tests need none of these.
 
 ### 4. Create the database
 
@@ -104,7 +104,7 @@ The app creates its tables on startup. See [docs/architecture.md](./docs/archite
 
 ### 5. Configure the frontend
 
-Edit `apps/frontend/.env`:
+Edit `examples/truefit/frontend/.env`:
 
 ```env
 VITE_API_URL=http://localhost:8000
@@ -130,11 +130,11 @@ Interactive API docs are at `http://localhost:8000/api/docs` while the backend r
 ## Project structure
 
 ```
-packages/soro/       The Soro SDK (publishable on its own, depends on no app code)
-apps/backend/        FastAPI interview backend
-apps/frontend/       React + Vite interview UI
-docs/                Architecture, API, project story, pivot plan
-scripts/             dev.sh, deploy.sh, setup-gcp.sh
+packages/soro/              The Soro SDK (publishable on its own, depends on no app code)
+examples/truefit/backend/   FastAPI interview backend
+examples/truefit/frontend/  React + Vite interview UI
+docs/                       Architecture, API, project story, pivot plan
+scripts/                    dev.sh, deploy.sh, setup-gcp.sh
 ```
 
 The backend is layered. Knowing the layers tells you where code belongs:
@@ -152,13 +152,13 @@ A test enforces that `truefit_core` never imports `truefit_infra`.
 
 | File | What it does |
 |------|-------------|
-| `apps/backend/src/truefit_api/main.py` | FastAPI app, middleware, router registration |
-| `apps/backend/src/truefit_api/dependencies.py` | Dependency injection wiring |
-| `apps/backend/src/truefit_api/api/v1/ws/interview_websocket.py` | WebSocket endpoint for live interviews |
-| `apps/backend/src/truefit_core/agents/interviewer/` | Interview prompt, tools, handlers and agent |
-| `apps/backend/src/truefit_infra/realtime/webrtc_client.py` | WebRTC peer connection |
-| `apps/backend/src/truefit_infra/llm/factory.py` | Feeds app settings to Soro's adapter factory |
-| `apps/backend/src/truefit_infra/auth/middleware.py` | JWT validation dependency |
+| `examples/truefit/backend/src/truefit_api/main.py` | FastAPI app, middleware, router registration |
+| `examples/truefit/backend/src/truefit_api/dependencies.py` | Dependency injection wiring |
+| `examples/truefit/backend/src/truefit_api/api/v1/ws/interview_websocket.py` | WebSocket endpoint for live interviews |
+| `examples/truefit/backend/src/truefit_core/agents/interviewer/` | Interview prompt, tools, handlers and agent |
+| `examples/truefit/backend/src/truefit_infra/realtime/webrtc_client.py` | WebRTC peer connection |
+| `examples/truefit/backend/src/truefit_infra/llm/factory.py` | Feeds app settings to Soro's adapter factory |
+| `examples/truefit/backend/src/truefit_infra/auth/middleware.py` | JWT validation dependency |
 | `packages/soro/src/soro/ports.py` | The `LiveSessionPort` interface every provider implements |
 | `packages/soro/src/soro/transport/webrtc.py` | WebRTC audio bridge and turn handling |
 
@@ -198,7 +198,7 @@ Then open a pull request against `main`.
 
 ### Backend (Python)
 
-- Formatter: `black`. Install it with `pip install black` and run `black apps/backend/src packages/soro/src` before committing.
+- Formatter: `black`. Install it with `pip install black` and run `black examples/truefit/backend/src packages/soro/src` before committing.
 - Type hints on all function signatures.
 - Docstrings on public classes and non-trivial functions.
 - All I/O-bound operations are `async`.
@@ -214,7 +214,7 @@ async def get_interview_session(session_id: UUID) -> InterviewSession:
 
 ### Frontend (TypeScript)
 
-- Linter: ESLint (`pnpm lint` in `apps/frontend`).
+- Linter: ESLint (`pnpm lint` in `examples/truefit/frontend`).
 - Functional components with hooks; named exports preferred.
 - No `any`: define interfaces or use generics.
 
@@ -252,9 +252,9 @@ Rules: lowercase summary with no trailing period, imperative mood ("add", not "a
 
 ```bash
 make soro-test                               # the Soro SDK
-cd apps/backend && .venv/bin/python -m pytest tests     # backend: unit and integration
-cd apps/backend && .venv/bin/python -m pytest tests/unit   # backend, unit only
-cd apps/frontend && pnpm lint && pnpm build     # frontend type check and lint
+cd examples/truefit/backend && .venv/bin/python -m pytest tests     # backend: unit and integration
+cd examples/truefit/backend && .venv/bin/python -m pytest tests/unit   # backend, unit only
+cd examples/truefit/frontend && pnpm lint && pnpm build     # frontend type check and lint
 ```
 
 - **Unit tests** use fake providers and need no keys, database or Redis.
@@ -271,7 +271,7 @@ What to test:
 
 ## Working on the Soro SDK
 
-Soro lives in `packages/soro` and must not import anything from `apps/`. Install it on its own with `pip install -e "packages/soro[dev]"`.
+Soro lives in `packages/soro` and must not import anything from `examples/`. Install it on its own with `pip install -e "packages/soro[dev]"`.
 
 Before a release, check the package the way a user gets it:
 

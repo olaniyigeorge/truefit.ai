@@ -12,7 +12,7 @@
 
 The pivot is **much less green-field than it looks**, but the hardest part of it is **bigger than the working notes suggest**. Two findings drive everything below:
 
-1. **The core seam is real and well-designed.** [`LiveSessionPort`](../apps/backend/src/truefit_core/application/ports.py#L392) is a genuine hexagonal port — normalized `(event_type, data)` event tuples, an explicit audio-format contract, and abstracted tool-calling. It is not decoration. [`GeminiLiveAdapter`](../apps/backend/src/truefit_infra/llm/gemini_live.py) really is the only file that imports the Google GenAI SDK.
+1. **The core seam is real and well-designed.** [`LiveSessionPort`](../examples/truefit/backend/src/truefit_core/application/ports.py#L392) is a genuine hexagonal port — normalized `(event_type, data)` event tuples, an explicit audio-format contract, and abstracted tool-calling. It is not decoration. [`GeminiLiveAdapter`](../examples/truefit/backend/src/truefit_infra/llm/gemini_live.py) really is the only file that imports the Google GenAI SDK.
 
 2. **Multi-provider support was already built — and never merged.** Commits `f0ed618`, `13502f0`, and `5147d52` (on branches `dev` and `open-ai-rt`) contain a complete `OpenAIRealtimeAdapter`, a `LiveAdapterFactory` (env-driven provider selection), and a `FallbackLiveAdapter`, all implementing `LiveSessionPort` cleanly. **None of it is on `main`.** That is why the working tree carries orphaned `openai_realtime.pyc` / `factory.pyc` / `fallback_adapter.pyc` under `llm/__pycache__/` with no matching source.
 
@@ -26,21 +26,21 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 
 | Layer | File | State |
 |---|---|---|
-| Port (abstraction) | [`application/ports.py`](../apps/backend/src/truefit_core/application/ports.py#L392) | Real, clean, provider-neutral event contract |
-| Gemini adapter | [`llm/gemini_live.py`](../apps/backend/src/truefit_infra/llm/gemini_live.py) | Complete; SDK isolation holds |
+| Port (abstraction) | [`application/ports.py`](../examples/truefit/backend/src/truefit_core/application/ports.py#L392) | Real, clean, provider-neutral event contract |
+| Gemini adapter | [`llm/gemini_live.py`](../examples/truefit/backend/src/truefit_infra/llm/gemini_live.py) | Complete; SDK isolation holds |
 | OpenAI adapter | `llm/openai_realtime.py` (branch `dev`) | Complete, **unmerged** |
 | Provider factory | `llm/factory.py` (branch `dev`) | Complete, **unmerged** |
 | Fallback wrapper | `llm/fallback_adapter.py` (branch `dev`) | Complete, **unmerged** |
-| Voice agent loop | [`agents/interviewer/live_interview_agent.py`](../apps/backend/src/truefit_core/agents/interviewer/live_interview_agent.py) | Works, but coupled to the interview domain (see Gap 1) |
-| Tool declarations | [`agents/interviewer/tools.py`](../apps/backend/src/truefit_core/agents/interviewer/tools.py) | Interview-specific, baked into the agent |
-| WS wiring | [`api/v1/ws/interview_websocket.py`](../apps/backend/src/truefit_api/api/v1/ws/interview_websocket.py#L96) | Hardcodes `GeminiLiveAdapter()` instead of the factory |
-| Config | [`infra/config.py`](../apps/backend/src/truefit_infra/config.py) | Has `GEMINI_*` keys; **no** `LLM_PRIMARY_PROVIDER` / `LLM_FALLBACK_PROVIDER` yet |
+| Voice agent loop | [`agents/interviewer/live_interview_agent.py`](../examples/truefit/backend/src/truefit_core/agents/interviewer/live_interview_agent.py) | Works, but coupled to the interview domain (see Gap 1) |
+| Tool declarations | [`agents/interviewer/tools.py`](../examples/truefit/backend/src/truefit_core/agents/interviewer/tools.py) | Interview-specific, baked into the agent |
+| WS wiring | [`api/v1/ws/interview_websocket.py`](../examples/truefit/backend/src/truefit_api/api/v1/ws/interview_websocket.py#L96) | Hardcodes `GeminiLiveAdapter()` instead of the factory |
+| Config | [`infra/config.py`](../examples/truefit/backend/src/truefit_infra/config.py) | Has `GEMINI_*` keys; **no** `LLM_PRIMARY_PROVIDER` / `LLM_FALLBACK_PROVIDER` yet |
 
 **Audio contract** (relied on across layers): inbound 16kHz mono s16 PCM, outbound 24kHz mono s16 PCM, with the WebRTC `AudioBridge` resampling to/from 48kHz Opus at the browser edge.
 
 ---
 
-## Progress (updated 2026-09-29)
+## Progress (updated 2026-10-03)
 
 | Item | Status |
 |---|---|
@@ -48,13 +48,13 @@ The practical meaning of finding 2: **the abstraction has already been proven ag
 | Gap 1: `VoiceAgentRuntime` extraction | Done |
 | Gap 2: tighten the port (capabilities, neutral tools and events) | Done |
 | Extract the SDK into `packages/soro` (step 5, first half) | Done (app imports it, both suites green) |
-| Pluggable turn detection (fixes the fan-noise bug) | Done (`soro.audio.EnergyTurnDetector`, `AudioBridge` uses it; neural detector and a noisy-room eval scenario still open) |
-| Connector layer (turn an existing system into tools) | Not started |
-| Non-blocking tools and a response policy (listen-only, addressed) | Not started |
-| Eval harness (one pipeline, both approaches) | Not started |
-| Step 4: `ComposedLiveAdapter` (Gap 3) | Not started, research done |
+| Pluggable turn detection (fixes the fan-noise bug) | Done (`EnergyTurnDetector`, plus `SileroTurnDetector` behind `soro[vad]` and a noisy-room eval; see [build-plan.md](./build-plan.md)) |
+| Connector layer (turn an existing system into tools) | Done (functions, OpenAPI, MCP connectors and the `soro.Agent` facade) |
+| Non-blocking tools and a response policy (listen-only, addressed) | Partly done (background tools and confirm-before-execute; listen-only mode open) |
+| Eval harness (one pipeline, both approaches) | Done (`soro.evals`, `python -m soro.evals`; scripted baseline in CI, live providers opt-in) |
+| Step 4: `ComposedLiveAdapter` (Gap 3) | Built and in the contract suite on fake components; live validation with real models open |
 | Hosted HTTP API and client SDKs | Not started |
-| Step 3: use cases on the `truefit` branch (interview, personal OS, meeting copilot) | Interview exists; the rest not started |
+| Step 3: use cases under `examples/` (interview, personal OS, meeting copilot) | Interview moved to `examples/truefit/`; the rest not started |
 
 Also fixed while getting a clean baseline: `Candidate.attach_resume()` (callers never passed the asset id), `JobService.create_job()` / `CreateJobCommand` (out of sync with the `Job` aggregate, now take `created_by` and `requirements`), and a test helper that turned `skills=[]` into default skills. The Soro package suite has 162 passing tests and the interview app suite 181, apart from one old script (`tests/test_auth.py`) that was already failing.
 
@@ -103,13 +103,18 @@ packages/soro/            the SDK. Depends on no app.
     tools.py              ToolSpec, normalize_tools
     runtime/              VoiceAgentRuntime, ToolRegistry
     adapters/             gemini, openai, fallback, factory (explicit config, no globals)
-    audio/                PcmResampler
+    agent.py              Agent facade: connectors + prompt + policy -> runtime
+    connectors/           functions, openapi, mcp
+    runtime/policy.py     confirm-before-execute, background tools
+    adapters/composed/    STT -> LLM -> TTS behind the port (local defaults)
+    audio/                PcmResampler, energy and Silero turn detectors
+    evals/                turn-detection and scenario evals, python -m soro.evals
     testing.py            FakeLiveAdapter for consumers' own tests
   tests/                  unit and contract tests, no interview code
-apps/                     the interview app: a reference consumer of Soro
+examples/truefit/         the interview app: a reference consumer of Soro
 ```
 
-- Installed as `soro[gemini]`, `soro[openai]` or `soro[all]`. The backend's `requirements.txt` installs it from `../../packages/soro`, so `pip install -r` must run from `apps/backend` (the `Makefile`, `scripts/dev.sh` and `scripts/deploy.sh` all do).
+- Installed as `soro[gemini]`, `soro[openai]` or `soro[all]`. The backend's `requirements.txt` installs it from `../../../packages/soro`, so `pip install -r` must run from `examples/truefit/backend` (the `Makefile`, `scripts/dev.sh` and `scripts/deploy.sh` all do).
 - Adapters take config as constructor arguments and fall back to the provider's usual environment variables. Soro reads no other global configuration.
 - Version 0.1.0, alpha. The port may still change while the composed approach is validated against it. Do not publish until then.
 
@@ -119,17 +124,17 @@ Testing has three levels, none of which needs the interview app: automated unit 
 
 | Layer | State |
 |---|---|
-| Models: one port over Gemini Live, OpenAI Realtime, later a composed pipeline | Built |
+| Models: one port over Gemini Live, OpenAI Realtime and a composed local pipeline | Built (composed path not yet run live) |
 | Runtime: loops, tool dispatch, lifecycle, reconnect recovery | Built |
-| Connectors: turn an existing system into tools (functions, OpenAPI, MCP) | Missing |
-| Turn detection | Pluggable energy detector with adaptive noise floor; neural option open |
+| Connectors: turn an existing system into tools (functions, OpenAPI, MCP) | Built |
+| Turn detection | Pluggable: adaptive energy detector, Silero neural detector |
 | Transport: WebRTC and WebSocket, client SDKs | Inside the interview app |
 | Hosted API: sessions, keys, tenants | Not started |
-| Evals | Not started |
+| Evals | Built: noisy-room turn detection and scenario scorecards |
 
 The connector layer is what delivers the idea above, and it is where Soro can differ from runtime and transport frameworks. Voice adds requirements a text agent does not have: confirm risky actions aloud, summarise tool results for the ear, keep talking while a slow tool runs, permissions and an audit log, and an ambient mode that listens and speaks only when addressed.
 
-Target developer experience (not built yet):
+Developer experience (built; see the Soro README):
 
 ```python
 agent = soro.Agent(
@@ -149,9 +154,9 @@ Research on the free path (2026-09-29, unverified beyond the sources): OpenRoute
 ## Known issues
 
 - **Gemini `1011 Internal error occurred`.** The Live model `gemini-2.5-flash-native-audio-preview-12-2025` closes sessions with 1011, often 4 to 10 seconds in while generating the first response. Google documents no cause. Forum reports describe the same model failing very frequently since late May 2026, including with session resumption on, so this looks like preview-model instability, not our bug. The adapter reconnects on transient close codes and gives up after three failed reconnects in a row (a reconnect only counts as good once a turn completes). Options: set `GEMINI_LIVE_MODEL` to a newer model (Google's models page lists `gemini-3.8-live` as GA, unverified here, and the 3.x models differ in tool and turn behaviour, so the adapter config may need per-model changes), or send the first text turn with `send_realtime_input` (an untested suggestion).
-- **Fan noise keeps the mic "speaking".** `AudioBridge` ends a turn with a hand-rolled detector: any chunk whose peak exceeds 400 counts as speech and resets the 0.8 second silence timer, so steady noise never lets a turn end. `SILENCE_THRESHOLD` is defined and unused, so there is no hysteresis, and only the first 32 samples of each 20ms chunk are inspected. The fix is pluggable turn detection in the SDK (an adaptive energy detector, an optional neural detector such as Silero, or the provider's own) plus a noisy-room eval scenario.
+- **Fan noise keeps the mic "speaking".** `AudioBridge` ends a turn with a hand-rolled detector: any chunk whose peak exceeds 400 counts as speech and resets the 0.8 second silence timer, so steady noise never lets a turn end. `SILENCE_THRESHOLD` is defined and unused, so there is no hysteresis, and only the first 32 samples of each 20ms chunk are inspected. The fix is pluggable turn detection in the SDK (an adaptive energy detector, an optional neural detector such as Silero, or the provider's own) plus a noisy-room eval scenario. Status: the SDK now has both detectors and the scenario (`python -m soro.evals turns`); on it the energy detector still false-triggers when a fan switches on mid-call and Silero does not. `AudioBridge` takes either via `turn_detector=`; the interview app still uses the default energy detector.
 - **OpenAI path unverified live.** The GA migration is unit-tested against the SDK's field definitions but has not run against the real API because the account's credit is exhausted.
-- **Deploy will need a branch switch.** `scripts/deploy.sh` pulls `main`. When `apps/` moves to the `truefit` branch, deployment must follow it.
+- **Deploy after the move to `examples/truefit/`.** `scripts/deploy.sh` now points at the new paths and copies the old `apps/backend/.env` across on the VM the first time it runs. The old `apps/backend/venv` on the VM is left behind and can be deleted once the new deploy is healthy.
 
 ## Near-term order
 
@@ -159,7 +164,7 @@ Research on the free path (2026-09-29, unverified beyond the sources): OpenRoute
 2. Connector layer, minimal first: decorated functions and non-blocking tools, then MCP and OpenAPI import.
 3. Eval harness inside the package: time to first audio, turn latency, barge-in, tool round trip, reconnects, noisy-room end-of-turn, run per approach.
 4. Composed adapter, validated against the port, then publish 0.1.
-5. Cut the `truefit` branch with the interview app, then build the personal OS assistant and meeting copilot as outside consumers.
+5. Build the personal OS assistant and meeting copilot under `examples/`, next to the interview app (moved to `examples/truefit/` on 2026-10-05).
 
 ## The gaps
 
@@ -167,9 +172,9 @@ Research on the free path (2026-09-29, unverified beyond the sources): OpenRoute
 
 The port is clean; the layers above it are not yet reusable.
 
-- [`LiveInterviewAgent`](../apps/backend/src/truefit_core/agents/interviewer/live_interview_agent.py#L18) imports the **concrete** `GeminiLiveAdapter` and type-hints against it (lines 18, 93) rather than `LiveSessionPort`. It also hard-imports `INTERVIEW_TOOLS`, `build_system_prompt`, `InterviewContext`, and `InterviewOrchestrationService`. The "agent" *is* the interview product — it is not a reusable voice-agent runtime.
-- The WebSocket layer [hardcodes `GeminiLiveAdapter()`](../apps/backend/src/truefit_api/api/v1/ws/interview_websocket.py#L96) in `get_gemini_live()`; it should resolve through the factory.
-- The [tools](../apps/backend/src/truefit_core/agents/interviewer/tools.py) (`record_question`, `persist_answer`, `complete_interview`, `flag_interrupt`) are interview-domain concepts hard-wired into the agent's dispatcher.
+- [`LiveInterviewAgent`](../examples/truefit/backend/src/truefit_core/agents/interviewer/live_interview_agent.py#L18) imports the **concrete** `GeminiLiveAdapter` and type-hints against it (lines 18, 93) rather than `LiveSessionPort`. It also hard-imports `INTERVIEW_TOOLS`, `build_system_prompt`, `InterviewContext`, and `InterviewOrchestrationService`. The "agent" *is* the interview product — it is not a reusable voice-agent runtime.
+- The WebSocket layer [hardcodes `GeminiLiveAdapter()`](../examples/truefit/backend/src/truefit_api/api/v1/ws/interview_websocket.py#L96) in `get_gemini_live()`; it should resolve through the factory.
+- The [tools](../examples/truefit/backend/src/truefit_core/agents/interviewer/tools.py) (`record_question`, `persist_answer`, `complete_interview`, `flag_interrupt`) are interview-domain concepts hard-wired into the agent's dispatcher.
 
 **What it takes:** extract a domain-neutral `VoiceAgentRuntime` — the two-loop send/receive engine plus tool dispatch — that depends only on `LiveSessionPort` and takes tools, system prompt, and tool-handlers as *inputs*. The interview becomes the first *consumer* of the runtime, not the runtime itself. This is a refactor, not a rewrite: the callback seam (`on_audio_output`, `on_text_output`, `on_interrupt`, `on_turn_complete`) already exists.
 
@@ -195,7 +200,7 @@ The good news: the port is abstract enough that a `ComposedLiveAdapter` can hide
 
 ## What it would take — in order
 
-1. **Recover and de-risk what exists** *(days).* Bring the `dev` multi-provider code to `main`, add `LLM_PRIMARY_PROVIDER` / `LLM_FALLBACK_PROVIDER` to [`config.py`](../apps/backend/src/truefit_infra/config.py), wire the WS layer to `create_live_adapter()`, and delete the orphaned `.pyc` files. Outcome: Gemini↔OpenAI swappability plus fallback, immediately.
+1. **Recover and de-risk what exists** *(days).* Bring the `dev` multi-provider code to `main`, add `LLM_PRIMARY_PROVIDER` / `LLM_FALLBACK_PROVIDER` to [`config.py`](../examples/truefit/backend/src/truefit_infra/config.py), wire the WS layer to `create_live_adapter()`, and delete the orphaned `.pyc` files. Outcome: Gemini↔OpenAI swappability plus fallback, immediately.
 2. **Extract `VoiceAgentRuntime`** *(~1 week).* Domain-neutral, port-typed, tools-as-input. The interview becomes consumer #1. Resolves Gap 1; tighten Gap 2 in the same pass.
 3. **Prove reusability with a second use case** *(days).* A meeting note-taker that reuses the runtime with different tools and prompt. This is what makes it *infrastructure* — and it satisfies the 3-month milestone's "first non-interview use case."
 4. **Build `ComposedLiveAdapter` for the free/open path** *(weeks — the actual bet).* VAD + STT + open LLM + TTS behind `LiveSessionPort`. This is what makes "free models first-class" true rather than aspirational.
@@ -214,22 +219,22 @@ The good news: the port is abstract enough that a `ComposedLiveAdapter` can hide
 
 Steps 1–3 are mostly **refactoring of work already done**, and they yield a shippable model-agnostic voice infra for *paid* providers. Step 4 is the differentiator and the real risk.
 
-If credits (Voice Bridge and similar) come through, the 3-month milestone can ship on steps 1–3 alone, with step 4 as the thing built toward — which de-risks the entire pivot. The recommended first move is step 1 → step 2, because it unblocks everything else and turns "the interview app" into "the first app on the platform."
+No credit program is available (2026-10-05), so the free composed path (step 4) is the main bet rather than the thing built toward. The recommended first move is step 1 → step 2, because it unblocks everything else and turns "the interview app" into "the first app on the platform."
 
 ---
 
 ## Decisions made
 
 - **Product surface:** SDK first, offered over HTTP for web and mobile apps. Hosted API later.
-- **Name:** Soro. The interview app keeps the TrueFit name and lives on the `truefit` branch as a reference consumer.
-- **Layout:** `packages/` inside this repo.
+- **Name:** Soro. The interview app keeps the TrueFit name.
+- **Layout:** `packages/soro` for the SDK. The interview app lives on `main` under `examples/truefit/` (decided 2026-10-05) instead of on a separate `truefit` branch. A long-lived branch would need regular merges to keep up with SDK changes, and keeping the app on `main` means every SDK change is tested against a real consumer in the same commit. The later use cases (personal OS assistant, meeting copilot) go under `examples/` the same way.
 - **First use cases:** interviews (exists), a personal OS assistant that talks to the user's knowledge repo and calendar, and a meeting copilot.
-- **Free stack direction:** Deepgram for streaming STT and TTS, with OpenRouter's free models as a fallback.
+- **Free path at GA (decided 2026-10-05):** first-class. Aim for a high-quality free experience wherever possible, and spend resources where they matter most. In practice: the composed local pipeline (Silero, faster-whisper, an Ollama or llama.cpp LLM, Piper) is the default path that must work with no account and no key, and it is what the evals and examples run on first. Paid speech-to-speech providers (Gemini Live, OpenAI Realtime) stay fully supported as a quality tier, selected by configuration, never required.
+- **Free stack direction (revised 2026-10-05):** local models first, since they cost nothing to run and need no credit. Free hosted tiers (Deepgram's starting credit, OpenRouter's free models) are optional components behind the same `SpeechToText` / `LanguageModel` / `TextToSpeech` protocols, useful when local hardware is too weak, but nothing depends on them.
+- **Credit programs (as of 2026-10-05):** none. The only resource is Claude Code usage (two one-hour windows a day, at 00:00 and 12:00). Consequences: CI and evals run on fakes and local models; live runs against paid providers happen opportunistically and are not release gates; work is planned in chunks that fit a one-hour window.
+- **Connector standard (decided 2026-10-05):** all three stay, with clear roles. Plain functions are the core primitive (in-process code, zero dependencies, what the other two compile down to). MCP is the primary way to reach external systems, because that is where the ecosystem of ready-made servers is, and it saves writing an integration per service. OpenAPI is the convenience path for an existing HTTP service that has a spec but no MCP server. New voice features (confirm, background, result summarising) are built at the `ToolSpec` / policy level so they apply to every connector equally.
+- **Hosted API (decided 2026-10-05, deferred):** not built until the SDK is at 0.1 and a consumer needs it. When it is built: one API key per tenant for server-to-server calls, short-lived session tokens minted by the customer's backend for browser and mobile clients (the same pattern as OpenAI's ephemeral realtime keys), and no storage of end-user third-party credentials. Per-user tokens (for example Google) stay with the customer's app and reach Soro only at runtime, through a connector's auth hook for the length of one session. That keeps the hosted service out of the credential-custody business, which a project with no budget for security and compliance work cannot take on.
 
 ## Open decisions
 
-- **Free path at GA:** first-class supported target, or a best-effort tier?
-- **Credit programs:** which are open (Voice Bridge and others)?
-- **Connector standard:** how far to lean on MCP versus OpenAPI versus plain functions.
-- **Hosted API:** auth model, tenancy, and how per-user credentials (for example Google tokens) are held.
-- **Whether to keep the `truefit` branch** or move the interview app under `examples/` on `main`, since a diverging branch needs regular merges to avoid rotting.
+- None blocking. Revisit the hosted API design when the first outside consumer needs it.

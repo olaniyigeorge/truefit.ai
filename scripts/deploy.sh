@@ -24,8 +24,8 @@ error()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 # =============================================================================
 REPO_URL="https://github.com/olaniyigeorge/truefit.ai.git"
 APP_DIR="$HOME/truefit.ai"
-FRONTEND_DIR="$APP_DIR/apps/frontend"
-BACKEND_DIR="$APP_DIR/apps/backend"
+FRONTEND_DIR="$APP_DIR/examples/truefit/frontend"
+BACKEND_DIR="$APP_DIR/examples/truefit/backend"
 BACKEND_MODULE="src.truefit_api.main:app"
 BACKEND_PORT=8000
 VM_USER=$(whoami)
@@ -79,6 +79,14 @@ else
 fi
 
 success "Repo up to date"
+
+# The app moved from apps/ to examples/truefit/. The untracked .env stays behind
+# in the old directory after a pull, so carry it over once.
+LEGACY_ENV="$APP_DIR/apps/backend/.env"
+if [ -f "$LEGACY_ENV" ] && [ ! -f "$BACKEND_DIR/.env" ]; then
+    log "Moving .env from the old apps/backend location..."
+    cp "$LEGACY_ENV" "$BACKEND_DIR/.env"
+fi
 
 # ============================================
 # STEP 3: Backend - Python venv + dependencies 

@@ -1,10 +1,10 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/apps/backend/.venv/bin/python",
+  "python.defaultInterpreterPath": "${workspaceFolder}/examples/truefit/backend/.venv/bin/python",
   "python.analysis.extraPaths": [
-    "${workspaceFolder}/apps/backend",
-    "${workspaceFolder}/apps/backend/src",
+    "${workspaceFolder}/examples/truefit/backend",
+    "${workspaceFolder}/examples/truefit/backend/src",
     "${workspaceFolder}/packages/soro/src"
   ],
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["apps/backend/tests", "packages/soro/tests"]
+  "python.testing.pytestArgs": ["examples/truefit/backend/tests", "packages/soro/tests"]
 }

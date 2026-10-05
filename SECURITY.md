@@ -22,7 +22,7 @@ Real credentials for this project are managed as follows:
 - **Firebase credentials** managed via the Firebase Console
 - **Planned:** migration to [GCP Secret Manager](https://cloud.google.com/secret-manager) for all production secrets
 
-The `.env.example` file in `apps/backend/` contains only placeholder values safe for public viewing. No real credentials have ever been committed to this repository.
+The `.env.example` file in `examples/truefit/backend/` contains only placeholder values safe for public viewing. No real credentials have ever been committed to this repository.
 
 ---
 

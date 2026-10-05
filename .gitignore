@@ -58,8 +58,8 @@ cython_debug/
 .env
 .env.*
 .envrc
-!apps/backend/env.example
-!apps/frontend/env.example
+!examples/truefit/backend/env.example
+!examples/truefit/frontend/env.example
 
 # Databases 
 *.db
@@ -78,7 +78,7 @@ package-lock.json
 
 # Frontend build output
 dist/
-apps/frontend/.vite/
+examples/truefit/frontend/.vite/
 
 # Credentials & GCP 
 service-account*.json
