@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in this repository, please **do not** open a public issue.
 
-Email **olaniyigeorge77@gmail.com** with:
+Email **olaniyi@olaniyigeorge.com** with:
 
 - A description of the vulnerability
 - Steps to reproduce
