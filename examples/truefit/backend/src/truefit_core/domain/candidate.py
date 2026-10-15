@@ -200,9 +200,7 @@ class Candidate:
             self._skills = list(skills)
         self._touch()
 
-    def attach_resume(
-        self, resume: ResumeRef, resume_asset_id: Optional[uuid.UUID] = None
-    ) -> None:
+    def attach_resume(self, resume: ResumeRef, resume_asset_id: Optional[uuid.UUID] = None) -> None:
         self._assert_active()
         self._resume = resume
         self._resume_asset_id = resume_asset_id
@@ -230,9 +228,7 @@ class Candidate:
     def register_active_interview(self, job_id: uuid.UUID) -> None:
         self._assert_active()
         if self.has_active_interview_for(job_id):
-            raise ValueError(
-                f"Candidate already has an active interview for job {job_id}"
-            )
+            raise ValueError(f"Candidate already has an active interview for job {job_id}")
         self._active_interview_job_ids.add(job_id)
         self._touch()
 
@@ -253,18 +249,13 @@ class Candidate:
 
     def _assert_active(self) -> None:
         if self._status != CandidateStatus.ACTIVE:
-            raise PermissionError(
-                f"Cannot modify candidate in status '{self._status.value}'"
-            )
+            raise PermissionError(f"Cannot modify candidate in status '{self._status.value}'")
 
     def _touch(self) -> None:
         self._updated_at = _utcnow()
 
     def __repr__(self) -> str:
-        return (
-            f"Candidate(id={self._id}, name={self._full_name!r}, "
-            f"status={self._status.value})"
-        )
+        return f"Candidate(id={self._id}, name={self._full_name!r}, status={self._status.value})"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Candidate):

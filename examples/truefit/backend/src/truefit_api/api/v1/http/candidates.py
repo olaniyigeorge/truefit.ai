@@ -162,18 +162,14 @@ async def register_candidate(
 
     existing = await repo.get_by_email(body.email)
     if existing:
-        raise HTTPException(
-            409, detail=f"Candidate with email '{body.email}' already exists"
-        )
+        raise HTTPException(409, detail=f"Candidate with email '{body.email}' already exists")
 
     contact = ContactInfo(
         email=body.email,
         phone=body.phone,
         linkedin_url=body.linkedin_url,
     )
-    candidate = Candidate(
-        full_name=body.full_name, contact=contact, user_id=owner_id
-    )
+    candidate = Candidate(full_name=body.full_name, contact=contact, user_id=owner_id)
     await repo.save(candidate)
     return CandidateOut.from_domain(candidate)
 

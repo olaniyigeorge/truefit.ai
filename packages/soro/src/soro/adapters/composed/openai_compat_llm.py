@@ -32,7 +32,10 @@ def _httpx():
 
 def to_chat_tools(specs: list[ToolSpec]) -> list[dict[str, Any]]:
     return [
-        {"type": "function", "function": {"name": s.name, "description": s.description, "parameters": s.parameters}}
+        {
+            "type": "function",
+            "function": {"name": s.name, "description": s.description, "parameters": s.parameters},
+        }
         for s in specs
     ]
 
@@ -61,7 +64,9 @@ class OpenAICompatibleLLM:
         if self._client is None:
             httpx = _httpx()
             headers = {"Authorization": f"Bearer {self.api_key}"} if self.api_key else {}
-            self._client = httpx.AsyncClient(headers=headers, timeout=self.timeout, transport=self._transport)
+            self._client = httpx.AsyncClient(
+                headers=headers, timeout=self.timeout, transport=self._transport
+            )
         return self._client
 
     async def aclose(self) -> None:
@@ -69,7 +74,9 @@ class OpenAICompatibleLLM:
             await self._client.aclose()
             self._client = None
 
-    async def stream(self, messages: list[dict[str, Any]], tools: list[ToolSpec]) -> AsyncIterator[LLMChunk]:
+    async def stream(
+        self, messages: list[dict[str, Any]], tools: list[ToolSpec]
+    ) -> AsyncIterator[LLMChunk]:
         body: dict[str, Any] = {
             "model": self.model,
             "messages": messages,
@@ -82,7 +89,9 @@ class OpenAICompatibleLLM:
         # Tool calls stream as fragments keyed by index: the id and name arrive
         # first, the JSON arguments in pieces. Assemble, then yield each whole.
         pending: dict[int, dict[str, Any]] = {}
-        async with self._http().stream("POST", f"{self.base_url}/chat/completions", json=body) as resp:
+        async with self._http().stream(
+            "POST", f"{self.base_url}/chat/completions", json=body
+        ) as resp:
             if resp.status_code >= 400:
                 detail = (await resp.aread()).decode(errors="replace")[:500]
                 raise RuntimeError(f"LLM server returned {resp.status_code}: {detail}")
@@ -99,7 +108,9 @@ class OpenAICompatibleLLM:
                     if delta.get("content"):
                         yield TextDelta(delta["content"])
                     for position, fragment in enumerate(delta.get("tool_calls") or []):
-                        slot = pending.setdefault(fragment.get("index", position), {"id": None, "name": "", "args": ""})
+                        slot = pending.setdefault(
+                            fragment.get("index", position), {"id": None, "name": "", "args": ""}
+                        )
                         slot["id"] = fragment.get("id") or slot["id"]
                         fn = fragment.get("function") or {}
                         slot["name"] += fn.get("name") or ""
@@ -109,7 +120,9 @@ class OpenAICompatibleLLM:
 
         for index in sorted(pending):
             slot = pending[index]
-            yield ToolCallRequest(id=slot["id"] or f"call_{index}", name=slot["name"], args=_parse_args(slot["args"]))
+            yield ToolCallRequest(
+                id=slot["id"] or f"call_{index}", name=slot["name"], args=_parse_args(slot["args"])
+            )
 
 
 def _parse_args(raw: str) -> dict[str, Any]:

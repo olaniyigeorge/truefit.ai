@@ -82,9 +82,7 @@ class InterruptCommand:
 
 
 class InterruptReason(str, Enum):
-    CANDIDATE_SPOKE = (
-        "candidate_spoke"  # normal interrupt - candidate has something to say
-    )
+    CANDIDATE_SPOKE = "candidate_spoke"  # normal interrupt - candidate has something to say
     CLARIFICATION = "clarification"  # agent detects this is a question, not an answer
     NOISE = "noise"  # VAD false positive - agent should resume
     TECHNICAL = "technical"  # connectivity / audio issue
@@ -171,9 +169,7 @@ async def handle_start_session(
         session_status=interview.status.value,
         max_questions=interview.max_questions,
         max_duration_minutes=interview.max_duration_minutes,
-        started_at=(
-            interview.started_at.isoformat() if interview.started_at else _utcnow_iso()
-        ),
+        started_at=(interview.started_at.isoformat() if interview.started_at else _utcnow_iso()),
     )
 
 
@@ -302,8 +298,7 @@ async def handle_interrupt(
     )
 
     logger.info(
-        f"Interrupt {interrupt_id} on interview {cmd.interview_id}: "
-        f"{reason.value} -> {directive}"
+        f"Interrupt {interrupt_id} on interview {cmd.interview_id}: {reason.value} -> {directive}"
     )
 
     return InterruptResponse(

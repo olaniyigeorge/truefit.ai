@@ -111,9 +111,7 @@ async def oauth_authenticate(
         access_token = jwt_svc.create_access_token(
             subject=str(user.id),
             user_email=user.email,
-            user_role=(
-                user.role.value if hasattr(user.role, "value") else str(user.role)
-            ),
+            user_role=(user.role.value if hasattr(user.role, "value") else str(user.role)),
             org_id=str(user.org_id) if user.org_id else None,
         )
 

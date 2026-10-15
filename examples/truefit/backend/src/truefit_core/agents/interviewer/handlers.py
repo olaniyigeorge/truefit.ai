@@ -80,8 +80,7 @@ class InterviewToolHandlers:
                 "success": True,
                 "question_id": result["question_id"],
                 "question_number": result["question_number"],
-                "questions_remaining": result["total_questions"]
-                - result["question_number"],
+                "questions_remaining": result["total_questions"] - result["question_number"],
             }
         except Exception as e:
             logger.warning(f"[InterviewTools] record_question rejected: {e}")

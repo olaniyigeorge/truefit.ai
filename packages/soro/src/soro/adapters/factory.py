@@ -23,7 +23,7 @@ _NONE = "none"
 
 
 def _missing_extra(extra: str, exc: ImportError) -> str:
-    return f"The {extra} provider needs its dependencies ({exc}). Install them with: pip install \"soro[{extra}]\""
+    return f'The {extra} provider needs its dependencies ({exc}). Install them with: pip install "soro[{extra}]"'
 
 
 def _make_adapter(

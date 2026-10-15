@@ -29,6 +29,7 @@ Each provider's SDK is imported lazily, so you only need the extras you use. If 
 ```python
 import soro
 
+
 @soro.tool
 def save_note(text: str) -> None:
     """Save a note for the user.
@@ -38,14 +39,18 @@ def save_note(text: str) -> None:
     """
     ...
 
+
 agent = soro.Agent(
     prompt="You are my assistant. You can manage my notes and calendar.",
-    tools=[save_note],                                         # plain functions
-    connectors=[soro.connectors.openapi("https://my-os.example/openapi.json"),
-                soro.connectors.mcp("python calendar_server.py")],
-    confirm=["delete_*", "schedule_*"],                        # ask aloud before running
-    background=["search_*"],                                   # slow: acknowledge now, report later
-    provider="gemini", gemini_api_key="...",
+    tools=[save_note],  # plain functions
+    connectors=[
+        soro.connectors.openapi("https://my-os.example/openapi.json"),
+        soro.connectors.mcp("python calendar_server.py"),
+    ],
+    confirm=["delete_*", "schedule_*"],  # ask aloud before running
+    background=["search_*"],  # slow: acknowledge now, report later
+    provider="gemini",
+    gemini_api_key="...",
 )
 await agent.run(audio_input_stream=mic(), on_audio_output=play)
 ```
@@ -62,28 +67,36 @@ from soro import RuntimeCallbacks, ToolRegistry, ToolSpec, VoiceAgentRuntime, cr
 
 notes: list[str] = []
 
+
 async def save_note(args: dict) -> dict:
     notes.append(args["text"])
     return {"success": True}
 
-async def play(pcm: bytes) -> None:   # 24kHz mono s16 PCM from the model
+
+async def play(pcm: bytes) -> None:  # 24kHz mono s16 PCM from the model
     ...
 
-async def mic():                      # yield 16kHz mono s16 PCM chunks
+
+async def mic():  # yield 16kHz mono s16 PCM chunks
     ...
     yield b""
 
+
 async def main():
     runtime = VoiceAgentRuntime(
-        adapter=create_live_adapter("gemini", fallback="openai",
-                                    gemini_api_key="...", openai_api_key="..."),
+        adapter=create_live_adapter(
+            "gemini", fallback="openai", gemini_api_key="...", openai_api_key="..."
+        ),
         system_prompt="You are a note taker. Save anything the user asks you to remember.",
         tools=ToolRegistry().register(
             ToolSpec(
                 name="save_note",
                 description="Save a note for the user.",
-                parameters={"type": "object", "properties": {"text": {"type": "string"}},
-                            "required": ["text"]},
+                parameters={
+                    "type": "object",
+                    "properties": {"text": {"type": "string"}},
+                    "required": ["text"],
+                },
             ),
             save_note,
         ),
@@ -92,6 +105,7 @@ async def main():
         opening_message="Greet the user and ask what they want to remember.",
     )
     await runtime.run()
+
 
 asyncio.run(main())
 ```
@@ -117,10 +131,10 @@ Providers with their own voice activity detection (`capabilities.native_vad`) ne
 from soro.audio import EnergyTurnDetector
 
 detector = EnergyTurnDetector()
-for chunk in mic_chunks:                # 16-bit mono PCM, any chunk size
+for chunk in mic_chunks:  # 16-bit mono PCM, any chunk size
     event = detector.process(chunk)
     if event:
-        print(event.kind)               # "start" or "end"
+        print(event.kind)  # "start" or "end"
 ```
 
 It learns a noise floor, so steady noise such as a fan raises the floor instead of holding a turn open. It uses separate start and end thresholds so a level near the edge does not flap, and it tolerates the short gaps between syllables. Time is measured in audio, not wall clock, so it is deterministic. Tune it with `EnergyTurnConfig` (for example `end_ms`).
@@ -130,7 +144,7 @@ For noisy rooms use the neural detector, a drop-in with the same protocol. It ru
 ```python
 from soro.audio import create_turn_detector
 
-detector = create_turn_detector("silero")   # pip install "soro[vad]"
+detector = create_turn_detector("silero")  # pip install "soro[vad]"
 ```
 
 `python -m soro.evals turns` compares the detectors on the same noisy-room audio. On the built-in cases the energy detector false-triggers when a fan switches on mid-call and Silero does not.
@@ -156,9 +170,9 @@ bridge.open_mic()
 ```python
 adapter = soro.create_live_adapter(
     "composed",
-    composed_llm_base_url="http://localhost:11434/v1",   # Ollama
-    composed_llm_model="qwen2.5",                         # pick a model trained for tool calls
-    composed_tts_voice="voices/en_US-amy-medium.onnx",    # .onnx.json beside it
+    composed_llm_base_url="http://localhost:11434/v1",  # Ollama
+    composed_llm_model="qwen2.5",  # pick a model trained for tool calls
+    composed_tts_voice="voices/en_US-amy-medium.onnx",  # .onnx.json beside it
 )
 ```
 
@@ -199,7 +213,9 @@ python -m soro.evals scenarios --list
 ```python
 from soro.testing import FakeLiveAdapter
 
-adapter = FakeLiveAdapter(events=[("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}})])
+adapter = FakeLiveAdapter(
+    events=[("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}})]
+)
 ```
 
 `FakeLiveAdapter` needs no network or API key and records everything your agent sends. See `examples/offline_note_taker.py` for a complete run.

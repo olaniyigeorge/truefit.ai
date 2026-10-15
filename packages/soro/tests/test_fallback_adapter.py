@@ -84,7 +84,11 @@ async def test_calls_outside_session_raise():
 
 
 async def test_receive_and_tool_response_delegate_to_active():
-    events = [("audio", b"a"), ("tool_call", {"id": "1", "name": "n", "args": {}}), ("turn_complete", None)]
+    events = [
+        ("audio", b"a"),
+        ("tool_call", {"id": "1", "name": "n", "args": {}}),
+        ("turn_complete", None),
+    ]
     primary = FakeLiveAdapter(events=events)
     adapter = FallbackLiveAdapter(primary=primary)
 
@@ -124,8 +128,12 @@ async def test_health_check_reports_both_providers():
 
 
 def test_capabilities_are_the_common_denominator():
-    primary = FakeLiveAdapter(capabilities=AdapterCapabilities(supports_images=True, native_vad=False))
-    backup = FakeLiveAdapter(capabilities=AdapterCapabilities(supports_images=False, native_vad=False))
+    primary = FakeLiveAdapter(
+        capabilities=AdapterCapabilities(supports_images=True, native_vad=False)
+    )
+    backup = FakeLiveAdapter(
+        capabilities=AdapterCapabilities(supports_images=False, native_vad=False)
+    )
     caps = FallbackLiveAdapter(primary=primary, fallback=backup).capabilities
     assert caps.supports_images is False
     assert (caps.input_sample_rate, caps.output_sample_rate) == (16_000, 24_000)

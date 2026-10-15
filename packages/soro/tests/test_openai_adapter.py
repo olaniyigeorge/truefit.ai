@@ -56,7 +56,9 @@ class FakeWS:
 
 
 def _tone(n: int) -> bytes:
-    return struct.pack(f"<{n}h", *[int(8000 * math.sin(2 * math.pi * 440 * i / 16000)) for i in range(n)])
+    return struct.pack(
+        f"<{n}h", *[int(8000 * math.sin(2 * math.pi * 440 * i / 16000)) for i in range(n)]
+    )
 
 
 async def _events(server_events):
@@ -139,7 +141,13 @@ async def test_session_update_uses_the_ga_shape(connect_spy):
         {"type": "function", "name": "record", "description": "d", "parameters": tool.parameters}
     ]
     # beta-only keys must be gone
-    for beta_key in ("modalities", "voice", "input_audio_format", "output_audio_format", "turn_detection"):
+    for beta_key in (
+        "modalities",
+        "voice",
+        "input_audio_format",
+        "output_audio_format",
+        "turn_detection",
+    ):
         assert beta_key not in s
 
 
@@ -197,16 +205,33 @@ async def test_function_call_item_becomes_a_tool_call():
         [
             {
                 "type": "response.output_item.done",
-                "item": {"type": "function_call", "name": "record_question", "call_id": "c1", "arguments": '{"topic": "apis"}'},
+                "item": {
+                    "type": "function_call",
+                    "name": "record_question",
+                    "call_id": "c1",
+                    "arguments": '{"topic": "apis"}',
+                },
             }
         ]
     )
-    assert events == [("tool_call", {"id": "c1", "name": "record_question", "args": {"topic": "apis"}})]
+    assert events == [
+        ("tool_call", {"id": "c1", "name": "record_question", "args": {"topic": "apis"}})
+    ]
 
 
 async def test_bad_tool_arguments_become_empty_args_not_a_crash():
     events = await _events(
-        [{"type": "response.output_item.done", "item": {"type": "function_call", "name": "n", "call_id": "c", "arguments": "{oops"}}]
+        [
+            {
+                "type": "response.output_item.done",
+                "item": {
+                    "type": "function_call",
+                    "name": "n",
+                    "call_id": "c",
+                    "arguments": "{oops",
+                },
+            }
+        ]
     )
     assert events == [("tool_call", {"id": "c", "name": "n", "args": {}})]
 
@@ -217,7 +242,11 @@ async def test_tool_result_is_returned_as_a_function_call_output_then_response_c
     await adapter.send_tool_response(call_id="c1", name="n", result={"success": True})
     assert ws.sent[0] == {
         "type": "conversation.item.create",
-        "item": {"type": "function_call_output", "call_id": "c1", "output": json.dumps({"success": True})},
+        "item": {
+            "type": "function_call_output",
+            "call_id": "c1",
+            "output": json.dumps({"success": True}),
+        },
     }
     assert ws.sent[1] == {"type": "response.create"}
 
@@ -231,7 +260,10 @@ async def test_tool_result_is_returned_as_a_function_call_output_then_response_c
         ({"status": "incomplete", "status_details": {"reason": "turn_detected"}}, "interrupted"),
         ({"status": "incomplete", "status_details": {"reason": "client_cancelled"}}, "interrupted"),
         # Regression: these used to yield nothing and leave the agent waiting forever.
-        ({"status": "incomplete", "status_details": {"reason": "max_output_tokens"}}, "turn_complete"),
+        (
+            {"status": "incomplete", "status_details": {"reason": "max_output_tokens"}},
+            "turn_complete",
+        ),
         ({"status": "incomplete", "status_details": {"reason": "content_filter"}}, "turn_complete"),
         ({"status": "incomplete"}, "turn_complete"),
     ],
@@ -255,8 +287,15 @@ async def test_speech_started_only_interrupts_an_active_response():
 
 async def test_api_error_event_raises_with_the_server_message():
     with pytest.raises(RuntimeError, match="beta_api_shape_disabled"):
-        await _events([{"type": "error", "error": {"code": "beta_api_shape_disabled", "message": "no"}}])
+        await _events(
+            [{"type": "error", "error": {"code": "beta_api_shape_disabled", "message": "no"}}]
+        )
 
 
 async def test_unknown_events_are_ignored():
-    assert await _events([{"type": "rate_limits.updated", "rate_limits": []}, {"type": "something.new"}]) == []
+    assert (
+        await _events(
+            [{"type": "rate_limits.updated", "rate_limits": []}, {"type": "something.new"}]
+        )
+        == []
+    )

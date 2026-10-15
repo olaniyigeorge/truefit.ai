@@ -41,8 +41,16 @@ def test_schema_from_signature_and_docstring():
     assert spec.description == "Save a note for the user."
     props = spec.parameters["properties"]
     assert props["text"] == {"type": "string", "description": "What to write down."}
-    assert props["pinned"] == {"type": "boolean", "description": "Keep it at the top of the list.", "default": False}
-    assert props["tags"] == {"type": "array", "items": {"type": "string"}, "description": "Labels for later search."}
+    assert props["pinned"] == {
+        "type": "boolean",
+        "description": "Keep it at the top of the list.",
+        "default": False,
+    }
+    assert props["tags"] == {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "Labels for later search.",
+    }
     assert spec.parameters["required"] == ["text"]
 
 

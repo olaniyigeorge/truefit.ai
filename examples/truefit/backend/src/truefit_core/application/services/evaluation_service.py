@@ -81,9 +81,7 @@ class EvaluationService:
         # Idempotency guard
         existing = await self._evaluations.get_by_interview(interview_id)
         if existing is not None:
-            logger.info(
-                f"Evaluation already exists for interview {interview_id}, returning cached"
-            )
+            logger.info(f"Evaluation already exists for interview {interview_id}, returning cached")
             return existing
 
         interview = await self._interviews.get_by_id(interview_id)
@@ -156,9 +154,7 @@ class EvaluationService:
                     },
                 )
             )
-            logger.info(
-                f"Report uploaded for evaluation {evaluation.id} -> {storage_key}"
-            )
+            logger.info(f"Report uploaded for evaluation {evaluation.id} -> {storage_key}")
 
         except Exception as e:
             # Report generation failure is non-fatal - evaluation is already persisted.
@@ -184,9 +180,7 @@ class EvaluationService:
         # possible (immutable). We update via repo directly.
         # Otherwise, attach_report() will raise if already set - handle appropriately
         # by updating the storage key column in the DB directly via the repo.
-        logger.info(
-            f"Report regenerated for evaluation {evaluation_id} -> {storage_key}"
-        )
+        logger.info(f"Report regenerated for evaluation {evaluation_id} -> {storage_key}")
         return storage_key
 
     # ── Internal helpers ─────

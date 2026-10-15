@@ -71,26 +71,40 @@ def test_barge_in_counts_handled_within_budget_and_excludes_it_from_turn_latency
 
 def test_tool_call_correctness():
     scenario = _scenario(
-        expected_calls=(ExpectedCall("record_question"),
-                        ExpectedCall("persist_answer", {"answer": re.compile("python", re.I)})),
+        expected_calls=(
+            ExpectedCall("record_question"),
+            ExpectedCall("persist_answer", {"answer": re.compile("python", re.I)}),
+        ),
         forbidden_calls=("delete_everything",),
         each_preceded_by={"record_question": "persist_answer"},
     )
-    good = [("record_question", {}), ("persist_answer", {"answer": "Python!"}), ("record_question", {})]
+    good = [
+        ("record_question", {}),
+        ("persist_answer", {"answer": "Python!"}),
+        ("record_question", {}),
+    ]
     assert tool_call_failures(scenario, good) == []
 
-    skipped_save = [("record_question", {}), ("record_question", {}), ("persist_answer", {"answer": "x"})]
+    skipped_save = [
+        ("record_question", {}),
+        ("record_question", {}),
+        ("persist_answer", {"answer": "x"}),
+    ]
     failures = tool_call_failures(scenario, skipped_save)
     assert "record_question called again before persist_answer" in failures
     assert any(f.startswith("expected persist_answer with {answer~/python/}") for f in failures)
 
-    assert tool_call_failures(scenario, [*good, ("delete_everything", {})]) == ["forbidden call delete_everything"]
+    assert tool_call_failures(scenario, [*good, ("delete_everything", {})]) == [
+        "forbidden call delete_everything"
+    ]
 
 
 def test_expected_calls_must_be_in_order():
     scenario = _scenario(expected_calls=(ExpectedCall("a"), ExpectedCall("b")))
     assert tool_call_failures(scenario, [("a", {}), ("x", {}), ("b", {})]) == []
-    assert tool_call_failures(scenario, [("b", {}), ("a", {})]) == ["expected b (in order), not seen"]
+    assert tool_call_failures(scenario, [("b", {}), ("a", {})]) == [
+        "expected b (in order), not seen"
+    ]
 
 
 def _run(trace, scenario=None, **kw) -> ScenarioRun:

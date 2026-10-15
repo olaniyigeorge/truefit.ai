@@ -103,7 +103,9 @@ class OpenAPIConnector:
         if not base:
             raise ValueError("The spec has no servers entry; pass base_url=")
         ops = [op for op in parse_operations(doc) if self._allowed(op)]
-        return [(ToolSpec(op.name, op.summary, op.parameters), self._handler(op, base)) for op in ops]
+        return [
+            (ToolSpec(op.name, op.summary, op.parameters), self._handler(op, base)) for op in ops
+        ]
 
     async def aclose(self) -> None:
         if self._client is not None:
@@ -111,7 +113,9 @@ class OpenAPIConnector:
             self._client = None
 
     def _allowed(self, op: Operation) -> bool:
-        if self._allow_ops is not None and not any(fnmatch.fnmatchcase(op.name, p) for p in self._allow_ops):
+        if self._allow_ops is not None and not any(
+            fnmatch.fnmatchcase(op.name, p) for p in self._allow_ops
+        ):
             return False
         if self._allow_tags is not None and not self._allow_tags.intersection(op.tags):
             return False
@@ -153,7 +157,10 @@ class OpenAPIConnector:
                 return {"success": False, "error": f"Missing path arguments: {missing}"}
             url = base.rstrip("/") + "/" + path.lstrip("/")
             resp = await self._client.request(
-                op.method.upper(), url, params=query or None, headers=headers or None,
+                op.method.upper(),
+                url,
+                params=query or None,
+                headers=headers or None,
                 json=body,
             )
             return _result(resp)
@@ -241,23 +248,36 @@ def _operation(doc: dict, name: str, method: str, path: str, raw: dict, shared: 
         parameters["required"] = sorted(set(required), key=required.index)
     summary = (raw.get("summary") or raw.get("description") or "").strip()
     return Operation(
-        name=name, method=method, path=path, summary=summary,
-        tags=tuple(raw.get("tags") or ()), parameters=parameters,
-        locations=locations, body_whole=body_whole,
+        name=name,
+        method=method,
+        path=path,
+        summary=summary,
+        tags=tuple(raw.get("tags") or ()),
+        parameters=parameters,
+        locations=locations,
+        body_whole=body_whole,
     )
 
 
 def _deref(doc: dict, node: Any) -> Any:
     """Follow a single local $ref (#/components/...). Remote refs are left alone."""
     seen = set()
-    while isinstance(node, dict) and isinstance(node.get("$ref"), str) and node["$ref"].startswith("#/"):
+    while (
+        isinstance(node, dict)
+        and isinstance(node.get("$ref"), str)
+        and node["$ref"].startswith("#/")
+    ):
         ref = node["$ref"]
         if ref in seen:
             return {}
         seen.add(ref)
         target: Any = doc
         for part in ref[2:].split("/"):
-            target = target.get(part.replace("~1", "/").replace("~0", "~"), {}) if isinstance(target, dict) else {}
+            target = (
+                target.get(part.replace("~1", "/").replace("~0", "~"), {})
+                if isinstance(target, dict)
+                else {}
+            )
         node = target
     return node
 
@@ -272,7 +292,11 @@ def _resolve(doc: dict, schema: Any, depth: int = 0) -> Any:
         return {"type": "object"}
     schema = _deref(doc, schema)
     if isinstance(schema, dict):
-        return {k: _resolve(doc, v, depth + 1) for k, v in schema.items() if k not in ("$ref", "xml", "example")}
+        return {
+            k: _resolve(doc, v, depth + 1)
+            for k, v in schema.items()
+            if k not in ("$ref", "xml", "example")
+        }
     if isinstance(schema, list):
         return [_resolve(doc, v, depth + 1) for v in schema]
     return copy.deepcopy(schema)

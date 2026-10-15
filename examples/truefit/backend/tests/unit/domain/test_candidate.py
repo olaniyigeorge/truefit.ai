@@ -137,12 +137,8 @@ class TestCandidateConstruction:
 
     def test_candidate_equality_by_id(self):
         fixed_id = uuid.uuid4()
-        a = Candidate(
-            candidate_id=fixed_id, full_name="A", contact=make_contact("a@x.com")
-        )
-        b = Candidate(
-            candidate_id=fixed_id, full_name="B", contact=make_contact("b@x.com")
-        )
+        a = Candidate(candidate_id=fixed_id, full_name="A", contact=make_contact("a@x.com"))
+        b = Candidate(candidate_id=fixed_id, full_name="B", contact=make_contact("b@x.com"))
         assert a == b
 
     def test_different_candidates_are_not_equal(self):

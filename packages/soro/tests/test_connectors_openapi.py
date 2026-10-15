@@ -29,7 +29,14 @@ SPEC = {
             },
             "Tag": {"type": "string", "enum": ["work", "home"]},
         },
-        "parameters": {"NoteId": {"name": "note_id", "in": "path", "required": True, "schema": {"type": "string"}}},
+        "parameters": {
+            "NoteId": {
+                "name": "note_id",
+                "in": "path",
+                "required": True,
+                "schema": {"type": "string"},
+            }
+        },
     },
     "paths": {
         "/notes": {
@@ -39,7 +46,12 @@ SPEC = {
                 "tags": ["notes"],
                 "parameters": [
                     {"name": "tag", "in": "query", "schema": {"$ref": "#/components/schemas/Tag"}},
-                    {"name": "limit", "in": "query", "description": "Max results.", "schema": {"type": "integer"}},
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Max results.",
+                        "schema": {"type": "integer"},
+                    },
                 ],
             },
             "post": {
@@ -48,16 +60,28 @@ SPEC = {
                 "tags": ["notes"],
                 "requestBody": {
                     "required": True,
-                    "content": {"application/json": {"schema": {"$ref": "#/components/schemas/NewNote"}}},
+                    "content": {
+                        "application/json": {"schema": {"$ref": "#/components/schemas/NewNote"}}
+                    },
                 },
             },
         },
         "/notes/{note_id}": {
             "parameters": [{"$ref": "#/components/parameters/NoteId"}],
-            "delete": {"operationId": "delete_note", "summary": "Delete a note.", "tags": ["admin"]},
+            "delete": {
+                "operationId": "delete_note",
+                "summary": "Delete a note.",
+                "tags": ["admin"],
+            },
             "put": {
                 "summary": "Replace tags.",
-                "requestBody": {"content": {"application/json": {"schema": {"type": "array", "items": {"type": "string"}}}}},
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {"type": "array", "items": {"type": "string"}}
+                        }
+                    }
+                },
             },
         },
     },
@@ -69,7 +93,10 @@ def test_operations_become_tools_with_merged_argument_schemas():
     assert set(ops) == {"list_notes", "create_note", "delete_note", "put_notes_note_id"}
 
     listing = ops["list_notes"].parameters
-    assert listing["properties"]["tag"] == {"type": "string", "enum": ["work", "home"]}  # $ref inlined
+    assert listing["properties"]["tag"] == {
+        "type": "string",
+        "enum": ["work", "home"],
+    }  # $ref inlined
     assert listing["properties"]["limit"]["description"] == "Max results."
     assert "required" not in listing
 
@@ -138,7 +165,8 @@ async def test_http_errors_come_back_as_results_and_path_args_are_escaped():
 async def test_allowlists_by_operation_pattern_and_tag():
     _, transport = _stub()
     assert set(await _tools(openapi(SPEC, transport=transport, operations=["*_note"]))) == {
-        "create_note", "delete_note",
+        "create_note",
+        "delete_note",
     }
     assert set(await _tools(openapi(SPEC, transport=transport, tags=["admin"]))) == {"delete_note"}
 

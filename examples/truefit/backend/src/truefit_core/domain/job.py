@@ -289,8 +289,7 @@ class Job:
     def assert_open_for_interviews(self) -> None:
         if not self.is_open_for_interviews:
             raise ValueError(
-                f"Job '{self._title}' is not accepting interviews "
-                f"(status={self._status.value})"
+                f"Job '{self._title}' is not accepting interviews (status={self._status.value})"
             )
 
     # ── Internal

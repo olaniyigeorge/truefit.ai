@@ -107,12 +107,7 @@ def test_steady_fan_noise_from_the_start_never_triggers_a_turn():
 def test_speech_over_fan_noise_is_detected_and_ends():
     rng = random.Random(6)
     speech = [
-        _pcm(
-            a + b
-            for a, b in zip(
-                array("h", s).tolist(), array("h", n).tolist()
-            )
-        )
+        _pcm(a + b for a, b in zip(array("h", s).tolist(), array("h", n).tolist()))
         for s, n in zip(speech_frames(2, rng, rms=8000), fan(2, rng))
     ]
     frames = fan(2, rng) + speech + fan(3, rng)

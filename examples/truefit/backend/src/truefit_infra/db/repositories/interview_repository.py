@@ -31,7 +31,6 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
     async def save(self, interview: Interview) -> None:
         async with self._db.get_session() as session:
-
             # 1) Load existing session WITH turns eagerly
             result = await session.execute(
                 select(InterviewSession)
@@ -143,9 +142,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
             # load job listing to get org_id
             app = s.application
-            job_res = await session.execute(
-                select(JobListing).where(JobListing.id == app.job_id)
-            )
+            job_res = await session.execute(select(JobListing).where(JobListing.id == app.job_id))
             job = job_res.scalar_one()
 
             return self._to_domain(session_row=s, job=job)
@@ -170,9 +167,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
 
             # batch load jobs for org_id mapping
             job_ids = {s.application.job_id for s in sessions}
-            jobs_res = await session.execute(
-                select(JobListing).where(JobListing.id.in_(job_ids))
-            )
+            jobs_res = await session.execute(select(JobListing).where(JobListing.id.in_(job_ids)))
             jobs = {j.id: j for j in jobs_res.scalars().all()}
 
             return [self._to_domain(s, jobs[s.application.job_id]) for s in sessions]
@@ -195,9 +190,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             )
             sessions = res.scalars().all()
 
-            job_res = await session.execute(
-                select(JobListing).where(JobListing.id == job_id)
-            )
+            job_res = await session.execute(select(JobListing).where(JobListing.id == job_id))
             job = job_res.scalar_one()
 
             return [self._to_domain(s, job) for s in sessions]
@@ -228,9 +221,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             if not s:
                 return None
 
-            job_res = await session.execute(
-                select(JobListing).where(JobListing.id == job_id)
-            )
+            job_res = await session.execute(select(JobListing).where(JobListing.id == job_id))
             job = job_res.scalar_one()
 
             return self._to_domain(s, job)
@@ -239,8 +230,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
         interview = await self.get_by_id(interview_id)
         if interview is None:
             logger.warning(
-                f"[InterviewRepo] close_dangling_questions: "
-                f"interview {interview_id} not found"
+                f"[InterviewRepo] close_dangling_questions: interview {interview_id} not found"
             )
             return 0
 
@@ -248,8 +238,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
         if count:
             await self.save(interview)
             logger.info(
-                f"[InterviewRepo] Voided {count} dangling question(s) "
-                f"for interview {interview_id}"
+                f"[InterviewRepo] Voided {count} dangling question(s) for interview {interview_id}"
             )
         return count
 
@@ -271,9 +260,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             sessions = res.scalars().all()
 
             job_ids = {s.application.job_id for s in sessions}
-            jobs_res = await session.execute(
-                select(JobListing).where(JobListing.id.in_(job_ids))
-            )
+            jobs_res = await session.execute(select(JobListing).where(JobListing.id.in_(job_ids)))
             jobs = {j.id: j for j in jobs_res.scalars().all()}
 
             return [self._to_domain(s, jobs[s.application.job_id]) for s in sessions]
@@ -317,9 +304,7 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
                     text=payload["question_text"],
                     topic=payload.get("topic"),
                     follow_up_of=(
-                        uuid.UUID(payload["follow_up_of"])
-                        if payload.get("follow_up_of")
-                        else None
+                        uuid.UUID(payload["follow_up_of"]) if payload.get("follow_up_of") else None
                     ),
                     asked_at=(
                         datetime.fromisoformat(payload["asked_at"])
@@ -351,14 +336,10 @@ class SQLAlchemyInterviewRepository(InterviewRepository):
             org_id=job.org_id,
             status=InterviewStatus(session_row.status),
             max_questions=(
-                session_row.realtime.get("max_questions", 10)
-                if session_row.realtime
-                else 10
+                session_row.realtime.get("max_questions", 10) if session_row.realtime else 10
             ),
             max_duration_minutes=(
-                session_row.realtime.get("max_duration_minutes", 30)
-                if session_row.realtime
-                else 30
+                session_row.realtime.get("max_duration_minutes", 30) if session_row.realtime else 30
             ),
             turns=turns,
             started_at=_ensure_tz(session_row.started_at),

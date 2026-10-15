@@ -12,7 +12,16 @@ from soro.adapters.gemini import GeminiLiveAdapter
 pytestmark = pytest.mark.unit
 
 
-def msg(*, data=None, out_text=None, in_text=None, turn_complete=False, interrupted=False, tool_call=None, go_away=None):
+def msg(
+    *,
+    data=None,
+    out_text=None,
+    in_text=None,
+    turn_complete=False,
+    interrupted=False,
+    tool_call=None,
+    go_away=None,
+):
     sc = SimpleNamespace(
         output_transcription=SimpleNamespace(text=out_text) if out_text else None,
         input_transcription=SimpleNamespace(text=in_text) if in_text else None,
@@ -55,7 +64,14 @@ async def test_keeps_reading_across_turns():
     session = FakeSdkSession(
         [
             [msg(data=b"hello", out_text="Hi, welcome.", turn_complete=True)],
-            [msg(in_text="I built a queue", data=b"answer", out_text="Interesting.", turn_complete=True)],
+            [
+                msg(
+                    in_text="I built a queue",
+                    data=b"answer",
+                    out_text="Interesting.",
+                    turn_complete=True,
+                )
+            ],
             [msg(data=b"third", out_text="Next question.", turn_complete=True)],
         ]
     )
@@ -63,7 +79,11 @@ async def test_keeps_reading_across_turns():
 
     assert [e for e in events if e[0] == "turn_complete"] == [("turn_complete", None)] * 3
     assert [e[1] for e in events if e[0] == "audio"] == [b"hello", b"answer", b"third"]
-    assert [e[1] for e in events if e[0] == "text"] == ["Hi, welcome.", "Interesting.", "Next question."]
+    assert [e[1] for e in events if e[0] == "text"] == [
+        "Hi, welcome.",
+        "Interesting.",
+        "Next question.",
+    ]
     assert ("input_text", "I built a queue") in events
     assert session.receive_calls == 4  # three turns, then the closed connection surfaced
 
@@ -71,7 +91,10 @@ async def test_keeps_reading_across_turns():
 async def test_transcript_buffers_do_not_leak_between_turns():
     session = FakeSdkSession(
         [
-            [msg(out_text="First ", turn_complete=False), msg(out_text="turn.", turn_complete=True)],
+            [
+                msg(out_text="First ", turn_complete=False),
+                msg(out_text="turn.", turn_complete=True),
+            ],
             [msg(out_text="Second.", turn_complete=True)],
         ]
     )
@@ -80,7 +103,9 @@ async def test_transcript_buffers_do_not_leak_between_turns():
 
 
 async def test_tool_calls_and_interruptions_survive_later_turns():
-    call = SimpleNamespace(function_calls=[SimpleNamespace(id="c1", name="record_question", args={"topic": "apis"})])
+    call = SimpleNamespace(
+        function_calls=[SimpleNamespace(id="c1", name="record_question", args={"topic": "apis"})]
+    )
     session = FakeSdkSession(
         [
             [msg(turn_complete=True)],
@@ -88,7 +113,10 @@ async def test_tool_calls_and_interruptions_survive_later_turns():
         ]
     )
     events, _ = await collect(session)
-    assert ("tool_call", {"id": "c1", "name": "record_question", "args": {"topic": "apis"}}) in events
+    assert (
+        "tool_call",
+        {"id": "c1", "name": "record_question", "args": {"topic": "apis"}},
+    ) in events
     assert ("interrupted", None) in events
 
 
@@ -223,7 +251,9 @@ async def run_events(adapter, tools=None, opening=None):
 
 async def test_transient_error_resumes_with_the_handle_and_reports_it():
     first = ScriptedSession([[rmsg(handle="h1", data=b"a", turn_complete=True)]], then=err(1011))
-    second = ScriptedSession([[msg(data=b"b", out_text="Back again.", turn_complete=True)]], then=ConnectionError("end"))
+    second = ScriptedSession(
+        [[msg(data=b"b", out_text="Back again.", turn_complete=True)]], then=ConnectionError("end")
+    )
     adapter, live = make_adapter([first, second])
 
     events = await run_events(adapter)
@@ -240,19 +270,26 @@ async def test_transient_error_resumes_with_the_handle_and_reports_it():
 async def test_early_failure_without_a_handle_restarts_and_replays_the_opening_message():
     """The first log: 1011 four seconds in, before any resumption handle existed."""
     first = ScriptedSession([], then=err(1011))
-    second = ScriptedSession([[msg(data=b"hi", out_text="Hello!", turn_complete=True)]], then=ConnectionError("end"))
+    second = ScriptedSession(
+        [[msg(data=b"hi", out_text="Hello!", turn_complete=True)]], then=ConnectionError("end")
+    )
     adapter, live = make_adapter([first, second])
 
     events = await run_events(adapter, opening="Interview context")
 
     assert ("text", "Hello!") in events
-    assert ("session_resumed", {"reason": "connection_error", "restarted": True}) in events  # state was lost
+    assert (
+        "session_resumed",
+        {"reason": "connection_error", "restarted": True},
+    ) in events  # state was lost
     assert live.connects[1]["config"].session_resumption.handle is None
     assert second.content == ["Interview context"]  # replayed onto the fresh session
 
 
 async def test_handle_is_only_kept_when_resumable():
-    first = ScriptedSession([[rmsg(handle="not-yet", resumable=False, turn_complete=True)]], then=err(1011))
+    first = ScriptedSession(
+        [[rmsg(handle="not-yet", resumable=False, turn_complete=True)]], then=err(1011)
+    )
     second = ScriptedSession([], then=ConnectionError("end"))
     adapter, live = make_adapter([first, second])
     await run_events(adapter, opening="ctx")
@@ -261,7 +298,8 @@ async def test_handle_is_only_kept_when_resumable():
 
 async def test_the_latest_handle_wins():
     first = ScriptedSession(
-        [[rmsg(handle="h1", turn_complete=True)], [rmsg(handle="h2", turn_complete=True)]], then=err(1011)
+        [[rmsg(handle="h1", turn_complete=True)], [rmsg(handle="h2", turn_complete=True)]],
+        then=err(1011),
     )
     second = ScriptedSession([], then=ConnectionError("end"))
     adapter, live = make_adapter([first, second])
@@ -299,7 +337,10 @@ async def test_gives_up_after_three_reconnects_in_a_row():
 
 async def test_the_retry_budget_resets_whenever_the_connection_delivers():
     """A long session can be recycled many times as long as each connection works."""
-    sessions = [ScriptedSession([[rmsg(handle=f"h{i}", turn_complete=True)]], then=err(1011)) for i in range(6)]
+    sessions = [
+        ScriptedSession([[rmsg(handle=f"h{i}", turn_complete=True)]], then=err(1011))
+        for i in range(6)
+    ]
     sessions.append(ScriptedSession([[msg(turn_complete=True)]], then=ConnectionError("end")))
     adapter, live = make_adapter(sessions)
     events = await run_events(adapter)
@@ -310,9 +351,12 @@ async def test_the_retry_budget_resets_whenever_the_connection_delivers():
 async def test_go_away_with_a_handle_resumes_instead_of_ending_the_session():
     """Gemini recycles connections periodically; that must not end a 45 minute session."""
     first = ScriptedSession(
-        [[rmsg(handle="h1", turn_complete=True)], [msg(go_away=SimpleNamespace(time_left="30s"))]], then=err(1011)
+        [[rmsg(handle="h1", turn_complete=True)], [msg(go_away=SimpleNamespace(time_left="30s"))]],
+        then=err(1011),
     )
-    second = ScriptedSession([[msg(out_text="Still here.", turn_complete=True)]], then=ConnectionError("end"))
+    second = ScriptedSession(
+        [[msg(out_text="Still here.", turn_complete=True)]], then=ConnectionError("end")
+    )
     adapter, live = make_adapter([first, second])
     events = await run_events(adapter)
     assert ("session_resumed", {"reason": "go_away", "restarted": False}) in events
@@ -322,7 +366,10 @@ async def test_go_away_with_a_handle_resumes_instead_of_ending_the_session():
 
 
 async def test_go_away_without_a_handle_still_reports_session_ending():
-    first = ScriptedSession([[msg(go_away=SimpleNamespace(time_left="30s"), turn_complete=True)]], then=ConnectionError("end"))
+    first = ScriptedSession(
+        [[msg(go_away=SimpleNamespace(time_left="30s"), turn_complete=True)]],
+        then=ConnectionError("end"),
+    )
     adapter, live = make_adapter([first])
     events = await run_events(adapter)
     assert ("session_ending", {"reason": "provider_go_away", "time_left": "30s"}) in events
@@ -352,6 +399,7 @@ async def test_senders_wait_for_the_reconnect_instead_of_hitting_a_dead_session(
     adapter, live = make_adapter([first, second], gate=gate)
 
     async with adapter.open_session("p") as session:
+
         async def drain():
             try:
                 return [e async for e in session.receive()]
@@ -379,7 +427,10 @@ async def test_connection_config_enables_resumption_and_compression():
 
 
 async def test_model_can_be_set_with_an_argument():
-    adapter, live = make_adapter([ScriptedSession([], then=ConnectionError("end"))], model="gemini-live-2.5-flash-native-audio")
+    adapter, live = make_adapter(
+        [ScriptedSession([], then=ConnectionError("end"))],
+        model="gemini-live-2.5-flash-native-audio",
+    )
     await run_events(adapter)
     assert live.connects[0]["model"] == "gemini-live-2.5-flash-native-audio"
 
@@ -393,7 +444,9 @@ async def test_model_can_be_set_with_the_environment(monkeypatch):
 
 async def test_the_argument_beats_the_environment(monkeypatch):
     monkeypatch.setenv("GEMINI_LIVE_MODEL", "from-env")
-    adapter, live = make_adapter([ScriptedSession([], then=ConnectionError("end"))], model="from-arg")
+    adapter, live = make_adapter(
+        [ScriptedSession([], then=ConnectionError("end"))], model="from-arg"
+    )
     await run_events(adapter)
     assert live.connects[0]["model"] == "from-arg"
 
@@ -425,8 +478,11 @@ async def test_default_model_when_not_overridden():
 async def test_a_session_that_keeps_dying_mid_greeting_gives_up_instead_of_looping():
     """Regression: 1011 six seconds in, every time, with greeting audio arriving first.
     Any message used to reset the retry budget, so the greeting was replayed forever."""
+
     def dies_mid_greeting():
-        return ScriptedSession([[msg(data=b"hel", out_text="Hel")]], then=err(1011))  # audio, never turn_complete
+        return ScriptedSession(
+            [[msg(data=b"hel", out_text="Hel")]], then=err(1011)
+        )  # audio, never turn_complete
 
     adapter, live = make_adapter([dies_mid_greeting() for _ in range(8)])
     events = await run_events(adapter, opening="Greet the candidate")
@@ -441,7 +497,9 @@ async def test_only_a_completed_turn_restores_the_retry_budget():
     sessions = [
         ScriptedSession([[msg(data=b"a")]], then=err(1011)),  # fails mid-turn
         ScriptedSession([[msg(data=b"b")]], then=err(1011)),  # fails mid-turn
-        ScriptedSession([[msg(data=b"c", turn_complete=True)]], then=err(1011)),  # completes, budget restored
+        ScriptedSession(
+            [[msg(data=b"c", turn_complete=True)]], then=err(1011)
+        ),  # completes, budget restored
         ScriptedSession([[msg(data=b"d")]], then=err(1011)),
         ScriptedSession([[msg(data=b"e")]], then=err(1011)),
         ScriptedSession([[msg(turn_complete=True)]], then=ConnectionError("end")),

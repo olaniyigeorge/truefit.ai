@@ -153,9 +153,13 @@ class ScenarioRunner:
         self.settle_s = settle_s
         self.seed = seed
 
-    async def run(self, scenario: Scenario, adapter: LiveSessionPort, provider: str = "") -> ScenarioRun:
+    async def run(
+        self, scenario: Scenario, adapter: LiveSessionPort, provider: str = ""
+    ) -> ScenarioRun:
         tap = TracingAdapter(adapter)
-        run = ScenarioRun(scenario, provider or type(adapter).__name__, tap.trace, adapter.capabilities)
+        run = ScenarioRun(
+            scenario, provider or type(adapter).__name__, tap.trace, adapter.capabilities
+        )
 
         async def discard(*_: Any) -> None:
             return None
@@ -180,9 +184,13 @@ class ScenarioRunner:
 
     # ── The caller
 
-    async def _caller(self, scenario: Scenario, tap: TracingAdapter, run: ScenarioRun) -> AsyncIterator[bytes]:
+    async def _caller(
+        self, scenario: Scenario, tap: TracingAdapter, run: ScenarioRun
+    ) -> AsyncIterator[bytes]:
         trace = tap.trace
-        await trace.wait_for(lambda: trace.first("mark", "session_open") is not None, self.turn_timeout_s)
+        await trace.wait_for(
+            lambda: trace.first("mark", "session_open") is not None, self.turn_timeout_s
+        )
         since = 0
         turns = scenario.turns
         if scenario.opening_message is not None and not (turns and turns[0].barge_in):
@@ -201,7 +209,9 @@ class ScenarioRunner:
             for frame in turn.frames(self.seed + idx):
                 yield frame
                 await asyncio.sleep(FRAME_MS / 1000)
-            end = await trace.add("mark", "caller_turn_end", {"turn": idx, "barge_in": turn.barge_in})
+            end = await trace.add(
+                "mark", "caller_turn_end", {"turn": idx, "barge_in": turn.barge_in}
+            )
             since = end.i
             next_barges = idx + 1 < len(turns) and turns[idx + 1].barge_in
             if not next_barges:
@@ -245,15 +255,28 @@ def _call(call_id: str, name: str, **args: Any) -> Event:
 
 
 NOTE_TOOLS = (
-    ToolSpec("save_note", "Save a note for the user.",
-             {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]}),
+    ToolSpec(
+        "save_note",
+        "Save a note for the user.",
+        {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]},
+    ),
 )
 
 INTERVIEW_TOOLS = (
-    ToolSpec("record_question", "Record the question you are about to ask.",
-             {"type": "object", "properties": {"question": {"type": "string"}}, "required": ["question"]}),
-    ToolSpec("persist_answer", "Save the candidate's answer to the current question.",
-             {"type": "object", "properties": {"answer": {"type": "string"}}, "required": ["answer"]}),
+    ToolSpec(
+        "record_question",
+        "Record the question you are about to ask.",
+        {
+            "type": "object",
+            "properties": {"question": {"type": "string"}},
+            "required": ["question"],
+        },
+    ),
+    ToolSpec(
+        "persist_answer",
+        "Save the candidate's answer to the current question.",
+        {"type": "object", "properties": {"answer": {"type": "string"}}, "required": ["answer"]},
+    ),
     ToolSpec("complete_interview", "End the interview once every question is answered."),
 )
 
@@ -262,7 +285,7 @@ BUILTIN_SCENARIOS: tuple[Scenario, ...] = (
         name="note_taker",
         description="Greets, then saves the note the caller dictates.",
         prompt="You are a friendly note-taking assistant. Greet the user briefly. "
-               "When they ask you to remember something, call save_note with it, then confirm in one sentence.",
+        "When they ask you to remember something, call save_note with it, then confirm in one sentence.",
         opening_message="The user has just joined the call.",
         turns=(CallerTurn(text="Please save a note that says buy milk."),),
         tools=NOTE_TOOLS,
@@ -277,8 +300,8 @@ BUILTIN_SCENARIOS: tuple[Scenario, ...] = (
         name="interview_order",
         description="Two-question interview; every answer is saved before the next question.",
         prompt="You are a job interviewer. Before asking each question, call record_question with it. "
-               "After the candidate answers, call persist_answer with their answer before saying anything else. "
-               "Ask exactly two short questions, then call complete_interview and say goodbye.",
+        "After the candidate answers, call persist_answer with their answer before saying anything else. "
+        "Ask exactly two short questions, then call complete_interview and say goodbye.",
         opening_message="The candidate has joined and is ready.",
         turns=(
             CallerTurn(text="I have five years of Python experience, mostly backend work."),
@@ -294,13 +317,25 @@ BUILTIN_SCENARIOS: tuple[Scenario, ...] = (
         ),
         each_preceded_by={"record_question": "persist_answer"},
         script=(
-            (_call("q1", "record_question", question="Tell me about your Python experience."),
-             *speech(0.3), ("text", "Tell me about your Python experience.")),
-            (_call("a1", "persist_answer", answer="Five years of Python, mostly backend."),
-             _call("q2", "record_question", question="Describe a project you led."),
-             *speech(0.3), ("text", "Thanks. Describe a project you led.")),
-            (_call("a2", "persist_answer", answer="Led a team splitting a monolith into services."),
-             _call("done", "complete_interview"), *speech(0.2), ("text", "Thank you, goodbye.")),
+            (
+                _call("q1", "record_question", question="Tell me about your Python experience."),
+                *speech(0.3),
+                ("text", "Tell me about your Python experience."),
+            ),
+            (
+                _call("a1", "persist_answer", answer="Five years of Python, mostly backend."),
+                _call("q2", "record_question", question="Describe a project you led."),
+                *speech(0.3),
+                ("text", "Thanks. Describe a project you led."),
+            ),
+            (
+                _call(
+                    "a2", "persist_answer", answer="Led a team splitting a monolith into services."
+                ),
+                _call("done", "complete_interview"),
+                *speech(0.2),
+                ("text", "Thank you, goodbye."),
+            ),
         ),
     ),
     Scenario(
@@ -318,8 +353,10 @@ BUILTIN_SCENARIOS: tuple[Scenario, ...] = (
         prompt="You are a helpful assistant.",
         opening_message="The user has joined.",
         turns=(CallerTurn(audio_s=0.3, barge_in=True),),
-        script=((*speech(2.0), ("text", "Hello and welcome, let me tell you everything...")),
-                (*speech(0.3), ("text", "Sorry, go ahead."))),
+        script=(
+            (*speech(2.0), ("text", "Hello and welcome, let me tell you everything...")),
+            (*speech(0.3), ("text", "Sorry, go ahead.")),
+        ),
         live=False,
     ),
     Scenario(
@@ -328,9 +365,15 @@ BUILTIN_SCENARIOS: tuple[Scenario, ...] = (
         prompt="You are a helpful assistant.",
         opening_message="The user has joined.",
         turns=(CallerTurn(text="What can you do?"),),
-        script=((*speech(0.2),),
-                (*speech(0.1), ("session_resumed", {"reason": "eval", "restarted": False}),
-                 *speech(0.2), ("text", "I can take notes and answer questions."))),
+        script=(
+            (*speech(0.2),),
+            (
+                *speech(0.1),
+                ("session_resumed", {"reason": "eval", "restarted": False}),
+                *speech(0.2),
+                ("text", "I can take notes and answer questions."),
+            ),
+        ),
         live=False,
     ),
 )

@@ -27,6 +27,7 @@ AsyncCallback = Callable[..., Awaitable[None]]
 
 logger = logging.getLogger("soro.runtime")
 
+
 class SessionComplete(Exception):
     """
     Raised (usually by a tool handler) to end the session normally.

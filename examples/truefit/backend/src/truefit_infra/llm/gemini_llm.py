@@ -55,8 +55,7 @@ class GeminiLLMAdapter(LLMPort):
         """
         schema_json = json.dumps(schema.model_json_schema(), indent=2)
         full_prompt = (
-            f"{prompt}\n\n"
-            f"Respond ONLY with valid JSON matching this schema:\n{schema_json}"
+            f"{prompt}\n\nRespond ONLY with valid JSON matching this schema:\n{schema_json}"
         )
 
         response = await self._client.aio.models.generate_content(

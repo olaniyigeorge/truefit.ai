@@ -42,9 +42,7 @@ def make_candidate(user_id=OWNER, with_resume=False):
 
         from src.truefit_core.domain.candidate import ResumeRef
 
-        c.attach_resume(
-            ResumeRef("k/ada.pdf", "ada.pdf", datetime.now(timezone.utc))
-        )
+        c.attach_resume(ResumeRef("k/ada.pdf", "ada.pdf", datetime.now(timezone.utc)))
     return c
 
 

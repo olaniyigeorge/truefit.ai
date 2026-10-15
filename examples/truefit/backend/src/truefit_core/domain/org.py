@@ -238,8 +238,7 @@ class Org:
     def assert_can_create_jobs(self) -> None:
         if not self.is_active:
             raise PermissionError(
-                f"Org '{self._name}' cannot create job listings "
-                f"(status={self._status.value})"
+                f"Org '{self._name}' cannot create job listings (status={self._status.value})"
             )
 
     # ── Helpers ──

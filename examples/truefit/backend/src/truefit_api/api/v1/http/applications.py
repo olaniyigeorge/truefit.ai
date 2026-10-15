@@ -50,16 +50,12 @@ class CandidateOwnership:
     """Maps candidate profiles to their owning users (candidate_profiles.user_id)."""
 
     async def owner_user_id(self, candidate_id: uuid.UUID) -> Optional[uuid.UUID]:
-        stmt = select(CandidateProfileModel.user_id).where(
-            CandidateProfileModel.id == candidate_id
-        )
+        stmt = select(CandidateProfileModel.user_id).where(CandidateProfileModel.id == candidate_id)
         async with db_manager.get_session() as session:
             return (await session.execute(stmt)).scalar_one_or_none()
 
     async def profile_id_for_user(self, user_id: uuid.UUID) -> Optional[uuid.UUID]:
-        stmt = select(CandidateProfileModel.id).where(
-            CandidateProfileModel.user_id == user_id
-        )
+        stmt = select(CandidateProfileModel.id).where(CandidateProfileModel.user_id == user_id)
         async with db_manager.get_session() as session:
             return (await session.execute(stmt)).scalars().first()
 
@@ -153,7 +149,7 @@ async def create_application(
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Application already exists for this job and candidate",
+            detail="Application already exists for this job and candidate",
         )
 
     application = Application(
@@ -193,20 +189,15 @@ async def _list_for_candidate(
 ) -> list[ApplicationOut]:
     """Candidates only ever see their own applications."""
     own_profile = await ownership.profile_id_for_user(uuid.UUID(str(user.user_id)))
-    if candidate_id and not (
-        _same(candidate_id, own_profile) or _same(candidate_id, user.user_id)
-    ):
+    if candidate_id and not (_same(candidate_id, own_profile) or _same(candidate_id, user.user_id)):
         raise _forbidden()
     if own_profile is None:
         return []
-    applications = await repo.list_by_candidate(
-        own_profile, limit=limit, offset=offset
-    )
+    applications = await repo.list_by_candidate(own_profile, limit=limit, offset=offset)
     return [
         ApplicationOut.from_domain(a)
         for a in applications
-        if (not job_id or a.job_id == job_id)
-        and (not status_filter or a.status == status_filter)
+        if (not job_id or a.job_id == job_id) and (not status_filter or a.status == status_filter)
     ]
 
 
@@ -233,9 +224,7 @@ async def list_applications(
         if job_id:
             ensure_org_member(user, await _job_org_id(job_repo, job_id))
         else:
-            applications = await repo.list_by_candidate(
-                candidate_id, limit=limit, offset=offset
-            )
+            applications = await repo.list_by_candidate(candidate_id, limit=limit, offset=offset)
             orgs: dict[uuid.UUID, Optional[uuid.UUID]] = {}
             visible = []
             for a in applications:
@@ -256,9 +245,7 @@ async def list_applications(
             offset=offset,
         )
     else:
-        applications = await repo.list_by_candidate(
-            candidate_id, limit=limit, offset=offset
-        )
+        applications = await repo.list_by_candidate(candidate_id, limit=limit, offset=offset)
 
     return [ApplicationOut.from_domain(a) for a in applications]
 

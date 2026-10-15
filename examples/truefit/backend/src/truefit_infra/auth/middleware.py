@@ -15,9 +15,7 @@ from src.truefit_core.common.utils import logger
 class TokenPayload:
     """Represents verified JWT token payload."""
 
-    def __init__(
-        self, user_id: str, email: str, role: str, org_id: Optional[str] = None
-    ):
+    def __init__(self, user_id: str, email: str, role: str, org_id: Optional[str] = None):
         self.user_id = user_id
         self.email = email
         self.role = role

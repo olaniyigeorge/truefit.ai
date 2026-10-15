@@ -32,7 +32,13 @@ import time
 from collections import deque
 from typing import Any, AsyncGenerator, Optional
 
-from soro.adapters.composed.components import LanguageModel, SpeechToText, TextDelta, TextToSpeech, ToolCallRequest
+from soro.adapters.composed.components import (
+    LanguageModel,
+    SpeechToText,
+    TextDelta,
+    TextToSpeech,
+    ToolCallRequest,
+)
 from soro.audio.turn import EnergyTurnDetector, TurnDetector
 from soro.ports import AdapterCapabilities, LiveSessionPort
 from soro.tools import ToolSpec, normalize_tools
@@ -138,7 +144,9 @@ class ComposedLiveAdapter(LiveSessionPort):
             try:
                 await warm_up()
             except Exception as exc:
-                logger.warning(f"[Composed] Warm-up of {type(part).__name__} failed: {type(exc).__name__}: {exc}")
+                logger.warning(
+                    f"[Composed] Warm-up of {type(part).__name__} failed: {type(exc).__name__}: {exc}"
+                )
 
     async def close(self) -> None:
         if not self._open:
@@ -289,7 +297,9 @@ class ComposedLiveAdapter(LiveSessionPort):
             cancelled = True
             if said:
                 # Keep what was actually heard, so the model knows where it was cut off.
-                self.history.append({"role": "assistant", "content": " ".join(said) + " [interrupted by the user]"})
+                self.history.append(
+                    {"role": "assistant", "content": " ".join(said) + " [interrupted by the user]"}
+                )
             raise
         except Exception as exc:
             # An STT/LLM/TTS failure ends this reply, not the session: the user can
@@ -347,7 +357,7 @@ class ComposedLiveAdapter(LiveSessionPort):
     def _flush_sentences(buffer: str, sentences: asyncio.Queue) -> str:
         start = 0
         for match in _SENTENCE_END.finditer(buffer):
-            candidate = buffer[start:match.start()].strip()
+            candidate = buffer[start : match.start()].strip()
             if len(candidate) >= _MIN_SENTENCE:
                 sentences.put_nowait(candidate)
                 start = match.end()
@@ -373,16 +383,30 @@ class ComposedLiveAdapter(LiveSessionPort):
         for call in calls:
             future = asyncio.get_running_loop().create_future()
             self._pending_tools[call.id] = future
-            await self._queue.put(("tool_call", {"id": call.id, "name": call.name, "args": call.args}))
+            await self._queue.put(
+                ("tool_call", {"id": call.id, "name": call.name, "args": call.args})
+            )
             results.append((call, await future))
-        self.history.append({
-            "role": "assistant",
-            "content": text or None,
-            "tool_calls": [
-                {"id": c.id, "type": "function", "function": {"name": c.name, "arguments": json.dumps(c.args)}}
-                for c, _ in results
-            ],
-        })
+        self.history.append(
+            {
+                "role": "assistant",
+                "content": text or None,
+                "tool_calls": [
+                    {
+                        "id": c.id,
+                        "type": "function",
+                        "function": {"name": c.name, "arguments": json.dumps(c.args)},
+                    }
+                    for c, _ in results
+                ],
+            }
+        )
         for call, result in results:
-            self.history.append({"role": "tool", "tool_call_id": call.id, "content": json.dumps(result, default=str)})
+            self.history.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": call.id,
+                    "content": json.dumps(result, default=str),
+                }
+            )
         said.clear()

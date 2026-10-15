@@ -34,7 +34,9 @@ def _piper():
 def voice_sample_rate(voice_path: str | Path, config_path: str | Path | None = None) -> int:
     config = Path(config_path) if config_path else Path(f"{voice_path}.json")
     if not config.exists():
-        raise FileNotFoundError(f"Piper voice config not found: {config} (it ships beside the .onnx)")
+        raise FileNotFoundError(
+            f"Piper voice config not found: {config} (it ships beside the .onnx)"
+        )
     return int(json.loads(config.read_text(encoding="utf-8"))["audio"]["sample_rate"])
 
 
@@ -67,7 +69,9 @@ class PiperTTS:
         async with self._lock:
             if self._voice is None:
                 PiperVoice = _piper()
-                self._voice = await asyncio.to_thread(PiperVoice.load, self.voice_path, self.config_path)
+                self._voice = await asyncio.to_thread(
+                    PiperVoice.load, self.voice_path, self.config_path
+                )
         return self._voice
 
     async def warm_up(self) -> None:

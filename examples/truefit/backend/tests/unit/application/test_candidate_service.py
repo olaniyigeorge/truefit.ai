@@ -47,9 +47,7 @@ def candidate_repo():
 @pytest.fixture()
 def storage():
     s = AsyncMock()
-    s.upload = AsyncMock(
-        return_value=MagicMock(url="https://cdn.example.com/resume.pdf")
-    )
+    s.upload = AsyncMock(return_value=MagicMock(url="https://cdn.example.com/resume.pdf"))
     s.delete = AsyncMock(return_value=None)
     s.get_presigned_url = AsyncMock(return_value="https://cdn.example.com/signed-url")
     return s
@@ -97,9 +95,7 @@ class TestRegisterCandidate:
     async def test_check_email_before_save(self, service, candidate_repo):
         """Ensures get_by_email is called BEFORE save - order matters."""
         call_order = []
-        candidate_repo.get_by_email.side_effect = (
-            lambda e: call_order.append("get") or None
-        )
+        candidate_repo.get_by_email.side_effect = lambda e: call_order.append("get") or None
         candidate_repo.save.side_effect = lambda c: call_order.append("save")
 
         await service.register_candidate(full_name="Alice", email="new@example.com")
@@ -178,9 +174,7 @@ class TestUploadResume:
         storage.upload.assert_awaited_once()
         candidate_repo.save.assert_awaited_once()
 
-    async def test_storage_key_uses_candidate_id(
-        self, service, candidate_repo, storage
-    ):
+    async def test_storage_key_uses_candidate_id(self, service, candidate_repo, storage):
         candidate = _make_candidate()
         candidate_repo.get_by_id.return_value = candidate
 
@@ -196,9 +190,7 @@ class TestUploadResume:
         with pytest.raises(ValueError, match="not found"):
             await service.upload_resume(uuid.uuid4(), filename="cv.pdf", data=b"data")
 
-    async def test_custom_content_type_is_passed_to_storage(
-        self, service, candidate_repo, storage
-    ):
+    async def test_custom_content_type_is_passed_to_storage(self, service, candidate_repo, storage):
         candidate = _make_candidate()
         candidate_repo.get_by_id.return_value = candidate
 
@@ -241,9 +233,7 @@ class TestDeleteResume:
         with pytest.raises(ValueError, match="no resume"):
             await service.delete_resume(candidate.id)
 
-    async def test_delete_resume_raises_if_candidate_not_found(
-        self, service, candidate_repo
-    ):
+    async def test_delete_resume_raises_if_candidate_not_found(self, service, candidate_repo):
         candidate_repo.get_by_id.return_value = None
 
         with pytest.raises(ValueError, match="not found"):

@@ -1,4 +1,6 @@
-.PHONY: dev dev-backend dev-frontend setup soro-test soro-smoke soro-testpypi
+.PHONY: dev dev-backend dev-frontend setup lint format test soro-test soro-smoke soro-testpypi
+
+RUFF ?= ruff
 
 ## Run backend + frontend together in dev mode
 dev:
@@ -24,6 +26,21 @@ setup:
 	@[ -f examples/truefit/backend/.env ] || cp examples/truefit/backend/env.example examples/truefit/backend/.env
 	@cd examples/truefit/frontend && pnpm install
 	@[ -f examples/truefit/frontend/.env ] || cp examples/truefit/frontend/env.example examples/truefit/frontend/.env
+
+## Lint Python (ruff) and the frontend (eslint)
+lint:
+	@$(RUFF) check packages/soro examples/truefit/backend
+	@$(RUFF) format --check packages/soro examples/truefit/backend
+	@cd examples/truefit/frontend && pnpm lint
+
+## Format Python with ruff
+format:
+	@$(RUFF) format packages/soro examples/truefit/backend
+	@$(RUFF) check --fix packages/soro examples/truefit/backend
+
+## Tests for Soro and the TrueFit backend (SQLite, no Postgres)
+test: soro-test
+	@cd examples/truefit/backend && .venv/bin/python -m pytest tests -q
 
 ## Run the Soro SDK unit tests
 soro-test:

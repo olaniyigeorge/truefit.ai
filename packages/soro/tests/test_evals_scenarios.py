@@ -59,8 +59,14 @@ async def test_barge_in_stops_the_scripted_agent():
 
 async def test_an_agent_that_skips_persist_answer_fails_the_ordering_rule():
     bad_script = (
-        (("tool_call", {"id": "q1", "name": "record_question", "args": {"question": "Q1"}}), *speech(0.1)),
-        (("tool_call", {"id": "q2", "name": "record_question", "args": {"question": "Q2"}}), *speech(0.1)),
+        (
+            ("tool_call", {"id": "q1", "name": "record_question", "args": {"question": "Q1"}}),
+            *speech(0.1),
+        ),
+        (
+            ("tool_call", {"id": "q2", "name": "record_question", "args": {"question": "Q2"}}),
+            *speech(0.1),
+        ),
     )
     scenario = Scenario(
         name="sloppy",
@@ -90,12 +96,16 @@ async def test_tool_responses_reach_the_model_and_function_tools_work():
         prompt="p",
         turns=(CallerTurn(text="weather?"),),
         tools=(lookup,),
-        script=((("tool_call", {"id": "1", "name": "lookup", "args": {"city": "Lagos"}}), *speech(0.1)),),
+        script=(
+            (("tool_call", {"id": "1", "name": "lookup", "args": {"city": "Lagos"}}), *speech(0.1)),
+        ),
     )
     adapter = ScriptedAdapter(scenario.script)
     await ScenarioRunner(**FAST).run(scenario, adapter)
     assert calls == ["Lagos"]
-    assert adapter.tool_responses == [{"call_id": "1", "name": "lookup", "result": {"forecast": "sunny"}}]
+    assert adapter.tool_responses == [
+        {"call_id": "1", "name": "lookup", "result": {"forecast": "sunny"}}
+    ]
 
 
 async def test_a_silent_model_times_out_instead_of_hanging():
@@ -138,7 +148,9 @@ async def test_run_suite_skips_unavailable_and_scripted_only_for_live_providers(
     scenarios = get_scenarios(["note_taker", "barge_in"])
     cards = await run_suite(
         {"scripted": lambda s: ScriptedAdapter(s.script), "gemini": broken},
-        scenarios, runner=ScenarioRunner(**FAST), live={"gemini"},
+        scenarios,
+        runner=ScenarioRunner(**FAST),
+        live={"gemini"},
     )
     rows = {(c.provider, c.scenario): c for c in cards}
     assert rows[("scripted", "note_taker")].passed and rows[("scripted", "barge_in")].passed

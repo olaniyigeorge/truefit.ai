@@ -29,12 +29,20 @@ class FakeSession:
         self.calls: list[tuple[str, dict]] = []
 
     async def list_tools(self):
-        return NS(tools=[
-            NS(name="add", description="Add two numbers.",
-               input_schema={"type": "object", "properties": {"a": {"type": "integer"}}}),
-            NS(name="delete_file", description=None,
-               inputSchema={"type": "object", "properties": {"path": {"type": "string"}}}),
-        ])
+        return NS(
+            tools=[
+                NS(
+                    name="add",
+                    description="Add two numbers.",
+                    input_schema={"type": "object", "properties": {"a": {"type": "integer"}}},
+                ),
+                NS(
+                    name="delete_file",
+                    description=None,
+                    inputSchema={"type": "object", "properties": {"path": {"type": "string"}}},
+                ),
+            ]
+        )
 
     async def call_tool(self, name, arguments):
         self.calls.append((name, arguments))
@@ -52,8 +60,15 @@ async def test_tools_and_calls_proxy_through_the_session():
     assert specs["add"].parameters["properties"] == {"a": {"type": "integer"}}
     assert specs["delete_file"].description == ""
     handlers = {s.name: h for s, h in pairs}
-    assert await handlers["add"]({"a": 2}) == {"success": True, "content": "5", "data": {"result": 5}}
-    assert await handlers["delete_file"]({"path": "/x"}) == {"success": False, "content": "permission denied"}
+    assert await handlers["add"]({"a": 2}) == {
+        "success": True,
+        "content": "5",
+        "data": {"result": 5},
+    }
+    assert await handlers["delete_file"]({"path": "/x"}) == {
+        "success": False,
+        "content": "permission denied",
+    }
     assert session.calls == [("add", {"a": 2}), ("delete_file", {"path": "/x"})]
     await conn.aclose()  # a given session is not ours to close
 

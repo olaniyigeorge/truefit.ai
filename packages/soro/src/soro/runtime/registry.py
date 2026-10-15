@@ -21,9 +21,7 @@ class ToolRegistry:
         self._specs: list[ToolSpec] = []
         self._handlers: dict[str, ToolHandler] = {}
 
-    def register(
-        self, spec: ToolSpec | dict[str, Any], handler: ToolHandler
-    ) -> "ToolRegistry":
+    def register(self, spec: ToolSpec | dict[str, Any], handler: ToolHandler) -> "ToolRegistry":
         """
         spec: a ToolSpec, or a bare declaration dict {"name", "description", "parameters"}.
         Returns self so registrations can be chained.

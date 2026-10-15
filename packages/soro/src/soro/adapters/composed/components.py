@@ -48,7 +48,9 @@ class SpeechToText(Protocol):
 
 @runtime_checkable
 class LanguageModel(Protocol):
-    def stream(self, messages: list[dict[str, Any]], tools: list[ToolSpec]) -> AsyncIterator[LLMChunk]:
+    def stream(
+        self, messages: list[dict[str, Any]], tools: list[ToolSpec]
+    ) -> AsyncIterator[LLMChunk]:
         """Stream the next assistant message: text fragments and/or complete tool calls."""
         ...
 
@@ -94,13 +96,17 @@ class FakeLanguageModel:
     can interrupt mid-reply.
     """
 
-    def __init__(self, replies: Sequence[Sequence[LLMChunk | str]] = (), delay_s: float = 0.0) -> None:
+    def __init__(
+        self, replies: Sequence[Sequence[LLMChunk | str]] = (), delay_s: float = 0.0
+    ) -> None:
         self._replies = [list(r) for r in replies]
         self.delay_s = delay_s
         self.seen: list[list[dict[str, Any]]] = []  # the history each call was given
         self.tools_seen: list[list[str]] = []
 
-    async def stream(self, messages: list[dict[str, Any]], tools: list[ToolSpec]) -> AsyncIterator[LLMChunk]:
+    async def stream(
+        self, messages: list[dict[str, Any]], tools: list[ToolSpec]
+    ) -> AsyncIterator[LLMChunk]:
         self.seen.append([dict(m) for m in messages])
         self.tools_seen.append([t.name for t in tools])
         reply = self._replies.pop(0) if self._replies else []
@@ -116,7 +122,9 @@ class FakeTextToSpeech:
     longer sentences produce more audio. `delay_s` paces chunks like real playback.
     """
 
-    def __init__(self, sample_rate: int = 24_000, chars_per_chunk: int = 10, delay_s: float = 0.0) -> None:
+    def __init__(
+        self, sample_rate: int = 24_000, chars_per_chunk: int = 10, delay_s: float = 0.0
+    ) -> None:
         self._rate = sample_rate
         self.chars_per_chunk = chars_per_chunk
         self.delay_s = delay_s

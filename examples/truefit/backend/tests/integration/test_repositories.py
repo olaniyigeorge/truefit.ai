@@ -50,9 +50,7 @@ def _make_requirements(level: ExperienceLevel = ExperienceLevel.MID) -> JobRequi
     )
 
 
-def _make_job(
-    org_id: uuid.UUID, created_by: uuid.UUID, title: str = "Backend Engineer"
-) -> Job:
+def _make_job(org_id: uuid.UUID, created_by: uuid.UUID, title: str = "Backend Engineer") -> Job:
     return Job(
         org_id=org_id,
         created_by=created_by,
@@ -169,7 +167,6 @@ class TestSQLAlchemyJobRepository:
         assert len(jobs) == 3
 
     async def test_get_by_company_excludes_other_orgs(self):
-        other_org_id = uuid.uuid4()
         await self.repo.save(_make_job(self.org_id, self.user_id, "Acme Job"))
         # Note: job for other_org_id would fail FK constraint in Postgres;
         # here we only test that filtering works on the saved job.

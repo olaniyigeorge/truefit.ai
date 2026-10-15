@@ -43,7 +43,6 @@ from src.truefit_infra.db.models import JobListing
 
 
 class SQLAlchemyJobRepository(JobRepository):
-
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
@@ -192,11 +191,7 @@ class SQLAlchemyJobRepository(JobRepository):
         *,
         status: Optional[JobStatus] = None,
     ) -> int:
-        stmt = (
-            select(func.count())
-            .select_from(JobListing)
-            .where(JobListing.org_id == org_id)
-        )
+        stmt = select(func.count()).select_from(JobListing).where(JobListing.org_id == org_id)
         if status:
             stmt = stmt.where(JobListing.status == status.value)
 
@@ -205,9 +200,7 @@ class SQLAlchemyJobRepository(JobRepository):
             return result.scalar_one()
 
     async def exists(self, job_id: uuid.UUID) -> bool:
-        stmt = (
-            select(func.count()).select_from(JobListing).where(JobListing.id == job_id)
-        )
+        stmt = select(func.count()).select_from(JobListing).where(JobListing.id == job_id)
 
         async with self._db.get_session() as session:
             result = await session.execute(stmt)

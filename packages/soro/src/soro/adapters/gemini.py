@@ -129,9 +129,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         if not key:
             raise RuntimeError("GEMINI_API_KEY is not configured.")
         self._client = genai.Client(api_key=key)
-        self._session: Optional[Any] = (
-            None  # Set to the live session inside open_session()
-        )
+        self._session: Optional[Any] = None  # Set to the live session inside open_session()
         self._send_lock = asyncio.Lock()  # Lock to prevent concurrent audio sends
         self._activity_ended = False
         self._model: str = model or os.environ.get("GEMINI_LIVE_MODEL") or _DEFAULT_MODEL
@@ -154,7 +152,7 @@ class GeminiLiveAdapter(LiveSessionPort):
             supports_images=True,
             native_vad=False,  # we run with automatic_activity_detection disabled and signal activity explicitly
         )
- 
+
     # ─────────────────────────
     # LiveSessionPort interface
     # ─────────────────────────
@@ -166,9 +164,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         Not used in this implementation - open_session() is the correct way
         to start a session. Raising here makes the misuse obvious immediately.
         """
-        raise NotImplementedError(
-            "Use GeminiLiveAdapter.open_session() context manager."
-        )
+        raise NotImplementedError("Use GeminiLiveAdapter.open_session() context manager.")
 
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """
@@ -183,9 +179,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         session = await self._live()
         if not pcm_bytes or self._activity_ended:
             return
-        await session.send_realtime_input(
-            media=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME)
-        )
+        await session.send_realtime_input(media=types.Blob(data=pcm_bytes, mime_type=_INPUT_MIME))
 
     async def send_audio_stream_end(self) -> None:
         """
@@ -212,9 +206,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         useful for coding interviews where the candidate shares their screen.
         """
         session = await self._live()
-        await session.send_realtime_input(
-            video=types.Blob(data=jpeg_bytes, mime_type="image/jpeg")
-        )
+        await session.send_realtime_input(video=types.Blob(data=jpeg_bytes, mime_type="image/jpeg"))
 
     async def send_client_content(self, text: str) -> None:
         """
@@ -239,9 +231,7 @@ class GeminiLiveAdapter(LiveSessionPort):
             turn_complete=True,
         )
 
-    async def send_tool_response(
-        self, *, call_id: str, name: str, result: dict
-    ) -> None:
+    async def send_tool_response(self, *, call_id: str, name: str, result: dict) -> None:
         """
         Responds to a tool call that Gemini made.
 
@@ -381,7 +371,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         VoiceAgentRuntime._receive_loop()). It never returns normally -
         it runs until the session closes or an exception occurs.
 
-        TEXT BUFFERING 
+        TEXT BUFFERING
         Gemini streams output transcript (what it's saying) and input transcript
         (what it hears the candidate saying) incrementally - one word or phrase
         at a time. We buffer these in _text_buf and _input_buf and only yield
@@ -393,7 +383,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         server_content. This is intentional - audio latency is more critical
         than transcript latency, so we forward audio chunks as fast as possible.
 
-        EVENTS YIELDED 
+        EVENTS YIELDED
         ("audio",         bytes)  - PCM chunk, yield immediately on every frame
         ("text",          str)    - agent transcript, yielded at turn_complete/interrupted
         ("input_text",    str)    - candidate transcript, yielded at turn_complete/interrupted
@@ -404,9 +394,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         """
         _require_session(self._session)
         _text_buffer = ""  # Accumulates agent speech transcript across streaming chunks
-        _input_buffer = (
-            ""  # Accumulates candidate speech transcript across streaming chunks
-        )
+        _input_buffer = ""  # Accumulates candidate speech transcript across streaming chunks
 
         try:
             async for response in self._messages():
@@ -417,7 +405,7 @@ class GeminiLiveAdapter(LiveSessionPort):
                     )
                     continue
 
-                # Audio (highest priority - forward immediately) 
+                # Audio (highest priority - forward immediately)
                 # response.data contains the raw 24kHz PCM audio bytes.
                 # Yield this immediately without any buffering.
                 if response.data:
@@ -426,7 +414,7 @@ class GeminiLiveAdapter(LiveSessionPort):
 
                 sc = response.server_content
                 if sc:
-                    # Transcript accumulation 
+                    # Transcript accumulation
                     # output_transcription = what the agent is saying (its speech -> text)
                     # input_transcription  = what the candidate is saying (their speech -> text)
                     if sc.output_transcription:
@@ -437,7 +425,7 @@ class GeminiLiveAdapter(LiveSessionPort):
                             f"[GeminiLive] Candidate speech: '{sc.input_transcription.text[:60]}'"
                         )
 
-                    # Interrupted: candidate started talking, flush and signal 
+                    # Interrupted: candidate started talking, flush and signal
                     # Flush both buffers (partial transcripts are still useful)
                     # then signal the agent so it can stop playing audio.
                     if sc.interrupted:
@@ -454,9 +442,7 @@ class GeminiLiveAdapter(LiveSessionPort):
                     # This is the normal end of an agent turn. Flush transcripts
                     # then signal the agent to open the mic for the candidate.
                     if sc.turn_complete:
-                        logger.info(
-                            f"[GeminiLive] turn_complete - buf='{_text_buffer[:60]}'"
-                        )
+                        logger.info(f"[GeminiLive] turn_complete - buf='{_text_buffer[:60]}'")
                         if _text_buffer.strip():
                             yield ("text", _text_buffer.strip())
                             _text_buffer = ""
@@ -480,13 +466,11 @@ class GeminiLiveAdapter(LiveSessionPort):
                             },
                         )
 
-                # Go away: server is shutting down the session 
+                # Go away: server is shutting down the session
                 # We log the time remaining and yield the signal so the agent
                 # can clean up gracefully (save progress, send closing remarks).
                 if response.go_away:
-                    logger.warning(
-                        f"[GeminiLive] go_away: time_left={response.go_away.time_left}"
-                    )
+                    logger.warning(f"[GeminiLive] go_away: time_left={response.go_away.time_left}")
                     yield (
                         "session_ending",
                         {
@@ -549,7 +533,7 @@ class GeminiLiveAdapter(LiveSessionPort):
             system_prompt=system_prompt,
             tools=normalize_tools(tools),
         )
-    
+
     # ----------------------
     # EXPLICIT ACTIVITY SIGNALS FOR TURN MANAGEMENT (optional - we rely on Gemini's VAD by default)
     # ----------------------
@@ -560,10 +544,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         if self._session:
             self._activity_ended = False  # Re-open audio flow for new turn
             async with self._send_lock:
-                await self._session.send_realtime_input(
-                    activity_start=types.ActivityStart()
-                )
-
+                await self._session.send_realtime_input(activity_start=types.ActivityStart())
 
     async def send_activity_end(self) -> None:
         """Tell Gemini the candidate has finished speaking. Triggers model response."""
@@ -571,9 +552,7 @@ class GeminiLiveAdapter(LiveSessionPort):
         if self._session:
             self._activity_ended = True  # Block further audio immediately
             async with self._send_lock:
-                await self._session.send_realtime_input(
-                    activity_end=types.ActivityEnd()
-                )
+                await self._session.send_realtime_input(activity_end=types.ActivityEnd())
 
 
 # ──────────────────────────────────────
@@ -652,9 +631,7 @@ class _LiveSessionContext:
             input_audio_transcription=types.AudioTranscriptionConfig(),
             speech_config=types.SpeechConfig(
                 voice_config=types.VoiceConfig(
-                    prebuilt_voice_config=types.PrebuiltVoiceConfig(
-                        voice_name=self._adapter._voice
-                    )
+                    prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=self._adapter._voice)
                 )
             ),
             realtime_input_config=types.RealtimeInputConfig(
@@ -665,8 +642,8 @@ class _LiveSessionContext:
                 )
             ),
             thinking_config=types.ThinkingConfig(
-                    thinking_budget=0,
-                    include_thoughts=False,
+                thinking_budget=0,
+                include_thoughts=False,
             ),
             # TODO: thinking_budget, no enable_affective_dialog - these need v1alpha
             tools=_to_gemini_tools(self._tools),

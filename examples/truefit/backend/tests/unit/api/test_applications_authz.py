@@ -31,7 +31,11 @@ class FakeAppRepo:
 
     async def get_by_job_and_candidate(self, job_id, candidate_id):
         return next(
-            (a for a in self.apps.values() if a.job_id == job_id and a.candidate_id == candidate_id),
+            (
+                a
+                for a in self.apps.values()
+                if a.job_id == job_id and a.candidate_id == candidate_id
+            ),
             None,
         )
 
@@ -76,8 +80,14 @@ def world():
     app_b = Application(job_id=JOB_B, candidate_id=bob_profile)
     repo.apps = {app_a.id: app_a, app_b.id: app_b}
     return SimpleNamespace(
-        repo=repo, ownership=ownership, alice=alice_user, bob=bob_user,
-        alice_profile=alice_profile, bob_profile=bob_profile, app_a=app_a, app_b=app_b,
+        repo=repo,
+        ownership=ownership,
+        alice=alice_user,
+        bob=bob_user,
+        alice_profile=alice_profile,
+        bob_profile=bob_profile,
+        app_a=app_a,
+        app_b=app_b,
     )
 
 
@@ -138,7 +148,11 @@ def test_get_allowed_callers(make_client, world):
 
 def test_get_denied_callers(make_client, world):
     url = f"/api/v1/applications/{world.app_a.id}"
-    for caller in (user("candidate", user_id=world.bob), user("recruiter", ORG_B), user("recruiter")):
+    for caller in (
+        user("candidate", user_id=world.bob),
+        user("recruiter", ORG_B),
+        user("recruiter"),
+    ):
         assert make_client(caller).get(url).status_code == 403
 
 
@@ -162,7 +176,9 @@ def test_candidate_list_forced_to_own(make_client, world):
     c = make_client(user("candidate", user_id=world.alice))
     assert ids(c.get(f"/api/v1/applications?job_id={JOB_B}")) == set()
     assert ids(c.get("/api/v1/applications")) == {str(world.app_a.id)}
-    assert ids(c.get(f"/api/v1/applications?candidate_id={world.alice_profile}")) == {str(world.app_a.id)}
+    assert ids(c.get(f"/api/v1/applications?candidate_id={world.alice_profile}")) == {
+        str(world.app_a.id)
+    }
 
 
 def test_candidate_list_other_candidate_is_403(make_client, world):

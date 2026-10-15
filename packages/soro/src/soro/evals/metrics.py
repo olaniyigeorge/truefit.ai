@@ -57,7 +57,11 @@ def _ms(start: float, end: float) -> float:
 
 
 def time_to_first_audio(trace: Trace) -> Optional[float]:
-    stimuli = [e for e in trace.events if (e.direction, e.kind) in (("out", "content"), ("mark", "caller_turn_end"))]
+    stimuli = [
+        e
+        for e in trace.events
+        if (e.direction, e.kind) in (("out", "content"), ("mark", "caller_turn_end"))
+    ]
     if not stimuli:
         return None
     first = trace.first("in", "audio", stimuli[0].i)
@@ -76,7 +80,9 @@ def turn_latencies(trace: Trace) -> list[float]:
 
 
 def barge_ins(trace: Trace) -> tuple[int, int, list[float]]:
-    starts = [m for m in trace.select("mark", "caller_turn_start") if (m.data or {}).get("barge_in")]
+    starts = [
+        m for m in trace.select("mark", "caller_turn_start") if (m.data or {}).get("barge_in")
+    ]
     handled, latencies = 0, []
     for start in starts:
         stop = trace.first("in", "interrupted", start.i)
@@ -116,8 +122,14 @@ def tool_call_failures(scenario: Scenario, calls: list[tuple[str, dict]]) -> lis
 
 
 def _show(args: dict) -> str:
-    return "{" + ", ".join(f"{k}~/{v.pattern}/" if isinstance(v, re.Pattern) else f"{k}={v!r}"
-                           for k, v in args.items()) + "}"
+    return (
+        "{"
+        + ", ".join(
+            f"{k}~/{v.pattern}/" if isinstance(v, re.Pattern) else f"{k}={v!r}"
+            for k, v in args.items()
+        )
+        + "}"
+    )
 
 
 def compute_metrics(run: ScenarioRun, cost_per_minute: Optional[float] = None) -> Metrics:
@@ -127,19 +139,29 @@ def compute_metrics(run: ScenarioRun, cost_per_minute: Optional[float] = None) -
     m.turn_latency_ms = turn_latencies(trace)
     m.barge_ins, m.barge_ins_handled, m.barge_in_ms = barge_ins(trace)
 
-    m.tool_calls = [(e.data["name"], e.data.get("args") or {}) for e in trace.select("in", "tool_call")]
+    m.tool_calls = [
+        (e.data["name"], e.data.get("args") or {}) for e in trace.select("in", "tool_call")
+    ]
     m.tool_failures = tool_call_failures(scenario, m.tool_calls)
 
     # Providers stream transcripts as fragments, so join without separators.
     m.transcript = "".join(str(e.data) for e in trace.select("in", "text"))
-    m.transcript_failures = [p for p in scenario.transcript_patterns if not re.search(p, m.transcript)]
+    m.transcript_failures = [
+        p for p in scenario.transcript_patterns if not re.search(p, m.transcript)
+    ]
 
     resumed = trace.select("in", "session_resumed")
     m.reconnects = len(resumed)
-    m.reconnects_recovered = sum(1 for e in resumed if trace.first("in", "turn_complete", e.i) is not None)
+    m.reconnects_recovered = sum(
+        1 for e in resumed if trace.first("in", "turn_complete", e.i) is not None
+    )
 
-    m.audio_in_s = round(sum(e.data for e in trace.select("out", "audio")) / 2 / caps.input_sample_rate, 2)
-    m.audio_out_s = round(sum(e.data for e in trace.select("in", "audio")) / 2 / caps.output_sample_rate, 2)
+    m.audio_in_s = round(
+        sum(e.data for e in trace.select("out", "audio")) / 2 / caps.input_sample_rate, 2
+    )
+    m.audio_out_s = round(
+        sum(e.data for e in trace.select("in", "audio")) / 2 / caps.output_sample_rate, 2
+    )
     if cost_per_minute is not None:
         m.cost_usd = round((m.audio_in_s + m.audio_out_s) / 60 * cost_per_minute, 4)
     return m

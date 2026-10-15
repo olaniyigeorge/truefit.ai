@@ -16,7 +16,6 @@ from src.truefit_infra.db.models import Application as ApplicationORM
 
 
 class SQLAlchemyApplicationRepository(ApplicationRepository):
-
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 

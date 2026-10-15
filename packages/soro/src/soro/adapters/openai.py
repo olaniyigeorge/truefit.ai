@@ -185,9 +185,9 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         self._model: str = model or os.environ.get("OPENAI_REALTIME_MODEL") or _DEFAULT_MODEL
         self._voice = voice
         self._input_resampler = PcmResampler(_INPUT_SAMPLE_RATE, _WIRE_SAMPLE_RATE)
-        self._ws: Optional[Any] = None        # websockets connection, set in open_session
-        self._send_lock = asyncio.Lock()       # serialises all ws.send() calls
-        self._activity_ended = False           # blocks send_audio() after activity end
+        self._ws: Optional[Any] = None  # websockets connection, set in open_session
+        self._send_lock = asyncio.Lock()  # serialises all ws.send() calls
+        self._activity_ended = False  # blocks send_audio() after activity end
         self._active_response_id: str | None = None  # tracks if a response is in flight
 
     @property
@@ -209,9 +209,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         Not used in this implementation. open_session() is the correct entry point.
         Raising here makes misuse immediately obvious.
         """
-        raise NotImplementedError(
-            "Use OpenAIRealtimeAdapter.open_session() context manager."
-        )
+        raise NotImplementedError("Use OpenAIRealtimeAdapter.open_session() context manager.")
 
     async def send_audio(self, pcm_bytes: bytes) -> None:
         """
@@ -232,10 +230,12 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         if not wire_pcm:
             return
         encoded = base64.b64encode(wire_pcm).decode("ascii")
-        await self._send({
-            "type": "input_audio_buffer.append",
-            "audio": encoded,
-        })
+        await self._send(
+            {
+                "type": "input_audio_buffer.append",
+                "audio": encoded,
+            }
+        )
 
     async def send_audio_stream_end(self) -> None:
         """
@@ -273,20 +273,20 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         """
         _require_ws(self._ws)
         # Step 1: add the user message to the conversation
-        await self._send({
-            "type": "conversation.item.create",
-            "item": {
-                "type": "message",
-                "role": "user",
-                "content": [{"type": "input_text", "text": text}],
-            },
-        })
+        await self._send(
+            {
+                "type": "conversation.item.create",
+                "item": {
+                    "type": "message",
+                    "role": "user",
+                    "content": [{"type": "input_text", "text": text}],
+                },
+            }
+        )
         # Step 2: ask the model to respond (generates opening greeting)
         await self._send({"type": "response.create"})
 
-    async def send_tool_response(
-        self, *, call_id: str, name: str, result: dict
-    ) -> None:
+    async def send_tool_response(self, *, call_id: str, name: str, result: dict) -> None:
         """
         Responds to a tool call that OpenAI made.
 
@@ -303,14 +303,16 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         """
         _require_ws(self._ws)
         # Step 1: deliver the tool result
-        await self._send({
-            "type": "conversation.item.create",
-            "item": {
-                "type": "function_call_output",
-                "call_id": call_id,
-                "output": json.dumps(result),
-            },
-        })
+        await self._send(
+            {
+                "type": "conversation.item.create",
+                "item": {
+                    "type": "function_call_output",
+                    "call_id": call_id,
+                    "output": json.dumps(result),
+                },
+            }
+        )
         # Step 2: ask the model to continue from here
         await self._send({"type": "response.create"})
 
@@ -359,30 +361,28 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
           error                                                -> logged + raised
         """
         _require_ws(self._ws)
-        _text_buffer = ""    # Accumulates agent speech transcript across delta events
-        _input_buffer = ""   # Accumulates candidate transcript (used if deltas arrive)
+        _text_buffer = ""  # Accumulates agent speech transcript across delta events
+        _input_buffer = ""  # Accumulates candidate transcript (used if deltas arrive)
 
         try:
             async for raw_message in self._ws:
                 event = json.loads(raw_message)
                 event_type: str = event.get("type", "")
 
-                # ── Audio output (highest priority - yield immediately) 
+                # ── Audio output (highest priority - yield immediately)
                 # response.output_audio.delta carries base64-encoded 24kHz PCM.
                 # Decode and yield immediately - audio latency is king.
                 if event_type == "response.output_audio.delta":
                     audio_bytes = base64.b64decode(event["delta"])
-                    logger.debug(
-                        f"[OpenAIRealtime] audio chunk: {len(audio_bytes)} bytes"
-                    )
+                    logger.debug(f"[OpenAIRealtime] audio chunk: {len(audio_bytes)} bytes")
                     yield ("audio", audio_bytes)
 
-                # ── Agent transcript (incremental) 
+                # ── Agent transcript (incremental)
                 # Accumulate per-delta into buffer. Flush at response.done.
                 elif event_type == "response.output_audio_transcript.delta":
                     _text_buffer += event.get("delta", "")
 
-                # ── Agent transcript done (alternative flush point) 
+                # ── Agent transcript done (alternative flush point)
                 # response.output_audio_transcript.done carries the full text of the current
                 # content part. We overwrite the buffer with the authoritative version
                 # to avoid any drift from partial deltas.
@@ -391,15 +391,13 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                     if transcript:
                         _text_buffer = transcript  # authoritative; replaces buffer
 
-                # ── Candidate speech transcript 
+                # ── Candidate speech transcript
                 # Arrives as a complete string after the candidate's audio turn
                 # is committed and transcribed. Yield immediately.
                 elif event_type == "conversation.item.input_audio_transcription.completed":
                     transcript = event.get("transcript", "").strip()
                     if transcript:
-                        logger.info(
-                            f"[OpenAIRealtime] Candidate speech: '{transcript[:60]}'"
-                        )
+                        logger.info(f"[OpenAIRealtime] Candidate speech: '{transcript[:60]}'")
                         yield ("input_text", transcript)
 
                 # ── Interruption detection
@@ -419,16 +417,14 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                         yield ("interrupted", None)
                         self._active_response_id = None
 
-                # ── Response lifecycle tracking 
+                # ── Response lifecycle tracking
                 # response.created tells us a new response has started - track its ID
                 # so we can detect interruptions accurately.
                 elif event_type == "response.created":
                     self._active_response_id = event.get("response", {}).get("id")
-                    logger.debug(
-                        f"[OpenAIRealtime] Response started: {self._active_response_id}"
-                    )
+                    logger.debug(f"[OpenAIRealtime] Response started: {self._active_response_id}")
 
-                # ── Function calls 
+                # ── Function calls
                 # response.output_item.done fires when any output item finishes.
                 # When item.type == "function_call", it contains the complete call:
                 #   item.name     - function name
@@ -449,15 +445,13 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                                 f"{fn_name}: {raw_args!r}"
                             )
                             args = {}
-                        logger.info(
-                            f"[OpenAIRealtime] Tool call: {fn_name}({args})"
-                        )
+                        logger.info(f"[OpenAIRealtime] Tool call: {fn_name}({args})")
                         yield (
                             "tool_call",
                             {"id": call_id, "name": fn_name, "args": args},
                         )
 
-                # ── Turn complete / interrupted 
+                # ── Turn complete / interrupted
                 # response.done fires at the end of every response regardless of outcome.
                 # status == "completed"  -> normal end of agent turn
                 # status == "cancelled"  -> response was interrupted by candidate speech
@@ -474,10 +468,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                     _input_buffer = ""
 
                     if status == "completed":
-                        logger.info(
-                            f"[OpenAIRealtime] turn_complete - "
-                            f"buf='{flushed_text[:60]}'"
-                        )
+                        logger.info(f"[OpenAIRealtime] turn_complete - buf='{flushed_text[:60]}'")
                         if flushed_text:
                             yield ("text", flushed_text)
                         if flushed_input:
@@ -498,10 +489,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                         yield ("turn_complete", None)
 
                     elif status in ("cancelled", "failed", "incomplete"):
-                        logger.info(
-                            f"[OpenAIRealtime] response {status} "
-                            f"(interrupted or errored)"
-                        )
+                        logger.info(f"[OpenAIRealtime] response {status} (interrupted or errored)")
                         if flushed_text:
                             yield ("text", flushed_text)
                         if flushed_input:
@@ -518,9 +506,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
                     )
                     # Re-raise as a plain exception so the agent's error handler
                     # can clean up. Include the full error info for debugging.
-                    raise RuntimeError(
-                        f"OpenAI Realtime API error: {json.dumps(error_info)}"
-                    )
+                    raise RuntimeError(f"OpenAI Realtime API error: {json.dumps(error_info)}")
 
                 # ── Session / informational events
                 # Log but don't yield - the agent doesn't need these.
@@ -628,9 +614,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         if self._ws:
             self._activity_ended = True
             async with self._send_lock:
-                await self._ws.send(
-                    json.dumps({"type": "input_audio_buffer.commit"})
-                )
+                await self._ws.send(json.dumps({"type": "input_audio_buffer.commit"}))
             logger.debug("[OpenAIRealtime] activity_end: buffer committed")
 
     # ────────────────
@@ -645,9 +629,7 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         async with self._send_lock:
             await self._ws.send(json.dumps(payload))
 
-    async def _configure_session(
-        self, system_prompt: str, tools: list[ToolSpec]
-    ) -> None:
+    async def _configure_session(self, system_prompt: str, tools: list[ToolSpec]) -> None:
         """
         Sends the initial session.update event to configure the live session.
 
@@ -690,10 +672,12 @@ class OpenAIRealtimeAdapter(LiveSessionPort):
         if openai_tools:
             session_config["tools"] = openai_tools
 
-        await self._send({
-            "type": "session.update",
-            "session": session_config,
-        })
+        await self._send(
+            {
+                "type": "session.update",
+                "session": session_config,
+            }
+        )
         logger.info(
             f"[OpenAIRealtime] session.update sent "
             f"(tools={len(openai_tools)}, vad={'server' if _TURN_DETECTION_CONFIG else 'manual'})"

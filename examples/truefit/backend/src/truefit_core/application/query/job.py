@@ -33,8 +33,7 @@ class GetJobResponse:
             status=job.status.value,
             experience_level=job.experience_level.value,
             skills=[
-                {"name": s.name, "required": s.required, "weight": s.weight}
-                for s in job.skills
+                {"name": s.name, "required": s.required, "weight": s.weight} for s in job.skills
             ],
             interview_config={
                 "max_questions": job.interview_config.max_questions,
@@ -64,7 +63,5 @@ async def list_company_jobs(
     job_repo: JobRepository,
     pagination: PaginationParams = PaginationParams(),
 ) -> list[GetJobResponse]:
-    jobs = await job_repo.get_by_company(
-        org_id, limit=pagination.limit, offset=pagination.offset
-    )
+    jobs = await job_repo.get_by_company(org_id, limit=pagination.limit, offset=pagination.offset)
     return [GetJobResponse.from_domain(j) for j in jobs]

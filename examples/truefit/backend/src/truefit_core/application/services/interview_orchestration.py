@@ -77,9 +77,7 @@ class InterviewOrchestrationService:
         lock_key = f"{_SESSION_LOCK_PREFIX}:{candidate_id}:{job_id}"
 
         if await self._cache.exists(lock_key):
-            raise ValueError(
-                "A session creation is already in progress for this candidate and job"
-            )
+            raise ValueError("A session creation is already in progress for this candidate and job")
         await self._cache.set(lock_key, "1", ttl_seconds=_SESSION_LOCK_TTL)
 
         try:
@@ -108,9 +106,7 @@ class InterviewOrchestrationService:
                 voided = await self._interviews.close_dangling_questions(existing.id)
                 if voided:
                     existing = await self._interviews.get_by_id(existing.id)
-                    logger.info(
-                        f"Voided {voided} dangling question(s) for interview {existing.id}"
-                    )
+                    logger.info(f"Voided {voided} dangling question(s) for interview {existing.id}")
                 return existing
 
             # ── Only enforce eligibility when NOT resuming ────
@@ -147,9 +143,7 @@ class InterviewOrchestrationService:
                 )
             )
 
-            logger.info(
-                f"Interview {interview.id} started for candidate {candidate_id}"
-            )
+            logger.info(f"Interview {interview.id} started for candidate {candidate_id}")
             return interview
 
         finally:
@@ -179,9 +173,7 @@ class InterviewOrchestrationService:
         interview = await self._get_active_interview(interview_id)
 
         if interview.awaiting_answer:
-            raise ValueError(
-                "Cannot record a new question while the previous is unanswered"
-            )
+            raise ValueError("Cannot record a new question while the previous is unanswered")
         if not interview.can_ask_more:
             raise ValueError(
                 f"Interview has reached the maximum of {interview.max_questions} questions"
@@ -350,9 +342,7 @@ class InterviewOrchestrationService:
                 },
             )
         )
-        logger.info(
-            f"Interview {interview.id} completed ({interview.answered_count} answers)"
-        )
+        logger.info(f"Interview {interview.id} completed ({interview.answered_count} answers)")
 
         return {
             "status": "completed",

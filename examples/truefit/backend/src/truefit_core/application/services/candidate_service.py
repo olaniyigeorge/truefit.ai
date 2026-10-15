@@ -74,9 +74,7 @@ class CandidateService:
                 email=candidate.contact.email,  # email is immutable
                 phone=phone if phone is not None else candidate.contact.phone,
                 linkedin_url=(
-                    linkedin_url
-                    if linkedin_url is not None
-                    else candidate.contact.linkedin_url
+                    linkedin_url if linkedin_url is not None else candidate.contact.linkedin_url
                 ),
             )
 

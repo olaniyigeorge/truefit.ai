@@ -126,7 +126,7 @@ export default function ApplicationsPage() {
 
                 setApplications(apps)
             }
-           }catch(err) {
+           } catch {
             setError("Failed to load applications")
            }finally{
             setLoading(false)

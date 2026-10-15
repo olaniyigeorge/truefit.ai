@@ -358,9 +358,7 @@ async def _ensure_candidate_profile(
         return r2.json()
 
     if r.status_code == 422:
-        raise RuntimeError(
-            f"CandidateProfile validation error: {r.json().get('detail')}"
-        )
+        raise RuntimeError(f"CandidateProfile validation error: {r.json().get('detail')}")
 
     raise RuntimeError(f"CandidateProfile create failed ({r.status_code}): {r.text}")
 
@@ -383,9 +381,7 @@ async def _ensure_application(
         return r.json()
 
     if r.status_code == 409:
-        r2 = await client.get(
-            f"/applications?job_id={job_id}&candidate_id={candidate_profile_id}"
-        )
+        r2 = await client.get(f"/applications?job_id={job_id}&candidate_id={candidate_profile_id}")
         r2.raise_for_status()
         # assume list
         data = r2.json()
@@ -428,9 +424,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
             resources.users.append(u)
 
         admin_user = next(u for u in resources.users if u.get("role") == "admin")
-        recruiter_user = next(
-            u for u in resources.users if u.get("role") == "recruiter"
-        )
+        recruiter_user = next(u for u in resources.users if u.get("role") == "recruiter")
 
         # 2) Orgs (created_by = admin)
         print("\n── Step 2: Orgs ──")
@@ -448,17 +442,13 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
             resources.candidate_users.append(u)
             print(f"  ✓  Candidate user: {u['id']}  {u.get('email')}")
 
-            prof = await _ensure_candidate_profile(
-                client, user_id=u["id"], email=u["email"]
-            )
+            prof = await _ensure_candidate_profile(client, user_id=u["id"], email=u["email"])
             resources.candidate_profiles.append(prof)
             print(f"     -> Profile: {prof['id']}  user_id={prof['user_id']}")
 
         # 4) Jobs (created_by = recruiter; org_id = primary org)
         print("\n── Step 4: Jobs ──")
-        for payload in make_job_payloads(
-            primary_org["id"], created_by=recruiter_user["id"]
-        ):
+        for payload in make_job_payloads(primary_org["id"], created_by=recruiter_user["id"]):
             job = await _create_job(client, payload)
             print(f"  ✓  Job: {job['id']}  [{job['title']}]  status={job['status']}")
 
@@ -468,9 +458,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
                     job = job2
                     print(f"     -> Activated  status={job['status']}")
                 else:
-                    print(
-                        f"     ⚠  Could not activate ({job2.get('activation_error', 'unknown')})"
-                    )
+                    print(f"     ⚠  Could not activate ({job2.get('activation_error', 'unknown')})")
 
             resources.jobs.append(job)
 
@@ -509,12 +497,7 @@ async def seed(activate_jobs: bool = True) -> SeededResources:
    Interviews:         {len(resources.interviews)}
 """)
 
-    if (
-        resources.orgs
-        or resources.jobs
-        or resources.candidate_profiles
-        or resources.interviews
-    ):
+    if resources.orgs or resources.jobs or resources.candidate_profiles or resources.interviews:
         print("── Resource IDs ──")
         for u in resources.users:
             print(f"   user       {u['id']}  {u.get('email')} [{u.get('role')}]")

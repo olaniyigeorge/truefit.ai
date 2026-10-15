@@ -34,7 +34,6 @@ from src.truefit_core.application.ports import OrgRepository
 
 
 class SQLAlchemyOrgRepository(OrgRepository):
-
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
@@ -81,12 +80,7 @@ class SQLAlchemyOrgRepository(OrgRepository):
         return self._to_domain(row) if row else None
 
     async def list_all(self, *, limit: int = 50, offset: int = 0) -> list[Org]:
-        stmt = (
-            select(OrgModel)
-            .order_by(OrgModel.created_at.desc())
-            .limit(limit)
-            .offset(offset)
-        )
+        stmt = select(OrgModel).order_by(OrgModel.created_at.desc()).limit(limit).offset(offset)
         async with self._db.get_session() as session:
             result = await session.execute(stmt)
             rows = result.scalars().all()

@@ -117,7 +117,9 @@ async def test_missing_optional_callbacks_do_not_crash():
 
 async def test_session_ending_stops_processing_further_events():
     on_audio = AsyncMock()
-    adapter = FakeLiveAdapter(events=[("session_ending", {"reason": "provider_go_away"}), ("audio", b"late")])
+    adapter = FakeLiveAdapter(
+        events=[("session_ending", {"reason": "provider_go_away"}), ("audio", b"late")]
+    )
     agent, _ = _agent(adapter, on_audio_output=on_audio)
     await agent.run(_context())
     on_audio.assert_not_awaited()
@@ -149,7 +151,9 @@ async def test_record_question_tool_success_returns_remaining_and_stores_id():
 
 
 async def test_record_question_rejection_tells_model_to_wait():
-    adapter = FakeLiveAdapter(events=[("tool_call", {"id": "c1", "name": "record_question", "args": {}})])
+    adapter = FakeLiveAdapter(
+        events=[("tool_call", {"id": "c1", "name": "record_question", "args": {}})]
+    )
     agent, orch = _agent(adapter)
     orch.ask_next_question.side_effect = ValueError("question already active")
 
@@ -162,7 +166,12 @@ async def test_record_question_rejection_tells_model_to_wait():
 
 async def test_persist_answer_without_active_question_errors():
     adapter = FakeLiveAdapter(
-        events=[("tool_call", {"id": "c1", "name": "persist_answer", "args": {"answer_transcript": "a"}})]
+        events=[
+            (
+                "tool_call",
+                {"id": "c1", "name": "persist_answer", "args": {"answer_transcript": "a"}},
+            )
+        ]
     )
     agent, orch = _agent(adapter)
     await agent.run(_context())
@@ -175,17 +184,29 @@ async def test_persist_answer_uses_stored_question_and_flags_completion():
     adapter = FakeLiveAdapter(
         events=[
             ("tool_call", {"id": "c0", "name": "record_question", "args": {}}),
-            ("tool_call", {"id": "c1", "name": "persist_answer",
-                           "args": {"answer_transcript": "my answer", "duration_seconds": 12}}),
+            (
+                "tool_call",
+                {
+                    "id": "c1",
+                    "name": "persist_answer",
+                    "args": {"answer_transcript": "my answer", "duration_seconds": 12},
+                },
+            ),
             ("audio", b"after-complete"),
         ]
     )
     on_audio = AsyncMock()
     agent, orch = _agent(adapter, on_audio_output=on_audio)
     orch.ask_next_question.return_value = {
-        "question_id": str(qid), "question_number": 1, "total_questions": 1,
+        "question_id": str(qid),
+        "question_number": 1,
+        "total_questions": 1,
     }
-    orch.submit_answer.return_value = {"status": "completed", "answered_count": 1, "remaining_questions": 0}
+    orch.submit_answer.return_value = {
+        "status": "completed",
+        "answered_count": 1,
+        "remaining_questions": 0,
+    }
     ctx = _context()
 
     await agent.run(ctx)
@@ -207,8 +228,16 @@ async def test_unknown_tool_returns_error_instead_of_raising():
 
 async def test_tool_exception_is_returned_to_model_not_raised():
     adapter = FakeLiveAdapter(
-        events=[("tool_call", {"id": "c1", "name": "persist_answer",
-                               "args": {"answer_transcript": "a", "question_id": str(uuid.uuid4())}})]
+        events=[
+            (
+                "tool_call",
+                {
+                    "id": "c1",
+                    "name": "persist_answer",
+                    "args": {"answer_transcript": "a", "question_id": str(uuid.uuid4())},
+                },
+            )
+        ]
     )
     agent, orch = _agent(adapter)
     orch.submit_answer.side_effect = RuntimeError("db down")
@@ -221,8 +250,16 @@ async def test_tool_exception_is_returned_to_model_not_raised():
 
 async def test_complete_interview_publishes_event_and_ends_without_tool_response():
     adapter = FakeLiveAdapter(
-        events=[("tool_call", {"id": "c1", "name": "complete_interview",
-                               "args": {"reason": "time_up", "closing_remarks": "bye"}})]
+        events=[
+            (
+                "tool_call",
+                {
+                    "id": "c1",
+                    "name": "complete_interview",
+                    "args": {"reason": "time_up", "closing_remarks": "bye"},
+                },
+            )
+        ]
     )
     agent, orch = _agent(adapter)
     ctx = _context()
@@ -248,7 +285,9 @@ async def test_complete_interview_publishes_event_and_ends_without_tool_response
 )
 async def test_flag_interrupt_directive_mapping(itype, directive):
     adapter = FakeLiveAdapter(
-        events=[("tool_call", {"id": "c1", "name": "flag_interrupt", "args": {"interrupt_type": itype}})]
+        events=[
+            ("tool_call", {"id": "c1", "name": "flag_interrupt", "args": {"interrupt_type": itype}})
+        ]
     )
     agent, _ = _agent(adapter)
     ctx = _context()

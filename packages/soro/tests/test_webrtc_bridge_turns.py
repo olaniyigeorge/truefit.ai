@@ -79,7 +79,11 @@ async def test_steady_fan_noise_does_not_start_a_turn():
 
 async def test_speech_after_quiet_starts_a_turn_and_locks_until_the_agent_responds():
     rng = random.Random(2)
-    frames = [_frame(30, rng) for _ in range(50)] + _speech(1.5, rng) + [_frame(30, rng) for _ in range(80)]
+    frames = (
+        [_frame(30, rng) for _ in range(50)]
+        + _speech(1.5, rng)
+        + [_frame(30, rng) for _ in range(80)]
+    )
     bridge, events = await _run(frames)
     assert events == ["start", "end"]
     assert bridge._vad_waiting_for_response

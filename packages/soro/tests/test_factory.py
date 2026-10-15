@@ -47,13 +47,26 @@ def test_names_are_case_and_whitespace_insensitive(made):
 
 def test_credentials_and_models_reach_the_adapters(made):
     create_live_adapter(
-        "gemini", "openai",
-        gemini_api_key="g", gemini_model="gm", gemini_voice="Puck",
-        openai_api_key="o", openai_model="om", openai_voice="marin",
+        "gemini",
+        "openai",
+        gemini_api_key="g",
+        gemini_model="gm",
+        gemini_voice="Puck",
+        openai_api_key="o",
+        openai_model="om",
+        openai_voice="marin",
     )
     opts = made[0][1]
-    assert (opts["gemini_api_key"], opts["gemini_model"], opts["gemini_voice"]) == ("g", "gm", "Puck")
-    assert (opts["openai_api_key"], opts["openai_model"], opts["openai_voice"]) == ("o", "om", "marin")
+    assert (opts["gemini_api_key"], opts["gemini_model"], opts["gemini_voice"]) == (
+        "g",
+        "gm",
+        "Puck",
+    )
+    assert (opts["openai_api_key"], opts["openai_model"], opts["openai_voice"]) == (
+        "o",
+        "om",
+        "marin",
+    )
 
 
 def test_same_primary_and_fallback_rejected(made):

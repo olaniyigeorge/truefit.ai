@@ -187,9 +187,7 @@ async def create_org(
             detail=f"Slug '{slug}' is already taken. Provide a different slug.",
         )
 
-    print(
-        f"\n\nCreating org with name={body.name} slug={slug} created_by={user.user_id}\n\n"
-    )
+    print(f"\n\nCreating org with name={body.name} slug={slug} created_by={user.user_id}\n\n")
     contact = OrgContact(
         email=body.contact.email,
         phone=body.contact.phone,
@@ -257,9 +255,7 @@ async def list_orgs(
             s = OrgStatus(status_filter)
         except ValueError:
             raise HTTPException(400, detail=f"Invalid status: {status_filter}")
-        print(
-            f"\n\nListing orgs with status={s.value} limit={limit} offset={offset}\n\n"
-        )
+        print(f"\n\nListing orgs with status={s.value} limit={limit} offset={offset}\n\n")
         orgs = await repo.list_by_status(s, limit=limit, offset=offset)
     else:
         orgs = await repo.list_all(limit=limit, offset=offset)

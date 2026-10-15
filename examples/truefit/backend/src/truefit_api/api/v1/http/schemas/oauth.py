@@ -33,9 +33,7 @@ class AuthTokenResponse(BaseModel):
         ...,
         description="Token lifetime in seconds (ACCESS_TOKEN_EXPIRE_MINUTES * 60)",
     )
-    is_new_user: bool = Field(
-        default=False, description="True if this is the user's first sign-in"
-    )
+    is_new_user: bool = Field(default=False, description="True if this is the user's first sign-in")
 
 
 class UserAuthResponse(BaseModel):

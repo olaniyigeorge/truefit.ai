@@ -71,16 +71,29 @@ async def check_runtime_with_fake_adapter():
 
     tools = (
         ToolRegistry()
-        .register(ToolSpec(name="note", description="n", parameters={"type": "object", "properties": {"text": {"type": "string"}}}), note)
+        .register(
+            ToolSpec(
+                name="note",
+                description="n",
+                parameters={"type": "object", "properties": {"text": {"type": "string"}}},
+            ),
+            note,
+        )
         .register(ToolSpec(name="end", description="e"), end)
     )
     adapter = FakeLiveAdapter(
-        events=[("tool_call", {"id": "1", "name": "note", "args": {"text": "hi"}}), ("tool_call", {"id": "2", "name": "end", "args": {}})],
+        events=[
+            ("tool_call", {"id": "1", "name": "note", "args": {"text": "hi"}}),
+            ("tool_call", {"id": "2", "name": "end", "args": {}}),
+        ],
         hold_open_until_audio=1,
     )
     await asyncio.wait_for(
         VoiceAgentRuntime(
-            adapter=adapter, system_prompt="p", tools=tools, audio_input_stream=mic(),
+            adapter=adapter,
+            system_prompt="p",
+            tools=tools,
+            audio_input_stream=mic(),
             callbacks=RuntimeCallbacks(on_audio_output=play),
         ).run(),
         timeout=10,
@@ -123,7 +136,7 @@ def check_factory_errors(extras):
         create_live_adapter("gemini")
     except expected as exc:
         if expected is ImportError:
-            assert 'soro[gemini]' in str(exc), exc
+            assert "soro[gemini]" in str(exc), exc
     else:
         raise AssertionError(f"create_live_adapter('gemini') did not raise {expected.__name__}")
     step("factory rejects unknown providers, and reports a missing key or extra clearly")
@@ -137,7 +150,12 @@ def check_extras(extras):
         "vad": ["onnxruntime", "soro.audio.silero"],
         "openapi": ["httpx", "yaml", "soro.connectors.openapi"],
         "mcp": ["mcp", "soro.connectors.mcp"],
-        "composed": ["faster_whisper", "piper", "httpx", "soro.adapters.composed.faster_whisper_stt"],
+        "composed": [
+            "faster_whisper",
+            "piper",
+            "httpx",
+            "soro.adapters.composed.faster_whisper_stt",
+        ],
     }
     for extra in extras:
         for mod in modules[extra]:
@@ -190,7 +208,9 @@ async def check_agent_with_function_tools():
 def check_evals_cli():
     import subprocess
 
-    result = subprocess.run([sys.executable, "-m", "soro.evals", "scenarios"], capture_output=True, text=True)
+    result = subprocess.run(
+        [sys.executable, "-m", "soro.evals", "scenarios"], capture_output=True, text=True
+    )
     assert result.returncode == 0, result.stdout + result.stderr
     step("python -m soro.evals scenarios passes on the scripted baseline")
 
@@ -198,7 +218,13 @@ def check_evals_cli():
 async def check_live():
     from soro import create_live_adapter
 
-    provider = "gemini" if os.getenv("GEMINI_API_KEY") else "openai" if os.getenv("OPENAI_API_KEY") else None
+    provider = (
+        "gemini"
+        if os.getenv("GEMINI_API_KEY")
+        else "openai"
+        if os.getenv("OPENAI_API_KEY")
+        else None
+    )
     if not provider:
         print("skip live session (set GEMINI_API_KEY or OPENAI_API_KEY to run it)")
         return
@@ -213,7 +239,11 @@ async def check_live():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--extras", default="", help="comma separated: gemini,openai,webrtc,vad,openapi,mcp,composed")
+    parser.add_argument(
+        "--extras",
+        default="",
+        help="comma separated: gemini,openai,webrtc,vad,openapi,mcp,composed",
+    )
     extras = [e for e in parser.parse_args().extras.split(",") if e]
     check_not_source_tree()
     check_public_api()

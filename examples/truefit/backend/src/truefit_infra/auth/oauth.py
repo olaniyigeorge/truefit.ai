@@ -34,8 +34,9 @@ class OAuthProvider:
 
 
 class FirebaseOAuthProvider(OAuthProvider):
-
-    CERTS_URL = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    CERTS_URL = (
+        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    )
 
     def __init__(self, project_id: str):
         self.project_id = project_id
@@ -104,9 +105,7 @@ class GoogleOAuthProvider(OAuthProvider):
         """
         try:
             async with httpx.AsyncClient() as client:
-                response = await client.get(
-                    self.token_endpoint, params={"access_token": token}
-                )
+                response = await client.get(self.token_endpoint, params={"access_token": token})
 
                 if response.status_code != 200:
                     raise ValueError(f"Token validation failed: {response.text}")

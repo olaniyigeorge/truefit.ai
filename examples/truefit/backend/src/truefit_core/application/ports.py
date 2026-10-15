@@ -145,9 +145,7 @@ class EvaluationRepository(ABC):
     async def get_by_id(self, evaluation_id: uuid.UUID) -> Optional[Evaluation]: ...
 
     @abstractmethod
-    async def get_by_interview(
-        self, interview_id: uuid.UUID
-    ) -> Optional[Evaluation]: ...
+    async def get_by_interview(self, interview_id: uuid.UUID) -> Optional[Evaluation]: ...
 
     @abstractmethod
     async def list_by_job(
@@ -234,9 +232,7 @@ class LLMPort(ABC):
         ...
 
     @abstractmethod
-    async def evaluate_interview(
-        self, request: EvaluationRequest
-    ) -> LLMEvaluationResult:
+    async def evaluate_interview(self, request: EvaluationRequest) -> LLMEvaluationResult:
         """
         Produce a structured evaluation of the full interview transcript.
         """
@@ -309,9 +305,7 @@ class StoragePort(ABC):
     async def delete(self, key: str) -> None: ...
 
     @abstractmethod
-    async def get_presigned_url(
-        self, key: str, *, expires_in_seconds: int = 3600
-    ) -> str:
+    async def get_presigned_url(self, key: str, *, expires_in_seconds: int = 3600) -> str:
         """Return a time-limited URL for direct client access."""
         ...
 
@@ -335,9 +329,7 @@ class CachePort(ABC):
     async def get(self, key: str) -> Optional[Any]: ...
 
     @abstractmethod
-    async def set(
-        self, key: str, value: Any, *, ttl_seconds: Optional[int] = None
-    ) -> None: ...
+    async def set(self, key: str, value: Any, *, ttl_seconds: Optional[int] = None) -> None: ...
 
     @abstractmethod
     async def delete(self, key: str) -> None: ...
@@ -355,7 +347,6 @@ class CachePort(ABC):
 
 
 class ApplicationRepository(ABC):
-
     @abstractmethod
     async def save(self, application: Application) -> None: ...
 

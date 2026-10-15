@@ -114,6 +114,7 @@ def _merge_capabilities(
 # SESSION CONTEXT MANAGER
 # ───────────────────────
 
+
 class _FallbackSessionContext:
     """
     Internal async context manager returned by FallbackLiveAdapter.open_session().
@@ -146,9 +147,7 @@ class _FallbackSessionContext:
         self._failed_over = False
 
     async def __aenter__(self) -> "FallbackLiveAdapter":
-        primary_cm = self._owner._primary.open_session(
-            self._system_prompt, self._tools
-        )
+        primary_cm = self._owner._primary.open_session(self._system_prompt, self._tools)
         primary_exc: Optional[Exception] = None
 
         try:
@@ -174,14 +173,9 @@ class _FallbackSessionContext:
             logger.error("[FallbackAdapter] Primary failed and no fallback is configured")
             raise primary_exc
 
-        logger.warning(
-            f"[FallbackAdapter] Falling back to "
-            f"{type(self._owner._fallback).__name__}"
-        )
+        logger.warning(f"[FallbackAdapter] Falling back to {type(self._owner._fallback).__name__}")
 
-        fallback_cm = self._owner._fallback.open_session(
-            self._system_prompt, self._tools
-        )
+        fallback_cm = self._owner._fallback.open_session(self._system_prompt, self._tools)
         try:
             await asyncio.wait_for(fallback_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT)
             self._active_cm = fallback_cm
@@ -232,9 +226,7 @@ class _FallbackSessionContext:
                     )
             fallback_cm = owner._fallback.open_session(self._system_prompt, self._tools)
             try:
-                await asyncio.wait_for(
-                    fallback_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT
-                )
+                await asyncio.wait_for(fallback_cm.__aenter__(), timeout=_SESSION_OPEN_TIMEOUT)
             except Exception as exc:
                 self._active_cm = None
                 owner._active = None
@@ -268,6 +260,7 @@ class _FallbackSessionContext:
 # ──────────────────────
 # FALLBACK LIVE ADAPTER
 # ──────────────────────
+
 
 class FallbackLiveAdapter(LiveSessionPort):
     """
@@ -351,9 +344,7 @@ class FallbackLiveAdapter(LiveSessionPort):
         )
 
     async def connect(self, system_prompt: str) -> None:
-        raise NotImplementedError(
-            "Use FallbackLiveAdapter.open_session() context manager."
-        )
+        raise NotImplementedError("Use FallbackLiveAdapter.open_session() context manager.")
 
     # ─────────────────────────────
     # LiveSessionPort: send methods
@@ -390,9 +381,7 @@ class FallbackLiveAdapter(LiveSessionPort):
         self._sent_content.append(text)
         await active.send_client_content(text)
 
-    async def send_tool_response(
-        self, *, call_id: str, name: str, result: dict
-    ) -> None:
+    async def send_tool_response(self, *, call_id: str, name: str, result: dict) -> None:
         """
         Respond to a tool call. Unblocks the model so it can continue.
         Provider-specific wire format differences are handled inside each
@@ -469,11 +458,7 @@ class FallbackLiveAdapter(LiveSessionPort):
           }
         """
         primary_healthy = await self._primary.is_healthy()
-        fallback_healthy = (
-            await self._fallback.is_healthy()
-            if self._fallback is not None
-            else None
-        )
+        fallback_healthy = await self._fallback.is_healthy() if self._fallback is not None else None
         return {
             "primary": {
                 "provider": type(self._primary).__name__,

@@ -22,7 +22,9 @@ DEFAULT_TURN_DETECTOR = "silero"
 
 
 def create_turn_detector() -> TurnDetector:
-    kind = (getattr(AppConfig, "VOICE_TURN_DETECTOR", None) or DEFAULT_TURN_DETECTOR).strip().lower()
+    kind = (
+        (getattr(AppConfig, "VOICE_TURN_DETECTOR", None) or DEFAULT_TURN_DETECTOR).strip().lower()
+    )
     try:
         return soro_create_turn_detector(kind)
     except ImportError as exc:

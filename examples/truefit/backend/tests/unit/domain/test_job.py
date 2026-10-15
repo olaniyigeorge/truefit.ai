@@ -338,9 +338,7 @@ class TestJobMutations:
 
     def test_update_requirements(self):
         job = make_job()
-        new_req = JobRequirements(
-            experience_level=ExperienceLevel.SENIOR, min_total_years=7
-        )
+        new_req = JobRequirements(experience_level=ExperienceLevel.SENIOR, min_total_years=7)
         job.update_requirements(new_req)
         assert job.requirements.experience_level == ExperienceLevel.SENIOR
         assert job.experience_level == ExperienceLevel.SENIOR

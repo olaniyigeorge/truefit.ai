@@ -91,9 +91,7 @@ class WebRTCSignaling:
     ) -> None:
         """Add a trickle ICE candidate from the browser."""
         if not self._client:
-            logger.warning(
-                f"[{self._session_id}] ICE candidate before offer - dropping"
-            )
+            logger.warning(f"[{self._session_id}] ICE candidate before offer - dropping")
             return
 
         if not candidate:
@@ -117,7 +115,7 @@ class WebRTCSignaling:
         except Exception as e:
             logger.warning(f"[{self._session_id}] Failed to add ICE candidate: {e}")
 
-    # Accessors 
+    # Accessors
 
     @property
     def client(self) -> WebRTCClient | None:

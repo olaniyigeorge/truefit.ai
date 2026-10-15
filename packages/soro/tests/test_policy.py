@@ -19,8 +19,11 @@ pytestmark = pytest.mark.unit
 
 
 def _spec(name, **props):
-    return ToolSpec(name=name, description="Do it.",
-                    parameters={"type": "object", "properties": props, "required": list(props)})
+    return ToolSpec(
+        name=name,
+        description="Do it.",
+        parameters={"type": "object", "properties": props, "required": list(props)},
+    )
 
 
 async def test_confirmation_guard_refuses_until_confirmed_and_strips_the_flag():
@@ -107,7 +110,9 @@ async def test_apply_policy_matches_patterns_and_layers_confirm_outside_backgrou
     delivered: list[str] = []
     runner.attach(lambda t: _append(delivered, t))
     pairs = [(_spec("delete_note"), _ok), (_spec("search_web"), _ok), (_spec("read_note"), _ok)]
-    wrapped = apply_policy(pairs, confirm=["delete_*", "search_web"], background=["search_*"], runner=runner)
+    wrapped = apply_policy(
+        pairs, confirm=["delete_*", "search_web"], background=["search_*"], runner=runner
+    )
     by_name = {s.name: s for s, _ in wrapped}
     handlers = {s.name: h for s, h in wrapped}
 

@@ -66,12 +66,12 @@ _SAMPLE_RATE = 16_000  # Gemini expects 16kHz inbound
 _CHANNELS = 1  # mono - both Gemini and the bridge use mono
 _SAMPLE_WIDTH = 2  # 16-bit PCM = 2 bytes per sample (s16)
 _CHUNK_DURATION = 0.02  # 20ms chunks - standard WebRTC frame size
-_OUTPUT_SAMPLE_RATE = 24_000  # default agent output rate; the real rate comes from the adapter capabilities
+_OUTPUT_SAMPLE_RATE = (
+    24_000  # default agent output rate; the real rate comes from the adapter capabilities
+)
 INPUT_SAMPLE_RATE = _SAMPLE_RATE  # rate the bridge delivers mic audio at; adapters must accept it
 _WEBRTC_SAMPLE_RATE = 48_000  # aiortc/Opus expects 48kHz
-_CHUNK_SAMPLES = int(
-    _SAMPLE_RATE * _CHUNK_DURATION
-)  # 320 samples per 20ms chunk at 16kHz
+_CHUNK_SAMPLES = int(_SAMPLE_RATE * _CHUNK_DURATION)  # 320 samples per 20ms chunk at 16kHz
 # Final SILENCE_CHUNK: 320 samples × 2 bytes = 640 bytes of silence at 16kHz mono s16
 # This matches the exact size of a real 20ms inbound chunk so queues stay consistent.
 SILENCE_CHUNK = b"\x00\x00" * _CHUNK_SAMPLES
@@ -111,24 +111,17 @@ class AudioBridge:
         # maxsize=500 -> about 10 seconds of response buffering (generous for latency spikes)
         self.outbound_queue: asyncio.Queue[Optional[bytes]] = asyncio.Queue(maxsize=500)
         self._inbound_task: Optional[asyncio.Task] = None  # The _pump_inbound task
-        self._outbound_track: Optional[AgentAudioTrack] = (
-            None  # Set by create_outbound_track()
-        )
+        self._outbound_track: Optional[AgentAudioTrack] = None  # Set by create_outbound_track()
         self._closed = False
         self._track_attached = asyncio.Event()  # Set when inbound WebRTC track arrives
         self._agent_speaking = False  # True while agent is actively outputting audio
-        self._speaking_cooldown_until: float = (
-            0.0  # epoch time - suppress echo until this
-        )
-        self._mic_open = (
-            asyncio.Event()
-        )  # Gate: inbound audio only flows when this is set
+        self._speaking_cooldown_until: float = 0.0  # epoch time - suppress echo until this
+        self._mic_open = asyncio.Event()  # Gate: inbound audio only flows when this is set
         self._on_activity_start: Optional[Callable] = None
         self._on_activity_end: Optional[Callable] = None
         self._last_activity_start: float = 0.0
         self._last_activity_end: float = 0.0
         self._activity_send_lock = asyncio.Lock()
-
 
         self._vad_is_speaking = False
         self._vad_waiting_for_response = False  # KEY: locked after ActivityEnd
@@ -165,19 +158,20 @@ class AudioBridge:
         """
         self._mic_open.clear()
 
-        
     def _schedule_vad_unlock_timeout(self, timeout_seconds: float = 10.0) -> None:
         """Safety net: force-unlock VAD if Gemini never fires turn_complete."""
         if self._vad_response_timeout_task:
             self._vad_response_timeout_task.cancel()
-        
+
         async def _unlock_after_timeout():
             await asyncio.sleep(timeout_seconds)
             if self._vad_waiting_for_response:
-                logger.warning("[Bridge] VAD unlock timeout — forcing unlock (Gemini may have dropped the turn)")
+                logger.warning(
+                    "[Bridge] VAD unlock timeout — forcing unlock (Gemini may have dropped the turn)"
+                )
                 self.on_agent_responded()
-        
-        self._vad_response_timeout_task = asyncio.create_task(_unlock_after_timeout())        
+
+        self._vad_response_timeout_task = asyncio.create_task(_unlock_after_timeout())
 
     def _arm_vad_unlock_timeout(self, timeout: float = 12.0) -> None:
         """
@@ -194,7 +188,6 @@ class AudioBridge:
                 self.on_agent_responded()
 
         self._vad_unlock_task = asyncio.create_task(_unlock())
-
 
     def set_agent_speaking(self, speaking: bool) -> None:
         """
@@ -231,7 +224,7 @@ class AudioBridge:
             self._pump_inbound(track),
             name=f"audio-inbound-{self._session_id}",
         )
-        
+
         self._track_attached.set()
 
     async def _pump_inbound(self, track: MediaStreamTrack) -> None:
@@ -293,25 +286,21 @@ class AudioBridge:
                 resampled_frames = resampler.resample(frame)
                 for rf in resampled_frames:
                     pcm_bytes = bytes(rf.planes[0])
-                    chunk_size = (
-                        int(_SAMPLE_RATE * _CHUNK_DURATION) * _SAMPLE_WIDTH
-                    )  # 640 bytes
+                    chunk_size = int(_SAMPLE_RATE * _CHUNK_DURATION) * _SAMPLE_WIDTH  # 640 bytes
                     for i in range(0, len(pcm_bytes), chunk_size):
                         chunk = pcm_bytes[i : i + chunk_size]
-                        
+
                         # Only enqueue full 20ms chunks
                         if len(chunk) != chunk_size:
                             continue
- 
+
                         # ECHO SUPPRESSION: drop chunk during cooldown window
                         if time.monotonic() < self._speaking_cooldown_until:
                             continue
 
-                        self._handle_turn_event(
-                            self._turn_detector.process(chunk), "audio"
-                        )
+                        self._handle_turn_event(self._turn_detector.process(chunk), "audio")
 
-                        # Enqueue chunk regardless     
+                        # Enqueue chunk regardless
                         try:
                             self.inbound_queue.put_nowait(chunk)
                         except asyncio.QueueFull:
@@ -361,7 +350,7 @@ class AudioBridge:
             await cb()
         except Exception as e:
             logger.debug(f"[Bridge] VAD callback swallowed: {e}")
-    
+
     def on_agent_responded(self) -> None:
         """
         Called when Gemini's turn_complete fires — unlocks the VAD so the
@@ -371,7 +360,6 @@ class AudioBridge:
         self._vad_waiting_for_response = False
         self._vad_is_speaking = False
         self._turn_detector.reset()
-
 
     # ────────────────────────────
     # AGENT-FACING ASYNC GENERATOR
@@ -403,9 +391,7 @@ class AudioBridge:
                     return  # bridge closed - stop the generator
                 chunk_count += 1
                 if chunk_count % 100 == 0:
-                    logger.info(
-                        f"[{self._session_id}] Sent {chunk_count} chunks to Gemini"
-                    )
+                    logger.info(f"[{self._session_id}] Sent {chunk_count} chunks to Gemini")
                 yield chunk
             except asyncio.TimeoutError:
                 # Queue was empty for 2s - normal during agent turns when mic is closed
@@ -472,9 +458,7 @@ class AudioBridge:
             logger.debug(f"[AudioBridge] Queueing {len(pcm_bytes)} bytes of agent audio")
             self.outbound_queue.put_nowait(pcm_bytes)
         except asyncio.QueueFull:
-            logger.debug(
-                f"[{self._session_id}] Outbound audio queue full, dropping chunk"
-            )
+            logger.debug(f"[{self._session_id}] Outbound audio queue full, dropping chunk")
 
     # ────────
     # TEARDOWN
@@ -503,6 +487,7 @@ class AudioBridge:
 # ────────────────────
 # OUTBOUND AUDIO TRACK
 # ────────────────────
+
 
 class AgentAudioTrack(AudioStreamTrack):
     """
@@ -554,9 +539,9 @@ class AgentAudioTrack(AudioStreamTrack):
         self._queue = queue
         self._session_id = session_id
         self._input_sample_rate = input_sample_rate  # rate of PCM arriving on the queue
-        self._sample_rate = _WEBRTC_SAMPLE_RATE        # 48000Hz output to WebRTC
+        self._sample_rate = _WEBRTC_SAMPLE_RATE  # 48000Hz output to WebRTC
         self._samples_per_frame = int(
-            _WEBRTC_SAMPLE_RATE * _CHUNK_DURATION      # 960 samples = 20ms at 48kHz
+            _WEBRTC_SAMPLE_RATE * _CHUNK_DURATION  # 960 samples = 20ms at 48kHz
         )
         # frame_size=960 forces libswresample to emit exactly one 20ms frame
         # per resample() call, preventing burst output that causes audio loops.
@@ -566,9 +551,9 @@ class AgentAudioTrack(AudioStreamTrack):
             rate=_WEBRTC_SAMPLE_RATE,
             frame_size=self._samples_per_frame,
         )
-        self._buf = bytearray()   # accumulator for resampled 48kHz s16 PCM
-        self._pts: int = 0        # output presentation timestamp, advances by 960 per frame
-        self._start: Optional[float] = None   # wall-clock anchor, set on first recv()
+        self._buf = bytearray()  # accumulator for resampled 48kHz s16 PCM
+        self._pts: int = 0  # output presentation timestamp, advances by 960 per frame
+        self._start: Optional[float] = None  # wall-clock anchor, set on first recv()
         self._input_pts: int = 0  # input pts fed to resampler, advances by input samples
 
     @property
@@ -706,7 +691,7 @@ class AgentAudioTrack(AudioStreamTrack):
         or reorder frames.
         """
 
-        frame_num = getattr(self, '_frame_count', 0)
+        frame_num = getattr(self, "_frame_count", 0)
         self._frame_count = frame_num + 1
 
         if self._start is None:
@@ -726,7 +711,8 @@ class AgentAudioTrack(AudioStreamTrack):
 
         try:
             pcm_24k = await asyncio.wait_for(
-                self._queue.get(), timeout=0.005  # 5ms - well within our 20ms budget
+                self._queue.get(),
+                timeout=0.005,  # 5ms - well within our 20ms budget
             )
 
             if pcm_24k is None:
@@ -737,9 +723,7 @@ class AgentAudioTrack(AudioStreamTrack):
                 raise Exception("AudioBridge closed")
 
             n_samples_in = len(pcm_24k) // 2
-            in_frame = av.AudioFrame(
-                format="s16", layout="mono", samples=n_samples_in
-            )
+            in_frame = av.AudioFrame(format="s16", layout="mono", samples=n_samples_in)
             in_frame.planes[0].update(pcm_24k)
             in_frame.sample_rate = self._input_sample_rate
             in_frame.time_base = fractions.Fraction(1, self._input_sample_rate)
@@ -760,7 +744,7 @@ class AgentAudioTrack(AudioStreamTrack):
             #     f"buf={len(self._buf)}B\n"
             # )
             pass
- 
+
         target = self._samples_per_frame * 2  # 1920 bytes
 
         if len(self._buf) >= target:
@@ -784,9 +768,7 @@ class AgentAudioTrack(AudioStreamTrack):
                 # )
                 pass
 
-        frame = av.AudioFrame(
-            format="s16", layout="mono", samples=self._samples_per_frame
-        )
+        frame = av.AudioFrame(format="s16", layout="mono", samples=self._samples_per_frame)
         frame.planes[0].update(out_pcm)
         frame.sample_rate = self._sample_rate
         frame.time_base = fractions.Fraction(1, self._sample_rate)

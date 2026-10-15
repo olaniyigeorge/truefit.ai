@@ -63,9 +63,7 @@ class InterviewSweeper:
     async def _sweep(self) -> None:
         cutoff = datetime.now(timezone.utc) - timedelta(minutes=STALE_THRESHOLD_MINUTES)
 
-        active_sessions = await self._interviews.list_by_status(
-            InterviewStatus.ACTIVE, limit=200
-        )
+        active_sessions = await self._interviews.list_by_status(InterviewStatus.ACTIVE, limit=200)
 
         if len(active_sessions) >= 200:
             logger.warning(
@@ -74,13 +72,11 @@ class InterviewSweeper:
             )
 
         stale = [
-            s for s in active_sessions
-            if s.started_at and self._normalise_dt(s.started_at) < cutoff
+            s for s in active_sessions if s.started_at and self._normalise_dt(s.started_at) < cutoff
         ]
 
         logger.debug(
-            f"[Sweeper] Sweep complete — "
-            f"{len(active_sessions)} active, {len(stale)} stale"
+            f"[Sweeper] Sweep complete — {len(active_sessions)} active, {len(stale)} stale"
         )
 
         if not stale:

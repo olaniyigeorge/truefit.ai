@@ -38,13 +38,19 @@ class FakeOrgRepo:
 
 
 def make_org(slug="acme", status=OrgStatus.ACTIVE):
-    return Org(name="Acme", slug=slug, contact=OrgContact(email="a@acme.com"),
-               created_by=FOUNDER, status=status)
+    return Org(
+        name="Acme",
+        slug=slug,
+        contact=OrgContact(email="a@acme.com"),
+        created_by=FOUNDER,
+        status=status,
+    )
 
 
 def actor(role, org_id=None, user_id=None):
-    return TokenPayload(str(user_id or uuid.uuid4()), "a@example.com", role,
-                        str(org_id) if org_id else None)
+    return TokenPayload(
+        str(user_id or uuid.uuid4()), "a@example.com", role, str(org_id) if org_id else None
+    )
 
 
 @pytest.fixture
@@ -68,8 +74,7 @@ def ctx():
 CREATE = {"name": "New Co", "slug": "new-co", "contact": {"email": "n@co.com"}}
 
 
-@pytest.mark.parametrize("role,expected", [
-    ("candidate", 403), ("recruiter", 201), ("admin", 201)])
+@pytest.mark.parametrize("role,expected", [("candidate", 403), ("recruiter", 201), ("admin", 201)])
 def test_create_roles(ctx, role, expected):
     ctx.as_user(actor(role))
     assert ctx.client.post("/api/v1/orgs", json=CREATE).status_code == expected
@@ -108,9 +113,7 @@ def mutations(org_id):
 @pytest.mark.parametrize("idx", range(6))
 def test_mutations_denied_for_outsiders(ctx, idx):
     method, url, body = mutations(ctx.org.id)[idx]
-    for p in (actor("candidate", ctx.org.id),
-              actor("recruiter", uuid.uuid4()),
-              actor("recruiter")):
+    for p in (actor("candidate", ctx.org.id), actor("recruiter", uuid.uuid4()), actor("recruiter")):
         ctx.as_user(p)
         r = getattr(ctx.client, method)(url, **({"json": body} if body else {}))
         assert r.status_code == 403, (method, url, p.role)

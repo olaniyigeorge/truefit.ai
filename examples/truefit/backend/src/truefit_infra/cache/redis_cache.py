@@ -8,7 +8,6 @@ from src.truefit_core.application.ports import CachePort
 
 
 class RedisCacheAdapter(CachePort):
-
     def __init__(self, conn_url: str | None = None) -> None:
         url = conn_url or AppConfig.REDIS_URL
         if not url:
@@ -19,9 +18,7 @@ class RedisCacheAdapter(CachePort):
         data = await self._client.get(key)
         return json.loads(data) if data else None
 
-    async def set(
-        self, key: str, value: Any, *, ttl_seconds: Optional[int] = None
-    ) -> bool:
+    async def set(self, key: str, value: Any, *, ttl_seconds: Optional[int] = None) -> bool:
         try:
             serialized = json.dumps(value)
             if ttl_seconds is not None:

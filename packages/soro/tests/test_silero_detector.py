@@ -150,7 +150,7 @@ def _vad_available() -> bool:
 
 
 requires_vad = pytest.mark.skipif(
-    not _vad_available(), reason='needs soro[vad] and the bundled silero_vad.onnx'
+    not _vad_available(), reason="needs soro[vad] and the bundled silero_vad.onnx"
 )
 
 
@@ -187,7 +187,13 @@ def test_detectors_share_the_model_but_not_its_state():
     tone = b"".join(
         struct.pack(
             "<h",
-            int(6000 * sum(math.sin(2 * math.pi * f * n / 16_000) / k for k, f in enumerate((180, 360, 540), 1))),
+            int(
+                6000
+                * sum(
+                    math.sin(2 * math.pi * f * n / 16_000) / k
+                    for k, f in enumerate((180, 360, 540), 1)
+                )
+            ),
         )
         for n in range(320)
     )

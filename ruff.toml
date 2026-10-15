@@ -1,0 +1,23 @@
+# Shared by CI and `make lint` / `make format`.
+target-version = "py311"
+line-length = 100
+
+extend-exclude = [
+    ".venv",
+    "**/alembic/versions",
+]
+
+[lint]
+# Pyflakes and pycodestyle errors. Import sorting and pyupgrade rewrites
+# stay off until that cleanup is intentional.
+select = ["E4", "E7", "E9", "F"]
+ignore = [
+    "E402", # imports that must follow runtime setup
+    "E501", # line length is enforced by `ruff format`
+    "F401", # unused imports are widespread; turn this on after a cleanup
+    "F403", # alembic env star-imports the models on purpose
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"

@@ -60,7 +60,9 @@ class TurnCaseResult:
     passed: bool = False
 
 
-def score_case(factory: DetectorFactory, case: TurnCase, acoustic_ok: bool = True) -> TurnCaseResult:
+def score_case(
+    factory: DetectorFactory, case: TurnCase, acoustic_ok: bool = True
+) -> TurnCaseResult:
     """
     Feed the case through a fresh detector and score it. acoustic_ok=False marks
     acoustic cases as not-expected-to-pass (used for detectors that classify
@@ -100,24 +102,58 @@ def _cases(seed: int = 1234) -> list[TurnCase]:
     rng = random.Random(seed)
     out: list[TurnCase] = []
 
-    out.append(TurnCase("quiet_room", quiet(3, rng), speech_present=False,
-                        description="A quiet room must never report a turn."))
+    out.append(
+        TurnCase(
+            "quiet_room",
+            quiet(3, rng),
+            speech_present=False,
+            description="A quiet room must never report a turn.",
+        )
+    )
 
-    out.append(TurnCase("steady_fan", fan(20, rng), speech_present=False,
-                        description="Steady fan noise from the start: the classic false-turn trap."))
+    out.append(
+        TurnCase(
+            "steady_fan",
+            fan(20, rng),
+            speech_present=False,
+            description="Steady fan noise from the start: the classic false-turn trap.",
+        )
+    )
 
     frames = quiet(2, rng) + fan(12, rng)
-    out.append(TurnCase("fan_switches_on", frames, speech_present=False,
-                        description="A fan that starts mid-call must be learned, not held as a turn."))
+    out.append(
+        TurnCase(
+            "fan_switches_on",
+            frames,
+            speech_present=False,
+            description="A fan that starts mid-call must be learned, not held as a turn.",
+        )
+    )
 
     frames = quiet(1, rng) + speech_frames(2, rng) + quiet(2, rng)
-    out.append(TurnCase("speech_in_quiet", frames, speech_present=True, speech_end_s=3.0,
-                        acoustic=True, description="One turn in a quiet room."))
+    out.append(
+        TurnCase(
+            "speech_in_quiet",
+            frames,
+            speech_present=True,
+            speech_end_s=3.0,
+            acoustic=True,
+            description="One turn in a quiet room.",
+        )
+    )
 
     speech = mix(speech_frames(2, rng, rms=8000), fan(2, rng))
     frames = fan(2, rng) + speech + fan(3, rng)
-    out.append(TurnCase("speech_over_fan", frames, speech_present=True, speech_end_s=4.0,
-                        acoustic=True, description="A turn spoken over fan noise, then noise alone."))
+    out.append(
+        TurnCase(
+            "speech_over_fan",
+            frames,
+            speech_present=True,
+            speech_end_s=4.0,
+            acoustic=True,
+            description="A turn spoken over fan noise, then noise alone.",
+        )
+    )
 
     return out
 
@@ -149,7 +185,9 @@ def format_report(results: dict[str, list[TurnCaseResult]]) -> str:
     for name, rows in results.items():
         passed = sum(1 for r in rows if r.passed)
         lines.append(f"== {name}  ({passed}/{len(rows)} cases passed) ==")
-        lines.append(f"{'case':<18}{'pass':<6}{'false_start':<13}{'false_end':<11}{'turn':<6}{'end_latency':<12}")
+        lines.append(
+            f"{'case':<18}{'pass':<6}{'false_start':<13}{'false_end':<11}{'turn':<6}{'end_latency':<12}"
+        )
         for r in rows:
             latency = "-" if r.end_latency_ms is None else f"{r.end_latency_ms:.0f}ms"
             lines.append(

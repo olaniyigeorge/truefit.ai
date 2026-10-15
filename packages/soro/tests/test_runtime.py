@@ -20,8 +20,16 @@ from soro.testing import FakeLiveAdapter
 
 pytestmark = pytest.mark.unit
 
-NOTE_DECL = {"name": "add_note", "description": "Save a note", "parameters": {"type": "object", "properties": {}}}
-END_DECL = {"name": "end", "description": "End the call", "parameters": {"type": "object", "properties": {}}}
+NOTE_DECL = {
+    "name": "add_note",
+    "description": "Save a note",
+    "parameters": {"type": "object", "properties": {}},
+}
+END_DECL = {
+    "name": "end",
+    "description": "End the call",
+    "parameters": {"type": "object", "properties": {}},
+}
 
 
 async def _mic(chunks=()):
@@ -46,7 +54,9 @@ def _runtime(adapter, tools=None, *, mic=(), opening=None, on_error=None, **cb):
 
 def test_registry_exposes_neutral_specs():
     reg = ToolRegistry().register(NOTE_DECL, AsyncMock())
-    assert reg.specs == [ToolSpec(name="add_note", description="Save a note", parameters=NOTE_DECL["parameters"])]
+    assert reg.specs == [
+        ToolSpec(name="add_note", description="Save a note", parameters=NOTE_DECL["parameters"])
+    ]
     assert "add_note" in reg
 
 
@@ -101,12 +111,16 @@ async def test_no_opening_message_means_nothing_is_sent():
 async def test_custom_tool_result_returned_to_model():
     handler = AsyncMock(return_value={"success": True, "saved": 1})
     reg = ToolRegistry().register(NOTE_DECL, handler)
-    adapter = FakeLiveAdapter(events=[("tool_call", {"id": "1", "name": "add_note", "args": {"text": "x"}})])
+    adapter = FakeLiveAdapter(
+        events=[("tool_call", {"id": "1", "name": "add_note", "args": {"text": "x"}})]
+    )
 
     await _runtime(adapter, reg).run()
 
     handler.assert_awaited_once_with({"text": "x"})
-    assert adapter.tool_responses == [{"call_id": "1", "name": "add_note", "result": {"success": True, "saved": 1}}]
+    assert adapter.tool_responses == [
+        {"call_id": "1", "name": "add_note", "result": {"success": True, "saved": 1}}
+    ]
 
 
 async def test_handler_raising_session_complete_ends_run_normally():
@@ -235,12 +249,16 @@ def test_the_sdk_never_imports_an_application():
                 names = [node.module]
             elif isinstance(node, ast.Import):
                 names = [a.name for a in node.names]
-            offenders += [f"{path.name}: {n}" for n in names if n.split(".")[0] in ("src", "truefit_core", "truefit_infra", "truefit_api")]
+            offenders += [
+                f"{path.name}: {n}"
+                for n in names
+                if n.split(".")[0] in ("src", "truefit_core", "truefit_infra", "truefit_api")
+            ]
     assert offenders == []
 
 
-
 # ── Reconnect recovery
+
 
 def _resume_runtime(adapter, **kw):
     return VoiceAgentRuntime(
@@ -254,7 +272,9 @@ def _resume_runtime(adapter, **kw):
 
 
 async def test_a_resumed_session_asks_the_user_to_repeat_and_flushes_stale_audio():
-    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "connection_error", "restarted": False})])
+    adapter = FakeLiveAdapter(
+        events=[("session_resumed", {"reason": "connection_error", "restarted": False})]
+    )
     on_interrupt = AsyncMock()
     await _resume_runtime(adapter, on_interrupt=on_interrupt).run()
     assert adapter.content == ["Sorry, the line dropped. Please repeat your last answer."]
@@ -264,7 +284,9 @@ async def test_a_resumed_session_asks_the_user_to_repeat_and_flushes_stale_audio
 async def test_a_restarted_session_does_not_send_the_repeat_your_answer_nudge():
     """Regression: after a restart the opening message is replayed, so the nudge made the
     agent apologise for a dropped answer in a conversation that had only just begun."""
-    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "connection_error", "restarted": True})])
+    adapter = FakeLiveAdapter(
+        events=[("session_resumed", {"reason": "connection_error", "restarted": True})]
+    )
     on_interrupt = AsyncMock()
     await _resume_runtime(adapter, on_interrupt=on_interrupt).run()
     assert adapter.content == []
@@ -278,7 +300,9 @@ async def test_session_resumed_without_a_payload_is_treated_as_resumed():
 
 
 async def test_session_resumed_is_silent_without_a_resume_message():
-    adapter = FakeLiveAdapter(events=[("session_resumed", {"reason": "go_away", "restarted": False}), ("audio", b"x")])
+    adapter = FakeLiveAdapter(
+        events=[("session_resumed", {"reason": "go_away", "restarted": False}), ("audio", b"x")]
+    )
     on_audio = AsyncMock()
     await _runtime(adapter, on_audio_output=on_audio).run()
     assert adapter.content == []

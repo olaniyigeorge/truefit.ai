@@ -83,7 +83,7 @@ const Dashboard = () => {
                         totalInterviews: applications.filter(a => a.status === "interviewing").length,
                     })
                 }
-            } catch (e: any) {
+            } catch {
                 setError("Failed to load dashboard data")
             } finally {
                 setLoading(false)

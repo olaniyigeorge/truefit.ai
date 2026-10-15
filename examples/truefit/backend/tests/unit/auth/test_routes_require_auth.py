@@ -25,11 +25,7 @@ def _depends_on_auth(dependant) -> bool:
 
 
 def _api_routes():
-    return [
-        r
-        for r in app.routes
-        if isinstance(r, APIRoute) and r.path.startswith("/api/v1")
-    ]
+    return [r for r in app.routes if isinstance(r, APIRoute) and r.path.startswith("/api/v1")]
 
 
 def test_there_are_routes_to_check():
@@ -48,7 +44,5 @@ def test_every_non_public_route_requires_a_jwt():
 
 
 def test_the_public_list_only_names_routes_that_exist():
-    existing = {
-        (m, r.path) for r in _api_routes() for m in r.methods
-    }
+    existing = {(m, r.path) for r in _api_routes() for m in r.methods}
     assert PUBLIC <= existing

@@ -26,7 +26,6 @@ from src.truefit_infra.db.models import (
 
 
 class SQLAlchemyCandidateRepository(CandidateRepository):
-
     def __init__(self, db: DatabaseManager) -> None:
         self._db = db
 
@@ -124,9 +123,7 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         return candidates
 
     async def delete(self, candidate_id: uuid.UUID) -> None:
-        stmt = delete(CandidateProfileModel).where(
-            CandidateProfileModel.id == candidate_id
-        )
+        stmt = delete(CandidateProfileModel).where(CandidateProfileModel.id == candidate_id)
         async with self._db.get_session() as session:
             await session.execute(stmt)
 
@@ -208,14 +205,9 @@ class SQLAlchemyCandidateRepository(CandidateRepository):
         contact = ContactInfo(
             email=u.email,
             phone=getattr(u, "phone", None),
-            linkedin_url=getattr(u, "linkedin_url", None)
-            or getattr(u, "website_url", None),
+            linkedin_url=getattr(u, "linkedin_url", None) or getattr(u, "website_url", None),
         )
-        status = (
-            CandidateStatus.ACTIVE
-            if getattr(u, "is_active", True)
-            else CandidateStatus.BANNED
-        )
+        status = CandidateStatus.ACTIVE if getattr(u, "is_active", True) else CandidateStatus.BANNED
         return Candidate(
             candidate_id=profile.id,
             user_id=profile.user_id,

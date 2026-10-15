@@ -41,7 +41,12 @@ def test_expires_in_is_required_not_defaulted():
     with pytest.raises(ValidationError):
         AuthTokenResponse(
             access_token="t",
-            user={"id": "00000000-0000-0000-0000-000000000000", "email": "a@b.c", "role": "candidate", "is_active": True},
+            user={
+                "id": "00000000-0000-0000-0000-000000000000",
+                "email": "a@b.c",
+                "role": "candidate",
+                "is_active": True,
+            },
         )
 
 
@@ -51,11 +56,17 @@ def test_ice_servers_are_stun_only_without_turn_config(monkeypatch):
 
 
 def test_ice_servers_include_configured_turn_credentials(monkeypatch):
-    monkeypatch.setattr(ice.AppConfig, "TURN_SERVER_URL", "turn:turn.example.com:3478", raising=False)
+    monkeypatch.setattr(
+        ice.AppConfig, "TURN_SERVER_URL", "turn:turn.example.com:3478", raising=False
+    )
     monkeypatch.setattr(ice.AppConfig, "TURN_USERNAME", "user", raising=False)
     monkeypatch.setattr(ice.AppConfig, "TURN_CREDENTIAL", "secret", raising=False)
     servers = ice.build_ice_servers()
-    assert servers[1] == {"urls": "turn:turn.example.com:3478", "username": "user", "credential": "secret"}
+    assert servers[1] == {
+        "urls": "turn:turn.example.com:3478",
+        "username": "user",
+        "credential": "secret",
+    }
 
 
 def test_no_turn_credentials_are_hard_coded_in_signaling():

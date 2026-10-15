@@ -34,10 +34,12 @@ def test_normalize_passes_specs_through():
 
 def test_normalize_legacy_gemini_group_shape():
     legacy = [
-        {"function_declarations": [
-            {"name": "a", "description": "da", "parameters": PARAMS},
-            {"name": "b", "description": "db"},
-        ]}
+        {
+            "function_declarations": [
+                {"name": "a", "description": "da", "parameters": PARAMS},
+                {"name": "b", "description": "db"},
+            ]
+        }
     ]
     assert normalize_tools(legacy) == [
         ToolSpec(name="a", description="da", parameters=PARAMS),

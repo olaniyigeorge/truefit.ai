@@ -282,12 +282,8 @@ async def list_jobs(
         try:
             exp = ExperienceLevel(experience_level)
         except ValueError:
-            raise HTTPException(
-                400, detail=f"Invalid experience_level: {experience_level}"
-            )
-        jobs = await repo.get_by_org_and_experience(
-            org_id, exp, limit=limit, offset=offset
-        )
+            raise HTTPException(400, detail=f"Invalid experience_level: {experience_level}")
+        jobs = await repo.get_by_org_and_experience(org_id, exp, limit=limit, offset=offset)
 
     else:
         jobs = await repo.get_by_company(org_id, limit=limit, offset=offset)

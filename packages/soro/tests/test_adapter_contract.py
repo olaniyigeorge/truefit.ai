@@ -42,7 +42,9 @@ def _composed():
         FakeTextToSpeech,
     )
 
-    return ComposedLiveAdapter(stt=FakeSpeechToText(), llm=FakeLanguageModel(), tts=FakeTextToSpeech())
+    return ComposedLiveAdapter(
+        stt=FakeSpeechToText(), llm=FakeLanguageModel(), tts=FakeTextToSpeech()
+    )
 
 
 ADAPTERS = {
@@ -91,7 +93,9 @@ def test_open_session_accepts_toolspecs_and_returns_context_manager(adapter):
     assert hasattr(ctx, "__aenter__") and hasattr(ctx, "__aexit__")
 
 
-@pytest.mark.parametrize("make", [_gemini, _openai, _composed], ids=["gemini", "openai", "composed"])
+@pytest.mark.parametrize(
+    "make", [_gemini, _openai, _composed], ids=["gemini", "openai", "composed"]
+)
 def test_real_adapters_reject_duplicate_tool_names_before_connecting(make):
     with pytest.raises(ValueError, match="Duplicate"):
         make().open_session("p", tools=[ToolSpec(name="a"), ToolSpec(name="a")])
@@ -110,7 +114,11 @@ def test_gemini_translation_groups_declarations():
 
     spec = ToolSpec(name="a", description="d", parameters={"type": "object", "properties": {}})
     assert _to_gemini_tools([spec]) == [
-        {"function_declarations": [{"name": "a", "description": "d", "parameters": spec.parameters}]}
+        {
+            "function_declarations": [
+                {"name": "a", "description": "d", "parameters": spec.parameters}
+            ]
+        }
     ]
     assert _to_gemini_tools([]) is None
 

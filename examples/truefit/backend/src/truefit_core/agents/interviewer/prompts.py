@@ -3,9 +3,7 @@ from src.truefit_core.agents.interviewer.context import InterviewContext
 
 def build_system_prompt(ctx: InterviewContext) -> str:
     topics_section = (
-        f"\nFocus areas (cover all before repeating): {', '.join(ctx.topics)}"
-        if ctx.topics
-        else ""
+        f"\nFocus areas (cover all before repeating): {', '.join(ctx.topics)}" if ctx.topics else ""
     )
     resume_section = (
         f"\n\nCandidate resume summary:\n{ctx.candidate_resume_text}"
@@ -39,7 +37,7 @@ JOB CONTEXT
 Title: {ctx.job_title}
 Experience level: {ctx.experience_level}
 Description: {ctx.job_description}
-Required skills: {', '.join(ctx.required_skills)}{topics_section}
+Required skills: {", ".join(ctx.required_skills)}{topics_section}
 
 CANDIDATE
 ───

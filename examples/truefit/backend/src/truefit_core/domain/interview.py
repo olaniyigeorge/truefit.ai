@@ -29,9 +29,7 @@ class Question:
     id: uuid.UUID
     text: str
     topic: Optional[str] = None  # e.g "system design", "behavioural"
-    follow_up_of: Optional[uuid.UUID] = (
-        None  # links adaptive follow-ups to their parent
-    )
+    follow_up_of: Optional[uuid.UUID] = None  # links adaptive follow-ups to their parent
     asked_at: datetime = field(default_factory=_utcnow)
 
     def __post_init__(self) -> None:
@@ -256,9 +254,7 @@ class Interview:
         self._assert_active()
 
         if self.awaiting_answer:
-            raise ValueError(
-                "Cannot ask a new question while the previous one is unanswered"
-            )
+            raise ValueError("Cannot ask a new question while the previous one is unanswered")
         if self.question_count >= self._max_questions:
             raise ValueError(
                 f"Interview has reached the maximum of {self._max_questions} questions"
@@ -293,9 +289,7 @@ class Interview:
         if not self.awaiting_answer:
             raise ValueError("There is no pending question to answer")
         if self._turns[-1].question.id != question_id:
-            raise ValueError(
-                f"question_id {question_id} does not match the current question"
-            )
+            raise ValueError(f"question_id {question_id} does not match the current question")
 
         answer = Answer(
             question_id=question_id,
@@ -326,9 +320,7 @@ class Interview:
         to keep the domain free of infrastructure concerns.
         """
         if self._status not in (InterviewStatus.ACTIVE, InterviewStatus.SCHEDULED):
-            raise ValueError(
-                f"Cannot abandon interview in status '{self._status.value}'"
-            )
+            raise ValueError(f"Cannot abandon interview in status '{self._status.value}'")
         self._status = InterviewStatus.ABANDONED
         self._ended_at = _utcnow()
         self._touch()

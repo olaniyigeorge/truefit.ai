@@ -80,7 +80,9 @@ class MCPConnector:
         listed = await self._session.list_tools()
         pairs: list[ToolPair] = []
         for t in getattr(listed, "tools", listed):
-            if self._allow is not None and not any(fnmatch.fnmatchcase(t.name, p) for p in self._allow):
+            if self._allow is not None and not any(
+                fnmatch.fnmatchcase(t.name, p) for p in self._allow
+            ):
                 continue
             schema = _field(t, "input_schema", "inputSchema", {"type": "object", "properties": {}})
             spec = ToolSpec(name=t.name, description=t.description or "", parameters=dict(schema))
@@ -102,7 +104,11 @@ class MCPConnector:
             else:
                 from mcp.client.stdio import stdio_client
 
-                argv = shlex.split(self._target) if isinstance(self._target, str) else list(self._target)
+                argv = (
+                    shlex.split(self._target)
+                    if isinstance(self._target, str)
+                    else list(self._target)
+                )
                 if not argv:
                     raise ValueError("mcp() was given an empty command")
                 params = mcp.StdioServerParameters(command=argv[0], args=argv[1:], env=self._env)
@@ -149,7 +155,9 @@ def to_tool_result(result: Any) -> dict[str, Any]:
     content = getattr(result, "content", None)
     if content is None:  # 2.x may return a non-tool result, e.g. input required
         return {"success": False, "error": f"Unsupported MCP result: {type(result).__name__}"}
-    texts = [c.text for c in content if getattr(c, "type", None) == "text" and getattr(c, "text", None)]
+    texts = [
+        c.text for c in content if getattr(c, "type", None) == "text" and getattr(c, "text", None)
+    ]
     out: dict[str, Any] = {"success": not bool(_field(result, "is_error", "isError", False))}
     if texts:
         out["content"] = "\n".join(texts)

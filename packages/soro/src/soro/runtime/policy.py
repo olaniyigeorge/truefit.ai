@@ -116,7 +116,9 @@ class BackgroundTools:
 
     def wrap(self, spec: ToolSpec, handler: ToolHandler) -> ToolPair:
         async def start(args: dict[str, Any]) -> dict[str, Any]:
-            task = asyncio.create_task(self._run(spec.name, handler, args), name=f"bg-tool-{spec.name}")
+            task = asyncio.create_task(
+                self._run(spec.name, handler, args), name=f"bg-tool-{spec.name}"
+            )
             self._tasks.add(task)
             task.add_done_callback(self._tasks.discard)
             return {
@@ -187,7 +189,9 @@ def apply_policy(
     return out
 
 
-def policy_instructions(pairs: Iterable[ToolPair], confirm: Iterable[str], background: Iterable[str]) -> str:
+def policy_instructions(
+    pairs: Iterable[ToolPair], confirm: Iterable[str], background: Iterable[str]
+) -> str:
     """The system-prompt conventions the active policy relies on, or "" when none apply."""
     names = [s.name for s, _ in pairs]
     parts = []

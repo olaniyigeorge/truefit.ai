@@ -59,20 +59,28 @@ def create_composed_adapter(
     Fails here, not mid-call, when a dependency or the voice is missing. The LLM
     server is not contacted until the first reply.
     """
-    missing = [m for m in ("faster_whisper", "piper", "httpx", "numpy") if importlib.util.find_spec(m) is None]
+    missing = [
+        m
+        for m in ("faster_whisper", "piper", "httpx", "numpy")
+        if importlib.util.find_spec(m) is None
+    ]
     if missing:
         raise ImportError(
-            f"The composed adapter needs {', '.join(missing)}. Install them with: pip install \"soro[composed]\""
+            f'The composed adapter needs {", ".join(missing)}. Install them with: pip install "soro[composed]"'
         )
     voice = tts_voice or os.environ.get("SORO_PIPER_VOICE")
     if not voice:
-        raise RuntimeError("The composed adapter needs a Piper voice: pass tts_voice= or set SORO_PIPER_VOICE")
+        raise RuntimeError(
+            "The composed adapter needs a Piper voice: pass tts_voice= or set SORO_PIPER_VOICE"
+        )
 
     from soro.adapters.composed.faster_whisper_stt import FasterWhisperSTT
     from soro.adapters.composed.openai_compat_llm import OpenAICompatibleLLM
     from soro.adapters.composed.piper_tts import PiperTTS
 
-    detector = create_turn_detector(turn_detector) if isinstance(turn_detector, str) else turn_detector
+    detector = (
+        create_turn_detector(turn_detector) if isinstance(turn_detector, str) else turn_detector
+    )
     return ComposedLiveAdapter(
         stt=FasterWhisperSTT(stt_model or os.environ.get("SORO_STT_MODEL") or DEFAULT_STT_MODEL),
         llm=OpenAICompatibleLLM(

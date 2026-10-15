@@ -71,9 +71,7 @@ class UserService:
         email_norm = email.lower().strip()
         existing = await self._users.get_by_email(email_norm)
 
-        print(
-            f"\n\n\nCreating user with email={email_norm} account_type={account_type}\n\n"
-        )
+        print(f"\n\n\nCreating user with email={email_norm} account_type={account_type}\n\n")
         if existing:
             raise ValueError(f"User with email '{email_norm}' already exists")
 
@@ -143,9 +141,7 @@ class UserService:
 
             logger.info(f"Org created: {created_org['id']} by user {user.id}")
 
-        logger.info(
-            f"User created: {user.id} email={user.email} role={user.role.value}"
-        )
+        logger.info(f"User created: {user.id} email={user.email} role={user.role.value}")
         return {
             "user": user,
             "org": created_org,
@@ -171,12 +167,7 @@ class UserService:
         if not user:
             raise ValueError(f"User {user_id} not found")
 
-        if (
-            display_name is None
-            and is_active is None
-            and role is None
-            and org_id is None
-        ):
+        if display_name is None and is_active is None and role is None and org_id is None:
             raise ValueError("At least one field must be provided")
 
         user.update_profile(display_name=display_name, is_active=is_active)

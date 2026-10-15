@@ -181,7 +181,10 @@ class SileroTurnDetector:
         if uses_state:
             rnn = {"state": np.zeros((2, 1, 128), dtype=np.float32)}
         else:
-            rnn = {"h": np.zeros((2, 1, 64), dtype=np.float32), "c": np.zeros((2, 1, 64), dtype=np.float32)}
+            rnn = {
+                "h": np.zeros((2, 1, 64), dtype=np.float32),
+                "c": np.zeros((2, 1, 64), dtype=np.float32),
+            }
 
         # v5 expects each window prefixed with the tail of the previous one (64
         # samples at 16kHz, 32 at 8kHz), as silero-vad's own wrapper does. Without

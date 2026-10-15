@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Iterable
 
+
 def _empty_schema() -> dict[str, Any]:
     # A fresh nested dict every time: a shared default would let one spec's
     # mutation leak into every other spec.

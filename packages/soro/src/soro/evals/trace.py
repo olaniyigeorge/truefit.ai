@@ -46,13 +46,16 @@ class Trace:
             self._changed.notify_all()
         return event
 
-    def select(self, direction: str | None = None, kind: str | None = None, since: int = 0) -> list[TraceEvent]:
+    def select(
+        self, direction: str | None = None, kind: str | None = None, since: int = 0
+    ) -> list[TraceEvent]:
         """
         Events matching direction/kind from index `since` on. Ordering is by index,
         not time: two events can share a rounded timestamp but never a position.
         """
         return [
-            e for e in self.events[since:]
+            e
+            for e in self.events[since:]
             if (direction is None or e.direction == direction) and (kind is None or e.kind == kind)
         ]
 
@@ -62,6 +65,7 @@ class Trace:
 
     async def wait_for(self, predicate: Callable[[], bool], timeout: float) -> bool:
         """Wait until predicate() is true, re-checking on every new event. False on timeout."""
+
         async def until() -> None:
             async with self._changed:
                 await self._changed.wait_for(predicate)
@@ -136,7 +140,9 @@ class TracingAdapter(LiveSessionPort):
         await self.inner.send_client_content(text=text)
 
     async def send_tool_response(self, *, call_id: str, name: str, result: dict) -> None:
-        await self.trace.add("out", "tool_response", {"id": call_id, "name": name, "result": result})
+        await self.trace.add(
+            "out", "tool_response", {"id": call_id, "name": name, "result": result}
+        )
         await self.inner.send_tool_response(call_id=call_id, name=name, result=result)
 
     async def receive(self) -> AsyncGenerator[tuple[str, Any], None]:

@@ -104,7 +104,5 @@ class JobService:
             )
         )
 
-        logger.info(
-            f"Job {job_id} closed. {abandoned_count} active interview(s) abandoned."
-        )
+        logger.info(f"Job {job_id} closed. {abandoned_count} active interview(s) abandoned.")
         return job

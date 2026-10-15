@@ -61,7 +61,10 @@ class FasterWhisperSTT:
             if self._model is None:
                 _, WhisperModel = _deps()
                 self._model = await asyncio.to_thread(
-                    WhisperModel, self.model_name, device=self.device, compute_type=self.compute_type
+                    WhisperModel,
+                    self.model_name,
+                    device=self.device,
+                    compute_type=self.compute_type,
                 )
         return self._model
 
@@ -71,7 +74,9 @@ class FasterWhisperSTT:
 
     async def transcribe(self, pcm: bytes, sample_rate: int) -> str:
         if sample_rate != self.SAMPLE_RATE:
-            raise ValueError(f"faster-whisper needs {self.SAMPLE_RATE}Hz audio, got {sample_rate}Hz")
+            raise ValueError(
+                f"faster-whisper needs {self.SAMPLE_RATE}Hz audio, got {sample_rate}Hz"
+            )
         if not pcm:
             return ""
         np, _ = _deps()
@@ -81,8 +86,11 @@ class FasterWhisperSTT:
         def run() -> str:
             # segments is lazy: consume it here, in the worker thread.
             segments, _info = model.transcribe(
-                audio, language=self.language, beam_size=self.beam_size,
-                condition_on_previous_text=False, vad_filter=False,
+                audio,
+                language=self.language,
+                beam_size=self.beam_size,
+                condition_on_previous_text=False,
+                vad_filter=False,
             )
             return "".join(
                 seg.text for seg in segments if seg.no_speech_prob < self.no_speech_threshold

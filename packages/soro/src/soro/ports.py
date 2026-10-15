@@ -146,9 +146,7 @@ class LiveSessionPort(ABC):
         CapabilityNotSupported so a missing capability is never silently dropped.
         source: "camera" | "screen", informational only.
         """
-        raise CapabilityNotSupported(
-            f"{type(self).__name__} does not support image input"
-        )
+        raise CapabilityNotSupported(f"{type(self).__name__} does not support image input")
 
     @abstractmethod
     async def send_client_content(self, text: str) -> None:

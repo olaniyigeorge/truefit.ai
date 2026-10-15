@@ -17,14 +17,21 @@ ORG_B = uuid.uuid4()
 def make_user(org_id=None, role="candidate"):
     now = datetime.now(timezone.utc)
     return SimpleNamespace(
-        id=uuid.uuid4(), email="t@example.com", display_name="T", role=role,
-        org_id=org_id, is_active=True, created_at=now, updated_at=now,
+        id=uuid.uuid4(),
+        email="t@example.com",
+        display_name="T",
+        role=role,
+        org_id=org_id,
+        is_active=True,
+        created_at=now,
+        updated_at=now,
     )
 
 
 def actor(role, user_id=None, org_id=None):
-    return TokenPayload(str(user_id or uuid.uuid4()), "a@example.com", role,
-                        str(org_id) if org_id else None)
+    return TokenPayload(
+        str(user_id or uuid.uuid4()), "a@example.com", role, str(org_id) if org_id else None
+    )
 
 
 @pytest.fixture
@@ -39,16 +46,14 @@ def ctx():
     def as_user(payload):
         app.dependency_overrides[get_current_user] = lambda: payload
 
-    return SimpleNamespace(svc=svc, org_repo=org_repo, as_user=as_user,
-                           client=TestClient(app))
+    return SimpleNamespace(svc=svc, org_repo=org_repo, as_user=as_user, client=TestClient(app))
 
 
 CREATE_BODY = {"email": "n@example.com", "provider_subject": "sub"}
 
 
 def test_create_user_admin_only(ctx):
-    ctx.svc.create_user.return_value = {
-        "user": make_user(), "org": None, "candidate_profile": None}
+    ctx.svc.create_user.return_value = {"user": make_user(), "org": None, "candidate_profile": None}
     ctx.as_user(actor("recruiter", org_id=ORG_A))
     assert ctx.client.post("/api/v1/users", json=CREATE_BODY).status_code == 403
     ctx.as_user(actor("candidate"))
@@ -58,11 +63,17 @@ def test_create_user_admin_only(ctx):
     assert ctx.client.post("/api/v1/users", json=CREATE_BODY).status_code == 201
 
 
-@pytest.mark.parametrize("who,expected", [
-    ("self", 200), ("admin", 200), ("same_org_recruiter", 200),
-    ("other_org_recruiter", 403), ("other_candidate", 403),
-    ("same_org_candidate", 403),
-])
+@pytest.mark.parametrize(
+    "who,expected",
+    [
+        ("self", 200),
+        ("admin", 200),
+        ("same_org_recruiter", 200),
+        ("other_org_recruiter", 403),
+        ("other_candidate", 403),
+        ("same_org_candidate", 403),
+    ],
+)
 def test_get_user_and_by_email(ctx, who, expected):
     target = make_user(org_id=ORG_A)
     ctx.svc.get_user.return_value = target
@@ -100,9 +111,13 @@ def test_patch_self_display_name_ok(ctx):
     assert r.status_code == 200
 
 
-@pytest.mark.parametrize("body", [
-    {"is_active": False}, {"org_id": str(uuid.uuid4())},
-])
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"is_active": False},
+        {"org_id": str(uuid.uuid4())},
+    ],
+)
 def test_patch_self_privileged_denied(ctx, body):
     me = make_user()
     ctx.svc.update_user.return_value = me
@@ -151,8 +166,9 @@ def test_patch_admin_can_change_privileged(ctx):
     target = make_user()
     ctx.svc.update_user.return_value = target
     ctx.as_user(actor("admin"))
-    r = ctx.client.patch(f"/api/v1/users/{target.id}",
-                         json={"role": "recruiter", "is_active": True})
+    r = ctx.client.patch(
+        f"/api/v1/users/{target.id}", json={"role": "recruiter", "is_active": True}
+    )
     assert r.status_code == 200
 
 

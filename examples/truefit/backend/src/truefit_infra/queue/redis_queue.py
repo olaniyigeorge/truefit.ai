@@ -13,7 +13,6 @@ _MAX_STREAM_LEN = 10_000
 
 
 class RedisQueueAdapter(QueuePort):
-
     def __init__(self, conn_url: str | None = None) -> None:
         url = conn_url or AppConfig.REDIS_URL
         if not url:

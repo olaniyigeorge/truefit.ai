@@ -227,8 +227,7 @@ class WebRTCClient:
             for detecting when a candidate stops their screen share mid-interview.
             """
             logger.info(
-                f"[{self.context.session_id}] Received track: "
-                f"kind={track.kind} id={track.id}"
+                f"[{self.context.session_id}] Received track: kind={track.kind} id={track.id}"
             )
 
             if track.kind == "audio":
@@ -257,9 +256,7 @@ class WebRTCClient:
             own message handler and exposes on_inbound_event for InterviewConnection
             to wire to _on_datachannel_event().
             """
-            logger.info(
-                f"[{self.context.session_id}] DataChannel opened: {channel.label}"
-            )
+            logger.info(f"[{self.context.session_id}] DataChannel opened: {channel.label}")
             self.data_channel.attach(channel)
 
         @self.pc.on("connectionstatechange")

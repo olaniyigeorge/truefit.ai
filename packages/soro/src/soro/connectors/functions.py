@@ -122,7 +122,10 @@ class FunctionConnector:
         self._fns = fns
 
     async def tools(self) -> list[ToolPair]:
-        return [(getattr(f, _SPEC_ATTR, None) or spec_from_function(f), handler_for(f)) for f in self._fns]
+        return [
+            (getattr(f, _SPEC_ATTR, None) or spec_from_function(f), handler_for(f))
+            for f in self._fns
+        ]
 
     async def aclose(self) -> None:
         return None
@@ -144,8 +147,10 @@ def _schema_for(hint: Any) -> dict[str, Any]:
     if hint is type(None):
         return {"type": "null"}
     if inspect.isclass(hint) and issubclass(hint, enum.Enum):
-        return {"type": "string" if all(isinstance(m.value, str) for m in hint) else "integer",
-                "enum": [m.value for m in hint]}
+        return {
+            "type": "string" if all(isinstance(m.value, str) for m in hint) else "integer",
+            "enum": [m.value for m in hint],
+        }
 
     origin, args = get_origin(hint), get_args(hint)
     if origin is typing.Annotated:
@@ -158,7 +163,11 @@ def _schema_for(hint: Any) -> dict[str, Any]:
     if origin in (Union, types.UnionType):
         options = [a for a in args if a is not type(None)]
         # Optional[X] is just X to the model: it may leave the argument out.
-        return _schema_for(options[0]) if len(options) == 1 else {"anyOf": [_schema_for(a) for a in options]}
+        return (
+            _schema_for(options[0])
+            if len(options) == 1
+            else {"anyOf": [_schema_for(a) for a in options]}
+        )
     if origin is Literal:
         values = list(args)
         schema: dict[str, Any] = {"enum": values}
@@ -182,7 +191,9 @@ def _is_json(value: Any) -> bool:
 
 # ── Docstrings
 
-_SECTION = re.compile(r"^(Args|Arguments|Parameters|Params|Returns|Raises|Yields|Examples?|Notes?):\s*$")
+_SECTION = re.compile(
+    r"^(Args|Arguments|Parameters|Params|Returns|Raises|Yields|Examples?|Notes?):\s*$"
+)
 
 
 def _parse_docstring(doc: str) -> tuple[str, dict[str, str]]:

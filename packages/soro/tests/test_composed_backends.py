@@ -29,7 +29,9 @@ def _delta(**delta):
 
 
 async def _drain(llm, messages=None, tools=()):
-    return [c async for c in llm.stream(messages or [{"role": "user", "content": "hi"}], list(tools))]
+    return [
+        c async for c in llm.stream(messages or [{"role": "user", "content": "hi"}], list(tools))
+    ]
 
 
 async def test_llm_streams_text_and_assembles_fragmented_tool_calls():
@@ -45,28 +47,51 @@ async def test_llm_streams_text_and_assembles_fragmented_tool_calls():
         body = _sse(
             _delta(content="Let me "),
             _delta(content="check."),
-            _delta(tool_calls=[{"index": 0, "id": "call_1", "function": {"name": "get_weather", "arguments": ""}}]),
+            _delta(
+                tool_calls=[
+                    {
+                        "index": 0,
+                        "id": "call_1",
+                        "function": {"name": "get_weather", "arguments": ""},
+                    }
+                ]
+            ),
             _delta(tool_calls=[{"index": 0, "function": {"arguments": '{"city": '}}]),
             _delta(tool_calls=[{"index": 0, "function": {"arguments": '"Lagos"}'}}]),
-            _delta(tool_calls=[{"index": 1, "id": "call_2", "function": {"name": "noop", "arguments": "{}"}}]),
+            _delta(
+                tool_calls=[
+                    {"index": 1, "id": "call_2", "function": {"name": "noop", "arguments": "{}"}}
+                ]
+            ),
         )
         return httpx.Response(200, content=body, headers={"content-type": "text/event-stream"})
 
-    llm = OpenAICompatibleLLM(base_url="http://local/v1/", model="qwen2.5", transport=httpx.MockTransport(server))
+    llm = OpenAICompatibleLLM(
+        base_url="http://local/v1/", model="qwen2.5", transport=httpx.MockTransport(server)
+    )
     tool = ToolSpec(name="get_weather", description="Weather.")
     chunks = await _drain(llm, tools=[tool])
     await llm.aclose()
 
     assert chunks == [
-        TextDelta("Let me "), TextDelta("check."),
+        TextDelta("Let me "),
+        TextDelta("check."),
         ToolCallRequest("call_1", "get_weather", {"city": "Lagos"}),
         ToolCallRequest("call_2", "noop", {}),
     ]
     assert seen["url"] == "http://local/v1/chat/completions"
     assert seen["auth"] is None  # local servers need no key
     assert seen["body"]["stream"] is True and seen["body"]["model"] == "qwen2.5"
-    assert seen["body"]["tools"] == [{"type": "function", "function": {
-        "name": "get_weather", "description": "Weather.", "parameters": tool.parameters}}]
+    assert seen["body"]["tools"] == [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_weather",
+                "description": "Weather.",
+                "parameters": tool.parameters,
+            },
+        }
+    ]
 
 
 async def test_llm_handles_object_arguments_broken_json_and_errors():
@@ -75,8 +100,14 @@ async def test_llm_handles_object_arguments_broken_json_and_errors():
 
     def server(request):
         body = _sse(
-            _delta(tool_calls=[{"id": "a", "function": {"name": "x", "arguments": {"k": 1}}}]),  # Ollama style
-            _delta(tool_calls=[{"index": 1, "id": "b", "function": {"name": "y", "arguments": "{not json"}}]),
+            _delta(
+                tool_calls=[{"id": "a", "function": {"name": "x", "arguments": {"k": 1}}}]
+            ),  # Ollama style
+            _delta(
+                tool_calls=[
+                    {"index": 1, "id": "b", "function": {"name": "y", "arguments": "{not json"}}
+                ]
+            ),
         )
         return httpx.Response(200, content=body)
 
@@ -86,7 +117,9 @@ async def test_llm_handles_object_arguments_broken_json_and_errors():
         ToolCallRequest("b", "y", {"_raw_arguments": "{not json"}),
     ]
 
-    failing = OpenAICompatibleLLM(transport=httpx.MockTransport(lambda r: httpx.Response(404, text="model not found")))
+    failing = OpenAICompatibleLLM(
+        transport=httpx.MockTransport(lambda r: httpx.Response(404, text="model not found"))
+    )
     with pytest.raises(RuntimeError, match="404: model not found"):
         await _drain(failing)
 
@@ -103,8 +136,10 @@ async def test_whisper_drops_segments_it_rates_as_not_speech(monkeypatch):
 
     class FakeModel:
         def transcribe(self, _audio, **_options):
-            segments = [SimpleNamespace(text=" You", no_speech_prob=0.77),
-                        SimpleNamespace(text=" Buy milk.", no_speech_prob=0.01)]
+            segments = [
+                SimpleNamespace(text=" You", no_speech_prob=0.77),
+                SimpleNamespace(text=" Buy milk.", no_speech_prob=0.01),
+            ]
             return iter(segments), None
 
     stt = FasterWhisperSTT()
@@ -114,7 +149,9 @@ async def test_whisper_drops_segments_it_rates_as_not_speech(monkeypatch):
 
 def test_piper_sample_rate_is_read_from_the_voice_config(tmp_path):
     voice = tmp_path / "en_US-amy-medium.onnx"
-    (tmp_path / "en_US-amy-medium.onnx.json").write_text(json.dumps({"audio": {"sample_rate": 22050}}))
+    (tmp_path / "en_US-amy-medium.onnx.json").write_text(
+        json.dumps({"audio": {"sample_rate": 22050}})
+    )
     assert voice_sample_rate(voice) == 22050
     with pytest.raises(FileNotFoundError):
         voice_sample_rate(tmp_path / "missing.onnx")

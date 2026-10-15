@@ -39,7 +39,9 @@ class Scorecard:
 
 def scorecard(run: ScenarioRun, cost_per_minute: Optional[float] = None) -> Scorecard:
     m: Metrics = compute_metrics(run, cost_per_minute)
-    failures = list(m.tool_failures) + [f"transcript did not match /{p}/" for p in m.transcript_failures]
+    failures = list(m.tool_failures) + [
+        f"transcript did not match /{p}/" for p in m.transcript_failures
+    ]
     if run.error:
         failures.insert(0, run.error)
     if run.timeouts:
@@ -53,7 +55,9 @@ def scorecard(run: ScenarioRun, cost_per_minute: Optional[float] = None) -> Scor
         scenario=run.scenario.name,
         passed=not failures,
         ttfa_ms=m.ttfa_ms,
-        turn_latency_ms=None if m.mean_turn_latency_ms is None else round(m.mean_turn_latency_ms, 1),
+        turn_latency_ms=None
+        if m.mean_turn_latency_ms is None
+        else round(m.mean_turn_latency_ms, 1),
         turn_latency_max_ms=max(m.turn_latency_ms) if m.turn_latency_ms else None,
         barge_in=f"{m.barge_ins_handled}/{m.barge_ins}" if m.barge_ins else "-",
         barge_in_ms=max(m.barge_in_ms) if m.barge_in_ms else None,
@@ -76,8 +80,10 @@ def _num(value: Optional[float], unit: str = "ms") -> str:
 
 
 def format_scorecards(cards: list[Scorecard]) -> str:
-    header = (f"{'provider':<14}{'scenario':<17}{'pass':<6}{'ttfa':<8}{'turn':<8}{'turn_max':<10}"
-              f"{'barge_in':<10}{'tools':<7}{'transcript':<12}{'reconnect':<11}{'audio in/out':<14}{'cost':<8}")
+    header = (
+        f"{'provider':<14}{'scenario':<17}{'pass':<6}{'ttfa':<8}{'turn':<8}{'turn_max':<10}"
+        f"{'barge_in':<10}{'tools':<7}{'transcript':<12}{'reconnect':<11}{'audio in/out':<14}{'cost':<8}"
+    )
     lines = [header, "-" * len(header)]
     notes: list[str] = []
     for c in cards:

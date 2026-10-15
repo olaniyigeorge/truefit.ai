@@ -58,7 +58,9 @@ class ScriptedDetector:
 
 def _adapter(llm, stt=None, tts=None, detector=None) -> ComposedLiveAdapter:
     return ComposedLiveAdapter(
-        stt=stt or FakeSpeechToText(), llm=llm, tts=tts or FakeTextToSpeech(),
+        stt=stt or FakeSpeechToText(),
+        llm=llm,
+        tts=tts or FakeTextToSpeech(),
         turn_detector=detector or ScriptedDetector(),
     )
 
@@ -116,10 +118,12 @@ async def test_text_turn_is_spoken_sentence_by_sentence():
 
 
 async def test_spoken_turn_with_a_tool_call_round_trip():
-    llm = FakeLanguageModel([
-        ["Let me save that for you. ", ToolCallRequest("c1", "save_note", {"text": "milk"})],
-        ["Saved your note about milk."],
-    ])
+    llm = FakeLanguageModel(
+        [
+            ["Let me save that for you. ", ToolCallRequest("c1", "save_note", {"text": "milk"})],
+            ["Saved your note about milk."],
+        ]
+    )
     stt = FakeSpeechToText(["remember milk"])
     adapter = _adapter(llm, stt=stt)
     async with adapter.open_session("p", tools=[ToolSpec(name="save_note")]) as session:
@@ -137,18 +141,26 @@ async def test_spoken_turn_with_a_tool_call_round_trip():
     assert stt.heard == [FRAME * 5]
     second_call = llm.seen[1]
     assert second_call[-2] == {
-        "role": "assistant", "content": "Let me save that for you. ",
-        "tool_calls": [{"id": "c1", "type": "function",
-                        "function": {"name": "save_note", "arguments": '{"text": "milk"}'}}],
+        "role": "assistant",
+        "content": "Let me save that for you. ",
+        "tool_calls": [
+            {
+                "id": "c1",
+                "type": "function",
+                "function": {"name": "save_note", "arguments": '{"text": "milk"}'},
+            }
+        ],
     }
     assert second_call[-1] == {"role": "tool", "tool_call_id": "c1", "content": '{"success": true}'}
 
 
 async def test_barge_in_cancels_the_reply_and_answers_the_new_turn():
-    llm = FakeLanguageModel([
-        ["This is a long answer that goes on. ", "And on and on and on. ", "And on some more."],
-        ["Sure, go ahead."],
-    ])
+    llm = FakeLanguageModel(
+        [
+            ["This is a long answer that goes on. ", "And on and on and on. ", "And on some more."],
+            ["Sure, go ahead."],
+        ]
+    )
     tts = FakeTextToSpeech(delay_s=0.02)
     stt = FakeSpeechToText(["tell me everything", "wait"])
     adapter = _adapter(llm, stt=stt, tts=tts)
@@ -163,7 +175,9 @@ async def test_barge_in_cancels_the_reply_and_answers_the_new_turn():
     assert kinds[kinds.index("interrupted") + 1] == "input_text"
     assert kinds.count("turn_complete") == 1  # the interrupted reply never completed
     assert ("input_text", "wait") in rest
-    interrupted = [m for m in adapter.history if "[interrupted by the user]" in str(m.get("content"))]
+    interrupted = [
+        m for m in adapter.history if "[interrupted by the user]" in str(m.get("content"))
+    ]
     assert len(interrupted) == 1 and interrupted[0]["role"] == "assistant"
     assert "And on some more." not in tts.spoken
 
@@ -179,7 +193,9 @@ async def test_noise_with_an_empty_transcript_is_not_a_turn():
 
 
 async def test_text_arriving_mid_reply_waits_instead_of_interrupting():
-    llm = FakeLanguageModel([["First reply here, quite long."], ["Second reply here."]], delay_s=0.02)
+    llm = FakeLanguageModel(
+        [["First reply here, quite long."], ["Second reply here."]], delay_s=0.02
+    )
     adapter = _adapter(llm)
     async with adapter.open_session("p") as session:
         await session.send_client_content(text="one")
@@ -187,7 +203,10 @@ async def test_text_arriving_mid_reply_waits_instead_of_interrupting():
         await session.send_client_content(text="[tool result] search finished")
         events = await _collect(session, "turn_complete", count=2)
     assert "interrupted" not in _kinds(events)
-    assert [t for k, t in events if k == "text"] == ["First reply here, quite long.", "Second reply here."]
+    assert [t for k, t in events if k == "text"] == [
+        "First reply here, quite long.",
+        "Second reply here.",
+    ]
     assert adapter.history[3] == {"role": "user", "content": "[tool result] search finished"}
 
 
@@ -220,7 +239,11 @@ async def test_llm_failure_ends_the_reply_not_the_session():
 async def test_capabilities_follow_the_tts_rate_and_duplicate_tools_are_rejected():
     adapter = _adapter(FakeLanguageModel(), tts=FakeTextToSpeech(sample_rate=22_050))
     caps = adapter.capabilities
-    assert (caps.input_sample_rate, caps.output_sample_rate, caps.native_vad) == (16_000, 22_050, True)
+    assert (caps.input_sample_rate, caps.output_sample_rate, caps.native_vad) == (
+        16_000,
+        22_050,
+        True,
+    )
     with pytest.raises(ValueError, match="Duplicate"):
         adapter.open_session("p", tools=[ToolSpec(name="a"), ToolSpec(name="a")])
 
@@ -232,7 +255,9 @@ def _loud(n):
 
     rng = random.Random(1)
     peak = 4000 * math.sqrt(3)
-    return [array("h", (int(rng.uniform(-peak, peak)) for _ in range(320))).tobytes() for _ in range(n)]
+    return [
+        array("h", (int(rng.uniform(-peak, peak)) for _ in range(320))).tobytes() for _ in range(n)
+    ]
 
 
 async def test_energy_detector_default_path_and_silence_watchdog():
@@ -262,11 +287,13 @@ async def test_runs_under_the_runtime_through_the_agent_facade():
         """End the call."""
         raise SessionComplete("bye")
 
-    llm = FakeLanguageModel([
-        ["Hi! What should I note? "],
-        [ToolCallRequest("c1", "save_note", {"text": "eggs"})],
-        ["Noted eggs. Goodbye now. ", ToolCallRequest("c2", "end_call", {})],
-    ])
+    llm = FakeLanguageModel(
+        [
+            ["Hi! What should I note? "],
+            [ToolCallRequest("c1", "save_note", {"text": "eggs"})],
+            ["Noted eggs. Goodbye now. ", ToolCallRequest("c2", "end_call", {})],
+        ]
+    )
     adapter = _adapter(llm, stt=FakeSpeechToText(["note eggs"]))
 
     async def mic():
@@ -280,8 +307,12 @@ async def test_runs_under_the_runtime_through_the_agent_facade():
     async def play(pcm):
         played.append(pcm)
 
-    agent = Agent(prompt="Take notes.", tools=[save_note, end_call], adapter=adapter,
-                  opening_message="The user joined.")
+    agent = Agent(
+        prompt="Take notes.",
+        tools=[save_note, end_call],
+        adapter=adapter,
+        opening_message="The user joined.",
+    )
     reason = await asyncio.wait_for(agent.run(audio_input_stream=mic(), on_audio_output=play), 5)
     assert reason == "bye"
     assert notes == ["eggs"]

@@ -51,7 +51,7 @@ async def lifespan(app: FastAPI):
     sweeper: InterviewSweeper | None = None
 
     try:
-        # Database init 
+        # Database init
         engine_kwargs = {}
         if "sqlite" in AppConfig.DATABASE_URL:
             engine_kwargs.update(
@@ -90,7 +90,7 @@ async def lifespan(app: FastAPI):
     finally:
         # Shutdown
         if sweeper:
-            sweeper.stop()          # set exit flag
+            sweeper.stop()  # set exit flag
 
         if _sweeper_task:
             _sweeper_task.cancel()  # interrupt sleep immediately
@@ -111,7 +111,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Middleware 
+# Middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=req_res_time_log_middleware)
 register_error_handler(app)
 
@@ -131,7 +131,7 @@ app.add_middleware(
     allow_headers=["*"],  # TODO: restrict to headers required by whitelisted clients
 )
 
-# Routers 
+# Routers
 # Public: health, and the sign-in exchange inside auth_router (its other routes
 # require a JWT individually). Every other router requires a valid JWT; what a
 # user may do with it is decided per endpoint (truefit_infra/auth/authorization.py).

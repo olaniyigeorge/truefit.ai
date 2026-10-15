@@ -234,9 +234,7 @@ class TestCloseJob:
         assert active_iv.status == InterviewStatus.ABANDONED
         assert completed_iv.status == InterviewStatus.COMPLETED
 
-    async def test_closing_draft_job_raises_invalid_transition(
-        self, service, job_repo, queue
-    ):
+    async def test_closing_draft_job_raises_invalid_transition(self, service, job_repo, queue):
         draft_job = _make_job(status=JobStatus.DRAFT)
         job_repo.get_by_id.return_value = draft_job
 

@@ -54,16 +54,12 @@ def get_candidate_repo() -> SQLAlchemyCandidateRepository:
 # ── Authorization helpers
 
 
-async def _owns_candidate(
-    user: TokenPayload, candidate_id: uuid.UUID, candidate_repo
-) -> bool:
+async def _owns_candidate(user: TokenPayload, candidate_id: uuid.UUID, candidate_repo) -> bool:
     candidate = await candidate_repo.get_by_id(candidate_id)
     return candidate is not None and _same(candidate.user_id, user.user_id)
 
 
-async def _ensure_owner_or_admin(
-    user: TokenPayload, interview: Interview, candidate_repo
-) -> None:
+async def _ensure_owner_or_admin(user: TokenPayload, interview: Interview, candidate_repo) -> None:
     if is_admin(user):
         return
     if user.role == CANDIDATE and await _owns_candidate(
@@ -245,9 +241,7 @@ async def list_interviews(
             raise _forbidden()
 
     if candidate_id:
-        interviews = await repo.list_by_candidate(
-            candidate_id, limit=limit, offset=offset
-        )
+        interviews = await repo.list_by_candidate(candidate_id, limit=limit, offset=offset)
     else:
         interviews = await repo.list_by_job(job_id, limit=limit, offset=offset)
 
@@ -266,9 +260,7 @@ async def list_interviews(
             interviews = visible
         else:
             # Recruiter: only interviews for jobs in their org.
-            interviews = [
-                i for i in interviews if can_view_as_org_member(user, i.org_id)
-            ]
+            interviews = [i for i in interviews if can_view_as_org_member(user, i.org_id)]
 
     return [InterviewOut.from_domain(i) for i in interviews]
 
@@ -287,9 +279,7 @@ async def abandon_interview(
     await _ensure_owner_or_admin(user, interview, candidate_repo)
 
     if interview.is_finished:
-        raise HTTPException(
-            400, detail=f"Interview is already {interview.status.value}"
-        )
+        raise HTTPException(400, detail=f"Interview is already {interview.status.value}")
 
     interview.abandon(reason=f"{body.reason}:{body.initiated_by}")
     await interview_repo.save(interview)

@@ -56,6 +56,5 @@ class PcmResampler:
         self._pts += samples
         # Frame planes are padded, so trim to the real sample count.
         return b"".join(
-            bytes(out.planes[0])[: out.samples * 2]
-            for out in self._resampler.resample(frame)
+            bytes(out.planes[0])[: out.samples * 2] for out in self._resampler.resample(frame)
         )

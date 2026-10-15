@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import asyncio
@@ -98,28 +97,26 @@ def get_queue() -> RedisQueueAdapter:
     return RedisQueueAdapter()
 
 
-
 def get_live_adapter() -> LiveSessionPort:
     """
     Returns the configured live LLM adapter for this session.
- 
+
     Which concrete adapter (or combination) is returned is determined entirely
     by two environment variables read inside create_live_adapter():
- 
+
       LLM_PRIMARY_PROVIDER  = "gemini" | "openai"   (default: "gemini")
       LLM_FALLBACK_PROVIDER = "gemini" | "openai" | "none"  (default: "none")
- 
+
     Possible return values:
       GeminiLiveAdapter                          — primary=gemini, fallback=none
       OpenAIRealtimeAdapter                      — primary=openai, fallback=none
       FallbackLiveAdapter(Gemini → OpenAI)       — primary=gemini, fallback=openai
       FallbackLiveAdapter(OpenAI → Gemini)       — primary=openai, fallback=gemini
- 
+
     Nothing else in this file needs to know which one it got. They all
     implement LiveSessionPort identically from the caller's perspective.
     """
     return create_live_adapter()
- 
 
 
 def get_orchestration() -> InterviewOrchestrationService:
@@ -176,7 +173,7 @@ async def interview_websocket(
     candidate_repo: CandidateRepository = Depends(get_candidate_repo),
     queue: QueuePort = Depends(get_queue),
     cache: CachePort = Depends(get_cache),
-    live_adapter: LiveSessionPort  = Depends(get_live_adapter),
+    live_adapter: LiveSessionPort = Depends(get_live_adapter),
     jwt_service: JWTService = Depends(get_jwt_service),
 ) -> None:
     """
@@ -282,7 +279,9 @@ class InterviewConnection:
         self._ws: WebSocket = websocket  # The raw FastAPI WebSocket connection
         self._job_id = job_id  # UUID of the job being interviewed for
         self._candidate_id = candidate_id  # UUID of the candidate being interviewed
-        self._orchestration: InterviewOrchestrationService = orchestration  # App service: interview lifecycle ops
+        self._orchestration: InterviewOrchestrationService = (
+            orchestration  # App service: interview lifecycle ops
+        )
         self._job_repo = job_repo  # Fetch job details for context building
         self._candidate_repo = candidate_repo  # Fetch candidate details for context
         self._queue = queue  # Publish domain events (interview.completed etc.)
@@ -392,7 +391,7 @@ class InterviewConnection:
             #    Also close the mic immediately - it stays closed until the
             #    agent's opening turn finishes (see _on_turn_complete).
             if self._webrtc:
-                self._webrtc.audio_bridge.close_mic() # explicitly start closed
+                self._webrtc.audio_bridge.close_mic()  # explicitly start closed
                 self._webrtc.audio_bridge._on_activity_start = self._on_candidate_activity_start
                 self._webrtc.audio_bridge._on_activity_end = self._on_candidate_activity_end
                 self._webrtc.data_channel.on_inbound_event = self._on_datachannel_event
@@ -527,8 +526,6 @@ class InterviewConnection:
         # Give the WebRTC stack time to clock out the last frames to the browser
         await asyncio.sleep(0.2)
 
-
-    
         # NOW drain the queue — any chunks that arrived during the turn
         # completion window are stale and must be discarded BEFORE clear_buf()
         # is called, otherwise clear_buf() resets the resampler while the
@@ -550,11 +547,11 @@ class InterviewConnection:
 
     async def _on_candidate_activity_end(self) -> None:
         logger.info("[Connection] Candidate activity END — Gemini will now respond")
-        
+
         # Step 1: Stop new audio from entering the queue
         if self._webrtc:
             self._webrtc.audio_bridge.close_mic()
-        
+
         # Step 2: Drain whatever's already queued so nothing flows to Gemini
         # after the ActivityEnd signal
         if self._webrtc:
@@ -567,12 +564,13 @@ class InterviewConnection:
                 except asyncio.QueueEmpty:
                     break
             if drained:
-                logger.debug(f"[Connection] Drained {drained} stale inbound chunks before ActivityEnd")
-        
+                logger.debug(
+                    f"[Connection] Drained {drained} stale inbound chunks before ActivityEnd"
+                )
+
         # Step 3: send ActivityEnd — this IS the complete turn boundary in manual VAD mode.
         # Do NOT call send_audio_stream_end() here — that's only for auto-VAD mode.
         await self._live_adapter.send_activity_end()
-
 
     # ──────────────────────
     # WEBSOCKET RECEIVE LOOP
@@ -607,8 +605,7 @@ class InterviewConnection:
                 continue
 
             match msg.get("type"):
-
-                # WebRTC handshake (before agent starts) 
+                # WebRTC handshake (before agent starts)
                 case "webrtc_offer":
                     await self._handle_webrtc_offer(msg)
 
@@ -618,9 +615,7 @@ class InterviewConnection:
                 # Control messages (after agent starts)
                 case "end_session":
                     reason = msg.get("reason", "candidate_ended")
-                    await self._orchestration.abandon_interview(
-                        self._interview_id, reason=reason
-                    )
+                    await self._orchestration.abandon_interview(self._interview_id, reason=reason)
                     await self._send(
                         {
                             "type": "session_ended",
@@ -680,7 +675,7 @@ class InterviewConnection:
         # Store client reference + wire outbound audio track
         self._webrtc = self._signaling.client
 
-        # Wire ICE candidate forwarding 
+        # Wire ICE candidate forwarding
         # As the server's ICE agent discovers network candidates, forward
         # each one to the frontend over the WebSocket (trickle ICE pattern).
         async def _forward_ice(candidate) -> None:
@@ -919,9 +914,7 @@ class InterviewConnection:
         if the interview was already completed (orchestration handles idempotency).
         """
         if self._interview_id:
-            await self._orchestration.abandon_interview(
-                self._interview_id, reason=reason
-            )
+            await self._orchestration.abandon_interview(self._interview_id, reason=reason)
 
     async def _send(self, payload: dict) -> None:
         """

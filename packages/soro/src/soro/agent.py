@@ -92,8 +92,9 @@ class Agent:
         """
         try:
             pairs = await self._collect()
-            return apply_policy(pairs, confirm=self.confirm, background=self.background,
-                                runner=BackgroundTools())
+            return apply_policy(
+                pairs, confirm=self.confirm, background=self.background, runner=BackgroundTools()
+            )
         finally:
             await self._close_connectors()
 
@@ -113,8 +114,10 @@ class Agent:
         background = BackgroundTools()
         try:
             pairs = apply_policy(
-                await self._collect(), confirm=self.confirm,
-                background=self.background, runner=background,
+                await self._collect(),
+                confirm=self.confirm,
+                background=self.background,
+                runner=background,
             )
             prompt = self.prompt
             extra = policy_instructions(pairs, self.confirm, self.background)

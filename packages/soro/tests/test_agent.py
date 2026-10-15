@@ -49,18 +49,30 @@ async def test_tools_from_connectors_run_and_connectors_close():
         raise SessionComplete("bye")
 
     extra = RecordingConnector()
-    adapter = FakeLiveAdapter(events=[
-        ("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}}),
-        ("tool_call", {"id": "2", "name": "end_call", "args": {}}),
-    ], hold_open_until_audio=1)
-    agent = Agent(prompt="Take notes.", connectors=[extra], tools=[save_note, end_call],
-                  adapter=adapter, opening_message="Hi")
+    adapter = FakeLiveAdapter(
+        events=[
+            ("tool_call", {"id": "1", "name": "save_note", "args": {"text": "milk"}}),
+            ("tool_call", {"id": "2", "name": "end_call", "args": {}}),
+        ],
+        hold_open_until_audio=1,
+    )
+    agent = Agent(
+        prompt="Take notes.",
+        connectors=[extra],
+        tools=[save_note, end_call],
+        adapter=adapter,
+        opening_message="Hi",
+    )
 
     reason = await agent.run(audio_input_stream=_mic(), on_audio_output=_play)
 
     assert reason == "bye"
     assert notes == ["milk"]
-    assert adapter.tool_responses[0] == {"call_id": "1", "name": "save_note", "result": {"success": True}}
+    assert adapter.tool_responses[0] == {
+        "call_id": "1",
+        "name": "save_note",
+        "result": {"success": True},
+    }
     prompt, specs = adapter.open_args
     assert prompt == "Take notes."  # no policy, no appended conventions
     assert [s.name for s in specs] == ["save_note", "end_call"]
@@ -75,10 +87,16 @@ async def test_confirm_policy_guards_the_tool_and_extends_the_prompt():
         """Delete a note."""
         deleted.append(note_id)
 
-    adapter = FakeLiveAdapter(events=[
-        ("tool_call", {"id": "1", "name": "delete_note", "args": {"note_id": "a"}}),
-        ("tool_call", {"id": "2", "name": "delete_note", "args": {"note_id": "a", "confirmed": True}}),
-    ], hold_open_until_audio=1)
+    adapter = FakeLiveAdapter(
+        events=[
+            ("tool_call", {"id": "1", "name": "delete_note", "args": {"note_id": "a"}}),
+            (
+                "tool_call",
+                {"id": "2", "name": "delete_note", "args": {"note_id": "a", "confirmed": True}},
+            ),
+        ],
+        hold_open_until_audio=1,
+    )
     agent = Agent(prompt="P", tools=[delete_note], confirm=["delete_*"], adapter=adapter)
     await agent.run(audio_input_stream=_mic(), on_audio_output=_play)
 
@@ -97,9 +115,12 @@ async def test_background_result_is_injected_into_the_open_session():
         return {"summary": f"all about {topic}"}
 
     # Keep the session open long enough for the background task to report back.
-    adapter = FakeLiveAdapter(events=[
-        ("tool_call", {"id": "1", "name": "research", "args": {"topic": "bees"}}),
-    ], hold_open_until_audio=6)
+    adapter = FakeLiveAdapter(
+        events=[
+            ("tool_call", {"id": "1", "name": "research", "args": {"topic": "bees"}}),
+        ],
+        hold_open_until_audio=6,
+    )
 
     async def slow_mic():
         for _ in range(6):

@@ -120,25 +120,19 @@ class Application:
 
     def shortlist(self) -> None:
         if self._status not in (ApplicationStatus.new, ApplicationStatus.interviewing):
-            raise ValueError(
-                f"Cannot shortlist application in status: {self._status.value}"
-            )
+            raise ValueError(f"Cannot shortlist application in status: {self._status.value}")
         self._status = ApplicationStatus.shortlisted
         self._touch()
 
     def reject(self) -> None:
         if self.is_closed:
-            raise ValueError(
-                f"Application already closed with status: {self._status.value}"
-            )
+            raise ValueError(f"Application already closed with status: {self._status.value}")
         self._status = ApplicationStatus.rejected
         self._touch()
 
     def hire(self) -> None:
         if self._status != ApplicationStatus.shortlisted:
-            raise ValueError(
-                f"Can only hire from shortlisted, current: {self._status.value}"
-            )
+            raise ValueError(f"Can only hire from shortlisted, current: {self._status.value}")
         self._status = ApplicationStatus.hired
         self._touch()
 
@@ -150,9 +144,7 @@ class Application:
     def withdraw(self) -> None:
         """Candidate withdraws - treated as a rejection for pipeline purposes."""
         if self.is_closed:
-            raise ValueError(
-                f"Application already closed with status: {self._status.value}"
-            )
+            raise ValueError(f"Application already closed with status: {self._status.value}")
         self._status = ApplicationStatus.rejected
         self._meta["withdrawn"] = True
         self._touch()

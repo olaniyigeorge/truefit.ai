@@ -60,7 +60,9 @@ WEATHER_SPEC = {
             "get": {
                 "operationId": "get_forecast",
                 "summary": "Tomorrow's forecast for a city.",
-                "parameters": [{"name": "city", "in": "query", "required": True, "schema": {"type": "string"}}],
+                "parameters": [
+                    {"name": "city", "in": "query", "required": True, "schema": {"type": "string"}}
+                ],
             }
         }
     },
@@ -75,7 +77,10 @@ async def main() -> None:
     model = FakeLiveAdapter(
         events=[
             ("tool_call", {"id": "1", "name": "delete_note", "args": {"note_id": "1"}}),
-            ("tool_call", {"id": "2", "name": "delete_note", "args": {"note_id": "1", "confirmed": True}}),
+            (
+                "tool_call",
+                {"id": "2", "name": "delete_note", "args": {"note_id": "1", "confirmed": True}},
+            ),
             ("tool_call", {"id": "3", "name": "get_forecast", "args": {"city": "Lagos"}}),
             ("tool_call", {"id": "4", "name": "search_web", "args": {"query": "bees"}}),
         ],
@@ -85,7 +90,9 @@ async def main() -> None:
     agent = soro.Agent(
         prompt="You are my assistant. You can manage my notes and check the weather.",
         tools=[list_notes, delete_note, search_web, end_call],
-        connectors=[soro.connectors.openapi(WEATHER_SPEC, transport=httpx.MockTransport(weather_stub))],
+        connectors=[
+            soro.connectors.openapi(WEATHER_SPEC, transport=httpx.MockTransport(weather_stub))
+        ],
         confirm=["delete_*"],
         background=["search_*"],
         adapter=model,

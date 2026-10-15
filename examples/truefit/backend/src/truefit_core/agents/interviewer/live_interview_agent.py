@@ -110,9 +110,7 @@ class LiveInterviewAgent:
         )
         logger.info(f"[Agent] Starting interview {context.interview_id}")
         await self.runtime.run()
-        logger.info(
-            f"[Agent] Interview {context.interview_id} ended: {self.runtime.end_reason}"
-        )
+        logger.info(f"[Agent] Interview {context.interview_id} ended: {self.runtime.end_reason}")
 
     @staticmethod
     def _opening_message(ctx: InterviewContext) -> str:

@@ -94,7 +94,9 @@ class ScriptedAdapter(LiveSessionPort):
         for task in (self._responder, self._watcher):
             if task is not None:
                 task.cancel()
-        await asyncio.gather(*(t for t in (self._responder, self._watcher) if t), return_exceptions=True)
+        await asyncio.gather(
+            *(t for t in (self._responder, self._watcher) if t), return_exceptions=True
+        )
         self._queue.put_nowait(_CLOSE)
 
     async def is_healthy(self) -> bool:

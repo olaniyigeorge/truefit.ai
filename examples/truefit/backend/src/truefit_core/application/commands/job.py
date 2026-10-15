@@ -126,8 +126,7 @@ async def handle_create_job(
         raise ValueError("At least one skill is required to create a job")
 
     skills = [
-        SkillRequirement(name=s.name, required=s.required, weight=s.weight)
-        for s in cmd.skills
+        SkillRequirement(name=s.name, required=s.required, weight=s.weight) for s in cmd.skills
     ]
 
     interview_config = None

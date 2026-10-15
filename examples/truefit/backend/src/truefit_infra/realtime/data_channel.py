@@ -91,9 +91,7 @@ class DataChannelManager:
 
     # ── Outbound ───
 
-    async def send_event(
-        self, event_type: str, payload: dict[str, Any] | None = None
-    ) -> None:
+    async def send_event(self, event_type: str, payload: dict[str, Any] | None = None) -> None:
         """
         Enqueue an outbound event. Non-blocking - returns immediately.
         The sender loop drains the queue and writes to the DataChannel.
@@ -142,6 +140,4 @@ class DataChannelManager:
             try:
                 await self.on_inbound_event(event)
             except Exception as e:
-                logger.error(
-                    f"[{self._ctx.session_id}] Inbound event handler error: {e}"
-                )
+                logger.error(f"[{self._ctx.session_id}] Inbound event handler error: {e}")

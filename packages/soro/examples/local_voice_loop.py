@@ -23,7 +23,14 @@ import re
 from soro.adapters.composed import create_composed_adapter
 from soro.adapters.composed.piper_tts import PiperTTS
 from soro.audio.resampler import PcmResampler
-from soro.evals import CallerTurn, ExpectedCall, Scenario, ScenarioRunner, format_scorecards, scorecard
+from soro.evals import (
+    CallerTurn,
+    ExpectedCall,
+    Scenario,
+    ScenarioRunner,
+    format_scorecards,
+    scorecard,
+)
 from soro.tools import ToolSpec
 
 CALLER_LINES = ["Hello. Please save a note that says buy milk."]
@@ -36,7 +43,7 @@ async def speak(tts: PiperTTS, text: str) -> tuple[bytes, ...]:
     resampler = PcmResampler(tts.sample_rate, 16_000)
     pcm = b"".join([resampler.process(chunk) async for chunk in tts.synthesize(text)])
     pcm += b"\x00" * (-len(pcm) % FRAME_BYTES)
-    frames = [pcm[i:i + FRAME_BYTES] for i in range(0, len(pcm), FRAME_BYTES)]
+    frames = [pcm[i : i + FRAME_BYTES] for i in range(0, len(pcm), FRAME_BYTES)]
     return tuple(frames + [b"\x00" * FRAME_BYTES] * TRAILING_SILENCE)
 
 
@@ -50,16 +57,27 @@ async def main() -> None:
     scenario = Scenario(
         name="local_voice_loop",
         prompt="You are a friendly note-taking assistant on a phone call. Keep every reply to one short sentence. "
-               "When the user asks you to remember something, call save_note with it, then confirm.",
+        "When the user asks you to remember something, call save_note with it, then confirm.",
         turns=turns,
-        tools=(ToolSpec("save_note", "Save a note for the user.",
-                        {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]}),),
+        tools=(
+            ToolSpec(
+                "save_note",
+                "Save a note for the user.",
+                {
+                    "type": "object",
+                    "properties": {"text": {"type": "string"}},
+                    "required": ["text"],
+                },
+            ),
+        ),
         expected_calls=(ExpectedCall("save_note", {"text": re.compile("milk", re.I)}),),
     )
 
     adapter = create_composed_adapter()  # Silero turn detection by default
     # A small model on a laptop CPU can take tens of seconds per reply.
-    run = await ScenarioRunner(turn_timeout_s=180, session_timeout_s=600).run(scenario, adapter, "composed")
+    run = await ScenarioRunner(turn_timeout_s=180, session_timeout_s=600).run(
+        scenario, adapter, "composed"
+    )
 
     for event in run.trace.events:
         if event.kind in ("input_text", "text", "tool_call"):

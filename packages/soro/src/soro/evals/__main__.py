@@ -62,13 +62,20 @@ def _provider_factory(name: str):
     return build
 
 
-def _scenarios(providers: list[str], names: Optional[list[str]], costs: dict[str, float],
-               turn_timeout: float, session_timeout: float = 120.0) -> bool:
+def _scenarios(
+    providers: list[str],
+    names: Optional[list[str]],
+    costs: dict[str, float],
+    turn_timeout: float,
+    session_timeout: float = 120.0,
+) -> bool:
     scenarios = get_scenarios(names)
     factories = {p: _provider_factory(p) for p in providers}
     live = {p for p in providers if p != "scripted"}
     runner = ScenarioRunner(turn_timeout_s=turn_timeout, session_timeout_s=session_timeout)
-    cards = asyncio.run(run_suite(factories, scenarios, runner=runner, cost_per_minute=costs, live=live))
+    cards = asyncio.run(
+        run_suite(factories, scenarios, runner=runner, cost_per_minute=costs, live=live)
+    )
     print(format_scorecards(cards))
     return all(c.passed for c in cards if not c.skipped)
 
@@ -86,22 +93,47 @@ def _costs(values: list[str]) -> dict[str, float]:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
-    parser = argparse.ArgumentParser(prog="python -m soro.evals", description=__doc__.split("\n\n")[0])
+    parser = argparse.ArgumentParser(
+        prog="python -m soro.evals", description=__doc__.split("\n\n")[0]
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     turns = sub.add_parser("turns", help="noisy-room turn-detection comparison")
-    turns.add_argument("-d", "--detectors", type=_csv, default=["energy", "silero"],
-                       help="comma-separated detector names (default: energy,silero)")
+    turns.add_argument(
+        "-d",
+        "--detectors",
+        type=_csv,
+        default=["energy", "silero"],
+        help="comma-separated detector names (default: energy,silero)",
+    )
 
     scen = sub.add_parser("scenarios", help="scenario evals per provider")
-    scen.add_argument("-p", "--providers", type=_csv, default=["scripted"],
-                      help="comma-separated: scripted, gemini, openai, composed (default: scripted)")
-    scen.add_argument("-s", "--scenarios", type=_csv, default=None, help="comma-separated scenario names")
-    scen.add_argument("--cost", action="append", default=[], metavar="PROVIDER=USD_PER_MIN",
-                      help="audio price per minute, for a cost estimate (repeatable)")
-    scen.add_argument("--turn-timeout", type=float, default=20.0, help="seconds to wait for each reply")
-    scen.add_argument("--session-timeout", type=float, default=120.0,
-                      help="seconds a whole scenario may take (raise it for a local model on CPU)")
+    scen.add_argument(
+        "-p",
+        "--providers",
+        type=_csv,
+        default=["scripted"],
+        help="comma-separated: scripted, gemini, openai, composed (default: scripted)",
+    )
+    scen.add_argument(
+        "-s", "--scenarios", type=_csv, default=None, help="comma-separated scenario names"
+    )
+    scen.add_argument(
+        "--cost",
+        action="append",
+        default=[],
+        metavar="PROVIDER=USD_PER_MIN",
+        help="audio price per minute, for a cost estimate (repeatable)",
+    )
+    scen.add_argument(
+        "--turn-timeout", type=float, default=20.0, help="seconds to wait for each reply"
+    )
+    scen.add_argument(
+        "--session-timeout",
+        type=float,
+        default=120.0,
+        help="seconds a whole scenario may take (raise it for a local model on CPU)",
+    )
     scen.add_argument("--list", action="store_true", help="list the scenarios and exit")
 
     sub.add_parser("all", help="turn detection, then every scenario on the scripted baseline")
@@ -117,8 +149,17 @@ def main(argv: Optional[list[str]] = None) -> int:
             for s in get_scenarios():
                 print(f"{s.name:<17}{'live' if s.live else 'scripted only':<15}{s.description}")
             return 0
-        return 0 if _scenarios(args.providers, args.scenarios, _costs(args.cost), args.turn_timeout,
-                              args.session_timeout) else 1
+        return (
+            0
+            if _scenarios(
+                args.providers,
+                args.scenarios,
+                _costs(args.cost),
+                args.turn_timeout,
+                args.session_timeout,
+            )
+            else 1
+        )
     ok_turns = _turns(["energy", "silero"])
     print()
     ok_scen = _scenarios(["scripted"], None, {}, 20.0)
