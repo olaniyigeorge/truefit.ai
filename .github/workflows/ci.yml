@@ -47,7 +47,19 @@ jobs:
       - name: Validate setup scripts
         run: |
           bash -n scripts/setup-local-composed.sh
-          pwsh -NoLogo -NoProfile -NonInteractive -Command "\$tokens = \$null; \$errors = \$null; [System.Management.Automation.Language.Parser]::ParseFile('scripts/setup-local-composed.ps1', [ref]\$tokens, [ref]\$errors) | Out-Null; if (\$errors.Count -gt 0) { \$errors | Format-List | Out-String | Write-Error; exit 1 }"
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              "scripts/setup-local-composed.ps1",
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | Format-List | Out-String | Write-Error
+              exit 1
+            }
+          '
 
       - name: Test evaluation contract
         working-directory: examples/truefit/backend
