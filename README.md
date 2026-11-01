@@ -16,8 +16,8 @@ This project is mid-pivot from a single AI interview product to reusable voice i
 | Gemini Live and OpenAI Realtime adapters, env-driven selection, open-time fallback | Working |
 | `soro`, the extracted SDK (port, runtime, adapters) | Working, the interview app imports it |
 | Second use case: meeting copilot that guides you from your personal knowledge base | Planned |
-| Composed pipeline for free and open models (streaming STT, open LLM, TTS) | Planned |
-| Eval pipeline (per-provider comparison, latency, tool-call correctness) | Planned |
+| Composed pipeline for free and open models (streaming STT, open LLM, TTS) | Built; local models are opt-in |
+| Eval pipeline (per-provider comparison, latency, tool-call correctness) | Built; scripted scenarios pass |
 | SDK and hosted API | Planned |
 
 The full assessment, gaps and plan live in [docs/voice-infra-pivot.md](./docs/voice-infra-pivot.md).
@@ -78,6 +78,29 @@ COMPOSED_TTS_VOICE=...           # composed only: path to a Piper voice .onnx
 ```
 
 Fallback happens when the primary fails to open a session (network, auth, timeout) or fails before it has produced any output, in which case the opening message is replayed on the fallback. A session that dies after the conversation has started is not recovered by the wrapper, but the Gemini adapter reconnects and resumes its own session on transient errors.
+
+## Local setup across platforms
+
+The setup detects the operating system and CPU architecture and keeps platform-specific
+service handling in the setup layer. Install Python 3.11+, Node.js, pnpm, PostgreSQL,
+Redis, Ollama and Git for your platform first.
+
+```bash
+# macOS or Linux (Bash)
+SKIP_MODELS=1 bash scripts/setup-local-composed.sh
+```
+
+On Windows, run PowerShell as a normal user from the repository root:
+
+```powershell
+.\scripts\setup-local-composed.ps1 -SkipModels
+```
+
+Omit `SKIP_MODELS=1` or `-SkipModels` when the local Whisper, Piper and Ollama
+models should be downloaded. The model files are architecture-dependent native
+runtime workloads; the setup reports the detected architecture and lets the
+package installers select compatible wheels. If a service is managed externally
+(Docker, WSL, Postgres.app, Homebrew, systemd), start it before setup.
 
 ## Project structure
 
