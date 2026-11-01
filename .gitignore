@@ -96,6 +96,9 @@ firebase-adminsdk*.json
 .DS_Store
 Thumbs.db
 
-# Docs build 
+# Docs build
 docs/_build/
 /site
+
+# Downloaded models (recreated by scripts/setup-local-composed.sh)
+examples/truefit/backend/models/

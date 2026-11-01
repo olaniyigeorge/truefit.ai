@@ -44,6 +44,17 @@ jobs:
       - name: Check formatting
         run: ruff format --check packages/soro examples/truefit/backend
 
+      - name: Validate setup scripts
+        run: |
+          bash -n scripts/setup-local-composed.sh
+          pwsh -NoLogo -NoProfile -NonInteractive -Command "\$tokens = \$null; \$errors = \$null; [System.Management.Automation.Language.Parser]::ParseFile('scripts/setup-local-composed.ps1', [ref]\$tokens, [ref]\$errors) | Out-Null; if (\$errors.Count -gt 0) { \$errors | Format-List | Out-String | Write-Error; exit 1 }"
+
+      - name: Test evaluation contract
+        working-directory: examples/truefit/backend
+        env:
+          ENV: test
+        run: python -m pytest tests/unit/application/test_evaluation_schema.py -q
+
       - name: Test Soro
         working-directory: packages/soro
         run: python -m pytest tests -q
@@ -69,7 +80,7 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -86,6 +97,9 @@ jobs:
 
       - name: Typecheck
         run: pnpm exec tsc -b --pretty false
+
+      - name: Build production bundle
+        run: pnpm build
 
   deploy:
     name: Deploy to GCP

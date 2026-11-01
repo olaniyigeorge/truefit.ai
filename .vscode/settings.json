@@ -6,5 +6,9 @@
     "${workspaceFolder}/packages/soro/src"
   ],
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["examples/truefit/backend/tests", "packages/soro/tests"]
+  "python.testing.pytestArgs": [
+    "examples/truefit/backend/tests",
+    "packages/soro/tests"
+  ],
+  "python.terminal.useEnvFile": true
 }
