@@ -33,6 +33,7 @@ from src.truefit_core.application.ports import (
     QueuePort,
     StoragePort,
 )
+from src.truefit_core.application.evaluation_schema import parse_evaluation_result
 
 _EVENT_EVALUATION_COMPLETED = "evaluation.completed"
 _EVENT_REPORT_READY = "evaluation.report_ready"
@@ -194,29 +195,30 @@ class EvaluationService:
         org_id: uuid.UUID,
         llm_result_raw,  # LLMEvaluationResult
     ) -> Evaluation:
+        result = parse_evaluation_result(llm_result_raw)
         skill_scores = [
             SkillScore(
                 skill_name=s["skill_name"],
                 score=float(s["score"]),
                 rationale=s.get("rationale", ""),
             )
-            for s in (llm_result_raw.skill_scores or [])
+            for s in [score.model_dump() for score in result.skill_scores]
         ]
 
         scores = EvaluationScores(
-            technical=llm_result_raw.technical_score,
-            communication=llm_result_raw.communication_score,
-            problem_solving=llm_result_raw.problem_solving_score,
-            culture_fit=llm_result_raw.culture_fit_score,
-            overall=llm_result_raw.overall_score,
+            technical=result.technical_score,
+            communication=result.communication_score,
+            problem_solving=result.problem_solving_score,
+            culture_fit=result.culture_fit_score,
+            overall=result.overall_score,
             skill_scores=skill_scores,
         )
 
         try:
-            recommendation = HiringRecommendation(llm_result_raw.recommendation)
+            recommendation = HiringRecommendation(result.recommendation)
         except ValueError:
             logger.warning(
-                f"Unknown recommendation value '{llm_result_raw.recommendation}', defaulting to MAYBE"
+                f"Unknown recommendation value '{result.recommendation}', defaulting to MAYBE"
             )
             recommendation = HiringRecommendation.MAYBE
 
@@ -227,10 +229,10 @@ class EvaluationService:
             org_id=org_id,
             scores=scores,
             recommendation=recommendation,
-            summary=llm_result_raw.summary,
-            strengths=llm_result_raw.strengths,
-            weaknesses=llm_result_raw.weaknesses,
-            model_version=llm_result_raw.model_version,
+            summary=result.summary,
+            strengths=result.strengths,
+            weaknesses=result.weaknesses,
+            model_version=result.model_version,
         )
 
     async def _upload_report(self, evaluation: Evaluation) -> str:
