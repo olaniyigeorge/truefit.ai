@@ -26,8 +26,13 @@ Write-Host "[setup] Detected platform: Windows / $Arch"
 $DbPort = 5432
 $DbUser = "postgres"
 
-function Require-Command([string]$Name, [string]$Hint = "") {
-  if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
+function Require-Command {
+  param(
+    [string]$Name,
+    [string]$Hint = ""
+  )
+  $command = Get-Command $Name -ErrorAction SilentlyContinue
+  if ($null -eq $command) {
     $message = "Missing '$Name'. Install it and re-run."
     if ($Hint) { $message += " $Hint" }
     throw $message
@@ -46,15 +51,20 @@ Require-Command "ollama" "Install Ollama for Windows."
 $PythonVersion = & python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
 if ([version]$PythonVersion -lt [version]"3.11") { throw "Python $PythonVersion is too old; Python 3.11+ is required." }
 
-$RedisReady = (& redis-cli ping 2>$null) -contains "PONG"
+$RedisOutput = & redis-cli ping 2>$null
+$RedisReady = $RedisOutput -contains "PONG"
 if (-not $RedisReady) { throw "Redis is not responding. Start Redis and re-run." }
 
-$PgReady = (& pg_isready -q 2>$null; $LASTEXITCODE -eq 0)
+& pg_isready -q 2>$null
+$PgReady = ($LASTEXITCODE -eq 0)
 if (-not $PgReady) {
-  if (Get-Command pg_ctl -ErrorAction SilentlyContinue) {
+  $PgCtl = Get-Command pg_ctl -ErrorAction SilentlyContinue
+  if ($null -ne $PgCtl) {
     $PgData = Join-Path $env:LOCALAPPDATA "truefit-pgdata"
     $PgPort = 5433
-    if (-not (Test-Path (Join-Path $PgData "PG_VERSION"))) {
+    $PgVersion = Join-Path $PgData "PG_VERSION"
+    $PgVersionExists = Test-Path $PgVersion
+    if (-not $PgVersionExists) {
       & initdb -D $PgData --auth=trust -U postgres | Out-Null
     }
     & pg_ctl -D $PgData -o "-p $PgPort" -l (Join-Path $PgData "server.log") start | Out-Null
@@ -65,10 +75,11 @@ if (-not $PgReady) {
 }
 
 $Venv = Join-Path $Root "examples\truefit\backend\.venv"
-if (-not (Test-Path (Join-Path $Venv "Scripts\python.exe"))) {
+$VenvPython = Join-Path $Venv "Scripts\python.exe"
+$VenvPythonExists = Test-Path $VenvPython
+if (-not $VenvPythonExists) {
   & python -m venv $Venv
 }
-$VenvPython = Join-Path $Venv "Scripts\python.exe"
 $VenvPip = Join-Path $Venv "Scripts\pip.exe"
 & $VenvPip install --upgrade pip --quiet
 Push-Location (Join-Path $Root "examples\truefit\backend")
@@ -81,19 +92,29 @@ Pop-Location
 
 $BackendEnv = Join-Path $Root "examples\truefit\backend\.env"
 $ExampleEnv = Join-Path $Root "examples\truefit\backend\env.example"
-if (-not (Test-Path $BackendEnv)) { Copy-Item $ExampleEnv $BackendEnv }
+$BackendEnvExists = Test-Path $BackendEnv
+if (-not $BackendEnvExists) { Copy-Item $ExampleEnv $BackendEnv }
 
 & createdb -h 127.0.0.1 -p $DbPort -U $DbUser truefit_db 2>$null
 
-function Set-EnvValue([string]$Key, [string]$Value) {
-  $content = Get-Content $BackendEnv -Raw
+function Set-EnvValue {
+  param(
+    [string]$Key,
+    [string]$Value
+  )
+
+  $lines = @(Get-Content $BackendEnv)
   $line = "$Key=$Value"
-  if ($content -match "(?m)^$Key=.*$") {
-    $content = [regex]::Replace($content, "(?m)^$Key=.*$", [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $line }, 1)
-  } else {
-    $content = $content.TrimEnd() + "`n$line`n"
+  $found = $false
+  for ($index = 0; $index -lt $lines.Count; $index++) {
+    if ($lines[$index] -like "$Key=*") {
+      $lines[$index] = $line
+      $found = $true
+      break
+    }
   }
-  Set-Content -Path $BackendEnv -Value $content -NoNewline
+  if (-not $found) { $lines += $line }
+  Set-Content -Path $BackendEnv -Value $lines
 }
 
 Set-EnvValue "LLM_PRIMARY_PROVIDER" "composed"
@@ -108,12 +129,20 @@ if (-not $SkipModels) {
   $VoiceBase = Join-Path $VoiceDir "en_US-lessac-medium"
   foreach ($Extension in @(".onnx", ".onnx.json")) {
     $Target = "$VoiceBase$Extension"
-    if (-not (Test-Path $Target)) {
+    $TargetExists = Test-Path $Target
+    if (-not $TargetExists) {
       Invoke-WebRequest -Uri "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium$Extension" -OutFile $Target
     }
   }
   & $VenvPython -c "from faster_whisper import WhisperModel; WhisperModel('base.en', device='cpu', compute_type='int8')"
-  if (-not ((Invoke-WebRequest -Uri "http://127.0.0.1:11434/api/tags" -UseBasicParsing -ErrorAction SilentlyContinue))) {
+  $OllamaReady = $false
+  try {
+    Invoke-WebRequest -Uri "http://127.0.0.1:11434/api/tags" -UseBasicParsing -ErrorAction Stop | Out-Null
+    $OllamaReady = $true
+  } catch {
+    $OllamaReady = $false
+  }
+  if (-not $OllamaReady) {
     Start-Process ollama -ArgumentList "serve" -WindowStyle Hidden
     Start-Sleep -Seconds 3
   }
