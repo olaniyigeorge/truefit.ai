@@ -352,13 +352,13 @@ plus the optional `OPENAI_*` and `LLM_*` provider settings above).
 
 ## Known gaps
 
-- `truefit_workers` holds two empty placeholders (`evaluation_worker.py`,
-  `report_worker.py`). Nothing publishes `interview.completed` yet; the only
-  events emitted are `interview.agent_ending` and `interview.interrupted`.
+- `truefit_workers` currently holds placeholders for evaluation/report orchestration.
+  The next product-side work is to publish `interview.completed` and run evaluation
+  asynchronously; the Soro SDK does not own this workflow.
 - `FrameSampler` samples camera (every 5 s) and screen (every 2 s) frames to a
   queue, but nothing forwards them to the adapter, and the OpenAI adapter does
   not support images.
 - Data channel events are logged, not yet fed to the agent.
-- Not started (see [voice-infra-pivot.md](voice-infra-pivot.md)): connector
-  layer, composed STT/LLM/TTS adapter, hosted API, eval harness, neural turn
-  detector.
+- Hosted API and client SDKs remain deferred until Soro has a stable public contract
+  and a non-interview consumer. Resume/JD analysis and compliance checks remain
+  TrueFit application features, not Soro responsibilities.
