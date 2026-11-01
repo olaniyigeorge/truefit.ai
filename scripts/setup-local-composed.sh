@@ -37,23 +37,38 @@ warn()    { echo -e "${YELLOW}[warn]${NC}  $1"; }
 die()     { echo -e "${RED}[error]${NC} $1" >&2; exit 1; }
 
 # -----------------------------------------------------------------------------
-# 0. Sanity: macOS + Homebrew + free disk
+# 0. Sanity: operating system, architecture and free disk
 # -----------------------------------------------------------------------------
-if [ "$(uname -s)" != "Darwin" ]; then
-  die "This script targets macOS. On Linux, install the equivalents with your package manager."
-fi
+OS_NAME="$(uname -s)"
+ARCH_NAME="$(uname -m)"
+case "$OS_NAME" in
+  Darwin|Linux) ;;
+  MINGW*|MSYS*|CYGWIN*) die "Use scripts/setup-local-composed.ps1 from PowerShell on Windows." ;;
+  *) die "Unsupported operating system: $OS_NAME" ;;
+esac
+case "$ARCH_NAME" in
+  x86_64|amd64|arm64|aarch64) ;;
+  *) warn "Untested CPU architecture: $ARCH_NAME" ;;
+esac
+log "Detected platform: $OS_NAME / $ARCH_NAME"
 
-if ! command -v brew >/dev/null 2>&1; then
-  if [ -x /opt/homebrew/bin/brew ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  elif [ -x /usr/local/bin/brew ]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-  else
-    die "Homebrew not found. Install it from https://brew.sh and re-run."
+if [ "$OS_NAME" = "Darwin" ]; then
+  if ! command -v brew >/dev/null 2>&1; then
+    if [ -x /opt/homebrew/bin/brew ]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    else
+      die "Homebrew not found. Install it from https://brew.sh and re-run."
+    fi
   fi
 fi
 
-FREE_GB="$(df -g "$ROOT_DIR" | awk 'NR==2 {print $4}')"
+if [ "$OS_NAME" = "Darwin" ]; then
+  FREE_GB="$(df -g "$ROOT_DIR" | awk 'NR==2 {print $4}')"
+else
+  FREE_GB="$(df -Pk "$ROOT_DIR" | awk 'NR==2 {printf "%d", $4 / 1024 / 1024}')"
+fi
 if [ "${FREE_GB:-0}" -lt 12 ]; then
   warn "Only ${FREE_GB}GB free on this volume. The composed models need ~6GB."
 fi
@@ -61,7 +76,7 @@ fi
 # -----------------------------------------------------------------------------
 # 1. Toolchain
 # -----------------------------------------------------------------------------
-if [ "${SKIP_BREW:-0}" != "1" ]; then
+if [ "$OS_NAME" = "Darwin" ] && [ "${SKIP_BREW:-0}" != "1" ]; then
   NEED=()
   need_pkg() { # need_pkg <formula> [command-to-test...]
     local pkg="$1"; shift
@@ -91,19 +106,33 @@ if [ "${SKIP_BREW:-0}" != "1" ]; then
   fi
 fi
 
-# Versioned formulae are keg-only: put their binaries on PATH for this script.
-PG_PREFIX="$(brew --prefix postgresql@16 2>/dev/null || true)"
-[ -n "$PG_PREFIX" ] && export PATH="$PG_PREFIX/bin:$PATH"
+if [ "$OS_NAME" = "Darwin" ]; then
+  # Versioned formulae are keg-only: put their binaries on PATH for this script.
+  PG_PREFIX="$(brew --prefix postgresql@16 2>/dev/null || true)"
+  [ -n "$PG_PREFIX" ] && export PATH="$PG_PREFIX/bin:$PATH"
 
-PY_PREFIX="$(brew --prefix python@3.12 2>/dev/null || true)"
-if [ -n "$PY_PREFIX" ]; then
-  # libexec/bin/python3 is the unversioned shim that `make setup` calls.
-  export PATH="$PY_PREFIX/libexec/bin:$PY_PREFIX/bin:$PATH"
+  PY_PREFIX="$(brew --prefix python@3.12 2>/dev/null || true)"
+  if [ -n "$PY_PREFIX" ]; then
+    export PATH="$PY_PREFIX/libexec/bin:$PY_PREFIX/bin:$PATH"
+  fi
 fi
 
 for c in git make python3 node pnpm psql createdb pg_isready redis-server redis-cli ruff ollama; do
   command -v "$c" >/dev/null 2>&1 || die "$c not found on PATH; install it and re-run."
 done
+
+if [ "$OS_NAME" = "Darwin" ]; then
+  # psycopg2 may link against Homebrew or Postgres.app's libpq.
+  DYLD_DIRS=()
+  for libdir in "$(brew --prefix libpq 2>/dev/null || true)/lib" "$(pg_config --libdir 2>/dev/null || true)"; do
+    [ -d "$libdir" ] && DYLD_DIRS+=("$libdir")
+  done
+  if [ "${#DYLD_DIRS[@]}" -gt 0 ]; then
+    # Use the fallback path: a global DYLD_LIBRARY_PATH can make PyAV load
+    # Postgres.app's libiconv instead of the copy bundled with its wheel.
+    export DYLD_FALLBACK_LIBRARY_PATH="$(IFS=:; echo "${DYLD_DIRS[*]}")${DYLD_FALLBACK_LIBRARY_PATH:+:$DYLD_FALLBACK_LIBRARY_PATH}"
+  fi
+fi
 
 python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3,11) else 1)' \
   || die "python3 is $(python3 -V 2>&1); this project needs Python 3.11+."
@@ -115,11 +144,23 @@ log "python $(python3 -V 2>&1 | awk '{print $2}'), node $(node -v), pnpm $(pnpm 
 # -----------------------------------------------------------------------------
 log "Starting services..."
 if ! pg_isready -q 2>/dev/null; then
-  brew services start postgresql@16 >/dev/null 2>&1 || warn "Could not start postgresql@16 via brew services"
+  if [ "$OS_NAME" = "Darwin" ]; then
+    brew services start postgresql@16 >/dev/null 2>&1 || warn "Could not start postgresql@16 via brew services"
+  elif command -v systemctl >/dev/null 2>&1; then
+    systemctl --user start postgresql >/dev/null 2>&1 || systemctl start postgresql >/dev/null 2>&1 || true
+  fi
 fi
-brew services start redis >/dev/null 2>&1 || warn "Could not start redis via brew services"
+if [ "$OS_NAME" = "Darwin" ]; then
+  brew services start redis >/dev/null 2>&1 || warn "Could not start redis via brew services"
+elif command -v systemctl >/dev/null 2>&1; then
+  systemctl --user start redis >/dev/null 2>&1 || systemctl start redis >/dev/null 2>&1 || true
+fi
 if ! curl -sf http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
-  brew services start ollama >/dev/null 2>&1 || warn "Ollama is not Homebrew-managed; will start it later if needed"
+  if [ "$OS_NAME" = "Darwin" ]; then
+    brew services start ollama >/dev/null 2>&1 || warn "Ollama is not Homebrew-managed; will start it later if needed"
+  elif command -v systemctl >/dev/null 2>&1; then
+    systemctl --user start ollama >/dev/null 2>&1 || systemctl start ollama >/dev/null 2>&1 || true
+  fi
 fi
 
 for _ in $(seq 1 30); do [ "$(redis-cli ping 2>/dev/null || true)" = "PONG" ] && break; sleep 1; done
@@ -141,20 +182,21 @@ probe_pg() { # probe_pg <user> [port]
     -tAc "SELECT 1" >/dev/null 2>&1
 }
 
-for _ in $(seq 1 30); do pg_isready -q 2>/dev/null && break; sleep 1; done
-
-if pg_isready -q 2>/dev/null; then
-  for candidate in "$(whoami)" postgres; do
-    if probe_pg "$candidate" 5432; then
-      PG_USER="$candidate"
-      DB_READY=1
-      break
-    fi
-  done
-fi
+for existing_port in 5432 5433; do
+  if pg_isready -h 127.0.0.1 -p "$existing_port" -q 2>/dev/null; then
+    for candidate in "$(whoami)" postgres; do
+      if probe_pg "$candidate" "$existing_port"; then
+        PG_PORT="$existing_port"
+        PG_USER="$candidate"
+        DB_READY=1
+        break 2
+      fi
+    done
+  fi
+done
 
 if [ "$DB_READY" -eq 1 ]; then
-  success "Using existing PostgreSQL on port 5432 (user $PG_USER)"
+  success "Using existing PostgreSQL on port $PG_PORT (user $PG_USER)"
 else
   warn "No password-free PostgreSQL login found; creating a private cluster on port 5433"
   PG_PORT=5433
@@ -166,9 +208,13 @@ else
   done
 
   if ! command -v initdb >/dev/null 2>&1 || ! command -v pg_ctl >/dev/null 2>&1; then
-    log "Installing postgresql@16 for server binaries"
-    brew install postgresql@16
-    export PATH="$(brew --prefix postgresql@16)/bin:$PATH"
+    if [ "$OS_NAME" = "Darwin" ]; then
+      log "Installing postgresql@16 for server binaries"
+      brew install postgresql@16
+      export PATH="$(brew --prefix postgresql@16)/bin:$PATH"
+    else
+      die "initdb/pg_ctl are required to create a private PostgreSQL cluster. Install the PostgreSQL server package and re-run."
+    fi
   fi
 
   if [ ! -f "$PGDATA_DIR/PG_VERSION" ]; then
@@ -326,10 +372,19 @@ success "Backend configured for the composed pipeline"
 # 6. Database migrations + verification
 # -----------------------------------------------------------------------------
 log "Applying Alembic migrations"
+TABLE_COUNT="$(PGCONNECT_TIMEOUT=3 psql -w -h 127.0.0.1 -p "$PG_PORT" -U "$PG_USER" -d truefit_db \
+  -tAc "SELECT count(*) FROM information_schema.tables WHERE table_schema='public'" 2>/dev/null | tr -d '[:space:]')"
+ALEMBIC_TABLE="$(PGCONNECT_TIMEOUT=3 psql -w -h 127.0.0.1 -p "$PG_PORT" -U "$PG_USER" -d truefit_db \
+  -tAc "SELECT to_regclass('public.alembic_version')" 2>/dev/null | tr -d '[:space:]')"
+if [ "${TABLE_COUNT:-0}" -gt 0 ] && [ -z "$ALEMBIC_TABLE" ]; then
+  warn "Existing tables found without Alembic history; stamping the current schema head."
+  (cd "$ROOT_DIR/examples/truefit/backend" && "$VENV/bin/alembic" stamp head) \
+    || die "Could not record Alembic history for the existing database."
+fi
 if (cd "$ROOT_DIR/examples/truefit/backend" && "$VENV/bin/alembic" upgrade head); then
   success "Migrations applied"
 else
-  warn "alembic upgrade failed. The app also creates tables on startup; see docs/architecture.md."
+  die "Alembic migrations failed. Fix the database setup before starting the app."
 fi
 
 log "Verifying composed-pipeline imports"
