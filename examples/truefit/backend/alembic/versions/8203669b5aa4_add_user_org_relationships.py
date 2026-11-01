@@ -13,6 +13,9 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "8203669b5aa4"
+# The description migration is retained as a no-op compatibility step; this
+# keeps the historical revision chain linear while the consolidated initial
+# schema owns the actual tables.
 down_revision: Union[str, Sequence[str], None] = "29a4c7d64fe3"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
