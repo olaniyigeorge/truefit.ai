@@ -22,6 +22,7 @@ from src.truefit_core.domain.job import Job
 from src.truefit_core.domain.application import Application
 from src.truefit_core.domain.user import User
 from src.truefit_core.domain.org import Org
+from src.truefit_core.application.evaluation_schema import LLMEvaluationResult
 
 # Repository ports
 
@@ -198,26 +199,6 @@ class EvaluationRequest:
     experience_level: str
     transcript: list[dict]
     custom_instructions: Optional[str] = None
-
-
-@dataclass
-class LLMEvaluationResult:
-    """
-    Raw structured output from the LLM evaluation call.
-    The application layer maps this onto the Evaluation domain object.
-    """
-
-    recommendation: str  # maps to HiringRecommendation
-    overall_score: float  # 0–10
-    technical_score: float
-    communication_score: float
-    problem_solving_score: float
-    culture_fit_score: float
-    skill_scores: list[dict]  # [{skill_name, score, rationale}]
-    summary: str
-    strengths: list[str]
-    weaknesses: list[str]
-    model_version: Optional[str] = None
 
 
 class LLMPort(ABC):
