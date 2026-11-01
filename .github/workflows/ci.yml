@@ -65,7 +65,9 @@ jobs:
         working-directory: examples/truefit/backend
         env:
           ENV: test
-        run: python -m pytest tests/unit/application/test_evaluation_schema.py -q
+        run: |
+          cp env.example .env
+          python -m pytest tests/unit/application/test_evaluation_schema.py -q
 
       - name: Test Soro
         working-directory: packages/soro
