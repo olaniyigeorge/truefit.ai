@@ -30,6 +30,7 @@ from src.truefit_api.api.v1.ws.interview_websocket import (
 )
 from src.truefit_api.api.v1.http.applications import router as applications_router
 from src.truefit_api.api.v1.http.turn import router as turn_router
+from src.truefit_api.api.v1.http.evaluations import router as evaluations_router
 from src.truefit_core.application.services.interview_sweeper import InterviewSweeper
 from src.truefit_infra.db.repositories.interview_repository import (
     SQLAlchemyInterviewRepository,
@@ -147,6 +148,7 @@ app.include_router(interviews_router, prefix="/api/v1", dependencies=_authentica
 app.include_router(applications_router, prefix="/api/v1", dependencies=_authenticated)
 app.include_router(interview_ws_router)
 app.include_router(turn_router, prefix="/api/v1")
+app.include_router(evaluations_router, prefix="/api/v1", dependencies=_authenticated)
 
 
 if __name__ == "__main__":
