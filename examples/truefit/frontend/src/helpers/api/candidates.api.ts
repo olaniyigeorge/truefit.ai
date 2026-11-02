@@ -55,7 +55,10 @@ export type ListCandidateParams = {
 
 export const candidatesApi = {
     uploadResume: async (candidateId: string, formData: FormData): Promise<Candidate> => {
-        const res = await API.post(`/api/v1/candidates/${candidateId}/resume`, formData)
+        const res = await API.post(`/api/v1/candidates/${candidateId}/resume`, formData, {
+            // Override the JSON default so Axios/browser adds the multipart boundary.
+            headers: { "Content-Type": "multipart/form-data" },
+        })
         return res.data
     },
 
@@ -65,6 +68,10 @@ export const candidatesApi = {
     },
     getById: async (candidateId: string): Promise<Candidate> => {
         const res = await API.get(`/api/v1/candidates/${candidateId}`)
+        return res.data
+    },
+    getMe: async (): Promise<Candidate> => {
+        const res = await API.get(`/api/v1/candidates/me`)
         return res.data
     },
     list: async (params?: ListCandidateParams): Promise<Candidate[]> => {
