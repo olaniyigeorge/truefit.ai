@@ -92,6 +92,7 @@ class Modality(str, enum.Enum):
 class StorageProvider(str, enum.Enum):
     local = "local"
     gcs = "gcs"
+    cloudinary = "cloudinary"
 
 
 class AssetKind(str, enum.Enum):
