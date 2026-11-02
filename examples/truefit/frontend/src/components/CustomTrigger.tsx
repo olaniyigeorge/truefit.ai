@@ -8,8 +8,13 @@ const CustomTrigger = () =>  {
     const {toggleSidebar, state} = useSidebar()
 
     return(
-        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="p-3! w-3! h-3! rounded-full! bg-white! focus-visible:ring-0! relative z-50 left-3 top-5 hover:bg-grey-400!">
-            <Menu className={state == "collapsed"? "rotate-180" : ""} />
+        <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="relative z-50 left-2 top-4 h-8! w-8! rounded-md! border border-border bg-secondary! text-foreground! shadow-sm hover:bg-accent! hover:text-accent-foreground! focus-visible:ring-2! focus-visible:ring-primary!"
+        >
+            <Menu className={state == "collapsed" ? "rotate-180" : ""} />
             <span className="sr-only">toggle sidebar</span>
         </Button>
     )
