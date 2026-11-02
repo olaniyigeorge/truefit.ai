@@ -6,7 +6,7 @@ only maps the app's settings onto Soro's explicit arguments.
 
 Settings read from AppConfig:
   LLM_PRIMARY_PROVIDER    "gemini" | "openai" | "composed"           (blank means gemini)
-  LLM_FALLBACK_PROVIDER   "gemini" | "openai" | "composed" | "none"  (blank means none)
+  LLM_FALLBACK_PROVIDER   "gemini" | "openai" | "composed" | "none"  (blank means openai)
   GEMINI_API_KEY, GEMINI_LIVE_MODEL, OPENAI_API_KEY, OPENAI_REALTIME_MODEL
   COMPOSED_LLM_BASE_URL, COMPOSED_LLM_MODEL, COMPOSED_STT_MODEL, COMPOSED_TTS_VOICE
 """
