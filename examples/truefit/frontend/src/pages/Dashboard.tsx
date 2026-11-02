@@ -15,6 +15,7 @@ import { Briefcase, Users, FileText, Mic, ArrowRight, Clock, CheckCircle2, XCirc
 type DashboardData = {
     activeJobs: Job[]
     recentApplications: Application[]
+    totalApplications: number
     totalCandidates: number
     totalInterviews: number
 }
@@ -53,32 +54,40 @@ const Dashboard = () => {
                 setLoading(true)
  
                 if (isRecruiter && backendUser.org_id) {
-                    const [jobs, applications] = await Promise.all([
-                        jobsApi.list({ org_id: backendUser.org_id, limit: 100 }),
-                        applicationsApi.list({ job_id: undefined, candidate_id: undefined, limit: 20 }),
-                    ])
+                    const jobs = await jobsApi.list({ org_id: backendUser.org_id, limit: 100 })
+
+                    // The applications endpoint requires either a job_id or a
+                    // candidate_id. Load applications for this organisation's
+                    // jobs individually instead of sending an invalid empty
+                    // filter (which caused the dashboard's 400 response).
+                    const applications = (await Promise.all(
+                        jobs.map(job => applicationsApi.list({ job_id: job.id, limit: 100 }))
+                    ))
+                        .flat()
+                        .sort((a, b) =>
+                            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                        )
  
                     setData({
                         activeJobs: jobs.filter(j => j.status === "active").slice(0, 5),
                         recentApplications: applications.slice(0, 8),
-                        totalCandidates: 0,
-                        totalInterviews: 0,
+                        totalApplications: applications.length,
+                        totalCandidates: new Set(applications.map(a => a.candidate_id)).size,
+                        totalInterviews: applications.filter(a => a.status === "interviewing").length,
                     })
                 } else {
                     // Candidate view
-                    const allCandidates = await candidatesApi.list({ limit: 100 })
-                    const myProfile = allCandidates.find(c => c.user_id === backendUser.id)
+                    const myProfile = await candidatesApi.getMe()
 
-                    const applications = myProfile ? await applicationsApi.list({
+                    const applications = await applicationsApi.list({
                         candidate_id: myProfile.id,
                         limit: 20
                     })
-                    :
-                    []
 
                     setData({
                         activeJobs: [],
                         recentApplications: applications.slice(0, 8),
+                        totalApplications: applications.length,
                         totalCandidates: 0,
                         totalInterviews: applications.filter(a => a.status === "interviewing").length,
                     })
@@ -148,7 +157,7 @@ const Dashboard = () => {
                     <StatCard
                         icon={FileText}
                         label="Applications"
-                        value={data?.recentApplications.length ?? 0}
+                        value={data?.totalApplications ?? 0}
                         sub="Total received"
                     />
                     <StatCard
