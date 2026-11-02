@@ -2,6 +2,7 @@
 
 POST   /candidates                      Register a candidate
 GET    /candidates/{candidate_id}       Get candidate profile
+GET    /candidates/me                   Get the signed-in candidate's profile
 PATCH  /candidates/{candidate_id}       Update profile fields
 POST   /candidates/{candidate_id}/resume  Upload resume (multipart)
 DELETE /candidates/{candidate_id}/resume  Remove resume
@@ -11,7 +12,12 @@ GET    /candidates/{candidate_id}/resume  Get presigned download URL
 from __future__ import annotations
 
 import uuid
+import asyncio
+import hashlib
+import re
+import time
 from typing import Optional
+from urllib.parse import unquote, urlparse
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from pydantic import BaseModel, EmailStr, Field
@@ -32,6 +38,9 @@ from src.truefit_infra.auth.authorization import (
 )
 from src.truefit_infra.auth.middleware import TokenPayload, get_current_user
 from src.truefit_infra.db.database import db_manager
+from src.truefit_infra.config import AppConfig
+from src.truefit_infra.db.models import AssetKind, MediaAsset, StorageProvider
+from src.truefit_core.common.utils import logger
 from src.truefit_infra.db.repositories.candidate_repository import (
     SQLAlchemyCandidateRepository,
 )
@@ -39,6 +48,67 @@ from src.truefit_infra.db.repositories.candidate_repository import (
 router = APIRouter(prefix="/candidates", tags=["candidates"])
 
 _MAX_RESUME_BYTES = 10 * 1024 * 1024  # 10 MB
+
+
+def _cloudinary_signature(params: dict[str, str], api_secret: str) -> str:
+    payload = "&".join(f"{key}={params[key]}" for key in sorted(params))
+    # Cloudinary signed uploads use SHA-1(string_to_sign + api_secret), not HMAC.
+    return hashlib.sha1(f"{payload}{api_secret}".encode()).hexdigest()
+
+
+async def _upload_resume_to_cloudinary(
+    *, candidate_id: uuid.UUID, filename: str, data: bytes, content_type: str
+) -> dict:
+    cloud_name = AppConfig.CLOUDINARY_CLOUD_NAME
+    api_key = AppConfig.CLOUDINARY_API_KEY
+    api_secret = AppConfig.CLOUDINARY_API_SECRET
+    if AppConfig.CLOUDINARY_URL and not all((cloud_name, api_key, api_secret)):
+        parsed = urlparse(AppConfig.CLOUDINARY_URL)
+        cloud_name = unquote(parsed.hostname or "")
+        api_key = unquote(parsed.username or "")
+        api_secret = unquote(parsed.password or "")
+
+    if not all((cloud_name, api_key, api_secret)):
+        raise HTTPException(503, detail="Cloudinary storage is not configured")
+
+    import requests
+
+    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip("-") or "resume"
+    timestamp = str(int(time.time()))
+    public_id = f"{AppConfig.CLOUDINARY_FOLDER.rstrip('/')}/{candidate_id}/{uuid.uuid4()}-{safe_filename}"
+    params = {
+        "public_id": public_id,
+        "timestamp": timestamp,
+    }
+    payload = {
+        **params,
+        "api_key": api_key,
+        "signature": _cloudinary_signature(params, api_secret),
+    }
+    url = f"https://api.cloudinary.com/v1_1/{cloud_name}/raw/upload"
+
+    def send_upload():
+        return requests.post(
+            url,
+            data=payload,
+            files={"file": (filename, data, content_type)},
+            timeout=60,
+        )
+
+    response = await asyncio.to_thread(send_upload)
+    if not response.ok:
+        try:
+            provider_error = response.json().get("error", {}).get("message")
+        except ValueError:
+            provider_error = None
+        logger.error(
+            "Cloudinary resume upload failed: status=%s message=%s",
+            response.status_code,
+            provider_error or response.text[:500],
+        )
+        detail = provider_error or "Cloudinary rejected the resume upload"
+        raise HTTPException(502, detail=detail)
+    return response.json()
 
 
 # ── Dependency
@@ -174,6 +244,21 @@ async def register_candidate(
     return CandidateOut.from_domain(candidate)
 
 
+@router.get("/me", response_model=CandidateOut)
+async def get_my_candidate_profile(
+    repo: SQLAlchemyCandidateRepository = Depends(get_candidate_repo),
+    user: TokenPayload = Depends(get_current_user),
+):
+    """Return the signed-in candidate profile without exposing the list endpoint."""
+    if user.role != CANDIDATE and not is_admin(user):
+        raise _forbidden()
+    candidate = await repo.get_by_email(user.email)
+    if not candidate:
+        raise HTTPException(404, detail="Candidate profile not found")
+    ensure_self(user, candidate.user_id)
+    return CandidateOut.from_domain(candidate)
+
+
 @router.get("/{candidate_id}", response_model=CandidateOut)
 async def get_candidate(
     candidate_id: uuid.UUID,
@@ -258,18 +343,37 @@ async def upload_resume(
     if len(data) > _MAX_RESUME_BYTES:
         raise HTTPException(413, detail="Resume exceeds 10 MB limit")
 
-    # TODO: replace with StoragePort.upload() when wired
-    # For now store key as a local reference for testing
     from datetime import datetime, timezone
 
-    storage_key = f"resumes/{candidate_id}/{file.filename}"
+    cloudinary_file = await _upload_resume_to_cloudinary(
+        candidate_id=candidate_id,
+        filename=file.filename or "resume",
+        data=data,
+        content_type=content_type,
+    )
+    storage_key = cloudinary_file.get("secure_url") or cloudinary_file["url"]
     resume_ref = ResumeRef(
         storage_key=storage_key,
         filename=file.filename,
         uploaded_at=datetime.now(timezone.utc),
         content_type=content_type,
     )
-    candidate.attach_resume(resume_ref)
+    async with db_manager.get_session() as session:
+        asset = MediaAsset(
+            owner_type="candidate",
+            owner_id=candidate_id,
+            kind=AssetKind.resume.value,
+            storage_provider=StorageProvider.cloudinary.value,
+            uri=storage_key,
+            content_type=content_type,
+            size_bytes=len(data),
+        )
+        session.add(asset)
+        await session.flush()
+        candidate.attach_resume(resume_ref, resume_asset_id=asset.id)
+        await session.commit()
+
+    # Persist the profile's asset reference through the normal repository path.
     await repo.save(candidate)
     return CandidateOut.from_domain(candidate)
 
