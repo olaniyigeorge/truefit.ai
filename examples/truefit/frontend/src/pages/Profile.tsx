@@ -103,15 +103,8 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (!backendUser?.id) return
-        // Candidate profile is linked to the user - fetch by user context
-        // The /candidates endpoint requires a candidate_id, not user_id
-        // For now we list and find the matching one
-        candidatesApi.list({ limit: 100 })
-            .then(all => {
-                const mine = all.find(c => c.user_id === backendUser.id)
-                if (mine) setCandidate(mine)
-                else setError("No candidate profile found for your account")
-            })
+        candidatesApi.getMe()
+            .then(setCandidate)
             .catch(() => setError("Failed to load profile"))
             .finally(() => setLoading(false))
     }, [backendUser])
@@ -135,8 +128,10 @@ export default function ProfilePage() {
             // Goes through the shared axios client so the Authorization header is attached
             const updated = await candidatesApi.uploadResume(candidate.id, formData)
             setCandidate(updated)
-        } catch {
-            setError("Failed to upload resume")
+        } catch (error) {
+            const detail = (error as { response?: { data?: { detail?: string } } })
+                .response?.data?.detail
+            setError(detail ?? "Failed to upload resume")
         }
     }
 
