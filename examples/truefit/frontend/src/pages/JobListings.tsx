@@ -51,9 +51,7 @@ export default function JobListingsPage() {
     const [error,      setError]      = useState<string | null>(null)
     const [search,     setSearch]     = useState("")
     const [successJob, setSuccessJob] = useState<Job | null>(null)
-    const [candidateProfile, setCandidateProfile] = useState<Candidate | null>(null)
 
-    console.log("Candidate profile:", candidateProfile)
     useEffect(() => {
         if (!backendUser?.id) return
 
@@ -61,19 +59,19 @@ export default function JobListingsPage() {
             try {
                 setLoading(true)
 
-                // Load jobs, candidate profile and existing applications in parallel
-                const [activeJobs, allCandidates, myApplications] = await Promise.all([
+                // Load public jobs and this candidate's private profile.
+                const [activeJobs, mine] = await Promise.all([
                     jobsApi.listActive({ limit: 100 }),
-                    candidatesApi.list({ limit: 100 }),
-                    applicationsApi.list({ candidate_id: backendUser.id, limit: 100 }).catch(() => []),
+                    candidatesApi.getMe(),
                 ])
+                const myApplications = await applicationsApi.list({
+                    candidate_id: mine.id,
+                    limit: 100,
+                }).catch(() => [])
 
                 setJobs(activeJobs)
 
-                // Find this user's candidate profile
-                const mine = allCandidates.find(c => c.user_id === backendUser.id)
-                setCandidate(mine ?? null)
-                setCandidateProfile(mine ?? null)
+                setCandidate(mine)
 
                 // Track already-applied job IDs
                 setAppliedIds(new Set(myApplications.map(a => a.job_id)))
