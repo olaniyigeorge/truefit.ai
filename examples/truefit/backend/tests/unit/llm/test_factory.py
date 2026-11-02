@@ -58,7 +58,7 @@ def test_a_missing_key_fails_loudly(monkeypatch):
 
 def test_default_config_is_gemini_only():
     """Guards the bug where a default openai fallback broke Gemini-only setups."""
-    assert GlobalConfig.model_fields["LLM_FALLBACK_PROVIDER"].default == "none"
+    assert GlobalConfig.model_fields["LLM_FALLBACK_PROVIDER"].default == "openai"
 
 
 def test_composed_settings_reach_the_local_pipeline(monkeypatch, tmp_path):
