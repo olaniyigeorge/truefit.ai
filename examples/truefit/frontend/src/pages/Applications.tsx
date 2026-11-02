@@ -106,10 +106,7 @@ export default function ApplicationsPage() {
 
                 setApplications(allApps)
             }else{
-                const allCandidates = await candidatesApi.list({ limit: 100 })
-                const myProfile = allCandidates.find(
-                    c => c.user_id === backendUser.id
-                )
+                const myProfile = await candidatesApi.getMe()
                 if (myProfile) {
                     setMyProfileId(myProfile.id)
                 }
