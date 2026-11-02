@@ -57,9 +57,15 @@ const AppSidebar = () => {
     return(
         <Sidebar collapsible="icon" variant="inset">
             <CustomTrigger />
-            <SidebarHeader className="pt-10 pb-4 px-4">
-                <div className="flex items-center gap-2.5">
-                    <span className="font-serif text-base font-bold">
+            <SidebarHeader className="pt-10 pb-4 px-4 group-data-[collapsible=icon]:px-2">
+                <div className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center">
+                    <span
+                        aria-label="TrueFit.ai"
+                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary text-[11px] font-bold tracking-tight text-primary-foreground"
+                    >
+                        TF
+                    </span>
+                    <span className="font-serif text-base font-bold group-data-[collapsible=icon]:hidden">
                         True<span className="text-primary">Fit</span>.ai
                     </span>
                 </div>
