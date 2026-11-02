@@ -27,6 +27,11 @@ class GlobalConfig(BaseSettings):
     LOCAL_STORAGE_DIR: str
     GCS_BUCKET: str
     GOOGLE_APPLICATION_CREDENTIALS: str
+    CLOUDINARY_CLOUD_NAME: str = ""
+    CLOUDINARY_API_KEY: str = ""
+    CLOUDINARY_API_SECRET: str = ""
+    CLOUDINARY_URL: str = ""
+    CLOUDINARY_FOLDER: str = "truefit/resumes"
     REALTIME_ENABLED: bool
     WEBRTC_TOKEN_SECRET: str
     WORKERS_ENABLED: str
@@ -37,7 +42,7 @@ class GlobalConfig(BaseSettings):
     TURN_USERNAME: str = ""
     TURN_CREDENTIAL: str = ""
     LLM_PRIMARY_PROVIDER: str = "gemini"  # "gemini" | "openai" | "composed"
-    LLM_FALLBACK_PROVIDER: str = "none"  # "openai" | "gemini" | "composed" | "none"
+    LLM_FALLBACK_PROVIDER: str = "openai"  # "openai" | "gemini" | "composed" | "none"
     OPENAI_API_KEY: str | None = None
     GEMINI_LIVE_MODEL: str | None = None  # default: gemini-2.5-flash-native-audio-preview-12-2025
     OPENAI_REALTIME_MODEL: str | None = None  # default: gpt-realtime-mini-2025-12-15
