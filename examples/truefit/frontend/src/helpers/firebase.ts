@@ -4,12 +4,15 @@ import config from "@/config"
 
 
 const firebaseConfig = {
-  apiKey: config.firebaseApiKey,
-  authDomain: config.firebaseAuthDomain,
-  projectId: config.firebaseProjectId,
-  storageBucket: config.firebaseStorageBucket,
-  messagingSenderId: config.firebaseMessagingSenderId,
-  appId: config.firebaseAppId
+  // Firebase's SDK validates these values during module initialization. Use
+  // local placeholders when Firebase is intentionally not configured so the
+  // public landing page can still render in development.
+  apiKey: config.firebaseApiKey || "local-dev-api-key",
+  authDomain: config.firebaseAuthDomain || "localhost",
+  projectId: config.firebaseProjectId || "local-dev",
+  storageBucket: config.firebaseStorageBucket || "local-dev.appspot.com",
+  messagingSenderId: config.firebaseMessagingSenderId || "local-dev",
+  appId: config.firebaseAppId || "local-dev-app"
 };
 
 

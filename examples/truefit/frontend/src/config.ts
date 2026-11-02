@@ -7,6 +7,12 @@ const config = {
     firebaseStorageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
     firebaseMessagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
     firebaseAppId: import.meta.env.VITE_FIREBASE_APP_ID,
+    firebaseConfigured: Boolean(
+        import.meta.env.VITE_FIREBASE_API_KEY &&
+        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN &&
+        import.meta.env.VITE_FIREBASE_PROJECT_ID &&
+        import.meta.env.VITE_FIREBASE_APP_ID,
+    ),
     env: import.meta.env.NODE_ENV || "development",
     dev: import.meta.env.DEV
 }

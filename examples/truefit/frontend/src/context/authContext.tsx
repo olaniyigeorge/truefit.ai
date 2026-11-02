@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, useCallback } from "react"
 import { onAuthStateChanged, signOut, type User } from "firebase/auth"
 import { auth } from "@/helpers/firebase"
+import config from "@/config"
 
 //define context data shape
 
@@ -53,6 +54,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     useEffect(() => {
+        // Firebase is optional for the public/dev landing page. Without a
+        // configured Firebase project, do not block the entire React tree on
+        // an auth callback that can never complete.
+        if (!config.firebaseConfigured) {
+            setLoading(false)
+            return
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             if(!currentUser){
